@@ -13,7 +13,7 @@ De drie cases draaien niet alleen als ontwerp en browserdemo. Ze zijn ook **gebo
 | Model-driven app | **Halverdijk Backoffice**: weegbonnen, schadeclaims met tijdlijn, aanvragen met lijnen en outbox, ERP-sandbox | [App openen](https://halverdijkdev.crm17.dynamics.com/main.aspx?appid=fb7afac1-35c9-f111-a05c-6045bd29a82d) |
 | Power Automate | 7 cloud flows, allemaal aan | [Flows](https://make.powerautomate.com/environments/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/flows) |
 | Approvals | goedkeuringen voor schadeclaims (DT-02) en materiaalaanvragen (DT-03) | [Ontvangen goedkeuringen](https://make.powerautomate.com/environments/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/approvals/received) |
-| Werfapp | Power Apps **code app** (React + gegenereerde Dataverse-services), [broncode](werfapp/) | wacht op het aanzetten van code apps in de omgeving (zie [Status](#status)) |
+| Werfapp | Power Apps **code app** (React + gegenereerde Dataverse-services), [broncode](werfapp/) | [App openen](https://apps.powerapps.com/play/e/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/app/860ecef4-4d59-4b2d-931a-415a252f2780): gepubliceerd; afspelen vraagt een Power Apps Premium- of Developer Plan-licentie |
 
 ## De zeven flows
 
@@ -84,7 +84,7 @@ Of importeer [`solution/release/HalverdijkTransformatie_managed.zip`](solution/r
 | Onderdeel | Status |
 |---|---|
 | Dataverse, model-driven app, 7 flows, Approvals | gebouwd, aan, geverifieerd |
-| Werfapp (code app) | code klaar en gebouwd; push naar de omgeving wacht op **Power Platform-beheercentrum → Omgevingen → Halverdijk Dev → Instellingen → Product → Functies → Power Apps code apps: aan** |
+| Werfapp (code app) | code apps staan aan in de omgeving; de app is **gepubliceerd** in de solution. Afspelen vereist een Power Apps-licentie voor de gebruiker (gratis Power Apps Developer Plan of Premium); die moet de eigenaar van het account zelf activeren. |
 
 ## Eerlijke grenzen
 
