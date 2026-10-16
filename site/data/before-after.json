@@ -1,0 +1,402 @@
+{
+  "cases": [
+    {
+      "id": "c1",
+      "tab": "01 Weegbonnen",
+      "asis": {
+        "headline": "140 papieren bonnen per dag, 's avonds gescand en met de hand overgetypt.",
+        "list": [
+          "Elke bon kost 3,5 minuten typwerk",
+          "Fouten zie je pas bij de factuur of de inspectie",
+          "Asbest of een dubbele bon kan ongemerkt in het ERP raken"
+        ],
+        "model": "c1_asis",
+        "title": "AS-IS — weegbonnen manueel verwerken",
+        "steps": [
+          {
+            "name": "Wegen en papieren weegbon printen",
+            "kind": "manueel"
+          },
+          {
+            "name": "Bon aftekenen, kopie mee",
+            "kind": "manueel"
+          },
+          {
+            "name": "Bonnen 's avonds bundelen en scannen",
+            "kind": "manueel"
+          },
+          {
+            "name": "Bon overtypen in ERP",
+            "kind": "mens"
+          },
+          {
+            "name": "Ontbrekende info opzoeken of navragen",
+            "kind": "manueel"
+          },
+          {
+            "name": "Klant, materiaal en prijs nakijken",
+            "kind": "mens"
+          },
+          {
+            "name": "Maandelijks factureren",
+            "kind": "mens"
+          },
+          {
+            "name": "Fout zoeken en creditnota",
+            "kind": "mens"
+          }
+        ],
+        "lanes": 4,
+        "end": "Gefactureerd",
+        "counts": {
+          "manual": 8,
+          "auto": 0
+        }
+      },
+      "tobe": {
+        "headline": "AI leest de bon, elf regels beslissen. Een mens kijkt alleen waar het nodig is.",
+        "list": [
+          "Schone bonnen boekt de flow zelf, idempotent",
+          "Twijfel gaat met de reden erbij naar de administratie",
+          "Asbest altijd naar de milieucoördinator; dubbels nooit geboekt"
+        ],
+        "model": "c1_tobe",
+        "title": "TO-BE — document intelligence met menselijke controle",
+        "steps": [
+          {
+            "name": "Document ophalen (postvak / scanmap)",
+            "kind": "automatisch"
+          },
+          {
+            "name": "Classificeren en velden extraheren (AI)",
+            "kind": "automatisch"
+          },
+          {
+            "name": "Elf controles R01–R11",
+            "kind": "automatisch"
+          },
+          {
+            "name": "Gemarkeerde velden nakijken en corrigeren",
+            "kind": "mens"
+          },
+          {
+            "name": "Weigeren of uitzonderlijk aanvaarden",
+            "kind": "mens"
+          },
+          {
+            "name": "Klant en vervoerder verwittigen",
+            "kind": "automatisch"
+          },
+          {
+            "name": "Weging boeken in ERP (API, idempotent)",
+            "kind": "automatisch"
+          },
+          {
+            "name": "Archiveren + KPI-log",
+            "kind": "automatisch"
+          }
+        ],
+        "lanes": 5,
+        "end": "Klaar voor facturatie",
+        "counts": {
+          "manual": 2,
+          "auto": 6
+        }
+      },
+      "kpis": [
+        {
+          "label": "Bonnen die een mens aanraakt",
+          "asis": "100%",
+          "tobe": "33,3%",
+          "note": "testset van 30 bonnen"
+        },
+        {
+          "label": "Uren per jaar",
+          "asis": "1.838",
+          "tobe": "595",
+          "note": "aanname, te valideren met een nulmeting"
+        },
+        {
+          "label": "Fout ontdekt",
+          "asis": "bij de factuur",
+          "tobe": "vóór de boeking",
+          "note": "3 van 4 leesfouten gevangen door de regels"
+        },
+        {
+          "label": "Geweigerd materiaal",
+          "asis": "kan erdoor",
+          "tobe": "altijd geblokkeerd",
+          "note": "regel R06, ook op de server (HV-DI-02)"
+        }
+      ]
+    },
+    {
+      "id": "c2",
+      "tab": "02 Schadeclaims",
+      "asis": {
+        "headline": "Schade wordt gebeld, gemaild of op papier gemeld, en komt dagen later in een Excel-register.",
+        "list": [
+          "55% van de meldingen is onvolledig: nabellen",
+          "54% van de verzekeringsaangiftes is te laat",
+          "Wie goedkeurt, hangt af van wie de mail leest"
+        ],
+        "model": "c2_asis",
+        "title": "AS-IS — schademelding via telefoon, mail en papier",
+        "steps": [
+          {
+            "name": "Bellen, mailen of papier invullen",
+            "kind": "manueel"
+          },
+          {
+            "name": "Info noteren, foto's vragen",
+            "kind": "mens"
+          },
+          {
+            "name": "Regel aanmaken in Excel-register",
+            "kind": "mens"
+          },
+          {
+            "name": "Nabellen, info later doorsturen",
+            "kind": "manueel"
+          },
+          {
+            "name": "Herstel regelen",
+            "kind": "mens"
+          },
+          {
+            "name": "Aangifte opmaken (vaak na deadline)",
+            "kind": "mens"
+          },
+          {
+            "name": "Expertise en beslissing verzekeraar",
+            "kind": "wachten"
+          },
+          {
+            "name": "Kosten boeken, dossier sluiten",
+            "kind": "mens"
+          }
+        ],
+        "lanes": 4,
+        "end": "Dossier afgesloten",
+        "counts": {
+          "manual": 7,
+          "auto": 0
+        }
+      },
+      "tobe": {
+        "headline": "De werfleider meldt in de app; binnen een halve minuut is er een dossier met ernst, eigenaar en keten.",
+        "list": [
+          "Verplichte velden en foto's vóór het verzenden",
+          "Aangiftedeadline in het dossier, bewaakt elk uur",
+          "Eén beslistabel (DT-02) voor de goedkeuring"
+        ],
+        "model": "c2_tobe",
+        "title": "TO-BE — digitale schadeclaim van werf tot afsluiting",
+        "steps": [
+          {
+            "name": "Melden in app: foto's, GPS, categorie",
+            "kind": "mens"
+          },
+          {
+            "name": "Dossier aanmaken + triage (ernst, eigenaar)",
+            "kind": "automatisch"
+          },
+          {
+            "name": "Betrokkenen verwittigen (Teams / mail)",
+            "kind": "automatisch"
+          },
+          {
+            "name": "Beoordelen: oorzaak, aansprakelijk-heid, raming",
+            "kind": "mens"
+          },
+          {
+            "name": "Aangifte-concept naar verzekeraar (≤ 8 dagen)",
+            "kind": "automatisch"
+          },
+          {
+            "name": "Aanvullen in app",
+            "kind": "mens"
+          },
+          {
+            "name": "Goedkeurings-keten bepalen (DT-02)",
+            "kind": "automatisch"
+          },
+          {
+            "name": "Goedkeuren in Teams (per niveau)",
+            "kind": "mens"
+          },
+          {
+            "name": "Herstel, vergoeding of verhaal afhandelen",
+            "kind": "mens"
+          },
+          {
+            "name": "Kosten en recuperatie boeken op project (ERP)",
+            "kind": "automatisch"
+          }
+        ],
+        "lanes": 5,
+        "end": "Dossier afgesloten",
+        "counts": {
+          "manual": 5,
+          "auto": 5
+        }
+      },
+      "kpis": [
+        {
+          "label": "Tot het dossier bestaat",
+          "asis": "3 dagen",
+          "tobe": "< 1 minuut",
+          "note": "mediaan nulmeting · flow HV-CL-01"
+        },
+        {
+          "label": "Onvolledige meldingen",
+          "asis": "55%",
+          "tobe": "0%",
+          "note": "de app verstuurt niet zonder de verplichte velden"
+        },
+        {
+          "label": "Te late aangiftes",
+          "asis": "54%",
+          "tobe": "5%",
+          "note": "doel, te meten na de pilot"
+        },
+        {
+          "label": "Minuten per claim",
+          "asis": "64",
+          "tobe": "14",
+          "note": "registreren en opvolgen, aanname"
+        }
+      ]
+    },
+    {
+      "id": "c3",
+      "tab": "03 Materiaal",
+      "asis": {
+        "headline": "Materiaal wordt besteld via telefoon, mail of WhatsApp; het depot loopt rond om de voorraad te zien.",
+        "list": [
+          "33% van de aanvragen is spoed",
+          "6,7% komt verkeerd aan, 22% te laat",
+          "Kosten staan pas dagen later op de werf"
+        ],
+        "model": "c3_asis",
+        "title": "AS-IS — materiaal aanvragen via telefoon, mail en WhatsApp",
+        "steps": [
+          {
+            "name": "Bellen, mailen of WhatsApp naar depot",
+            "kind": "manueel"
+          },
+          {
+            "name": "Voorraad nakijken (rondlopen, Excel)",
+            "kind": "manueel"
+          },
+          {
+            "name": "Offerte en bestelling bij leverancier",
+            "kind": "mens"
+          },
+          {
+            "name": "Levering telefonisch inplannen",
+            "kind": "manueel"
+          },
+          {
+            "name": "Leveren met papieren leverbon",
+            "kind": "manueel"
+          },
+          {
+            "name": "Nabestellen of retour (spoed)",
+            "kind": "manueel"
+          },
+          {
+            "name": "Leverbon ingeven, kosten op werf boeken",
+            "kind": "mens"
+          }
+        ],
+        "lanes": 5,
+        "end": "Kosten geboekt (dagen later)",
+        "counts": {
+          "manual": 7,
+          "auto": 0
+        }
+      },
+      "tobe": {
+        "headline": "Aanvraag in de app, met live voorraad; de flow wijst het dichtste depot toe en beslist of iemand moet goedkeuren.",
+        "list": [
+          "Kleine aanvraag op voorraad: geen mens nodig",
+          "Dichtste depot eerst, budget per categorie bewaakt",
+          "ERP-storing? De outbox probeert opnieuw, niemand merkt het"
+        ],
+        "model": "c3_tobe",
+        "title": "TO-BE — digitale materiaalaanvraag met voorraadcheck en ERP-koppeling",
+        "steps": [
+          {
+            "name": "Aanvraag: werf, artikel, hoeveelheid, datum",
+            "kind": "mens"
+          },
+          {
+            "name": "Voorraad per depot opvragen (API)",
+            "kind": "automatisch"
+          },
+          {
+            "name": "Toewijzen, budget, spoed, route (DT-03)",
+            "kind": "automatisch"
+          },
+          {
+            "name": "Goedkeuren in Teams of app",
+            "kind": "mens"
+          },
+          {
+            "name": "Reservatie + aankoopaanvraag naar ERP (outbox, retry)",
+            "kind": "automatisch"
+          },
+          {
+            "name": "Bestelling plaatsen bij leverancier",
+            "kind": "mens"
+          },
+          {
+            "name": "Levering inplannen (depot of leverancier)",
+            "kind": "mens"
+          },
+          {
+            "name": "Ontvangst bevestigen (foto leverbon)",
+            "kind": "mens"
+          },
+          {
+            "name": "Verbruik boeken op werf (ERP)",
+            "kind": "automatisch"
+          }
+        ],
+        "lanes": 6,
+        "end": "Kosten op project, dezelfde dag",
+        "counts": {
+          "manual": 5,
+          "auto": 4
+        }
+      },
+      "kpis": [
+        {
+          "label": "Afhandeling per aanvraag",
+          "asis": "18 min",
+          "tobe": "2,7 min",
+          "note": "aanname · doorlooptijd nu 15 uur (mediaan)"
+        },
+        {
+          "label": "Zonder goedkeuring door",
+          "asis": "0%",
+          "tobe": "43%",
+          "note": "replay van 60 historische aanvragen (fictief)"
+        },
+        {
+          "label": "Spoedaanvragen",
+          "asis": "33%",
+          "tobe": "20%",
+          "note": "doel"
+        },
+        {
+          "label": "Verkeerde leveringen",
+          "asis": "6,7%",
+          "tobe": "2%",
+          "note": "doel"
+        }
+      ]
+    }
+  ]
+}

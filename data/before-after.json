@@ -1,0 +1,89 @@
+{
+  "_note": "Bron voor de schuifvergelijking 'Vandaag en straks' op de site. {sleutel} wordt bij de build vervangen door het cijfer uit src/metrics.mjs (site/data/facts.json); een onbekende sleutel laat de build falen. De processtappen komen uit models/*.json (dezelfde BPMN-bron).",
+  "cases": [
+    {
+      "id": "c1",
+      "tab": "01 Weegbonnen",
+      "asis": {
+        "model": "c1_asis",
+        "headline": "{c1.docsDay} papieren bonnen per dag, 's avonds gescand en met de hand overgetypt.",
+        "pains": [
+          "Elke bon kost {c1.manualMin} minuten typwerk",
+          "Fouten zie je pas bij de factuur of de inspectie",
+          "Asbest of een dubbele bon kan ongemerkt in het ERP raken"
+        ]
+      },
+      "tobe": {
+        "model": "c1_tobe",
+        "headline": "AI leest de bon, elf regels beslissen. Een mens kijkt alleen waar het nodig is.",
+        "gains": [
+          "Schone bonnen boekt de flow zelf, idempotent",
+          "Twijfel gaat met de reden erbij naar de administratie",
+          "Asbest altijd naar de milieucoördinator; dubbels nooit geboekt"
+        ]
+      },
+      "kpis": [
+        { "label": "Bonnen die een mens aanraakt", "asis": "100%", "tobe": "{c1.touchPct}", "note": "testset van {c1.n} bonnen" },
+        { "label": "Uren per jaar", "asis": "{c1.hoursAsIs}", "tobe": "{c1.hoursToBe}", "note": "aanname, te valideren met een nulmeting" },
+        { "label": "Fout ontdekt", "asis": "bij de factuur", "tobe": "vóór de boeking", "note": "{c1.caught} van {c1.fieldsWrong} leesfouten gevangen door de regels" },
+        { "label": "Geweigerd materiaal", "asis": "kan erdoor", "tobe": "altijd geblokkeerd", "note": "regel R06, ook op de server (HV-DI-02)" }
+      ]
+    },
+    {
+      "id": "c2",
+      "tab": "02 Schadeclaims",
+      "asis": {
+        "model": "c2_asis",
+        "headline": "Schade wordt gebeld, gemaild of op papier gemeld, en komt dagen later in een Excel-register.",
+        "pains": [
+          "{c2.incomplete} van de meldingen is onvolledig: nabellen",
+          "{c2.latePct} van de verzekeringsaangiftes is te laat",
+          "Wie goedkeurt, hangt af van wie de mail leest"
+        ]
+      },
+      "tobe": {
+        "model": "c2_tobe",
+        "headline": "De werfleider meldt in de app; binnen een halve minuut is er een dossier met ernst, eigenaar en keten.",
+        "gains": [
+          "Verplichte velden en foto's vóór het verzenden",
+          "Aangiftedeadline in het dossier, bewaakt elk uur",
+          "Eén beslistabel (DT-02) voor de goedkeuring"
+        ]
+      },
+      "kpis": [
+        { "label": "Tot het dossier bestaat", "asis": "{c2.medianRegister}", "tobe": "< 1 minuut", "note": "mediaan nulmeting · flow HV-CL-01" },
+        { "label": "Onvolledige meldingen", "asis": "{c2.incomplete}", "tobe": "0%", "note": "de app verstuurt niet zonder de verplichte velden" },
+        { "label": "Te late aangiftes", "asis": "{c2.latePct}", "tobe": "{c2.lateTarget}", "note": "doel, te meten na de pilot" },
+        { "label": "Minuten per claim", "asis": "{c2.minAsIs}", "tobe": "{c2.minToBe}", "note": "registreren en opvolgen, aanname" }
+      ]
+    },
+    {
+      "id": "c3",
+      "tab": "03 Materiaal",
+      "asis": {
+        "model": "c3_asis",
+        "headline": "Materiaal wordt besteld via telefoon, mail of WhatsApp; het depot loopt rond om de voorraad te zien.",
+        "pains": [
+          "{c3.rushPct} van de aanvragen is spoed",
+          "{c3.wrongPct} komt verkeerd aan, {c3.latePct} te laat",
+          "Kosten staan pas dagen later op de werf"
+        ]
+      },
+      "tobe": {
+        "model": "c3_tobe",
+        "headline": "Aanvraag in de app, met live voorraad; de flow wijst het dichtste depot toe en beslist of iemand moet goedkeuren.",
+        "gains": [
+          "Kleine aanvraag op voorraad: geen mens nodig",
+          "Dichtste depot eerst, budget per categorie bewaakt",
+          "ERP-storing? De outbox probeert opnieuw, niemand merkt het"
+        ]
+      },
+      "kpis": [
+        { "label": "Afhandeling per aanvraag", "asis": "{c3.minAsIs} min", "tobe": "{c3.minToBe} min", "note": "aanname · doorlooptijd nu {c3.medianHandling} (mediaan)" },
+        { "label": "Zonder goedkeuring door", "asis": "0%", "tobe": "{c3.autoPct}", "note": "replay van {c3.n} historische aanvragen (fictief)" },
+        { "label": "Spoedaanvragen", "asis": "{c3.rushPct}", "tobe": "{c3.rushTarget}", "note": "doel" },
+        { "label": "Verkeerde leveringen", "asis": "{c3.wrongPct}", "tobe": "{c3.wrongTarget}", "note": "doel" }
+      ]
+    }
+  ]
+}

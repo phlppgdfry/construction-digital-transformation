@@ -17,6 +17,7 @@
     <a class="brand" href="./"><img class="brand-mark" src="assets/mark.svg" alt=""><span>Halverdijk<small>fictieve bouwgroep · portfolio</small></span></a>
     <nav aria-label="Hoofdnavigatie">
       <a href="#cases">Cases</a>
+      <a href="#voor-na">Voor &amp; na</a>
       <a href="#methode">Werkwijze</a>
       <a href="#architectuur">Architectuur</a>
       <a href="#powerplatform">Power Platform</a>
@@ -99,6 +100,28 @@
     </div>
   </section>
 
+  <section class="section" id="voor-na">
+    <div class="wrap">
+      <div class="section-title"><h2>Vandaag en straks</h2><span class="muted">sleep de rode schuif · cijfers uit het model, stappen uit de BPMN-modellen</span></div>
+      <p class="measure">Links hoe het nu loopt, rechts hoe het straks loopt, voor dezelfde case. Zelfde plek op het scherm, zodat je ziet wat er verandert: welke stappen een mens nog doet, welke automatisch gaan, en wat dat oplevert.</p>
+      <div class="tabs-row" role="tablist" aria-label="Kies een case" id="ba-tabs"></div>
+      <div class="ba" id="ba">
+        <div class="ba-layer ba-before"></div>
+        <div class="ba-layer ba-after"></div>
+        <input class="ba-range sr-only" type="range" min="0" max="100" value="50" aria-label="Schuif: links vandaag, rechts straks">
+        <div class="ba-handle" aria-hidden="true"><span class="ba-side l">‹ Vandaag</span><span class="ba-knob">‹ ›</span><span class="ba-side r">Straks ›</span></div>
+      </div>
+      <div class="ba-controls">
+        <button class="btn small ghost" data-ba-pos="100">Alleen vandaag</button>
+        <button class="btn small" data-ba-play>▶ Speel de verandering af</button>
+        <button class="btn small ghost" data-ba-pos="0">Alleen straks</button>
+      </div>
+      <div class="table-wrap ba-delta" id="ba-delta"></div>
+      <p class="muted" style="font-size:14px;margin-top:10px">Vandaag = nulmeting op de fictieve historiek en aannames uit <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/data/assumptions.json">assumptions.json</a>. Straks = uitkomst van de regels op de testset, of een doel waar dat zo vermeld staat. Niets hiervan is een gemeten resultaat bij een echt bedrijf.</p>
+      <noscript><p>Deze vergelijking heeft JavaScript nodig. De AS-IS- en TO-BE-analyses staan per case op GitHub.</p></noscript>
+    </div>
+  </section>
+
   <section class="section grey" id="methode">
     <div class="wrap">
       <div class="section-title"><h2>Werkwijze in zeven stappen</h2><span class="muted">dezelfde vragen bij elk project</span></div>
@@ -117,11 +140,15 @@
 
   <section class="section" id="processen">
     <div class="wrap">
-      <div class="section-title"><h2>TO-BE-processen</h2><span class="muted">rood = geautomatiseerd · bron: BPMN 2.0-bestanden in de repo</span></div>
+      <div class="section-title"><h2>Processen in BPMN</h2><span class="muted">AS-IS en TO-BE · rood = geautomatiseerd · bron: BPMN 2.0-bestanden in de repo</span></div>
       <div class="tabs-row" role="tablist" aria-label="Kies een proces">
-        <button class="btn small" role="tab" aria-selected="true" data-bpmn="c1_tobe">01 Weegbonnen</button>
-        <button class="btn small ghost" role="tab" aria-selected="false" data-bpmn="c2_tobe">02 Schadeclaims</button>
-        <button class="btn small ghost" role="tab" aria-selected="false" data-bpmn="c3_tobe">03 Materiaal</button>
+        <button class="btn small" role="tab" aria-selected="true" data-bpmn-case="c1">01 Weegbonnen</button>
+        <button class="btn small ghost" role="tab" aria-selected="false" data-bpmn-case="c2">02 Schadeclaims</button>
+        <button class="btn small ghost" role="tab" aria-selected="false" data-bpmn-case="c3">03 Materiaal</button>
+      </div>
+      <div class="tabs-row" role="tablist" aria-label="Kies vandaag of straks">
+        <button class="btn small ghost" role="tab" aria-selected="false" data-bpmn-phase="asis">AS-IS · vandaag</button>
+        <button class="btn small" role="tab" aria-selected="true" data-bpmn-phase="tobe">TO-BE · straks</button>
       </div>
       <figure class="figure">
         <img id="bpmn-img" src="assets/bpmn/c1_tobe.svg" alt="TO-BE-proces weegbonnen in BPMN">
@@ -231,13 +258,20 @@
 </footer>
 
 <script>
-  document.querySelectorAll("[data-bpmn]").forEach((b) => b.addEventListener("click", () => {
-    document.querySelectorAll("[data-bpmn]").forEach((x) => { x.classList.add("ghost"); x.setAttribute("aria-selected", "false"); });
+  // BPMN viewer: case × AS-IS/TO-BE
+  const bpmn = { c: "c1", p: "tobe" };
+  const names = { c1: "weegbonnen", c2: "schadeclaims", c3: "materiaalaanvragen" };
+  const pick = (attr, key) => document.querySelectorAll(`[${attr}]`).forEach((b) => b.addEventListener("click", () => {
+    document.querySelectorAll(`[${attr}]`).forEach((x) => { x.classList.add("ghost"); x.setAttribute("aria-selected", "false"); });
     b.classList.remove("ghost"); b.setAttribute("aria-selected", "true");
+    bpmn[key] = b.getAttribute(attr);
     const img = document.getElementById("bpmn-img");
-    img.src = `assets/bpmn/${b.dataset.bpmn}.svg`;
-    img.alt = `TO-BE-proces ${b.textContent}`;
+    img.src = `assets/bpmn/${bpmn.c}_${bpmn.p}.svg`;
+    img.alt = `${bpmn.p === "asis" ? "AS-IS" : "TO-BE"}-proces ${names[bpmn.c]} in BPMN`;
   }));
+  pick("data-bpmn-case", "c");
+  pick("data-bpmn-phase", "p");
 </script>
+<script src="assets/before-after.js" defer></script>
 </body>
 </html>

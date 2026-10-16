@@ -56,6 +56,30 @@ for (const f of ["master-data.json", "documents.json", "claims-history.json", "r
 const ruleTable = ["| Regel | Controle | Bij falen | Waarom |", "|---|---|---|---|", ...RULES.map((r) => `| ${r.id} | ${r.title} | ${{ review: "nazicht door administratie", block: "escalatie milieucoördinator", reject: "weigeren als dubbel" }[r.severity]} | ${r.why} |`)].join("\n");
 const fired = ["| Regel | Afgegaan op testset |", "|---|---|", ...RULES.map((r) => `| ${r.id} ${r.title} | ${model.case01.rulesFired[r.id]} |`)].join("\n");
 
+// before/after comparison for the site: text from data/before-after.json, numbers from facts, steps from the BPMN models
+const KIND = { manualTask: "manueel", userTask: "mens", receiveTask: "wachten", serviceTask: "automatisch", businessRuleTask: "automatisch", sendTask: "automatisch" };
+const fill = (str, where) => str.replace(/\{([\w.]+)\}/g, (_m, key) => {
+  if (!(key in facts)) { unknownFacts.push(`${where}: ${key}`); return _m; }
+  return facts[key];
+});
+const unknownFacts = [];
+const ba = j("data/before-after.json");
+const side = (s, where) => {
+  const spec = j(`models/${models.find((f) => j(`models/${f}`).id === s.model)}`);
+  const steps = spec.nodes.filter((n) => n.type in KIND).map((n) => ({ name: n.name, kind: KIND[n.type] }));
+  const ends = spec.nodes.filter((n) => n.type === "endEvent");
+  return {
+    headline: fill(s.headline, where), list: (s.pains ?? s.gains).map((x) => fill(x, where)), model: s.model, title: spec.name,
+    steps, lanes: spec.lanes.length, end: ends.at(-1).name,
+    counts: { manual: steps.filter((x) => x.kind === "manueel" || x.kind === "mens").length, auto: steps.filter((x) => x.kind === "automatisch").length },
+  };
+};
+write("site/data/before-after.json", JSON.stringify({ cases: ba.cases.map((c) => ({
+  id: c.id, tab: c.tab, asis: side(c.asis, `${c.id}.asis`), tobe: side(c.tobe, `${c.id}.tobe`),
+  kpis: c.kpis.map((k) => Object.fromEntries(Object.entries(k).map(([key, v]) => [key, fill(v, `${c.id}.kpis`)]))),
+})) }, null, 2) + "\n");
+if (unknownFacts.length) { console.error(`Unknown fact keys in data/before-after.json:\n  ${unknownFacts.join("\n  ")}`); process.exit(1); }
+
 // generated step list per Power Automate flow (between markers <!--actions:HV-XX-NN-->…<!--/actions-->)
 const pp = j("power-platform/model.json");
 const sets = Object.fromEntries(pp.tables.map((t) => [t.name, `${t.name}s`]));
