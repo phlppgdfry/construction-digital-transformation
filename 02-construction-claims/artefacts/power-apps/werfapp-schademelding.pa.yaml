@@ -1,0 +1,241 @@
+# Halverdijk Werfapp — scherm "Schade melden" (canvas app, telefoonlay-out, Power Apps source code format *.pa.yaml)
+# Offline-first: de app gebruikt een Dataverse offline-profiel (Schadeclaims, Schadefoto's, Werven).
+# Zonder bereik wordt Patch() lokaal bewaard en later gesynchroniseerd. hv_clientid (GUID uit de app)
+# voorkomt dubbele dossiers als de werfleider twee keer op "Verzenden" drukt (zie src/claims.mjs syncQueue).
+# De validaties hieronder zijn dezelfde als validateReport() in src/claims.mjs; de app blokkeert,
+# de server (flow HV-CL-01) controleert opnieuw. Nooit alleen op de client vertrouwen.
+App:
+  Properties:
+    Formulas: |-
+      =HvRood = ColorValue("#E20000");
+      HvNavy = ColorValue("#242A38");
+      Categorieen = Table(
+        {Code: "eigen-materieel", Label: "Eigen materieel"},
+        {Code: "gehuurd-materieel", Label: "Gehuurd materieel"},
+        {Code: "derden-schade", Label: "Eigendom van derden"},
+        {Code: "nutsleiding", Label: "Kabel of leiding (KLIP)"},
+        {Code: "eigen-werf", Label: "Eigen werk / werfinrichting"});
+      Fouten =
+        If(IsBlank(drpWerf.Selected), "Kies een werf;", "") &
+        If(IsBlank(drpCategorie.Selected), "Kies een categorie;", "") &
+        If(Len(Trim(txtOmschrijving.Text)) < 20, "Beschrijf in minstens 20 tekens wat er gebeurde;", "") &
+        If(CountRows(colFotos) < 1, "Minstens één foto;", "") &
+        If(drpCategorie.Selected.Code = "nutsleiding" && (IsBlank(txtKlip.Text) || IsBlank(drpLeiding.Selected) || IsBlank(txtBeheerder.Text)), "KLIP-referentie, type leiding en leidingbeheerder zijn verplicht;", "") &
+        If(drpCategorie.Selected.Code = "gehuurd-materieel" && IsBlank(txtHuurRef.Text), "Referentie huurcontract ontbreekt;", "") &
+        If(tglDerde.Value && IsBlank(txtDerde.Text), "Naam van de betrokken derde ontbreekt;", "");
+
+Screens:
+  scrMelden:
+    Properties:
+      Fill: =Color.White
+      OnVisible: |-
+        =Set(varClientId, GUID());
+        Clear(colFotos);
+        Set(varPositie, If(Location.Latitude <> 0, Location.Latitude & "," & Location.Longitude, Blank()))
+    Children:
+      - conKop:
+          Control: GroupContainer@1.3.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =HvNavy
+            Height: =64
+            Width: =Parent.Width
+          Children:
+            - lblKop:
+                Control: Label@2.5.1
+                Properties:
+                  Text: ="Schade melden"
+                  Color: =Color.White
+                  FontWeight: =FontWeight.Bold
+                  X: =16
+                  Width: =Parent.Width - 120
+                  Height: =64
+            - lblOffline:
+                Control: Label@2.5.1
+                Properties:
+                  Text: =If(Connection.Connected, "online", "offline — wordt later verzonden")
+                  Color: =If(Connection.Connected, Color.White, HvRood)
+                  Align: =Align.Right
+                  X: =Parent.Width - 220
+                  Width: =204
+                  Height: =64
+      - tglLetsel:
+          Control: Toggle@1.1.5
+          Properties:
+            Default: =false
+            Y: =80
+            X: =16
+      - lblLetsel:
+          Control: Label@2.5.1
+          Properties:
+            Text: |-
+              =If(tglLetsel.Value, "STOP — personenletsel: bel 112 indien nodig en volg de procedure arbeidsongeval (preventieadviseur). Dit formulier is alleen voor materiële schade.", "Is er iemand gewond?")
+            Color: =If(tglLetsel.Value, HvRood, HvNavy)
+            X: =90
+            Y: =72
+            Width: =Parent.Width - 106
+            Height: =64
+      - drpWerf:
+          Control: Classic/DropDown@2.3.1
+          Properties:
+            Items: =Filter(Werven, Actief = true)
+            Y: =150
+            X: =16
+            Width: =Parent.Width - 32
+            DisplayMode: =If(tglLetsel.Value, DisplayMode.Disabled, DisplayMode.Edit)
+      - drpCategorie:
+          Control: Classic/DropDown@2.3.1
+          Properties:
+            Items: =Categorieen
+            Value: =Label
+            Y: =206
+            X: =16
+            Width: =Parent.Width - 32
+      - drpLeiding:
+          Control: Classic/DropDown@2.3.1
+          Properties:
+            Items: =["gas", "elektriciteit", "water", "telecom", "riolering"]
+            Visible: =drpCategorie.Selected.Code = "nutsleiding"
+            Y: =262
+            X: =16
+            Width: =(Parent.Width - 40) / 2
+      - txtKlip:
+          Control: TextInput@2.3.2
+          Properties:
+            HintText: ="KLIP-referentie"
+            Visible: =drpCategorie.Selected.Code = "nutsleiding"
+            Y: =262
+            X: =(Parent.Width) / 2 + 4
+            Width: =(Parent.Width - 40) / 2
+      - txtBeheerder:
+          Control: TextInput@2.3.2
+          Properties:
+            HintText: ="Leidingbeheerder"
+            Visible: =drpCategorie.Selected.Code = "nutsleiding"
+            Y: =318
+            X: =16
+            Width: =Parent.Width - 32
+      - tglVerwittigd:
+          Control: Toggle@1.1.5
+          Properties:
+            Visible: =drpCategorie.Selected.Code = "nutsleiding"
+            Default: =false
+            Y: =374
+            X: =16
+      - txtHuurRef:
+          Control: TextInput@2.3.2
+          Properties:
+            HintText: ="Referentie huurcontract"
+            Visible: =drpCategorie.Selected.Code = "gehuurd-materieel"
+            Y: =262
+            X: =16
+            Width: =Parent.Width - 32
+      - txtOmschrijving:
+          Control: TextInput@2.3.2
+          Properties:
+            Mode: =TextMode.MultiLine
+            HintText: ="Wat gebeurde er? Welke machine of welk eigendom?"
+            Y: =430
+            X: =16
+            Width: =Parent.Width - 32
+            Height: =110
+      - txtBedrag:
+          Control: TextInput@2.3.2
+          Properties:
+            Format: =TextFormat.Number
+            HintText: ="Ruwe schatting in euro (0 als onbekend)"
+            Y: =552
+            X: =16
+            Width: =Parent.Width - 32
+      - tglDerde:
+          Control: Toggle@1.1.5
+          Properties:
+            Default: =false
+            Y: =608
+            X: =16
+      - txtDerde:
+          Control: TextInput@2.3.2
+          Properties:
+            HintText: ="Naam betrokken derde"
+            Visible: =tglDerde.Value
+            Y: =608
+            X: =100
+            Width: =Parent.Width - 116
+      - camFoto:
+          Control: AddMedia@2.2.1
+          Properties:
+            Y: =664
+            X: =16
+            OnChange: |-
+              =Collect(colFotos, {Naam: "foto-" & (CountRows(colFotos) + 1) & ".jpg", Inhoud: camFoto.Media})
+      - lblFotos:
+          Control: Label@2.5.1
+          Properties:
+            Text: =CountRows(colFotos) & " foto('s)"
+            Y: =664
+            X: =180
+      - lblFouten:
+          Control: Label@2.5.1
+          Properties:
+            Text: =Substitute(Fouten, ";", Char(10))
+            Color: =HvRood
+            Visible: =!IsBlank(Fouten)
+            Y: =720
+            X: =16
+            Width: =Parent.Width - 32
+            Height: =80
+      - btnVerzenden:
+          Control: Button@2.2.0
+          Properties:
+            Text: ="Verzenden"
+            Fill: =HvRood
+            Y: =Parent.Height - 72
+            X: =16
+            Width: =Parent.Width - 32
+            DisplayMode: =If(IsBlank(Fouten) && !tglLetsel.Value, DisplayMode.Edit, DisplayMode.Disabled)
+            OnSelect: |-
+              =With(
+                {
+                  claim: Patch(Schadeclaims, Defaults(Schadeclaims), {
+                    'Client ID': varClientId,
+                    Werf: drpWerf.Selected,
+                    Categorie: drpCategorie.Selected.Code,
+                    Omschrijving: txtOmschrijving.Text,
+                    'Geschat bedrag': Value(txtBedrag.Text),
+                    'Tijdstip schade': Now(),
+                    GPS: varPositie,
+                    'Type leiding': drpLeiding.Selected.Value,
+                    'KLIP-referentie': txtKlip.Text,
+                    Leidingbeheerder: txtBeheerder.Text,
+                    'Beheerder verwittigd': tglVerwittigd.Value,
+                    Huurreferentie: txtHuurRef.Text,
+                    'Derde betrokken': tglDerde.Value,
+                    'Naam derde': txtDerde.Text,
+                    Status: 'Status (Schadeclaims)'.Gemeld
+                  })
+                },
+                ForAll(colFotos As f, Patch('Schadefoto''s', Defaults('Schadefoto''s'), {Naam: f.Naam, Afbeelding: f.Inhoud, Schadeclaim: claim}))
+              );
+              Notify(If(Connection.Connected, "Melding verzonden. Je krijgt het dossiernummer via Teams.", "Opgeslagen op je toestel. Verzending zodra er bereik is."), NotificationType.Success);
+              Navigate(scrMijnMeldingen)
+
+  scrMijnMeldingen:
+    Properties:
+      Fill: =Color.White
+    Children:
+      - galMijn:
+          Control: Gallery@2.15.0
+          Variant: Vertical
+          Properties:
+            Items: =SortByColumns(Filter(Schadeclaims, 'Created By'.'Primary Email' = User().Email), "createdon", SortOrder.Descending)
+            Width: =Parent.Width
+            Height: =Parent.Height
+            TemplateSize: =72
+          Children:
+            - lblDossier:
+                Control: Label@2.5.1
+                Properties:
+                  Text: =Coalesce(ThisItem.Dossiernummer, "in wachtrij (offline)") & " · " & ThisItem.Status
+                  FontWeight: =FontWeight.Semibold
+                  X: =16
+                  Width: =Parent.TemplateWidth - 32

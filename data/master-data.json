@@ -1,0 +1,89 @@
+{
+  "_note": "Fictieve stamgegevens van Halverdijk Group. Alle namen, nummerplaten, prijzen en voorraden zijn verzonnen en dienen enkel om de cases uitvoerbaar te maken.",
+  "today": "2026-10-12",
+  "customers": [
+    { "customerNo": "K-1001", "name": "Bouwbedrijf Duinhoek", "active": true, "plates": ["1-DHK-101", "1-DHK-102"] },
+    { "customerNo": "K-1002", "name": "Wegenbouw Kreekzande", "active": true, "plates": ["1-KRZ-210", "2-KRZ-211"] },
+    { "customerNo": "K-1003", "name": "Grondwerken Polderveld", "active": true, "plates": ["1-PLV-330"] },
+    { "customerNo": "K-1004", "name": "Sloopwerken IJzermonde", "active": true, "plates": ["1-IJZ-404", "1-IJZ-405"] },
+    { "customerNo": "K-1005", "name": "Gemeente Westerzande — technische dienst", "active": true, "plates": ["1-GWZ-500"] },
+    { "customerNo": "K-1006", "name": "Tuinaanleg Groenkust", "active": true, "plates": ["1-GRK-612"] },
+    { "customerNo": "K-1007", "name": "Halverdijk Aannemingen (intern)", "active": true, "plates": ["1-HVA-701", "1-HVA-702", "1-HVA-703"] },
+    { "customerNo": "K-1008", "name": "Bouwgroep Strandvelde", "active": true, "plates": ["1-STV-808"] },
+    { "customerNo": "K-1010", "name": "Renovatie Kustlijn", "active": true, "plates": ["1-KSL-110"] },
+    { "customerNo": "K-1011", "name": "Afbraak Moerhoek", "active": false, "plates": ["1-MRH-111"] }
+  ],
+  "hauliers": [
+    { "haulierNo": "V-901", "name": "Transport Zeewind", "plates": ["1-ZWT-901", "1-ZWT-902"] }
+  ],
+  "acceptance": {
+    "_note": "Acceptatielijst van de fictieve breekwerf (omgevingsvergunning). Codes volgen de Europese afvalstoffenlijst (EURAL); de selectie en prijzen zijn illustratief.",
+    "accepted": [
+      { "code": "17 01 01", "label": "Beton", "pricePerTonne": 8 },
+      { "code": "17 01 02", "label": "Stenen", "pricePerTonne": 10 },
+      { "code": "17 01 07", "label": "Mengsels van beton, stenen en tegels", "pricePerTonne": 12 },
+      { "code": "17 03 02", "label": "Bitumineuze mengsels zonder teer", "pricePerTonne": 9 },
+      { "code": "17 05 04", "label": "Grond en stenen (niet gevaarlijk)", "pricePerTonne": 14, "needsSoilRef": true },
+      { "code": "17 09 04", "label": "Gemengd bouw- en sloopafval", "pricePerTonne": 38 }
+    ],
+    "refused": [
+      { "code": "17 06 05*", "label": "Asbesthoudende bouwmaterialen" },
+      { "code": "17 03 01*", "label": "Teerhoudende bitumineuze mengsels" }
+    ],
+    "products": [
+      { "code": "MG-031", "label": "Menggranulaat 0/31,5", "pricePerTonne": 11 },
+      { "code": "BG-040", "label": "Betongranulaat 0/40", "pricePerTonne": 13 },
+      { "code": "ZS-02", "label": "Zeefzand 0/2", "pricePerTonne": 9 }
+    ]
+  },
+  "projects": [
+    { "projectNo": "W-2601", "name": "Heraanleg Zeedijk Westerzande", "type": "wegenwerken", "active": true, "manager": "Projectleider Wegen", "department": "Wegen & Riolering", "depotKm": { "DEP-OOST": 6, "DEP-WEST": 19, "REC-BRK": 9, "ASF": 11 },
+      "budget": { "granulaten": 42000, "asfalt": 96000, "riolering": 18000, "signalisatie": 6000, "kleinmateriaal": 4500 } },
+    { "projectNo": "W-2602", "name": "Riolering Kreekstraat Polderveld", "type": "riolering", "active": true, "manager": "Projectleider Riolering", "department": "Wegen & Riolering", "depotKm": { "DEP-OOST": 24, "DEP-WEST": 8, "REC-BRK": 21, "ASF": 26 },
+      "budget": { "granulaten": 15000, "asfalt": 12000, "riolering": 64000, "signalisatie": 3000, "kleinmateriaal": 2500 } },
+    { "projectNo": "W-2603", "name": "Selectieve sloop schoolgebouw IJzermonde", "type": "sloop", "active": true, "manager": "Projectleider Sloop", "department": "Sloop & Sanering", "depotKm": { "DEP-OOST": 31, "DEP-WEST": 14, "REC-BRK": 28, "ASF": 33 },
+      "budget": { "granulaten": 4000, "asfalt": 0, "riolering": 0, "signalisatie": 2500, "kleinmateriaal": 6000 } },
+    { "projectNo": "W-2604", "name": "Bedrijventerrein Haven-Oost fase 2", "type": "grondwerken", "active": true, "manager": "Projectleider Grondwerken", "department": "Grondwerken", "depotKm": { "DEP-OOST": 4, "DEP-WEST": 27, "REC-BRK": 6, "ASF": 8 },
+      "budget": { "granulaten": 120000, "asfalt": 38000, "riolering": 26000, "signalisatie": 4000, "kleinmateriaal": 5000 } },
+    { "projectNo": "W-2605", "name": "Fietspad Kanaaldijk", "type": "wegenwerken", "active": false, "manager": "Projectleider Wegen", "department": "Wegen & Riolering", "depotKm": { "DEP-OOST": 15, "DEP-WEST": 12, "REC-BRK": 17, "ASF": 18 },
+      "budget": { "granulaten": 9000, "asfalt": 22000, "riolering": 0, "signalisatie": 1500, "kleinmateriaal": 1000 } }
+  ],
+  "depots": [
+    { "depotNo": "DEP-OOST", "name": "Depot Oost (hoofdzetel)" },
+    { "depotNo": "DEP-WEST", "name": "Depot West" },
+    { "depotNo": "REC-BRK", "name": "Breekwerf Halverdijk Recycling" },
+    { "depotNo": "ASF", "name": "Asfaltcentrale Halverdijk Asfalt" }
+  ],
+  "catalog": [
+    { "itemNo": "MG-031", "label": "Menggranulaat 0/31,5", "unit": "t", "unitCost": 11, "category": "granulaten", "source": "intern", "recycled": true },
+    { "itemNo": "BG-040", "label": "Betongranulaat 0/40", "unit": "t", "unitCost": 13, "category": "granulaten", "source": "intern", "recycled": true },
+    { "itemNo": "PG-031", "label": "Steenslag porfier 0/31,5 (primair)", "unit": "t", "unitCost": 24, "category": "granulaten", "source": "extern", "leadDays": 2, "recycledAlternative": "MG-031" },
+    { "itemNo": "ZS-02", "label": "Straatzand 0/2", "unit": "t", "unitCost": 12, "category": "granulaten", "source": "intern" },
+    { "itemNo": "SC-150", "label": "Schraal beton (stabilisé) 150 kg/m³", "unit": "m3", "unitCost": 78, "category": "granulaten", "source": "intern" },
+    { "itemNo": "AB-4C", "label": "Asfalt AB-4C", "unit": "t", "unitCost": 72, "category": "asfalt", "source": "intern", "weekdaysOnly": true },
+    { "itemNo": "RB-315", "label": "Rioolbuis PP SN8 Ø315", "unit": "m", "unitCost": 38, "category": "riolering", "source": "extern", "leadDays": 3 },
+    { "itemNo": "RB-400", "label": "Rioolbuis PP SN8 Ø400", "unit": "m", "unitCost": 61, "category": "riolering", "source": "extern", "leadDays": 5 },
+    { "itemNo": "KB-160", "label": "Kabelbeschermingsbuis Ø160", "unit": "m", "unitCost": 4.5, "category": "riolering", "source": "intern" },
+    { "itemNo": "BS-IC1", "label": "Betonboordsteen IC1", "unit": "m", "unitCost": 9, "category": "kleinmateriaal", "source": "intern" },
+    { "itemNo": "SB-F45", "label": "Signalisatiebord F45 (week)", "unit": "st", "unitCost": 21, "category": "signalisatie", "source": "intern" },
+    { "itemNo": "HK-350", "label": "Werfhek 3,5 m (week)", "unit": "st", "unitCost": 17.5, "category": "signalisatie", "source": "intern" },
+    { "itemNo": "GT-525", "label": "Geotextiel 5,25 × 100 m", "unit": "rol", "unitCost": 160, "category": "kleinmateriaal", "source": "extern", "leadDays": 2 }
+  ],
+  "stock": [
+    { "itemNo": "MG-031", "depotNo": "REC-BRK", "onHand": 1850, "reserved": 420 },
+    { "itemNo": "MG-031", "depotNo": "DEP-OOST", "onHand": 160, "reserved": 0 },
+    { "itemNo": "BG-040", "depotNo": "REC-BRK", "onHand": 640, "reserved": 120 },
+    { "itemNo": "ZS-02", "depotNo": "DEP-OOST", "onHand": 80, "reserved": 40 },
+    { "itemNo": "ZS-02", "depotNo": "DEP-WEST", "onHand": 35, "reserved": 0 },
+    { "itemNo": "SC-150", "depotNo": "REC-BRK", "onHand": 9999, "reserved": 0, "madeToOrder": true },
+    { "itemNo": "AB-4C", "depotNo": "ASF", "onHand": 9999, "reserved": 0, "madeToOrder": true },
+    { "itemNo": "KB-160", "depotNo": "DEP-OOST", "onHand": 300, "reserved": 120 },
+    { "itemNo": "KB-160", "depotNo": "DEP-WEST", "onHand": 90, "reserved": 0 },
+    { "itemNo": "BS-IC1", "depotNo": "DEP-OOST", "onHand": 140, "reserved": 60 },
+    { "itemNo": "SB-F45", "depotNo": "DEP-OOST", "onHand": 24, "reserved": 10 },
+    { "itemNo": "SB-F45", "depotNo": "DEP-WEST", "onHand": 12, "reserved": 0 },
+    { "itemNo": "HK-350", "depotNo": "DEP-OOST", "onHand": 180, "reserved": 150 },
+    { "itemNo": "HK-350", "depotNo": "DEP-WEST", "onHand": 60, "reserved": 20 },
+    { "itemNo": "RB-315", "depotNo": "DEP-WEST", "onHand": 18, "reserved": 0 }
+  ]
+}

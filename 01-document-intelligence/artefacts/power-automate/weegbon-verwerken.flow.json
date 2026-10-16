@@ -1,0 +1,491 @@
+{
+  "name": "HV-DI-01 Weegbon verwerken",
+  "description": "Cloud flow (Power Automate). Haalt weegbonnen uit het gedeelde postvak, laat Azure AI Document Intelligence de velden lezen, roept de child flow met de elf controles aan en boekt, zet in nazicht, escaleert of weigert. Ontwerp-artefact: importeren vraagt eigen verbindingen en omgevingsvariabelen.",
+  "properties": {
+    "connectionReferences": {
+      "shared_office365": {
+        "connectionReferenceLogicalName": "hv_sharedoffice365",
+        "api": {
+          "name": "shared_office365"
+        }
+      },
+      "shared_commondataserviceforapps": {
+        "connectionReferenceLogicalName": "hv_shareddataverse",
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_teams": {
+        "connectionReferenceLogicalName": "hv_sharedteams",
+        "api": {
+          "name": "shared_teams"
+        }
+      },
+      "shared_keyvault": {
+        "connectionReferenceLogicalName": "hv_sharedkeyvault",
+        "api": {
+          "name": "shared_keyvault"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "Postvak weegbonnen (hv_MailboxWeegbonnen)": {
+          "defaultValue": "weegbonnen@halverdijk.example",
+          "type": "String"
+        },
+        "DI endpoint (hv_DocIntelEndpoint)": {
+          "defaultValue": "https://hv-docintel.cognitiveservices.azure.com",
+          "type": "String"
+        },
+        "DI model (hv_DocIntelModel)": {
+          "defaultValue": "weegbon-v1",
+          "type": "String"
+        },
+        "ERP API basis-URL (hv_ErpApiBaseUrl)": {
+          "defaultValue": "https://api.halverdijk.example/erp/v1",
+          "type": "String"
+        },
+        "Teams-kanaal administratie (hv_TeamsChannelAdmin)": {
+          "defaultValue": "",
+          "type": "String"
+        }
+      },
+      "triggers": {
+        "Nieuwe_mail_in_postvak_weegbonnen": {
+          "type": "OpenApiConnectionNotification",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_office365",
+              "operationId": "SharedMailboxOnNewEmailV2",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365"
+            },
+            "parameters": {
+              "mailboxAddress": "@parameters('Postvak weegbonnen (hv_MailboxWeegbonnen)')",
+              "folderId": "Inbox",
+              "hasAttachments": true,
+              "includeAttachments": true
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "splitOn": "@triggerOutputs()?['body/value']"
+        }
+      },
+      "actions": {
+        "DI_sleutel_ophalen": {
+          "type": "OpenApiConnection",
+          "runAfter": {},
+          "inputs": {
+            "host": {
+              "connectionName": "shared_keyvault",
+              "operationId": "GetSecret",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_keyvault"
+            },
+            "parameters": {
+              "secretName": "docintel-key"
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "runtimeConfiguration": {
+            "secureData": {
+              "properties": [
+                "outputs"
+              ]
+            }
+          }
+        },
+        "Per_bijlage": {
+          "type": "Foreach",
+          "runAfter": {
+            "DI_sleutel_ophalen": [
+              "Succeeded"
+            ]
+          },
+          "foreach": "@filter(triggerOutputs()?['body/attachments'], item => or(endsWith(toLower(item?['name']), '.pdf'), endsWith(toLower(item?['name']), '.jpg')))",
+          "runtimeConfiguration": {
+            "concurrency": {
+              "repetitions": 4
+            }
+          },
+          "actions": {
+            "Try": {
+              "type": "Scope",
+              "runAfter": {},
+              "actions": {
+                "Documentrij_aanmaken": {
+                  "type": "OpenApiConnection",
+                  "runAfter": {},
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "CreateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "hv_documents",
+                      "item/hv_naam": "@items('Per_bijlage')?['name']",
+                      "item/hv_kanaal": 100000001,
+                      "item/hv_status": 100000000,
+                      "item/hv_afzender": "@triggerOutputs()?['body/from']"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Analyse_starten": {
+                  "type": "Http",
+                  "runAfter": {
+                    "Documentrij_aanmaken": [
+                      "Succeeded"
+                    ]
+                  },
+                  "inputs": {
+                    "method": "POST",
+                    "uri": "@{parameters('DI endpoint (hv_DocIntelEndpoint)')}/documentintelligence/documentModels/@{parameters('DI model (hv_DocIntelModel)')}:analyze?api-version=2024-11-30",
+                    "headers": {
+                      "Ocp-Apim-Subscription-Key": "@body('DI_sleutel_ophalen')?['value']",
+                      "Content-Type": "application/json"
+                    },
+                    "body": {
+                      "base64Source": "@items('Per_bijlage')?['contentBytes']"
+                    }
+                  },
+                  "runtimeConfiguration": {
+                    "secureData": {
+                      "properties": [
+                        "inputs"
+                      ]
+                    }
+                  }
+                },
+                "Status_resultaat": {
+                  "type": "InitializeVariable",
+                  "runAfter": {
+                    "Analyse_starten": [
+                      "Succeeded"
+                    ]
+                  },
+                  "inputs": {
+                    "variables": [
+                      {
+                        "name": "analyseStatus",
+                        "type": "string",
+                        "value": "running"
+                      }
+                    ]
+                  }
+                },
+                "Wachten_op_resultaat": {
+                  "type": "Until",
+                  "runAfter": {
+                    "Status_resultaat": [
+                      "Succeeded"
+                    ]
+                  },
+                  "expression": "@not(equals(variables('analyseStatus'), 'running'))",
+                  "limit": {
+                    "count": 30,
+                    "timeout": "PT2M"
+                  },
+                  "actions": {
+                    "Even_wachten": {
+                      "type": "Wait",
+                      "runAfter": {},
+                      "inputs": {
+                        "interval": {
+                          "count": 2,
+                          "unit": "Second"
+                        }
+                      }
+                    },
+                    "Resultaat_opvragen": {
+                      "type": "Http",
+                      "runAfter": {
+                        "Even_wachten": [
+                          "Succeeded"
+                        ]
+                      },
+                      "inputs": {
+                        "method": "GET",
+                        "uri": "@{outputs('Analyse_starten')?['headers']?['Operation-Location']}",
+                        "headers": {
+                          "Ocp-Apim-Subscription-Key": "@body('DI_sleutel_ophalen')?['value']"
+                        }
+                      }
+                    },
+                    "Status_bijwerken": {
+                      "type": "SetVariable",
+                      "runAfter": {
+                        "Resultaat_opvragen": [
+                          "Succeeded"
+                        ]
+                      },
+                      "inputs": {
+                        "name": "analyseStatus",
+                        "value": "@body('Resultaat_opvragen')?['status']"
+                      }
+                    }
+                  }
+                },
+                "Velden_mappen": {
+                  "type": "Compose",
+                  "runAfter": {
+                    "Wachten_op_resultaat": [
+                      "Succeeded"
+                    ]
+                  },
+                  "inputs": {
+                    "documentId": "@outputs('Documentrij_aanmaken')?['body/hv_documentnr']",
+                    "documentType": "@body('Resultaat_opvragen')?['analyzeResult/documents'][0]?['docType']",
+                    "fields": {
+                      "ticketNo": {
+                        "value": "@body('Resultaat_opvragen')?['analyzeResult/documents'][0]?['fields/Bonnummer/valueString']",
+                        "confidence": "@body('Resultaat_opvragen')?['analyzeResult/documents'][0]?['fields/Bonnummer/confidence']"
+                      },
+                      "net": {
+                        "value": "@body('Resultaat_opvragen')?['analyzeResult/documents'][0]?['fields/Netto/valueNumber']",
+                        "confidence": "@body('Resultaat_opvragen')?['analyzeResult/documents'][0]?['fields/Netto/confidence']"
+                      }
+                    }
+                  },
+                  "description": "Ingekort: in de echte flow staan alle elf velden uit extraction-schema.json."
+                },
+                "Controles_uitvoeren": {
+                  "type": "Workflow",
+                  "runAfter": {
+                    "Velden_mappen": [
+                      "Succeeded"
+                    ]
+                  },
+                  "inputs": {
+                    "host": {
+                      "workflowReferenceName": "hv-di-02-weegbon-controleren"
+                    },
+                    "body": {
+                      "extractie": "@outputs('Velden_mappen')"
+                    }
+                  },
+                  "description": "Child flow HV-DI-02: de elf regels R01–R11 (zie 03-design.md). Geeft { beslissing, bevindingen[] } terug."
+                },
+                "Volgens_beslissing": {
+                  "type": "Switch",
+                  "runAfter": {
+                    "Controles_uitvoeren": [
+                      "Succeeded"
+                    ]
+                  },
+                  "expression": "@body('Controles_uitvoeren')?['beslissing']",
+                  "cases": {
+                    "Automatisch": {
+                      "case": "auto",
+                      "actions": {
+                        "Boeken_in_ERP": {
+                          "type": "Http",
+                          "runAfter": {},
+                          "inputs": {
+                            "method": "POST",
+                            "uri": "@{parameters('ERP API basis-URL (hv_ErpApiBaseUrl)')}/weighing-tickets",
+                            "headers": {
+                              "Idempotency-Key": "@{outputs('Velden_mappen')?['fields/ticketNo/value']}",
+                              "Content-Type": "application/json"
+                            },
+                            "body": "@body('Controles_uitvoeren')?['erpPayload']",
+                            "authentication": {
+                              "type": "ManagedServiceIdentity",
+                              "audience": "api://halverdijk-erp-api"
+                            },
+                            "retryPolicy": {
+                              "type": "exponential",
+                              "count": 4,
+                              "interval": "PT30S"
+                            }
+                          }
+                        },
+                        "Status_geboekt": {
+                          "type": "OpenApiConnection",
+                          "runAfter": {
+                            "Boeken_in_ERP": [
+                              "Succeeded"
+                            ]
+                          },
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps",
+                              "operationId": "UpdateOnlyRecord",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "hv_documents",
+                              "recordId": "@outputs('Documentrij_aanmaken')?['body/hv_documentid']",
+                              "item/hv_status": 100000004,
+                              "item/hv_erpreferentie": "@body('Boeken_in_ERP')?['ticketId']"
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          }
+                        }
+                      }
+                    },
+                    "Nazicht": {
+                      "case": "review",
+                      "actions": {
+                        "Status_nazicht": {
+                          "type": "OpenApiConnection",
+                          "runAfter": {},
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps",
+                              "operationId": "UpdateOnlyRecord",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "hv_documents",
+                              "recordId": "@outputs('Documentrij_aanmaken')?['body/hv_documentid']",
+                              "item/hv_status": 100000002,
+                              "item/hv_bevindingen": "@{string(body('Controles_uitvoeren')?['bevindingen'])}"
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          }
+                        }
+                      }
+                    },
+                    "Escalatie": {
+                      "case": "escalate",
+                      "actions": {
+                        "Status_escalatie": {
+                          "type": "OpenApiConnection",
+                          "runAfter": {},
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps",
+                              "operationId": "UpdateOnlyRecord",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "hv_documents",
+                              "recordId": "@outputs('Documentrij_aanmaken')?['body/hv_documentid']",
+                              "item/hv_status": 100000003
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          }
+                        },
+                        "Milieucoordinator_verwittigen": {
+                          "type": "OpenApiConnection",
+                          "runAfter": {
+                            "Status_escalatie": [
+                              "Succeeded"
+                            ]
+                          },
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_teams",
+                              "operationId": "PostMessageToConversation",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams"
+                            },
+                            "parameters": {
+                              "poster": "Flow bot",
+                              "location": "Chat with Flow bot",
+                              "body/recipient": "milieu@halverdijk.example",
+                              "body/messageBody": "Geweigerd materiaal op weegbon @{outputs('Velden_mappen')?['fields/ticketNo/value']}. Beslis in de review-app; er wordt niets geboekt."
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          }
+                        }
+                      }
+                    },
+                    "Dubbel": {
+                      "case": "reject",
+                      "actions": {
+                        "Status_dubbel": {
+                          "type": "OpenApiConnection",
+                          "runAfter": {},
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps",
+                              "operationId": "UpdateOnlyRecord",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "hv_documents",
+                              "recordId": "@outputs('Documentrij_aanmaken')?['body/hv_documentid']",
+                              "item/hv_status": 100000005
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "default": {
+                    "actions": {}
+                  }
+                }
+              }
+            },
+            "Catch": {
+              "type": "Scope",
+              "runAfter": {
+                "Try": [
+                  "Failed",
+                  "TimedOut"
+                ]
+              },
+              "actions": {
+                "Status_fout": {
+                  "type": "OpenApiConnection",
+                  "runAfter": {},
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "UpdateOnlyRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "hv_documents",
+                      "recordId": "@outputs('Documentrij_aanmaken')?['body/hv_documentid']",
+                      "item/hv_status": 100000009,
+                      "item/hv_foutmelding": "@{result('Try')}"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Functioneel_beheer_verwittigen": {
+                  "type": "OpenApiConnection",
+                  "runAfter": {
+                    "Status_fout": [
+                      "Succeeded",
+                      "Failed"
+                    ]
+                  },
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_teams",
+                      "operationId": "PostMessageToConversation",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams"
+                    },
+                    "parameters": {
+                      "poster": "Flow bot",
+                      "location": "Channel",
+                      "body/recipient/channelId": "@parameters('Teams-kanaal administratie (hv_TeamsChannelAdmin)')",
+                      "body/messageBody": "Weegbonverwerking mislukt voor @{items('Per_bijlage')?['name']}. Document staat op status Fout; manuele verwerking via de review-app."
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "outputs": {}
+    }
+  }
+}

@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1780 700" width="1780" height="700" font-family="Barlow, 'Segoe UI', Arial, sans-serif" role="img" aria-label="TO-BE — document intelligence met menselijke controle">
+<title>TO-BE — document intelligence met menselijke controle</title>
+<defs><marker id="arr-c1_tobe" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#242a38"/></marker></defs>
+<rect x="0" y="0" width="1780" height="700" fill="#ffffff"/>
+<rect x="20" y="20" width="1750" height="650" fill="none" stroke="#242a38" stroke-width="1.5"/>
+<text transform="translate(39,345) rotate(-90)" text-anchor="middle" font-size="14" font-weight="700" fill="#242a38">Halverdijk Recycling</text>
+<rect x="50" y="20" width="1720" height="130" fill="#f6f6f7" stroke="#242a38" stroke-width="0.8"/>
+<text transform="translate(68,85) rotate(-90)" text-anchor="middle" font-size="11.5" fill="#242a38"><tspan x="0" dy="-6">Weegbrug /</tspan><tspan x="0" dy="12">vervoerder</tspan></text>
+<rect x="50" y="150" width="1720" height="130" fill="#efefef" stroke="#242a38" stroke-width="0.8"/>
+<text transform="translate(68,215) rotate(-90)" text-anchor="middle" font-size="11.5" fill="#242a38"><tspan x="0" dy="-6">Power Automate +</tspan><tspan x="0" dy="12">AI</tspan></text>
+<rect x="50" y="280" width="1720" height="130" fill="#f6f6f7" stroke="#242a38" stroke-width="0.8"/>
+<text transform="translate(68,345) rotate(-90)" text-anchor="middle" font-size="11.5" fill="#242a38"><tspan x="0" dy="-6">Administratie</tspan><tspan x="0" dy="12">(reviewer)</tspan></text>
+<rect x="50" y="410" width="1720" height="130" fill="#efefef" stroke="#242a38" stroke-width="0.8"/>
+<text transform="translate(68,475) rotate(-90)" text-anchor="middle" font-size="11.5" fill="#242a38"><tspan x="0" dy="0">Milieu-coördinator</tspan></text>
+<rect x="50" y="540" width="1720" height="130" fill="#f6f6f7" stroke="#242a38" stroke-width="0.8"/>
+<text transform="translate(68,605) rotate(-90)" text-anchor="middle" font-size="11.5" fill="#242a38"><tspan x="0" dy="0">ERP / facturatie</tspan></text>
+<path d="M150 103 L150 215 L242 215" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c1_tobe)"/>
+<path d="M358 215 L392 215" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c1_tobe)"/>
+<path d="M508 215 L542 215" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c1_tobe)"/>
+<path d="M658 215 L725 215" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c1_tobe)"/>
+<path d="M775 215 L882 215" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c1_tobe)"/>
+<text x="781" y="209" font-size="10.5" fill="#e20000" font-weight="600">dubbel</text>
+<path d="M750 240 L750 345 L842 345" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c1_tobe)"/>
+<text x="756" y="339" font-size="10.5" fill="#e20000" font-weight="600">nazicht</text>
+<path d="M775 215 L797 215 L797 475 L992 475" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c1_tobe)"/>
+<text x="803" y="469" font-size="10.5" fill="#e20000" font-weight="600">geweigerd</text>
+<path d="M775 215 L823 215 L823 605 L1292 605" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c1_tobe)"/>
+<path d="M779 211 l8 8" stroke="#242a38" stroke-width="1.3"/>
+<text x="829" y="599" font-size="10.5" fill="#e20000" font-weight="600">alles ok</text>
+<path d="M958 345 L1025 345" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c1_tobe)"/>
+<path d="M1075 345 L1332 345" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c1_tobe)"/>
+<text x="1081" y="339" font-size="10.5" fill="#e20000" font-weight="600">nee</text>
+<path d="M1075 345 L1115 345 L1115 605 L1292 605" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c1_tobe)"/>
+<path d="M1079 341 l8 8" stroke="#242a38" stroke-width="1.3"/>
+<text x="1121" y="599" font-size="10.5" fill="#e20000" font-weight="600">ja</text>
+<path d="M1108 475 L1175 475" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c1_tobe)"/>
+<path d="M1225 475 L1292 475" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c1_tobe)"/>
+<path d="M1229 471 l8 8" stroke="#242a38" stroke-width="1.3"/>
+<text x="1231" y="469" font-size="10.5" fill="#e20000" font-weight="600">nee</text>
+<path d="M1200 500 L1200 605 L1292 605" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c1_tobe)"/>
+<text x="1206" y="599" font-size="10.5" fill="#e20000" font-weight="600">uitzondering</text>
+<path d="M1408 475 L1482 475" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c1_tobe)"/>
+<path d="M1408 605 L1442 605" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c1_tobe)"/>
+<path d="M1558 605 L1632 605" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c1_tobe)"/>
+<circle cx="150" cy="85" r="18" fill="#fff" stroke="#242a38" stroke-width="1.6"/>
+<rect x="142" y="79.5" width="16" height="11" fill="#fff" stroke="#242a38"/><path d="M142 79.5l8 6 8-6" fill="none" stroke="#242a38"/>
+<text x="150" y="116" text-anchor="middle" font-size="10.5" fill="#242a38">Bon gescand of</text>
+<text x="150" y="128" text-anchor="middle" font-size="10.5" fill="#242a38">gemaild</text>
+<rect x="242" y="181" width="116" height="68" rx="9" fill="#fdecec" stroke="#e20000" stroke-width="1.5"/>
+<g transform="translate(249,187)" fill="none" stroke="#e20000" stroke-width="1.4"><circle cx="6" cy="6" r="3"/><path d="M6 0v2M6 10v2M0 6h2M10 6h2M1.8 1.8l1.4 1.4M8.8 8.8l1.4 1.4M1.8 10.2l1.4-1.4M8.8 3.2l1.4-1.4"/></g>
+<text x="300" y="206.5" text-anchor="middle" font-size="11" fill="#242a38">Document ophalen</text>
+<text x="300" y="219" text-anchor="middle" font-size="11" fill="#242a38">(postvak /</text>
+<text x="300" y="231.5" text-anchor="middle" font-size="11" fill="#242a38">scanmap)</text>
+<rect x="392" y="181" width="116" height="68" rx="9" fill="#fdecec" stroke="#e20000" stroke-width="1.5"/>
+<g transform="translate(399,187)" fill="none" stroke="#e20000" stroke-width="1.4"><circle cx="6" cy="6" r="3"/><path d="M6 0v2M6 10v2M0 6h2M10 6h2M1.8 1.8l1.4 1.4M8.8 8.8l1.4 1.4M1.8 10.2l1.4-1.4M8.8 3.2l1.4-1.4"/></g>
+<text x="450" y="206.5" text-anchor="middle" font-size="11" fill="#242a38">Classificeren en</text>
+<text x="450" y="219" text-anchor="middle" font-size="11" fill="#242a38">velden extraheren</text>
+<text x="450" y="231.5" text-anchor="middle" font-size="11" fill="#242a38">(AI)</text>
+<rect x="542" y="181" width="116" height="68" rx="9" fill="#fdecec" stroke="#e20000" stroke-width="1.5"/>
+<g transform="translate(549,187)" fill="none" stroke="#e20000" stroke-width="1.2"><rect width="14" height="11"/><path d="M0 4h14M4 4v7"/></g>
+<text x="600" y="212.75" text-anchor="middle" font-size="11" fill="#242a38">Elf controles</text>
+<text x="600" y="225.25" text-anchor="middle" font-size="11" fill="#242a38">R01–R11</text>
+<path d="M750 190L775 215L750 240L725 215z" fill="#fff" stroke="#242a38" stroke-width="1.6"/>
+<path d="M743 208l14 14M757 208l-14 14" stroke="#242a38" stroke-width="3"/>
+<text x="750" y="184" text-anchor="middle" font-size="10.5" font-weight="600" fill="#242a38">Uitkomst?</text>
+<circle cx="900" cy="215" r="18" fill="#fff" stroke="#e20000" stroke-width="3.2"/>
+<text x="900" y="246" text-anchor="middle" font-size="10.5" fill="#242a38">Gearchiveerd als</text>
+<text x="900" y="258" text-anchor="middle" font-size="10.5" fill="#242a38">dubbel</text>
+<rect x="842" y="311" width="116" height="68" rx="9" fill="#ffffff" stroke="#242a38" stroke-width="1.5"/>
+<g transform="translate(849,317)" fill="none" stroke="#242a38" stroke-width="1.2"><circle cx="6" cy="4" r="3"/><path d="M0 13c0-4 3-6 6-6s6 2 6 6z"/></g>
+<text x="900" y="336.5" text-anchor="middle" font-size="11" fill="#242a38">Gemarkeerde</text>
+<text x="900" y="349" text-anchor="middle" font-size="11" fill="#242a38">velden nakijken</text>
+<text x="900" y="361.5" text-anchor="middle" font-size="11" fill="#242a38">en corrigeren</text>
+<rect x="992" y="441" width="116" height="68" rx="9" fill="#ffffff" stroke="#242a38" stroke-width="1.5"/>
+<g transform="translate(999,447)" fill="none" stroke="#242a38" stroke-width="1.2"><circle cx="6" cy="4" r="3"/><path d="M0 13c0-4 3-6 6-6s6 2 6 6z"/></g>
+<text x="1050" y="466.5" text-anchor="middle" font-size="11" fill="#242a38">Weigeren of</text>
+<text x="1050" y="479" text-anchor="middle" font-size="11" fill="#242a38">uitzonderlijk</text>
+<text x="1050" y="491.5" text-anchor="middle" font-size="11" fill="#242a38">aanvaarden</text>
+<path d="M1050 320L1075 345L1050 370L1025 345z" fill="#fff" stroke="#242a38" stroke-width="1.6"/>
+<path d="M1043 338l14 14M1057 338l-14 14" stroke="#242a38" stroke-width="3"/>
+<text x="1050" y="314" text-anchor="middle" font-size="10.5" font-weight="600" fill="#242a38">Bon correct?</text>
+<path d="M1200 450L1225 475L1200 500L1175 475z" fill="#fff" stroke="#242a38" stroke-width="1.6"/>
+<path d="M1193 468l14 14M1207 468l-14 14" stroke="#242a38" stroke-width="3"/>
+<text x="1200" y="444" text-anchor="middle" font-size="10.5" font-weight="600" fill="#242a38">Aanvaarden?</text>
+<circle cx="1350" cy="345" r="18" fill="#fff" stroke="#e20000" stroke-width="3.2"/>
+<text x="1350" y="376" text-anchor="middle" font-size="10.5" fill="#242a38">Afgewezen,</text>
+<text x="1350" y="388" text-anchor="middle" font-size="10.5" fill="#242a38">vervoerder</text>
+<text x="1350" y="400" text-anchor="middle" font-size="10.5" fill="#242a38">verwittigd</text>
+<rect x="1292" y="441" width="116" height="68" rx="9" fill="#fdecec" stroke="#e20000" stroke-width="1.5"/>
+<g transform="translate(1299,447)"><rect width="14" height="10" fill="#242a38"/><path d="M0 0l7 5 7-5" stroke="#fff" fill="none"/></g>
+<text x="1350" y="466.5" text-anchor="middle" font-size="11" fill="#242a38">Klant en</text>
+<text x="1350" y="479" text-anchor="middle" font-size="11" fill="#242a38">vervoerder</text>
+<text x="1350" y="491.5" text-anchor="middle" font-size="11" fill="#242a38">verwittigen</text>
+<circle cx="1500" cy="475" r="18" fill="#fff" stroke="#e20000" stroke-width="3.2"/>
+<text x="1500" y="506" text-anchor="middle" font-size="10.5" fill="#242a38">Lading geweigerd</text>
+<rect x="1292" y="571" width="116" height="68" rx="9" fill="#fdecec" stroke="#e20000" stroke-width="1.5"/>
+<g transform="translate(1299,577)" fill="none" stroke="#e20000" stroke-width="1.4"><circle cx="6" cy="6" r="3"/><path d="M6 0v2M6 10v2M0 6h2M10 6h2M1.8 1.8l1.4 1.4M8.8 8.8l1.4 1.4M1.8 10.2l1.4-1.4M8.8 3.2l1.4-1.4"/></g>
+<text x="1350" y="596.5" text-anchor="middle" font-size="11" fill="#242a38">Weging boeken in</text>
+<text x="1350" y="609" text-anchor="middle" font-size="11" fill="#242a38">ERP (API,</text>
+<text x="1350" y="621.5" text-anchor="middle" font-size="11" fill="#242a38">idempotent)</text>
+<rect x="1442" y="571" width="116" height="68" rx="9" fill="#fdecec" stroke="#e20000" stroke-width="1.5"/>
+<g transform="translate(1449,577)" fill="none" stroke="#e20000" stroke-width="1.4"><circle cx="6" cy="6" r="3"/><path d="M6 0v2M6 10v2M0 6h2M10 6h2M1.8 1.8l1.4 1.4M8.8 8.8l1.4 1.4M1.8 10.2l1.4-1.4M8.8 3.2l1.4-1.4"/></g>
+<text x="1500" y="602.75" text-anchor="middle" font-size="11" fill="#242a38">Archiveren +</text>
+<text x="1500" y="615.25" text-anchor="middle" font-size="11" fill="#242a38">KPI-log</text>
+<circle cx="1650" cy="605" r="18" fill="#fff" stroke="#e20000" stroke-width="3.2"/>
+<text x="1650" y="636" text-anchor="middle" font-size="10.5" fill="#242a38">Klaar voor</text>
+<text x="1650" y="648" text-anchor="middle" font-size="10.5" fill="#242a38">facturatie</text>
+<g transform="translate(20,680)" font-size="10.5" fill="#242a38"><rect width="12" height="10" rx="2" fill="#ffffff" stroke="#242a38"/><text x="17" y="9">menselijke taak</text><rect x="110" width="12" height="10" rx="2" fill="#fdecec" stroke="#e20000"/><text x="127" y="9">geautomatiseerd (flow, regel, AI)</text></g>
+</svg>

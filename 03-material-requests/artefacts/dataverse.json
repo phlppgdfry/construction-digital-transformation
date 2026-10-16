@@ -1,0 +1,49 @@
+{
+  "_note": "Dataverse-tabellen voor case 03 (prefix hv_). Ontwerp. Stamgegevens (artikels, voorraad, budget) blijven in het ERP en worden live via de ERP-facade gelezen. Alleen de aanvraag en de outbox leven in Dataverse.",
+  "tables": [
+    { "logicalName": "hv_materiaalaanvraag", "displayName": "Materiaalaanvraag", "ownership": "User/Team", "primaryName": "hv_aanvraagnr",
+      "columns": [
+        { "name": "hv_aanvraagnr", "type": "Autonumber", "format": "MA-{DATETIMEUTC:yy}-{SEQNUM:4}" },
+        { "name": "hv_werf", "type": "Lookup", "target": "hv_werf" },
+        { "name": "hv_leverenop", "type": "DateTime" },
+        { "name": "hv_spoed", "type": "Yes/No", "note": "Berekend bij indienen: < 48 u" },
+        { "name": "hv_spoedreden", "type": "Choice", "options": ["onvoorziene werfsituatie", "planning gewijzigd door opdrachtgever", "eerdere levering onvolledig", "vergeten te bestellen"] },
+        { "name": "hv_status", "type": "Choice", "options": { "100000000": "Concept", "100000001": "Ingediend", "100000002": "Ter goedkeuring", "100000003": "Goedgekeurd", "100000004": "Gepland", "100000005": "Geleverd", "100000006": "Ontvangen", "100000009": "Afgewezen" } },
+        { "name": "hv_waarde", "type": "Currency" },
+        { "name": "hv_budgetoverschreden", "type": "Yes/No" },
+        { "name": "hv_aankoopnodig", "type": "Yes/No" },
+        { "name": "hv_route", "type": "Text", "note": "Uitkomst DT-03" },
+        { "name": "hv_ontvangstfoto", "type": "Image" }
+      ] },
+    { "logicalName": "hv_aanvraaglijn", "displayName": "Aanvraaglijn", "primaryName": "hv_artikelnr",
+      "columns": [
+        { "name": "hv_aanvraag", "type": "Lookup", "target": "hv_materiaalaanvraag", "cascadeDelete": "Cascade" },
+        { "name": "hv_artikelnr", "type": "Text" },
+        { "name": "hv_hoeveelheid", "type": "Decimal" },
+        { "name": "hv_toewijzing", "type": "Multiline text (JSON)", "note": "[{depotNo, qty, km}] uit hv_WijsVoorraadToe" },
+        { "name": "hv_tekort", "type": "Decimal" },
+        { "name": "hv_alternatief", "type": "Text" }
+      ] },
+    { "logicalName": "hv_outbox", "displayName": "ERP-outbox", "ownership": "Organization", "primaryName": "hv_idempotencykey",
+      "columns": [
+        { "name": "hv_idempotencykey", "type": "Text", "alternateKey": true },
+        { "name": "hv_endpoint", "type": "Choice (text)", "options": ["reservations", "purchase-requisitions", "goods-issues", "project-costs"] },
+        { "name": "hv_body", "type": "Multiline text (JSON)" },
+        { "name": "hv_status", "type": "Choice", "options": { "100000000": "Wachtend", "100000001": "Verzonden", "100000009": "Dead-letter" } },
+        { "name": "hv_pogingen", "type": "Whole number" },
+        { "name": "hv_volgendepoging", "type": "DateTime" },
+        { "name": "hv_laatstefout", "type": "Multiline text" },
+        { "name": "hv_antwoord", "type": "Multiline text" }
+      ],
+      "note": "Transactional outbox: de aanvraag en haar ERP-berichten worden in één Dataverse-transactie bewaard. Verzenden gebeurt los daarvan door HV-MA-02." }
+  ],
+  "customApis": [
+    { "name": "hv_WijsVoorraadToe", "type": "Dataverse low-code plug-in (Power Fx)", "note": "Dichtste depot eerst; schrijft hv_toewijzing en hv_tekort. Spiegel van allocateLine()." },
+    { "name": "hv_MaakErpBerichten", "type": "Dataverse low-code plug-in (Power Fx)", "note": "Maakt outbox-rijen met stabiele sleutel. Spiegel van erpMessages()." }
+  ],
+  "securityRoles": [
+    { "name": "HV Werfleider", "privileges": "hv_materiaalaanvraag + lijnen: create, read (user)" },
+    { "name": "HV Planning", "privileges": "hv_materiaalaanvraag: read/write (organisatie)" },
+    { "name": "HV Functioneel beheer", "privileges": "hv_outbox: read/write (organisatie), opnieuw in wachtrij zetten" }
+  ]
+}

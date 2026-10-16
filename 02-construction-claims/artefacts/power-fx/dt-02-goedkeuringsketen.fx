@@ -1,0 +1,5 @@
+// Case 02 — beslistabel DT-02: wie keurt een schadeclaim goed, in welke volgorde?
+// In de app staat dit als named formula (App.Formulas); de Power Automate-goedkeuringsflow krijgt de keten als tekst mee.
+// Uitvoeren: pac power-fx run --file dt-02-goedkeuringsketen.fx --echo   (scripts/check-powerfx.mjs vergelijkt met src/claims.mjs)
+Set(Gevallen, Table({a: 0, c: "eigen-werf"}, {a: 2500, c: "eigen-werf"}, {a: 2501, c: "eigen-werf"}, {a: 15000, c: "eigen-werf"}, {a: 15001, c: "eigen-werf"}, {a: 1900, c: "eigen-materieel"}, {a: 2100, c: "gehuurd-materieel"}, {a: 27500, c: "eigen-materieel"}, {a: 4200, c: "derden-schade"}, {a: 6800, c: "nutsleiding"}, {a: 22000, c: "nutsleiding"}))
+Concat(Gevallen, Text(a) & "|" & c & "=" & If(c in ["eigen-materieel", "gehuurd-materieel"], "Fleetmanager>", c in ["derden-schade", "nutsleiding"], "Claims & verzekeringen>", "") & If(a <= 2500, "Projectleider", a <= 15000, "Projectleider>Afdelingsverantwoordelijke", "Projectleider>Afdelingsverantwoordelijke>Directie"), ";")

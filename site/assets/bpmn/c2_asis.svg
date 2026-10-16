@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1780 570" width="1780" height="570" font-family="Barlow, 'Segoe UI', Arial, sans-serif" role="img" aria-label="AS-IS — schademelding via telefoon, mail en papier">
+<title>AS-IS — schademelding via telefoon, mail en papier</title>
+<defs><marker id="arr-c2_asis" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#242a38"/></marker></defs>
+<rect x="0" y="0" width="1780" height="570" fill="#ffffff"/>
+<rect x="20" y="20" width="1750" height="520" fill="none" stroke="#242a38" stroke-width="1.5"/>
+<text transform="translate(39,280) rotate(-90)" text-anchor="middle" font-size="14" font-weight="700" fill="#242a38">Halverdijk Aannemingen</text>
+<rect x="50" y="20" width="1720" height="130" fill="#f6f6f7" stroke="#242a38" stroke-width="0.8"/>
+<text transform="translate(68,85) rotate(-90)" text-anchor="middle" font-size="11.5" fill="#242a38"><tspan x="0" dy="0">Werfleider</tspan></text>
+<rect x="50" y="150" width="1720" height="130" fill="#efefef" stroke="#242a38" stroke-width="0.8"/>
+<text transform="translate(68,215) rotate(-90)" text-anchor="middle" font-size="11.5" fill="#242a38"><tspan x="0" dy="0">Projectleider</tspan></text>
+<rect x="50" y="280" width="1720" height="130" fill="#f6f6f7" stroke="#242a38" stroke-width="0.8"/>
+<text transform="translate(68,345) rotate(-90)" text-anchor="middle" font-size="11.5" fill="#242a38"><tspan x="0" dy="-6">Administratie /</tspan><tspan x="0" dy="12">claims</tspan></text>
+<rect x="50" y="410" width="1720" height="130" fill="#efefef" stroke="#242a38" stroke-width="0.8"/>
+<text transform="translate(68,475) rotate(-90)" text-anchor="middle" font-size="11.5" fill="#242a38"><tspan x="0" dy="-6">Verzekeraar /</tspan><tspan x="0" dy="12">derden</tspan></text>
+<path d="M168 85 L242 85" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c2_asis)"/>
+<path d="M300 119 L300 215 L392 215" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c2_asis)"/>
+<path d="M450 249 L450 345 L542 345" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c2_asis)"/>
+<path d="M658 345 L725 345" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c2_asis)"/>
+<path d="M750 320 L750 85 L842 85" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c2_asis)"/>
+<text x="756" y="79" font-size="10.5" fill="#e20000" font-weight="600">nee</text>
+<path d="M900 119 L900 398 L750 398 L750 370" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c2_asis)"/>
+<path d="M775 345 L1025 345" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c2_asis)"/>
+<path d="M779 341 l8 8" stroke="#242a38" stroke-width="1.3"/>
+<text x="781" y="339" font-size="10.5" fill="#e20000" font-weight="600">ja</text>
+<path d="M1050 370 L1050 475 L1142 475" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c2_asis)"/>
+<text x="1056" y="469" font-size="10.5" fill="#e20000" font-weight="600">ja</text>
+<path d="M1050 320 L1050 215 L1142 215" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c2_asis)"/>
+<path d="M1046 308 l8 8" stroke="#242a38" stroke-width="1.3"/>
+<text x="1056" y="209" font-size="10.5" fill="#e20000" font-weight="600">nee</text>
+<path d="M1258 475 L1292 475" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c2_asis)"/>
+<path d="M1350 441 L1350 345 L1442 345" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c2_asis)"/>
+<path d="M1200 249 L1200 345 L1442 345" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c2_asis)"/>
+<path d="M1558 345 L1632 345" fill="none" stroke="#242a38" stroke-width="1.3" marker-end="url(#arr-c2_asis)"/>
+<circle cx="150" cy="85" r="18" fill="#fff" stroke="#242a38" stroke-width="1.6"/>
+<text x="150" y="116" text-anchor="middle" font-size="10.5" fill="#242a38">Schade vastgesteld</text>
+<rect x="242" y="51" width="116" height="68" rx="9" fill="#ffffff" stroke="#242a38" stroke-width="1.5"/>
+<g transform="translate(249,57)" fill="none" stroke="#242a38" stroke-width="1.2"><path d="M0 7h9a2 2 0 0 0 0-4H3M0 7v4h10"/></g>
+<text x="300" y="82.75" text-anchor="middle" font-size="11" fill="#242a38">Bellen, mailen of</text>
+<text x="300" y="95.25" text-anchor="middle" font-size="11" fill="#242a38">papier invullen</text>
+<rect x="392" y="181" width="116" height="68" rx="9" fill="#ffffff" stroke="#242a38" stroke-width="1.5"/>
+<g transform="translate(399,187)" fill="none" stroke="#242a38" stroke-width="1.2"><circle cx="6" cy="4" r="3"/><path d="M0 13c0-4 3-6 6-6s6 2 6 6z"/></g>
+<text x="450" y="212.75" text-anchor="middle" font-size="11" fill="#242a38">Info noteren,</text>
+<text x="450" y="225.25" text-anchor="middle" font-size="11" fill="#242a38">foto's vragen</text>
+<rect x="542" y="311" width="116" height="68" rx="9" fill="#ffffff" stroke="#242a38" stroke-width="1.5"/>
+<g transform="translate(549,317)" fill="none" stroke="#242a38" stroke-width="1.2"><circle cx="6" cy="4" r="3"/><path d="M0 13c0-4 3-6 6-6s6 2 6 6z"/></g>
+<text x="600" y="342.75" text-anchor="middle" font-size="11" fill="#242a38">Regel aanmaken in</text>
+<text x="600" y="355.25" text-anchor="middle" font-size="11" fill="#242a38">Excel-register</text>
+<path d="M750 320L775 345L750 370L725 345z" fill="#fff" stroke="#242a38" stroke-width="1.6"/>
+<path d="M743 338l14 14M757 338l-14 14" stroke="#242a38" stroke-width="3"/>
+<text x="750" y="314" text-anchor="middle" font-size="10.5" font-weight="600" fill="#242a38">Info volledig?</text>
+<rect x="842" y="51" width="116" height="68" rx="9" fill="#ffffff" stroke="#242a38" stroke-width="1.5"/>
+<g transform="translate(849,57)" fill="none" stroke="#242a38" stroke-width="1.2"><path d="M0 7h9a2 2 0 0 0 0-4H3M0 7v4h10"/></g>
+<text x="900" y="82.75" text-anchor="middle" font-size="11" fill="#242a38">Nabellen, info</text>
+<text x="900" y="95.25" text-anchor="middle" font-size="11" fill="#242a38">later doorsturen</text>
+<path d="M1050 320L1075 345L1050 370L1025 345z" fill="#fff" stroke="#242a38" stroke-width="1.6"/>
+<path d="M1043 338l14 14M1057 338l-14 14" stroke="#242a38" stroke-width="3"/>
+<text x="1050" y="314" text-anchor="middle" font-size="10.5" font-weight="600" fill="#242a38">Verzekering nodig?</text>
+<rect x="1142" y="181" width="116" height="68" rx="9" fill="#ffffff" stroke="#242a38" stroke-width="1.5"/>
+<g transform="translate(1149,187)" fill="none" stroke="#242a38" stroke-width="1.2"><circle cx="6" cy="4" r="3"/><path d="M0 13c0-4 3-6 6-6s6 2 6 6z"/></g>
+<text x="1200" y="219" text-anchor="middle" font-size="11" fill="#242a38">Herstel regelen</text>
+<rect x="1142" y="441" width="116" height="68" rx="9" fill="#ffffff" stroke="#242a38" stroke-width="1.5"/>
+<g transform="translate(1149,447)" fill="none" stroke="#242a38" stroke-width="1.2"><circle cx="6" cy="4" r="3"/><path d="M0 13c0-4 3-6 6-6s6 2 6 6z"/></g>
+<text x="1200" y="466.5" text-anchor="middle" font-size="11" fill="#242a38">Aangifte opmaken</text>
+<text x="1200" y="479" text-anchor="middle" font-size="11" fill="#242a38">(vaak na</text>
+<text x="1200" y="491.5" text-anchor="middle" font-size="11" fill="#242a38">deadline)</text>
+<rect x="1292" y="441" width="116" height="68" rx="9" fill="#ffffff" stroke="#242a38" stroke-width="1.5"/>
+<g transform="translate(1299,447)" fill="none" stroke="#242a38"><rect width="14" height="10"/><path d="M0 0l7 5 7-5"/></g>
+<text x="1350" y="466.5" text-anchor="middle" font-size="11" fill="#242a38">Expertise en</text>
+<text x="1350" y="479" text-anchor="middle" font-size="11" fill="#242a38">beslissing</text>
+<text x="1350" y="491.5" text-anchor="middle" font-size="11" fill="#242a38">verzekeraar</text>
+<rect x="1442" y="311" width="116" height="68" rx="9" fill="#ffffff" stroke="#242a38" stroke-width="1.5"/>
+<g transform="translate(1449,317)" fill="none" stroke="#242a38" stroke-width="1.2"><circle cx="6" cy="4" r="3"/><path d="M0 13c0-4 3-6 6-6s6 2 6 6z"/></g>
+<text x="1500" y="342.75" text-anchor="middle" font-size="11" fill="#242a38">Kosten boeken,</text>
+<text x="1500" y="355.25" text-anchor="middle" font-size="11" fill="#242a38">dossier sluiten</text>
+<circle cx="1650" cy="345" r="18" fill="#fff" stroke="#e20000" stroke-width="3.2"/>
+<text x="1650" y="376" text-anchor="middle" font-size="10.5" fill="#242a38">Dossier afgesloten</text>
+<g transform="translate(20,550)" font-size="10.5" fill="#242a38"><rect width="12" height="10" rx="2" fill="#ffffff" stroke="#242a38"/><text x="17" y="9">menselijke taak</text><rect x="110" width="12" height="10" rx="2" fill="#fdecec" stroke="#e20000"/><text x="127" y="9">geautomatiseerd (flow, regel, AI)</text></g>
+</svg>

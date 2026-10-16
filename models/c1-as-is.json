@@ -1,0 +1,173 @@
+{
+  "id": "c1_asis",
+  "case": "01-document-intelligence",
+  "file": "as-is",
+  "name": "AS-IS — weegbonnen manueel verwerken",
+  "pool": "Halverdijk Recycling",
+  "description": "Huidige werkwijze (fictief): papieren weegbonnen worden gebundeld, gescand en overgetypt. Fouten worden pas bij facturatie of een klantklacht zichtbaar.",
+  "lanes": [
+    {
+      "id": "drv",
+      "name": "Chauffeur / vervoerder"
+    },
+    {
+      "id": "wb",
+      "name": "Weegbrugoperator"
+    },
+    {
+      "id": "adm",
+      "name": "Administratie recyclage"
+    },
+    {
+      "id": "fin",
+      "name": "Facturatie"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "s1",
+      "type": "startEvent",
+      "name": "Vrachtwagen aan weegbrug",
+      "lane": "wb",
+      "col": 0
+    },
+    {
+      "id": "t1",
+      "type": "manualTask",
+      "name": "Wegen en papieren weegbon printen",
+      "lane": "wb",
+      "col": 1
+    },
+    {
+      "id": "t2",
+      "type": "manualTask",
+      "name": "Bon aftekenen, kopie mee",
+      "lane": "drv",
+      "col": 2
+    },
+    {
+      "id": "t3",
+      "type": "manualTask",
+      "name": "Bonnen 's avonds bundelen en scannen",
+      "lane": "wb",
+      "col": 3
+    },
+    {
+      "id": "t4",
+      "type": "userTask",
+      "name": "Bon overtypen in ERP",
+      "lane": "adm",
+      "col": 4,
+      "doc": "Gemiddeld 3,5 minuten per bon (aanname). Geen controle op dubbele bonnen."
+    },
+    {
+      "id": "g1",
+      "type": "exclusiveGateway",
+      "name": "Compleet en leesbaar?",
+      "lane": "adm",
+      "col": 5
+    },
+    {
+      "id": "t5",
+      "type": "manualTask",
+      "name": "Ontbrekende info opzoeken of navragen",
+      "lane": "wb",
+      "col": 6
+    },
+    {
+      "id": "t6",
+      "type": "userTask",
+      "name": "Klant, materiaal en prijs nakijken",
+      "lane": "adm",
+      "col": 7
+    },
+    {
+      "id": "t7",
+      "type": "userTask",
+      "name": "Maandelijks factureren",
+      "lane": "fin",
+      "col": 8
+    },
+    {
+      "id": "g2",
+      "type": "exclusiveGateway",
+      "name": "Klant betwist factuur?",
+      "lane": "fin",
+      "col": 9
+    },
+    {
+      "id": "t8",
+      "type": "userTask",
+      "name": "Fout zoeken en creditnota",
+      "lane": "adm",
+      "col": 10
+    },
+    {
+      "id": "e1",
+      "type": "endEvent",
+      "name": "Gefactureerd",
+      "lane": "fin",
+      "col": 11
+    }
+  ],
+  "flows": [
+    {
+      "from": "s1",
+      "to": "t1"
+    },
+    {
+      "from": "t1",
+      "to": "t2"
+    },
+    {
+      "from": "t2",
+      "to": "t3"
+    },
+    {
+      "from": "t3",
+      "to": "t4"
+    },
+    {
+      "from": "t4",
+      "to": "g1"
+    },
+    {
+      "from": "g1",
+      "to": "t5",
+      "name": "nee"
+    },
+    {
+      "from": "g1",
+      "to": "t6",
+      "name": "ja",
+      "default": true
+    },
+    {
+      "from": "t5",
+      "to": "t4"
+    },
+    {
+      "from": "t6",
+      "to": "t7"
+    },
+    {
+      "from": "t7",
+      "to": "g2"
+    },
+    {
+      "from": "g2",
+      "to": "t8",
+      "name": "ja"
+    },
+    {
+      "from": "g2",
+      "to": "e1",
+      "name": "nee",
+      "default": true
+    },
+    {
+      "from": "t8",
+      "to": "t7"
+    }
+  ]
+}

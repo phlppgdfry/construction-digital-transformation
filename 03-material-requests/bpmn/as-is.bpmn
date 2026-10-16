@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Defs_c3_asis" targetNamespace="https://halverdijk.example/bpmn" exporter="construction-digital-transformation/scripts/bpmn.mjs" exporterVersion="1.0">
+  <bpmn:collaboration id="Collab_c3_asis">
+    <bpmn:documentation>Huidige werkwijze (fictief): de werfleider belt of stuurt een bericht, het depot kijkt de voorraad na, leveringen worden telefonisch gepland en de kosten worden dagen later geboekt.</bpmn:documentation>
+    <bpmn:participant id="Pool_c3_asis" name="Halverdijk Group" processRef="Process_c3_asis" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_c3_asis" name="AS-IS — materiaal aanvragen via telefoon, mail en WhatsApp" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_c3_asis">
+      <bpmn:lane id="Lane_c3_asis_wl" name="Werfleider">
+        <bpmn:flowNodeRef>s1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>g2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t7</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_c3_asis_dep" name="Depot / breekwerf">
+        <bpmn:flowNodeRef>t2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>g1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_c3_asis_buy" name="Aankoop">
+        <bpmn:flowNodeRef>t3</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_c3_asis_plan" name="Transportplanning">
+        <bpmn:flowNodeRef>t4</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t5</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_c3_asis_adm" name="Administratie">
+        <bpmn:flowNodeRef>t6</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>e1</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="s1" name="Materiaal nodig">
+      <bpmn:outgoing>Flow_c3_asis_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:manualTask id="t1" name="Bellen, mailen of WhatsApp naar depot">
+      <bpmn:incoming>Flow_c3_asis_1</bpmn:incoming>
+      <bpmn:incoming>Flow_c3_asis_10</bpmn:incoming>
+      <bpmn:outgoing>Flow_c3_asis_2</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="t2" name="Voorraad nakijken (rondlopen, Excel)">
+      <bpmn:incoming>Flow_c3_asis_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_c3_asis_3</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:exclusiveGateway id="g1" name="Op voorraad?" default="Flow_c3_asis_5">
+      <bpmn:incoming>Flow_c3_asis_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_c3_asis_4</bpmn:outgoing>
+      <bpmn:outgoing>Flow_c3_asis_5</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="t3" name="Offerte en bestelling bij leverancier">
+      <bpmn:incoming>Flow_c3_asis_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_c3_asis_6</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:manualTask id="t4" name="Levering telefonisch inplannen">
+      <bpmn:incoming>Flow_c3_asis_5</bpmn:incoming>
+      <bpmn:incoming>Flow_c3_asis_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_c3_asis_7</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="t5" name="Leveren met papieren leverbon">
+      <bpmn:incoming>Flow_c3_asis_7</bpmn:incoming>
+      <bpmn:outgoing>Flow_c3_asis_8</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:exclusiveGateway id="g2" name="Juist en op tijd?" default="Flow_c3_asis_11">
+      <bpmn:incoming>Flow_c3_asis_8</bpmn:incoming>
+      <bpmn:outgoing>Flow_c3_asis_9</bpmn:outgoing>
+      <bpmn:outgoing>Flow_c3_asis_11</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:manualTask id="t7" name="Nabestellen of retour (spoed)">
+      <bpmn:incoming>Flow_c3_asis_9</bpmn:incoming>
+      <bpmn:outgoing>Flow_c3_asis_10</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:userTask id="t6" name="Leverbon ingeven, kosten op werf boeken">
+      <bpmn:incoming>Flow_c3_asis_11</bpmn:incoming>
+      <bpmn:outgoing>Flow_c3_asis_12</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="e1" name="Kosten geboekt (dagen later)">
+      <bpmn:incoming>Flow_c3_asis_12</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_c3_asis_1" sourceRef="s1" targetRef="t1" />
+    <bpmn:sequenceFlow id="Flow_c3_asis_2" sourceRef="t1" targetRef="t2" />
+    <bpmn:sequenceFlow id="Flow_c3_asis_3" sourceRef="t2" targetRef="g1" />
+    <bpmn:sequenceFlow id="Flow_c3_asis_4" sourceRef="g1" targetRef="t3" name="nee" />
+    <bpmn:sequenceFlow id="Flow_c3_asis_5" sourceRef="g1" targetRef="t4" name="ja" />
+    <bpmn:sequenceFlow id="Flow_c3_asis_6" sourceRef="t3" targetRef="t4" />
+    <bpmn:sequenceFlow id="Flow_c3_asis_7" sourceRef="t4" targetRef="t5" />
+    <bpmn:sequenceFlow id="Flow_c3_asis_8" sourceRef="t5" targetRef="g2" />
+    <bpmn:sequenceFlow id="Flow_c3_asis_9" sourceRef="g2" targetRef="t7" name="nee" />
+    <bpmn:sequenceFlow id="Flow_c3_asis_10" sourceRef="t7" targetRef="t1" />
+    <bpmn:sequenceFlow id="Flow_c3_asis_11" sourceRef="g2" targetRef="t6" name="ja" />
+    <bpmn:sequenceFlow id="Flow_c3_asis_12" sourceRef="t6" targetRef="e1" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_c3_asis">
+    <bpmndi:BPMNPlane id="Plane_c3_asis" bpmnElement="Collab_c3_asis">
+      <bpmndi:BPMNShape id="Pool_c3_asis_di" bpmnElement="Pool_c3_asis" isHorizontal="true"><dc:Bounds x="20" y="20" width="1600" height="650" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_c3_asis_wl_di" bpmnElement="Lane_c3_asis_wl" isHorizontal="true"><dc:Bounds x="50" y="20" width="1570" height="130" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_c3_asis_dep_di" bpmnElement="Lane_c3_asis_dep" isHorizontal="true"><dc:Bounds x="50" y="150" width="1570" height="130" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_c3_asis_buy_di" bpmnElement="Lane_c3_asis_buy" isHorizontal="true"><dc:Bounds x="50" y="280" width="1570" height="130" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_c3_asis_plan_di" bpmnElement="Lane_c3_asis_plan" isHorizontal="true"><dc:Bounds x="50" y="410" width="1570" height="130" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_c3_asis_adm_di" bpmnElement="Lane_c3_asis_adm" isHorizontal="true"><dc:Bounds x="50" y="540" width="1570" height="130" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="s1_di" bpmnElement="s1"><dc:Bounds x="132" y="67" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="100" y="107" width="100" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t1_di" bpmnElement="t1"><dc:Bounds x="242" y="51" width="116" height="68" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t2_di" bpmnElement="t2"><dc:Bounds x="392" y="181" width="116" height="68" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="g1_di" bpmnElement="g1" isMarkerVisible="true"><dc:Bounds x="575" y="190" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="550" y="244" width="100" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t3_di" bpmnElement="t3"><dc:Bounds x="692" y="311" width="116" height="68" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t4_di" bpmnElement="t4"><dc:Bounds x="842" y="441" width="116" height="68" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t5_di" bpmnElement="t5"><dc:Bounds x="992" y="441" width="116" height="68" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="g2_di" bpmnElement="g2" isMarkerVisible="true"><dc:Bounds x="1175" y="60" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="1150" y="114" width="100" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t7_di" bpmnElement="t7"><dc:Bounds x="1292" y="51" width="116" height="68" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t6_di" bpmnElement="t6"><dc:Bounds x="1292" y="571" width="116" height="68" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="e1_di" bpmnElement="e1"><dc:Bounds x="1482" y="587" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="1450" y="627" width="100" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_c3_asis_1_di" bpmnElement="Flow_c3_asis_1"><di:waypoint x="168" y="85" /><di:waypoint x="242" y="85" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c3_asis_2_di" bpmnElement="Flow_c3_asis_2"><di:waypoint x="300" y="119" /><di:waypoint x="300" y="215" /><di:waypoint x="392" y="215" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c3_asis_3_di" bpmnElement="Flow_c3_asis_3"><di:waypoint x="508" y="215" /><di:waypoint x="575" y="215" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c3_asis_4_di" bpmnElement="Flow_c3_asis_4"><di:waypoint x="600" y="240" /><di:waypoint x="600" y="345" /><di:waypoint x="692" y="345" /><bpmndi:BPMNLabel><dc:Bounds x="606" y="327" width="40" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c3_asis_5_di" bpmnElement="Flow_c3_asis_5"><di:waypoint x="625" y="215" /><di:waypoint x="665" y="215" /><di:waypoint x="665" y="475" /><di:waypoint x="842" y="475" /><bpmndi:BPMNLabel><dc:Bounds x="671" y="457" width="40" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c3_asis_6_di" bpmnElement="Flow_c3_asis_6"><di:waypoint x="750" y="379" /><di:waypoint x="750" y="475" /><di:waypoint x="842" y="475" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c3_asis_7_di" bpmnElement="Flow_c3_asis_7"><di:waypoint x="958" y="475" /><di:waypoint x="992" y="475" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c3_asis_8_di" bpmnElement="Flow_c3_asis_8"><di:waypoint x="1050" y="441" /><di:waypoint x="1050" y="85" /><di:waypoint x="1175" y="85" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c3_asis_9_di" bpmnElement="Flow_c3_asis_9"><di:waypoint x="1225" y="85" /><di:waypoint x="1292" y="85" /><bpmndi:BPMNLabel><dc:Bounds x="1231" y="67" width="40" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c3_asis_10_di" bpmnElement="Flow_c3_asis_10"><di:waypoint x="1350" y="119" /><di:waypoint x="1350" y="138" /><di:waypoint x="300" y="138" /><di:waypoint x="300" y="119" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c3_asis_11_di" bpmnElement="Flow_c3_asis_11"><di:waypoint x="1225" y="85" /><di:waypoint x="1265" y="85" /><di:waypoint x="1265" y="605" /><di:waypoint x="1292" y="605" /><bpmndi:BPMNLabel><dc:Bounds x="1271" y="587" width="40" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c3_asis_12_di" bpmnElement="Flow_c3_asis_12"><di:waypoint x="1408" y="605" /><di:waypoint x="1482" y="605" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

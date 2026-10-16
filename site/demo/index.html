@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Werfportaal — demo</title>
+  <meta name="description" content="Interactieve demo van drie digitaliseringscases voor een fictieve bouwgroep: weegbonnen met document-AI, schadeclaims met offline werfapp, materiaalaanvragen met ERP-outbox.">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=Figtree:wght@400;500;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../"><img class="brand-mark" src="../assets/mark.svg" alt=""><span>Werfportaal<small>Halverdijk Group · fictieve demo</small></span></a>
+    <nav aria-label="Hoofdnavigatie">
+      <a href="../">Portfolio</a>
+      <a href="https://github.com/phlppgdfry/construction-digital-transformation">GitHub</a>
+      <button class="btn small" id="btn-tour" type="button">Rondleiding (2 min)</button>
+    </nav>
+  </div>
+</header>
+
+<div class="tabbar" role="tablist" aria-label="Cases">
+  <div class="wrap tabbar-inner">
+    <button role="tab" id="tab-documenten" aria-controls="p-documenten" aria-selected="true" data-tab="documenten"><span>01</span> Documenten</button>
+    <button role="tab" id="tab-claims" aria-controls="p-claims" aria-selected="false" data-tab="claims"><span>02</span> Schadeclaims</button>
+    <button role="tab" id="tab-materiaal" aria-controls="p-materiaal" aria-selected="false" data-tab="materiaal"><span>03</span> Materiaal</button>
+  </div>
+</div>
+
+<main class="wrap demo-main">
+  <p class="demo-note">Fictieve gegevens. De regels draaien op dezelfde code als de tests in de repo (<code>src/*.mjs</code>). AI-extractie en ERP worden gesimuleerd.</p>
+
+  <!-- ============================================================ 01 DOCUMENTEN -->
+  <section id="p-documenten" role="tabpanel" aria-labelledby="tab-documenten" class="panel">
+    <div class="panel-head">
+      <div>
+        <h2>Weegbonnen verwerken</h2>
+        <p class="muted">Gescande en gemailde bonnen → extractie (gesimuleerd) → elf regels → automatisch, nazicht, escalatie of dubbel.</p>
+      </div>
+      <div class="cta-row">
+        <button class="btn" id="doc-run" type="button">Verwerk alle bonnen</button>
+        <button class="btn ghost small" id="doc-reset" type="button">Opnieuw</button>
+      </div>
+    </div>
+    <div class="counters" id="doc-counters" aria-live="polite">
+      <div class="counter ok"><b data-c="auto">0</b><span>automatisch</span></div>
+      <div class="counter warn"><b data-c="review">0</b><span>nazicht</span></div>
+      <div class="counter risk"><b data-c="escalate">0</b><span>escalatie</span></div>
+      <div class="counter info"><b data-c="reject">0</b><span>dubbel</span></div>
+      <div class="counter plain"><b id="doc-acc">–</b><span>veldnauwkeurigheid</span></div>
+      <div class="counter plain"><b id="doc-silent">–</b><span>stille fouten</span></div>
+    </div>
+    <div class="doc-layout">
+      <ol class="doc-list" id="doc-list" aria-label="Documenten"></ol>
+      <div class="doc-detail" id="doc-detail" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================ 02 SCHADECLAIMS -->
+  <section id="p-claims" role="tabpanel" aria-labelledby="tab-claims" class="panel hidden">
+    <div class="panel-head">
+      <div>
+        <h2>Schade melden en afhandelen</h2>
+        <p class="muted">Links de werfapp (ook offline), rechts de backoffice: triage, DT-02-goedkeuringsketen, tijdlijn.</p>
+      </div>
+      <div class="clock">Demo-klok <b id="clock">ma 12/10 08:00</b> <button class="btn small ghost" id="clock-plus" type="button">+4 uur</button></div>
+    </div>
+    <div class="claims-layout">
+      <div class="phone" id="phone">
+        <div class="phone-top">
+          <span>Schade melden</span>
+          <label class="switch"><input type="checkbox" id="net" checked> <span id="net-label">online</span></label>
+        </div>
+        <div class="phone-body">
+          <label>Voorbeeld laden
+            <select id="preset">
+              <option value="">— leeg formulier —</option>
+              <option value="0">Gasleiding geraakt (W-2602)</option>
+              <option value="1">Hydraulische leiding rupskraan (W-2604)</option>
+              <option value="2">Gevelsteen op carport buren (W-2603)</option>
+              <option value="3">Gehuurde trilplaat (W-2601)</option>
+              <option value="4">Gekantelde dumper €27.500 (W-2604)</option>
+            </select>
+          </label>
+          <label class="check"><input type="checkbox" id="f-injuries"> Is er iemand gewond?</label>
+          <p class="stop hidden" id="stop-injury">STOP — personenletsel: bel 112 indien nodig en volg de procedure arbeidsongeval (preventieadviseur). Dit formulier is alleen voor materiële schade.</p>
+          <label>Werf <select id="f-project"></select></label>
+          <label>Categorie
+            <select id="f-category">
+              <option value="">— kies —</option>
+              <option value="eigen-materieel">Eigen materieel</option>
+              <option value="gehuurd-materieel">Gehuurd materieel</option>
+              <option value="derden-schade">Eigendom van derden</option>
+              <option value="nutsleiding">Kabel of leiding (KLIP)</option>
+              <option value="eigen-werf">Eigen werk / werfinrichting</option>
+            </select>
+          </label>
+          <div class="cond" data-for="nutsleiding">
+            <label>Type leiding <select id="f-utilityType"><option value="">—</option><option>gas</option><option>elektriciteit</option><option>water</option><option>telecom</option><option>riolering</option></select></label>
+            <label>KLIP-referentie <input id="f-klipRef" placeholder="KLIP-2026-…"></label>
+            <label>Leidingbeheerder <input id="f-utilityOwner"></label>
+            <label class="check"><input type="checkbox" id="f-ownerNotified"> Leidingbeheerder telefonisch verwittigd</label>
+          </div>
+          <div class="cond" data-for="gehuurd-materieel">
+            <label>Referentie huurcontract <input id="f-rentalRef"></label>
+          </div>
+          <label>Wat gebeurde er? <textarea id="f-description" rows="3"></textarea></label>
+          <label>Ruwe raming (€) <input id="f-amount" type="number" min="0" step="100"></label>
+          <label class="check"><input type="checkbox" id="f-thirdParty"> Derde betrokken</label>
+          <div class="cond" data-for="third">
+            <label>Naam derde <input id="f-thirdPartyName"></label>
+            <label class="check"><input type="checkbox" id="f-thirdPartyLiable"> Derde heeft de schade veroorzaakt</label>
+          </div>
+          <div class="photos"><span id="photo-count">0 foto's</span> <button type="button" class="btn small dark" id="photo-add">+ foto</button> <button type="button" class="btn small ghost" id="photo-clear">wis</button></div>
+          <ul class="errors" id="claim-errors"></ul>
+          <ul class="warnings" id="claim-warnings"></ul>
+          <button class="btn send" id="claim-send" type="button">Verzenden</button>
+          <button class="btn ghost small" id="claim-new" type="button">Nieuwe melding</button>
+          <p class="queue" id="queue" aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="backoffice">
+        <h3>Backoffice — schadedossiers</h3>
+        <div class="claims-list" id="claims-list"><p class="muted">Nog geen dossiers. Verzend een melding in de werfapp.</p></div>
+        <div class="claim-detail" id="claim-detail"></div>
+        <details class="dt"><summary>Beslistabel DT-02 — wie keurt goed?</summary>
+          <div class="table-wrap"><table><thead><tr><th>Geraamd bedrag</th><th>Keten na de beoordelaar</th></tr></thead><tbody>
+            <tr data-dt="1"><td>≤ €2.500</td><td>Projectleider</td></tr>
+            <tr data-dt="2"><td>€2.501 – €15.000</td><td>Projectleider → Afdelingsverantwoordelijke</td></tr>
+            <tr data-dt="3"><td>&gt; €15.000</td><td>Projectleider → Afdelingsverantwoordelijke → Directie</td></tr>
+          </tbody></table></div>
+          <p class="small muted">Beoordelaar eerst: Fleetmanager bij (gehuurd) materieel, Claims &amp; verzekeringen bij derden en leidingen.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ 03 MATERIAAL -->
+  <section id="p-materiaal" role="tabpanel" aria-labelledby="tab-materiaal" class="panel hidden">
+    <div class="panel-head">
+      <div>
+        <h2>Materiaal aanvragen</h2>
+        <p class="muted">Voorraad per depot, dichtste eerst, budget en beslistabel DT-03, en daarna de ERP-outbox met retry.</p>
+      </div>
+      <div class="cta-row" id="req-presets"></div>
+    </div>
+    <div class="mat-layout">
+      <form class="req-form" id="req-form" onsubmit="return false">
+        <label>Werf <select id="r-project"></select></label>
+        <label>Leveren op <input id="r-deliver" type="datetime-local"></label>
+        <p class="rush hidden" id="r-rush">Spoedaanvraag: levering binnen 48 uur. Kies een reden; transportplanning wordt verwittigd.</p>
+        <label class="hidden" id="r-reason-wrap">Spoedreden <select id="r-reason"></select></label>
+        <div class="lines" id="r-lines"></div>
+        <button type="button" class="btn small dark" id="r-add">+ lijn</button>
+        <ul class="errors" id="r-errors"></ul>
+      </form>
+      <div class="evaluation" id="evaluation" aria-live="polite"></div>
+    </div>
+    <div class="outbox" id="outbox-wrap">
+      <div class="panel-head">
+        <div><h3>ERP-outbox</h3><p class="muted small">Berichten wachten hier tot de ERP-facade ze aanvaardt. Retry na 1, 5, 15, 60 en 240 minuten; daarna dead-letter.</p></div>
+        <div class="outbox-controls">
+          <label class="check"><input type="checkbox" id="erp-up" checked> ERP bereikbaar</label>
+          <label>herstelt na <select id="erp-restore"><option value="20">20 min</option><option value="120">2 uur</option><option value="100000">niet (6 u+)</option></select></label>
+          <button class="btn small" id="outbox-send" type="button">Verstuur outbox</button>
+          <button class="btn small ghost" id="outbox-again" type="button">Opnieuw verzenden (antwoord verloren)</button>
+        </div>
+      </div>
+      <div id="outbox"></div>
+    </div>
+  </section>
+</main>
+
+<div class="tour hidden" id="tour" role="dialog" aria-label="Rondleiding">
+  <p id="tour-text" aria-live="polite"></p>
+  <div class="tour-actions">
+    <button type="button" data-tour="prev">Terug</button>
+    <button type="button" data-tour="next">Volgende</button>
+    <button type="button" data-tour="close">Sluiten</button>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

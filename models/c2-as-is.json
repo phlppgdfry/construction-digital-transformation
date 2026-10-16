@@ -1,0 +1,35 @@
+{
+  "id": "c2_asis", "case": "02-construction-claims", "file": "as-is",
+  "name": "AS-IS — schademelding via telefoon, mail en papier", "pool": "Halverdijk Aannemingen",
+  "description": "Huidige werkwijze (fictief): meldingen komen via drie kanalen, het dossier leeft in een Excel-register, informatie wordt nagebeld en de verzekeringsaangifte gebeurt vaak te laat.",
+  "lanes": [
+    { "id": "wl", "name": "Werfleider" },
+    { "id": "pl", "name": "Projectleider" },
+    { "id": "adm", "name": "Administratie / claims" },
+    { "id": "ext", "name": "Verzekeraar / derden" }
+  ],
+  "nodes": [
+    { "id": "s1", "type": "startEvent", "name": "Schade vastgesteld", "lane": "wl", "col": 0 },
+    { "id": "t1", "type": "manualTask", "name": "Bellen, mailen of papier invullen", "lane": "wl", "col": 1 },
+    { "id": "t2", "type": "userTask", "name": "Info noteren, foto's vragen", "lane": "pl", "col": 2 },
+    { "id": "t3", "type": "userTask", "name": "Regel aanmaken in Excel-register", "lane": "adm", "col": 3 },
+    { "id": "g1", "type": "exclusiveGateway", "name": "Info volledig?", "lane": "adm", "col": 4 },
+    { "id": "t4", "type": "manualTask", "name": "Nabellen, info later doorsturen", "lane": "wl", "col": 5 },
+    { "id": "g2", "type": "exclusiveGateway", "name": "Verzekering nodig?", "lane": "adm", "col": 6 },
+    { "id": "t6", "type": "userTask", "name": "Herstel regelen", "lane": "pl", "col": 7 },
+    { "id": "t5", "type": "userTask", "name": "Aangifte opmaken (vaak na deadline)", "lane": "ext", "col": 7 },
+    { "id": "t7", "type": "receiveTask", "name": "Expertise en beslissing verzekeraar", "lane": "ext", "col": 8 },
+    { "id": "t8", "type": "userTask", "name": "Kosten boeken, dossier sluiten", "lane": "adm", "col": 9 },
+    { "id": "e1", "type": "endEvent", "name": "Dossier afgesloten", "lane": "adm", "col": 10 }
+  ],
+  "flows": [
+    { "from": "s1", "to": "t1" }, { "from": "t1", "to": "t2" }, { "from": "t2", "to": "t3" }, { "from": "t3", "to": "g1" },
+    { "from": "g1", "to": "t4", "name": "nee" },
+    { "from": "t4", "to": "g1" },
+    { "from": "g1", "to": "g2", "name": "ja", "default": true },
+    { "from": "g2", "to": "t5", "name": "ja" },
+    { "from": "g2", "to": "t6", "name": "nee", "default": true },
+    { "from": "t5", "to": "t7" }, { "from": "t7", "to": "t8" }, { "from": "t6", "to": "t8" },
+    { "from": "t8", "to": "e1" }
+  ]
+}

@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Build (BPMN, numbers, site data)
+        run: node scripts/build.mjs
+      - name: Documents must match the model
+        run: git diff --exit-code || (echo "::error::A document or generated file drifted from the model. Run 'npm run build' and commit." && exit 1)
+      - name: Tests
+        run: npm test
+      - name: Links
+        run: python3 scripts/check-links.py

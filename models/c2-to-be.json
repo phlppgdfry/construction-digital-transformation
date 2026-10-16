@@ -1,0 +1,272 @@
+{
+  "id": "c2_tobe",
+  "case": "02-construction-claims",
+  "file": "to-be",
+  "name": "TO-BE — digitale schadeclaim van werf tot afsluiting",
+  "pool": "Halverdijk Aannemingen",
+  "description": "Gewenste werkwijze: de werfleider meldt in de app (ook offline). De flow maakt het dossier, triageert, verwittigt en start de aangifte. Goedkeuring volgt beslistabel DT-02 en de kosten landen op het project.",
+  "lanes": [
+    {
+      "id": "wl",
+      "name": "Werfleider (werfapp)"
+    },
+    {
+      "id": "flow",
+      "name": "Power Automate"
+    },
+    {
+      "id": "ass",
+      "name": "Beoordelaar (fleet / claims / PL)"
+    },
+    {
+      "id": "app",
+      "name": "Goedkeurders (DT-02)"
+    },
+    {
+      "id": "ext",
+      "name": "Verzekeraar / derden"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "s1",
+      "type": "startEvent",
+      "name": "Schade vastgesteld",
+      "lane": "wl",
+      "col": 0
+    },
+    {
+      "id": "t1",
+      "type": "userTask",
+      "name": "Melden in app: foto's, GPS, categorie",
+      "lane": "wl",
+      "col": 1,
+      "doc": "Werkt offline; synchroniseert met een client-id zodat dubbel verzenden geen dubbel dossier geeft."
+    },
+    {
+      "id": "g0",
+      "type": "exclusiveGateway",
+      "name": "Personen-letsel?",
+      "lane": "wl",
+      "col": 2
+    },
+    {
+      "id": "e0",
+      "type": "endEvent",
+      "name": "Procedure arbeidsongeval",
+      "lane": "wl",
+      "col": 3
+    },
+    {
+      "id": "t2",
+      "type": "serviceTask",
+      "name": "Dossier aanmaken + triage (ernst, eigenaar)",
+      "lane": "flow",
+      "col": 3
+    },
+    {
+      "id": "p1",
+      "type": "parallelGateway",
+      "name": "",
+      "lane": "flow",
+      "col": 4
+    },
+    {
+      "id": "t3",
+      "type": "sendTask",
+      "name": "Betrokkenen verwittigen (Teams / mail)",
+      "lane": "flow",
+      "col": 5
+    },
+    {
+      "id": "e5",
+      "type": "endEvent",
+      "name": "Verwittigd",
+      "lane": "flow",
+      "col": 6
+    },
+    {
+      "id": "t4",
+      "type": "userTask",
+      "name": "Beoordelen: oorzaak, aansprakelijk-heid, raming",
+      "lane": "ass",
+      "col": 5
+    },
+    {
+      "id": "t5",
+      "type": "sendTask",
+      "name": "Aangifte-concept naar verzekeraar (≤ 8 dagen)",
+      "lane": "ext",
+      "col": 6
+    },
+    {
+      "id": "e6",
+      "type": "endEvent",
+      "name": "Aangifte verstuurd",
+      "lane": "ext",
+      "col": 7
+    },
+    {
+      "id": "g2",
+      "type": "exclusiveGateway",
+      "name": "Info volledig?",
+      "lane": "ass",
+      "col": 6
+    },
+    {
+      "id": "t6",
+      "type": "userTask",
+      "name": "Aanvullen in app",
+      "lane": "wl",
+      "col": 7
+    },
+    {
+      "id": "t7",
+      "type": "businessRuleTask",
+      "name": "Goedkeurings-keten bepalen (DT-02)",
+      "lane": "ass",
+      "col": 8
+    },
+    {
+      "id": "t8",
+      "type": "userTask",
+      "name": "Goedkeuren in Teams (per niveau)",
+      "lane": "app",
+      "col": 9
+    },
+    {
+      "id": "g4",
+      "type": "exclusiveGateway",
+      "name": "Beslissing?",
+      "lane": "app",
+      "col": 10
+    },
+    {
+      "id": "e7",
+      "type": "endEvent",
+      "name": "Afgewezen, melder geïnformeerd",
+      "lane": "app",
+      "col": 11
+    },
+    {
+      "id": "t10",
+      "type": "userTask",
+      "name": "Herstel, vergoeding of verhaal afhandelen",
+      "lane": "ass",
+      "col": 11
+    },
+    {
+      "id": "t11",
+      "type": "serviceTask",
+      "name": "Kosten en recuperatie boeken op project (ERP)",
+      "lane": "flow",
+      "col": 12
+    },
+    {
+      "id": "e1",
+      "type": "endEvent",
+      "name": "Dossier afgesloten",
+      "lane": "flow",
+      "col": 13
+    }
+  ],
+  "flows": [
+    {
+      "from": "s1",
+      "to": "t1"
+    },
+    {
+      "from": "t1",
+      "to": "g0"
+    },
+    {
+      "from": "g0",
+      "to": "e0",
+      "name": "ja"
+    },
+    {
+      "from": "g0",
+      "to": "t2",
+      "name": "nee",
+      "default": true
+    },
+    {
+      "from": "t2",
+      "to": "p1"
+    },
+    {
+      "from": "p1",
+      "to": "t3"
+    },
+    {
+      "from": "p1",
+      "to": "t4"
+    },
+    {
+      "from": "p1",
+      "to": "t5",
+      "name": "indien verzekerd",
+      "bend": 22
+    },
+    {
+      "from": "t3",
+      "to": "e5"
+    },
+    {
+      "from": "t5",
+      "to": "e6"
+    },
+    {
+      "from": "t4",
+      "to": "g2"
+    },
+    {
+      "from": "g2",
+      "to": "t6",
+      "name": "nee",
+      "bend": 40
+    },
+    {
+      "from": "t6",
+      "to": "t4"
+    },
+    {
+      "from": "g2",
+      "to": "t7",
+      "name": "ja",
+      "default": true
+    },
+    {
+      "from": "t7",
+      "to": "t8"
+    },
+    {
+      "from": "t8",
+      "to": "g4"
+    },
+    {
+      "from": "g4",
+      "to": "t8",
+      "name": "volgend niveau"
+    },
+    {
+      "from": "g4",
+      "to": "e7",
+      "name": "afgewezen"
+    },
+    {
+      "from": "g4",
+      "to": "t10",
+      "name": "laatste ok",
+      "default": true
+    },
+    {
+      "from": "t10",
+      "to": "t11"
+    },
+    {
+      "from": "t11",
+      "to": "e1"
+    }
+  ]
+}

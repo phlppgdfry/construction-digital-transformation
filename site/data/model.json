@@ -1,0 +1,301 @@
+{
+  "now": "2026-10-12T08:00",
+  "models": [
+    {
+      "id": "c1_asis",
+      "case": "01-document-intelligence",
+      "file": "as-is",
+      "name": "AS-IS — weegbonnen manueel verwerken",
+      "tasks": 8,
+      "automated": 0
+    },
+    {
+      "id": "c1_tobe",
+      "case": "01-document-intelligence",
+      "file": "to-be",
+      "name": "TO-BE — document intelligence met menselijke controle",
+      "tasks": 8,
+      "automated": 6
+    },
+    {
+      "id": "c2_asis",
+      "case": "02-construction-claims",
+      "file": "as-is",
+      "name": "AS-IS — schademelding via telefoon, mail en papier",
+      "tasks": 8,
+      "automated": 0
+    },
+    {
+      "id": "c2_tobe",
+      "case": "02-construction-claims",
+      "file": "to-be",
+      "name": "TO-BE — digitale schadeclaim van werf tot afsluiting",
+      "tasks": 10,
+      "automated": 5
+    },
+    {
+      "id": "c3_asis",
+      "case": "03-material-requests",
+      "file": "as-is",
+      "name": "AS-IS — materiaal aanvragen via telefoon, mail en WhatsApp",
+      "tasks": 7,
+      "automated": 0
+    },
+    {
+      "id": "c3_tobe",
+      "case": "03-material-requests",
+      "file": "to-be",
+      "name": "TO-BE — digitale materiaalaanvraag met voorraadcheck en ERP-koppeling",
+      "tasks": 9,
+      "automated": 4
+    }
+  ],
+  "case01": {
+    "n": 30,
+    "counts": {
+      "auto": 20,
+      "review": 8,
+      "escalate": 1,
+      "reject": 1
+    },
+    "accuracy": {
+      "total": 330,
+      "correct": 326,
+      "rate": 0.988,
+      "wrong": [
+        {
+          "id": "DOC-003",
+          "field": "net",
+          "read": 26678,
+          "truth": 26078
+        },
+        {
+          "id": "DOC-006",
+          "field": "net",
+          "read": 13350,
+          "truth": 18350
+        },
+        {
+          "id": "DOC-008",
+          "field": "customerNo",
+          "read": "K-1094",
+          "truth": "K-1004"
+        },
+        {
+          "id": "DOC-025",
+          "field": "plate",
+          "read": "1-DHK-102",
+          "truth": "1-DHK-101"
+        }
+      ]
+    },
+    "silent": [
+      {
+        "id": "DOC-025",
+        "field": "plate"
+      }
+    ],
+    "rulesFired": {
+      "R01": 0,
+      "R02": 1,
+      "R03": 2,
+      "R04": 1,
+      "R05": 1,
+      "R06": 1,
+      "R07": 1,
+      "R08": 1,
+      "R09": 1,
+      "R10": 1,
+      "R11": 1
+    },
+    "docsYear": 31500,
+    "hoursAsIs": 1837.5,
+    "hoursToBe": 595,
+    "businessCase": {
+      "timeBenefit": 55912.5,
+      "hardBenefit": 0,
+      "benefit": 33547.5,
+      "run": 12460.5,
+      "oneOff": 36690,
+      "netPerYear": 21087,
+      "paybackMonths": 26.879,
+      "netOverHorizon": 16027.5
+    }
+  },
+  "case02": {
+    "baseline": {
+      "n": 40,
+      "byChannel": {
+        "telefoon": 18,
+        "mail": 11,
+        "papier": 11
+      },
+      "medianDaysToRegister": 3,
+      "incompleteShare": 0.55,
+      "avgFollowUps": 1.45,
+      "withoutPhotoShare": 0.5,
+      "medianDaysToClose": 81.5,
+      "insuredCount": 24,
+      "lateInsurerCount": 13,
+      "totalAmount": 390910,
+      "recoverableCount": 21
+    },
+    "minutesAsIs": 64,
+    "minutesToBe": 14,
+    "hoursSaved": 116.667,
+    "avoidedLate": 41.3,
+    "lateShareAsIs": 0.542,
+    "samples": [
+      {
+        "clientId": "c-001",
+        "category": "nutsleiding",
+        "severity": "kritiek",
+        "owner": "Claims & verzekeringen",
+        "notify": [
+          "Projectleider Riolering",
+          "Claims & verzekeringen",
+          "Leidingbeheerder (extern)",
+          "Preventieadviseur",
+          "Afdelingsverantwoordelijke"
+        ],
+        "approvalChain": [
+          "Claims & verzekeringen",
+          "Projectleider",
+          "Afdelingsverantwoordelijke"
+        ],
+        "insurerDeclaration": true,
+        "recoveryTrack": false,
+        "slaHours": 2
+      },
+      {
+        "clientId": "c-002",
+        "category": "eigen-materieel",
+        "severity": "laag",
+        "owner": "Fleetmanager",
+        "notify": [
+          "Projectleider Grondwerken"
+        ],
+        "approvalChain": [
+          "Fleetmanager",
+          "Projectleider"
+        ],
+        "insurerDeclaration": false,
+        "recoveryTrack": false,
+        "slaHours": 72
+      },
+      {
+        "clientId": "c-003",
+        "category": "derden-schade",
+        "severity": "middel",
+        "owner": "Claims & verzekeringen",
+        "notify": [
+          "Projectleider Sloop",
+          "Claims & verzekeringen"
+        ],
+        "approvalChain": [
+          "Claims & verzekeringen",
+          "Projectleider",
+          "Afdelingsverantwoordelijke"
+        ],
+        "insurerDeclaration": true,
+        "recoveryTrack": false,
+        "slaHours": 48
+      },
+      {
+        "clientId": "c-004",
+        "category": "gehuurd-materieel",
+        "severity": "middel",
+        "owner": "Fleetmanager",
+        "notify": [
+          "Projectleider Wegen",
+          "Claims & verzekeringen",
+          "Verhuurder (extern)"
+        ],
+        "approvalChain": [
+          "Fleetmanager",
+          "Projectleider"
+        ],
+        "insurerDeclaration": true,
+        "recoveryTrack": true,
+        "slaHours": 48
+      },
+      {
+        "clientId": "c-005",
+        "category": "eigen-materieel",
+        "severity": "hoog",
+        "owner": "Fleetmanager",
+        "notify": [
+          "Projectleider Grondwerken"
+        ],
+        "approvalChain": [
+          "Fleetmanager",
+          "Projectleider",
+          "Afdelingsverantwoordelijke",
+          "Directie"
+        ],
+        "insurerDeclaration": true,
+        "recoveryTrack": false,
+        "slaHours": 24
+      }
+    ],
+    "businessCase": {
+      "timeBenefit": 7233.333,
+      "hardBenefit": 49560,
+      "benefit": 53900,
+      "run": 10650,
+      "oneOff": 42120,
+      "netPerYear": 43250,
+      "paybackMonths": 17.686,
+      "netOverHorizon": 66005
+    },
+    "breakEvenLoss": 152.785
+  },
+  "case03": {
+    "baseline": {
+      "n": 60,
+      "byChannel": {
+        "telefoon": 32,
+        "mail": 20,
+        "whatsapp": 8
+      },
+      "rushShare": 0.333,
+      "medianHandlingHours": 15,
+      "wrongShare": 0.067,
+      "lateShare": 0.217,
+      "lateRushShare": 0.4
+    },
+    "replay": {
+      "n": 60,
+      "auto": 26,
+      "pl": 31,
+      "plAndDept": 3,
+      "rush": 20,
+      "withPurchase": 13,
+      "overBudget": 3,
+      "lines": 115,
+      "internalLines": 101,
+      "internalCoveredLines": 100,
+      "alternatives": 1,
+      "alternativeSaving": 260
+    },
+    "minutesToBe": 2.7,
+    "hoursSaved": 663,
+    "rushAvoided": 346.667,
+    "wrongAvoided": 121.333,
+    "businessCase": {
+      "timeBenefit": 29835,
+      "hardBenefit": 76960,
+      "benefit": 94861,
+      "run": 16494,
+      "oneOff": 53880,
+      "netPerYear": 78367,
+      "paybackMonths": 14.25,
+      "netOverHorizon": 142037.5
+    },
+    "netWithoutRushChange": 28100.333
+  },
+  "platform": {
+    "licenseYear": 12996,
+    "users": 57
+  }
+}

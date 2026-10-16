@@ -1,0 +1,351 @@
+{
+  "name": "HV-MA-01 Materiaalaanvraag verwerken",
+  "description": "Start bij een nieuwe aanvraag uit de app. Vraagt voorraad en budget op via de ERP-facade, past beslistabel DT-03 toe, vraagt zo nodig goedkeuring en zet de ERP-berichten in de outbox (hv_outbox). Versturen zelf doet HV-MA-02, zodat een ERP-storing de aanvraag niet blokkeert. Referentie-implementatie: evaluate() en approvalRoute() in src/materials.mjs.",
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "connectionReferenceLogicalName": "hv_shareddataverse",
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_approvals": {
+        "connectionReferenceLogicalName": "hv_sharedapprovals",
+        "api": {
+          "name": "shared_approvals"
+        }
+      },
+      "shared_teams": {
+        "connectionReferenceLogicalName": "hv_sharedteams",
+        "api": {
+          "name": "shared_teams"
+        }
+      },
+      "shared_hv_erpfacade": {
+        "connectionReferenceLogicalName": "hv_erpfacade",
+        "api": {
+          "name": "shared_hv-5ferp-20facade-5f1a2b3c"
+        },
+        "note": "Custom connector gegenereerd uit erp-material-api.openapi.yaml"
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "Auto-goedkeuring max (hv_AutoApproveMax)": {
+          "defaultValue": 1000,
+          "type": "Int"
+        },
+        "Projectleider max (hv_PlApproveMax)": {
+          "defaultValue": 10000,
+          "type": "Int"
+        }
+      },
+      "triggers": {
+        "Aanvraag_ingediend": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 3,
+              "subscriptionRequest/entityname": "hv_materiaalaanvraag",
+              "subscriptionRequest/scope": 4,
+              "subscriptionRequest/filteringattributes": "hv_status",
+              "subscriptionRequest/filterexpression": "hv_status eq 100000001"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Lijnen_ophalen": {
+          "type": "OpenApiConnection",
+          "runAfter": {},
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "ListRecords",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "hv_aanvraaglijns",
+              "$filter": "_hv_aanvraag_value eq @{triggerOutputs()?['body/hv_materiaalaanvraagid']}"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Budget_ophalen": {
+          "type": "OpenApiConnection",
+          "runAfter": {},
+          "inputs": {
+            "host": {
+              "connectionName": "shared_hv_erpfacade",
+              "operationId": "getProjectBudget",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_hv-5ferp-20facade-5f1a2b3c"
+            },
+            "parameters": {
+              "projectNo": "@triggerOutputs()?['body/hv_werfnr']"
+            },
+            "authentication": "@parameters('$authentication')",
+            "retryPolicy": {
+              "type": "exponential",
+              "count": 3,
+              "interval": "PT10S"
+            }
+          }
+        },
+        "Per_lijn_voorraad": {
+          "type": "Foreach",
+          "runAfter": {
+            "Lijnen_ophalen": [
+              "Succeeded"
+            ],
+            "Budget_ophalen": [
+              "Succeeded"
+            ]
+          },
+          "foreach": "@outputs('Lijnen_ophalen')?['body/value']",
+          "actions": {
+            "Voorraad_opvragen": {
+              "type": "OpenApiConnection",
+              "runAfter": {},
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_hv_erpfacade",
+                  "operationId": "getStock",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_hv-5ferp-20facade-5f1a2b3c"
+                },
+                "parameters": {
+                  "itemNo": "@items('Per_lijn_voorraad')?['hv_artikelnr']"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Toewijzing_bewaren": {
+              "type": "OpenApiConnection",
+              "runAfter": {
+                "Voorraad_opvragen": [
+                  "Succeeded"
+                ]
+              },
+              "description": "Depot-toewijzing (dichtste eerst) gebeurt in een Dataverse low-code plug-in (Power Fx) zodat app en flow dezelfde logica gebruiken; zie allocateLine() in src/materials.mjs.",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "PerformUnboundAction",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "actionName": "hv_WijsVoorraadToe",
+                  "item/LijnId": "@items('Per_lijn_voorraad')?['hv_aanvraaglijnid']",
+                  "item/Voorraad": "@{string(body('Voorraad_opvragen'))}"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          }
+        },
+        "Evaluatie_ophalen": {
+          "type": "OpenApiConnection",
+          "runAfter": {
+            "Per_lijn_voorraad": [
+              "Succeeded"
+            ]
+          },
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "GetItem",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "hv_materiaalaanvraags",
+              "recordId": "@triggerOutputs()?['body/hv_materiaalaanvraagid']",
+              "$select": "hv_waarde,hv_budgetoverschreden,hv_aankoopnodig,hv_spoed"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Route_DT03": {
+          "type": "Compose",
+          "runAfter": {
+            "Evaluatie_ophalen": [
+              "Succeeded"
+            ]
+          },
+          "description": "Beslistabel DT-03; zelfde logica als artefacts/power-fx/dt-03-route.fx.",
+          "inputs": "@if(outputs('Evaluatie_ophalen')?['body/hv_budgetoverschreden'], 'Projectleider>Afdelingsverantwoordelijke', if(greater(outputs('Evaluatie_ophalen')?['body/hv_waarde'], parameters('Projectleider max (hv_PlApproveMax)')), 'Projectleider>Afdelingsverantwoordelijke', if(or(greater(outputs('Evaluatie_ophalen')?['body/hv_waarde'], parameters('Auto-goedkeuring max (hv_AutoApproveMax)')), outputs('Evaluatie_ophalen')?['body/hv_aankoopnodig']), 'Projectleider', 'automatisch')))"
+        },
+        "Goedkeuring_nodig": {
+          "type": "If",
+          "runAfter": {
+            "Route_DT03": [
+              "Succeeded"
+            ]
+          },
+          "expression": {
+            "not": {
+              "equals": [
+                "@outputs('Route_DT03')",
+                "automatisch"
+              ]
+            }
+          },
+          "actions": {
+            "Goedkeuring_projectleider": {
+              "type": "OpenApiConnectionWebhook",
+              "runAfter": {},
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_approvals",
+                  "operationId": "StartAndWaitForAnApproval",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_approvals"
+                },
+                "parameters": {
+                  "approvalType": "Basic",
+                  "WebhookApprovalCreationInput/title": "Materiaalaanvraag @{triggerOutputs()?['body/hv_aanvraagnr']} — €@{outputs('Evaluatie_ophalen')?['body/hv_waarde']}@{if(outputs('Evaluatie_ophalen')?['body/hv_spoed'], ' (SPOED)', '')}",
+                  "WebhookApprovalCreationInput/assignedTo": "@{triggerOutputs()?['body/_hv_projectleider_value@OData.Community.Display.V1.FormattedValue']}",
+                  "WebhookApprovalCreationInput/details": "Route @{outputs('Route_DT03')}. Details en alternatieven in de app."
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "limit": {
+                "timeout": "P2D"
+              }
+            },
+            "Afgewezen_of_tweede_niveau": {
+              "type": "If",
+              "runAfter": {
+                "Goedkeuring_projectleider": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "equals": [
+                  "@body('Goedkeuring_projectleider')?['outcome']",
+                  "Reject"
+                ]
+              },
+              "actions": {
+                "Status_afgewezen": {
+                  "type": "OpenApiConnection",
+                  "runAfter": {},
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "UpdateOnlyRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "hv_materiaalaanvraags",
+                      "recordId": "@triggerOutputs()?['body/hv_materiaalaanvraagid']",
+                      "item/hv_status": 100000009
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Stop": {
+                  "type": "Terminate",
+                  "runAfter": {
+                    "Status_afgewezen": [
+                      "Succeeded"
+                    ]
+                  },
+                  "inputs": {
+                    "runStatus": "Succeeded"
+                  }
+                }
+              },
+              "else": {
+                "actions": {}
+              },
+              "description": "Tweede niveau (afdelingsverantwoordelijke) volgt hetzelfde patroon als HV-CL-02 en is hier weggelaten."
+            }
+          },
+          "else": {
+            "actions": {}
+          }
+        },
+        "Berichten_in_outbox": {
+          "type": "OpenApiConnection",
+          "runAfter": {
+            "Goedkeuring_nodig": [
+              "Succeeded"
+            ]
+          },
+          "description": "Dataverse-actie die per depot-toewijzing een reservatie en per extern artikel een aankoopaanvraag in hv_outbox zet, met stabiele idempotency-key (zie erpMessages()).",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "PerformUnboundAction",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "actionName": "hv_MaakErpBerichten",
+              "item/AanvraagId": "@triggerOutputs()?['body/hv_materiaalaanvraagid']"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Status_goedgekeurd": {
+          "type": "OpenApiConnection",
+          "runAfter": {
+            "Berichten_in_outbox": [
+              "Succeeded"
+            ]
+          },
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "UpdateOnlyRecord",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "hv_materiaalaanvraags",
+              "recordId": "@triggerOutputs()?['body/hv_materiaalaanvraagid']",
+              "item/hv_status": 100000003,
+              "item/hv_route": "@outputs('Route_DT03')"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Planning_verwittigen": {
+          "type": "OpenApiConnection",
+          "runAfter": {
+            "Status_goedgekeurd": [
+              "Succeeded"
+            ]
+          },
+          "inputs": {
+            "host": {
+              "connectionName": "shared_teams",
+              "operationId": "PostMessageToConversation",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams"
+            },
+            "parameters": {
+              "poster": "Flow bot",
+              "location": "Channel",
+              "body/recipient/channelId": "werfplanning",
+              "body/messageBody": "@{if(outputs('Evaluatie_ophalen')?['body/hv_spoed'], '⚠ SPOED — ', '')}Aanvraag @{triggerOutputs()?['body/hv_aanvraagnr']} goedgekeurd, levering @{formatDateTime(triggerOutputs()?['body/hv_leverenop'], 'ddd dd/MM HH:mm')}."
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "outputs": {}
+    }
+  }
+}

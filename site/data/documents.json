@@ -1,0 +1,1968 @@
+{
+  "_note": "30 fictieve weegbonnen zoals de extractiestap ze zou teruggeven ('extracted', met confidence) naast de werkelijke inhoud ('truth'). 'scenario' beschrijft wat er met het document aan de hand is; de regelmotor kijkt daar niet naar.",
+  "fields": [
+    "ticketNo",
+    "date",
+    "plate",
+    "customerNo",
+    "direction",
+    "material",
+    "gross",
+    "tare",
+    "net",
+    "idFormNo",
+    "soilRef"
+  ],
+  "documents": [
+    {
+      "id": "DOC-001",
+      "channel": "scan weegbrug",
+      "received": "2026-10-08T11:44",
+      "scenario": "clean",
+      "truth": {
+        "ticketNo": "WB-26-04187",
+        "date": "2026-10-08",
+        "plate": "1-PLV-330",
+        "customerNo": "K-1003",
+        "direction": "in",
+        "material": "17 01 02",
+        "gross": 32746,
+        "tare": 11832,
+        "net": 20914,
+        "idFormNo": "IDF-79055",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04187",
+          "confidence": 0.95
+        },
+        "date": {
+          "value": "2026-10-08",
+          "confidence": 0.942
+        },
+        "plate": {
+          "value": "1-PLV-330",
+          "confidence": 0.997
+        },
+        "customerNo": {
+          "value": "K-1003",
+          "confidence": 0.935
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.959
+        },
+        "material": {
+          "value": "17 01 02",
+          "confidence": 0.968
+        },
+        "gross": {
+          "value": 32746,
+          "confidence": 0.969
+        },
+        "tare": {
+          "value": 11832,
+          "confidence": 0.96
+        },
+        "net": {
+          "value": 20914,
+          "confidence": 0.994
+        },
+        "idFormNo": {
+          "value": "IDF-79055",
+          "confidence": 0.987
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.94
+        }
+      }
+    },
+    {
+      "id": "DOC-002",
+      "channel": "mail transporteur",
+      "received": "2026-10-08T08:20",
+      "scenario": "clean",
+      "truth": {
+        "ticketNo": "WB-26-04194",
+        "date": "2026-10-08",
+        "plate": "1-GWZ-500",
+        "customerNo": "K-1005",
+        "direction": "in",
+        "material": "17 01 01",
+        "gross": 23519,
+        "tare": 12331,
+        "net": 11188,
+        "idFormNo": "IDF-79184",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04194",
+          "confidence": 0.955
+        },
+        "date": {
+          "value": "2026-10-08",
+          "confidence": 0.983
+        },
+        "plate": {
+          "value": "1-GWZ-500",
+          "confidence": 0.983
+        },
+        "customerNo": {
+          "value": "K-1005",
+          "confidence": 0.934
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.93
+        },
+        "material": {
+          "value": "17 01 01",
+          "confidence": 0.932
+        },
+        "gross": {
+          "value": 23519,
+          "confidence": 0.987
+        },
+        "tare": {
+          "value": 12331,
+          "confidence": 0.965
+        },
+        "net": {
+          "value": 11188,
+          "confidence": 0.98
+        },
+        "idFormNo": {
+          "value": "IDF-79184",
+          "confidence": 0.959
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.972
+        }
+      }
+    },
+    {
+      "id": "DOC-003",
+      "channel": "mail transporteur",
+      "received": "2026-10-06T07:44",
+      "scenario": "low-confidence",
+      "truth": {
+        "ticketNo": "WB-26-04201",
+        "date": "2026-10-06",
+        "plate": "1-KRZ-210",
+        "customerNo": "K-1002",
+        "direction": "in",
+        "material": "17 01 07",
+        "gross": 38902,
+        "tare": 12824,
+        "net": 26078,
+        "idFormNo": "IDF-74809",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04201",
+          "confidence": 0.935
+        },
+        "date": {
+          "value": "2026-10-06",
+          "confidence": 0.94
+        },
+        "plate": {
+          "value": "1-KRZ-210",
+          "confidence": 0.931
+        },
+        "customerNo": {
+          "value": "K-1002",
+          "confidence": 0.984
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.985
+        },
+        "material": {
+          "value": "17 01 07",
+          "confidence": 0.957
+        },
+        "gross": {
+          "value": 38902,
+          "confidence": 0.93
+        },
+        "tare": {
+          "value": 12824,
+          "confidence": 0.987
+        },
+        "net": {
+          "value": 26678,
+          "confidence": 0.62
+        },
+        "idFormNo": {
+          "value": "IDF-74809",
+          "confidence": 0.978
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.986
+        }
+      }
+    },
+    {
+      "id": "DOC-004",
+      "channel": "scan weegbrug",
+      "received": "2026-10-07T13:24",
+      "scenario": "clean",
+      "truth": {
+        "ticketNo": "WB-26-04208",
+        "date": "2026-10-07",
+        "plate": "1-IJZ-405",
+        "customerNo": "K-1004",
+        "direction": "in",
+        "material": "17 03 02",
+        "gross": 28309,
+        "tare": 12090,
+        "net": 16219,
+        "idFormNo": "IDF-70507",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04208",
+          "confidence": 0.982
+        },
+        "date": {
+          "value": "2026-10-07",
+          "confidence": 0.966
+        },
+        "plate": {
+          "value": "1-IJZ-405",
+          "confidence": 0.986
+        },
+        "customerNo": {
+          "value": "K-1004",
+          "confidence": 0.971
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.987
+        },
+        "material": {
+          "value": "17 03 02",
+          "confidence": 0.944
+        },
+        "gross": {
+          "value": 28309,
+          "confidence": 0.936
+        },
+        "tare": {
+          "value": 12090,
+          "confidence": 0.941
+        },
+        "net": {
+          "value": 16219,
+          "confidence": 0.986
+        },
+        "idFormNo": {
+          "value": "IDF-70507",
+          "confidence": 0.989
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.938
+        }
+      }
+    },
+    {
+      "id": "DOC-005",
+      "channel": "mail transporteur",
+      "received": "2026-10-08T12:51",
+      "scenario": "clean",
+      "truth": {
+        "ticketNo": "WB-26-04215",
+        "date": "2026-10-08",
+        "plate": "1-KSL-110",
+        "customerNo": "K-1010",
+        "direction": "in",
+        "material": "17 01 01",
+        "gross": 32223,
+        "tare": 14301,
+        "net": 17922,
+        "idFormNo": "IDF-73798",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04215",
+          "confidence": 0.941
+        },
+        "date": {
+          "value": "2026-10-08",
+          "confidence": 0.993
+        },
+        "plate": {
+          "value": "1-KSL-110",
+          "confidence": 0.941
+        },
+        "customerNo": {
+          "value": "K-1010",
+          "confidence": 0.996
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.939
+        },
+        "material": {
+          "value": "17 01 01",
+          "confidence": 0.975
+        },
+        "gross": {
+          "value": 32223,
+          "confidence": 0.951
+        },
+        "tare": {
+          "value": 14301,
+          "confidence": 0.967
+        },
+        "net": {
+          "value": 17922,
+          "confidence": 0.963
+        },
+        "idFormNo": {
+          "value": "IDF-73798",
+          "confidence": 0.937
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.966
+        }
+      }
+    },
+    {
+      "id": "DOC-006",
+      "channel": "scan weegbrug",
+      "received": "2026-10-06T16:36",
+      "scenario": "net-misread",
+      "truth": {
+        "ticketNo": "WB-26-04222",
+        "date": "2026-10-06",
+        "plate": "1-KSL-110",
+        "customerNo": "K-1010",
+        "direction": "in",
+        "material": "17 01 07",
+        "gross": 31590,
+        "tare": 13240,
+        "net": 18350,
+        "idFormNo": "IDF-77872",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04222",
+          "confidence": 0.975
+        },
+        "date": {
+          "value": "2026-10-06",
+          "confidence": 0.954
+        },
+        "plate": {
+          "value": "1-KSL-110",
+          "confidence": 0.936
+        },
+        "customerNo": {
+          "value": "K-1010",
+          "confidence": 0.951
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.981
+        },
+        "material": {
+          "value": "17 01 07",
+          "confidence": 0.992
+        },
+        "gross": {
+          "value": 31590,
+          "confidence": 0.955
+        },
+        "tare": {
+          "value": 13240,
+          "confidence": 0.935
+        },
+        "net": {
+          "value": 13350,
+          "confidence": 0.96
+        },
+        "idFormNo": {
+          "value": "IDF-77872",
+          "confidence": 0.996
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.996
+        }
+      }
+    },
+    {
+      "id": "DOC-007",
+      "channel": "mail transporteur",
+      "received": "2026-10-07T11:27",
+      "scenario": "clean",
+      "truth": {
+        "ticketNo": "WB-26-04229",
+        "date": "2026-10-07",
+        "plate": "1-KSL-110",
+        "customerNo": "K-1010",
+        "direction": "uit",
+        "material": "MG-031",
+        "gross": 34570,
+        "tare": 14302,
+        "net": 20268,
+        "idFormNo": null,
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04229",
+          "confidence": 0.992
+        },
+        "date": {
+          "value": "2026-10-07",
+          "confidence": 0.994
+        },
+        "plate": {
+          "value": "1-KSL-110",
+          "confidence": 0.939
+        },
+        "customerNo": {
+          "value": "K-1010",
+          "confidence": 0.987
+        },
+        "direction": {
+          "value": "uit",
+          "confidence": 0.952
+        },
+        "material": {
+          "value": "MG-031",
+          "confidence": 0.998
+        },
+        "gross": {
+          "value": 34570,
+          "confidence": 0.962
+        },
+        "tare": {
+          "value": 14302,
+          "confidence": 0.947
+        },
+        "net": {
+          "value": 20268,
+          "confidence": 0.988
+        },
+        "idFormNo": {
+          "value": null,
+          "confidence": 0.989
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.946
+        }
+      }
+    },
+    {
+      "id": "DOC-008",
+      "channel": "scan weegbrug",
+      "received": "2026-10-08T07:16",
+      "scenario": "unknown-customer",
+      "truth": {
+        "ticketNo": "WB-26-04236",
+        "date": "2026-10-08",
+        "plate": "1-IJZ-404",
+        "customerNo": "K-1004",
+        "direction": "in",
+        "material": "17 09 04",
+        "gross": 29543,
+        "tare": 15216,
+        "net": 14327,
+        "idFormNo": "IDF-72567",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04236",
+          "confidence": 0.957
+        },
+        "date": {
+          "value": "2026-10-08",
+          "confidence": 0.959
+        },
+        "plate": {
+          "value": "1-IJZ-404",
+          "confidence": 0.972
+        },
+        "customerNo": {
+          "value": "K-1094",
+          "confidence": 0.91
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.993
+        },
+        "material": {
+          "value": "17 09 04",
+          "confidence": 0.999
+        },
+        "gross": {
+          "value": 29543,
+          "confidence": 0.989
+        },
+        "tare": {
+          "value": 15216,
+          "confidence": 0.989
+        },
+        "net": {
+          "value": 14327,
+          "confidence": 0.937
+        },
+        "idFormNo": {
+          "value": "IDF-72567",
+          "confidence": 0.968
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.952
+        }
+      }
+    },
+    {
+      "id": "DOC-009",
+      "channel": "mail transporteur",
+      "received": "2026-10-09T10:05",
+      "scenario": "clean",
+      "truth": {
+        "ticketNo": "WB-26-04243",
+        "date": "2026-10-09",
+        "plate": "1-IJZ-404",
+        "customerNo": "K-1004",
+        "direction": "uit",
+        "material": "ZS-02",
+        "gross": 40201,
+        "tare": 12619,
+        "net": 27582,
+        "idFormNo": null,
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04243",
+          "confidence": 0.95
+        },
+        "date": {
+          "value": "2026-10-09",
+          "confidence": 0.96
+        },
+        "plate": {
+          "value": "1-IJZ-404",
+          "confidence": 0.989
+        },
+        "customerNo": {
+          "value": "K-1004",
+          "confidence": 0.967
+        },
+        "direction": {
+          "value": "uit",
+          "confidence": 0.983
+        },
+        "material": {
+          "value": "ZS-02",
+          "confidence": 0.992
+        },
+        "gross": {
+          "value": 40201,
+          "confidence": 0.935
+        },
+        "tare": {
+          "value": 12619,
+          "confidence": 0.977
+        },
+        "net": {
+          "value": 27582,
+          "confidence": 0.942
+        },
+        "idFormNo": {
+          "value": null,
+          "confidence": 0.999
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.977
+        }
+      }
+    },
+    {
+      "id": "DOC-010",
+      "channel": "mail transporteur",
+      "received": "2026-10-08T10:58",
+      "scenario": "clean",
+      "truth": {
+        "ticketNo": "WB-26-04250",
+        "date": "2026-10-08",
+        "plate": "1-DHK-101",
+        "customerNo": "K-1001",
+        "direction": "in",
+        "material": "17 01 02",
+        "gross": 42528,
+        "tare": 15264,
+        "net": 27264,
+        "idFormNo": "IDF-73224",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04250",
+          "confidence": 0.978
+        },
+        "date": {
+          "value": "2026-10-08",
+          "confidence": 0.986
+        },
+        "plate": {
+          "value": "1-DHK-101",
+          "confidence": 0.978
+        },
+        "customerNo": {
+          "value": "K-1001",
+          "confidence": 0.942
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.985
+        },
+        "material": {
+          "value": "17 01 02",
+          "confidence": 0.977
+        },
+        "gross": {
+          "value": 42528,
+          "confidence": 0.935
+        },
+        "tare": {
+          "value": 15264,
+          "confidence": 0.954
+        },
+        "net": {
+          "value": 27264,
+          "confidence": 0.947
+        },
+        "idFormNo": {
+          "value": "IDF-73224",
+          "confidence": 0.943
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.966
+        }
+      }
+    },
+    {
+      "id": "DOC-011",
+      "channel": "scan weegbrug",
+      "received": "2026-10-05T13:31",
+      "scenario": "plate-not-linked",
+      "truth": {
+        "ticketNo": "WB-26-04257",
+        "date": "2026-10-05",
+        "plate": "1-VRK-377",
+        "customerNo": "K-1002",
+        "direction": "uit",
+        "material": "MG-031",
+        "gross": 34048,
+        "tare": 12277,
+        "net": 21771,
+        "idFormNo": null,
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04257",
+          "confidence": 0.951
+        },
+        "date": {
+          "value": "2026-10-05",
+          "confidence": 0.943
+        },
+        "plate": {
+          "value": "1-VRK-377",
+          "confidence": 0.981
+        },
+        "customerNo": {
+          "value": "K-1002",
+          "confidence": 0.971
+        },
+        "direction": {
+          "value": "uit",
+          "confidence": 0.938
+        },
+        "material": {
+          "value": "MG-031",
+          "confidence": 0.962
+        },
+        "gross": {
+          "value": 34048,
+          "confidence": 0.953
+        },
+        "tare": {
+          "value": 12277,
+          "confidence": 0.994
+        },
+        "net": {
+          "value": 21771,
+          "confidence": 0.997
+        },
+        "idFormNo": {
+          "value": null,
+          "confidence": 0.981
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.95
+        }
+      }
+    },
+    {
+      "id": "DOC-012",
+      "channel": "scan weegbrug",
+      "received": "2026-10-07T10:37",
+      "scenario": "clean",
+      "truth": {
+        "ticketNo": "WB-26-04264",
+        "date": "2026-10-07",
+        "plate": "1-IJZ-404",
+        "customerNo": "K-1004",
+        "direction": "in",
+        "material": "17 01 07",
+        "gross": 26775,
+        "tare": 13040,
+        "net": 13735,
+        "idFormNo": "IDF-73151",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04264",
+          "confidence": 0.99
+        },
+        "date": {
+          "value": "2026-10-07",
+          "confidence": 0.974
+        },
+        "plate": {
+          "value": "1-IJZ-404",
+          "confidence": 0.983
+        },
+        "customerNo": {
+          "value": "K-1004",
+          "confidence": 0.949
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.962
+        },
+        "material": {
+          "value": "17 01 07",
+          "confidence": 0.998
+        },
+        "gross": {
+          "value": 26775,
+          "confidence": 0.94
+        },
+        "tare": {
+          "value": 13040,
+          "confidence": 0.99
+        },
+        "net": {
+          "value": 13735,
+          "confidence": 0.968
+        },
+        "idFormNo": {
+          "value": "IDF-73151",
+          "confidence": 0.943
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.98
+        }
+      }
+    },
+    {
+      "id": "DOC-013",
+      "channel": "scan weegbrug",
+      "received": "2026-10-08T12:39",
+      "scenario": "asbestos",
+      "truth": {
+        "ticketNo": "WB-26-04271",
+        "date": "2026-10-08",
+        "plate": "1-KSL-110",
+        "customerNo": "K-1010",
+        "direction": "in",
+        "material": "17 06 05*",
+        "gross": 18326,
+        "tare": 14206,
+        "net": 4120,
+        "idFormNo": "IDF-71448",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04271",
+          "confidence": 0.965
+        },
+        "date": {
+          "value": "2026-10-08",
+          "confidence": 0.948
+        },
+        "plate": {
+          "value": "1-KSL-110",
+          "confidence": 0.947
+        },
+        "customerNo": {
+          "value": "K-1010",
+          "confidence": 0.993
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.937
+        },
+        "material": {
+          "value": "17 06 05*",
+          "confidence": 0.941
+        },
+        "gross": {
+          "value": 18326,
+          "confidence": 0.967
+        },
+        "tare": {
+          "value": 14206,
+          "confidence": 0.956
+        },
+        "net": {
+          "value": 4120,
+          "confidence": 0.998
+        },
+        "idFormNo": {
+          "value": "IDF-71448",
+          "confidence": 0.993
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.966
+        }
+      }
+    },
+    {
+      "id": "DOC-014",
+      "channel": "mail transporteur",
+      "received": "2026-10-06T11:13",
+      "scenario": "clean",
+      "truth": {
+        "ticketNo": "WB-26-04278",
+        "date": "2026-10-06",
+        "plate": "1-KSL-110",
+        "customerNo": "K-1010",
+        "direction": "in",
+        "material": "17 01 02",
+        "gross": 28909,
+        "tare": 13642,
+        "net": 15267,
+        "idFormNo": "IDF-75221",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04278",
+          "confidence": 0.959
+        },
+        "date": {
+          "value": "2026-10-06",
+          "confidence": 0.997
+        },
+        "plate": {
+          "value": "1-KSL-110",
+          "confidence": 0.94
+        },
+        "customerNo": {
+          "value": "K-1010",
+          "confidence": 0.935
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.988
+        },
+        "material": {
+          "value": "17 01 02",
+          "confidence": 0.931
+        },
+        "gross": {
+          "value": 28909,
+          "confidence": 0.951
+        },
+        "tare": {
+          "value": 13642,
+          "confidence": 0.964
+        },
+        "net": {
+          "value": 15267,
+          "confidence": 0.974
+        },
+        "idFormNo": {
+          "value": "IDF-75221",
+          "confidence": 0.984
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.952
+        }
+      }
+    },
+    {
+      "id": "DOC-015",
+      "channel": "scan weegbrug",
+      "received": "2026-10-07T13:55",
+      "scenario": "missing-idform",
+      "truth": {
+        "ticketNo": "WB-26-04285",
+        "date": "2026-10-07",
+        "plate": "1-DHK-101",
+        "customerNo": "K-1001",
+        "direction": "in",
+        "material": "17 01 01",
+        "gross": 26321,
+        "tare": 12110,
+        "net": 14211,
+        "idFormNo": null,
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04285",
+          "confidence": 0.978
+        },
+        "date": {
+          "value": "2026-10-07",
+          "confidence": 0.962
+        },
+        "plate": {
+          "value": "1-DHK-101",
+          "confidence": 0.956
+        },
+        "customerNo": {
+          "value": "K-1001",
+          "confidence": 0.986
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.944
+        },
+        "material": {
+          "value": "17 01 01",
+          "confidence": 0.942
+        },
+        "gross": {
+          "value": 26321,
+          "confidence": 0.987
+        },
+        "tare": {
+          "value": 12110,
+          "confidence": 0.997
+        },
+        "net": {
+          "value": 14211,
+          "confidence": 0.97
+        },
+        "idFormNo": {
+          "value": null,
+          "confidence": 0.963
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.982
+        }
+      }
+    },
+    {
+      "id": "DOC-016",
+      "channel": "scan weegbrug",
+      "received": "2026-10-07T15:13",
+      "scenario": "clean",
+      "truth": {
+        "ticketNo": "WB-26-04292",
+        "date": "2026-10-07",
+        "plate": "1-PLV-330",
+        "customerNo": "K-1003",
+        "direction": "uit",
+        "material": "MG-031",
+        "gross": 26770,
+        "tare": 12527,
+        "net": 14243,
+        "idFormNo": null,
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04292",
+          "confidence": 0.991
+        },
+        "date": {
+          "value": "2026-10-07",
+          "confidence": 0.959
+        },
+        "plate": {
+          "value": "1-PLV-330",
+          "confidence": 0.978
+        },
+        "customerNo": {
+          "value": "K-1003",
+          "confidence": 0.933
+        },
+        "direction": {
+          "value": "uit",
+          "confidence": 0.976
+        },
+        "material": {
+          "value": "MG-031",
+          "confidence": 0.992
+        },
+        "gross": {
+          "value": 26770,
+          "confidence": 0.944
+        },
+        "tare": {
+          "value": 12527,
+          "confidence": 0.972
+        },
+        "net": {
+          "value": 14243,
+          "confidence": 0.972
+        },
+        "idFormNo": {
+          "value": null,
+          "confidence": 0.962
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.977
+        }
+      }
+    },
+    {
+      "id": "DOC-017",
+      "channel": "scan weegbrug",
+      "received": "2026-10-07T15:53",
+      "scenario": "soil-without-ref",
+      "truth": {
+        "ticketNo": "WB-26-04299",
+        "date": "2026-10-07",
+        "plate": "1-PLV-330",
+        "customerNo": "K-1003",
+        "direction": "in",
+        "material": "17 05 04",
+        "gross": 25049,
+        "tare": 12149,
+        "net": 12900,
+        "idFormNo": "IDF-78520",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04299",
+          "confidence": 0.974
+        },
+        "date": {
+          "value": "2026-10-07",
+          "confidence": 0.99
+        },
+        "plate": {
+          "value": "1-PLV-330",
+          "confidence": 0.961
+        },
+        "customerNo": {
+          "value": "K-1003",
+          "confidence": 0.955
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.962
+        },
+        "material": {
+          "value": "17 05 04",
+          "confidence": 0.969
+        },
+        "gross": {
+          "value": 25049,
+          "confidence": 0.97
+        },
+        "tare": {
+          "value": 12149,
+          "confidence": 0.943
+        },
+        "net": {
+          "value": 12900,
+          "confidence": 0.936
+        },
+        "idFormNo": {
+          "value": "IDF-78520",
+          "confidence": 0.941
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.965
+        }
+      }
+    },
+    {
+      "id": "DOC-018",
+      "channel": "mail transporteur",
+      "received": "2026-10-05T13:27",
+      "scenario": "clean",
+      "truth": {
+        "ticketNo": "WB-26-04306",
+        "date": "2026-10-05",
+        "plate": "1-IJZ-405",
+        "customerNo": "K-1004",
+        "direction": "in",
+        "material": "17 03 02",
+        "gross": 39676,
+        "tare": 15195,
+        "net": 24481,
+        "idFormNo": "IDF-72729",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04306",
+          "confidence": 0.954
+        },
+        "date": {
+          "value": "2026-10-05",
+          "confidence": 0.958
+        },
+        "plate": {
+          "value": "1-IJZ-405",
+          "confidence": 0.991
+        },
+        "customerNo": {
+          "value": "K-1004",
+          "confidence": 0.949
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.948
+        },
+        "material": {
+          "value": "17 03 02",
+          "confidence": 0.993
+        },
+        "gross": {
+          "value": 39676,
+          "confidence": 0.967
+        },
+        "tare": {
+          "value": 15195,
+          "confidence": 0.971
+        },
+        "net": {
+          "value": 24481,
+          "confidence": 0.998
+        },
+        "idFormNo": {
+          "value": "IDF-72729",
+          "confidence": 0.959
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.983
+        }
+      }
+    },
+    {
+      "id": "DOC-019",
+      "channel": "mail transporteur",
+      "received": "2026-10-07T07:00",
+      "scenario": "duplicate",
+      "truth": {
+        "ticketNo": "WB-26-04208",
+        "date": "2026-10-07",
+        "plate": "1-IJZ-405",
+        "customerNo": "K-1004",
+        "direction": "in",
+        "material": "17 03 02",
+        "gross": 28309,
+        "tare": 12090,
+        "net": 16219,
+        "idFormNo": "IDF-70507",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04208",
+          "confidence": 0.953
+        },
+        "date": {
+          "value": "2026-10-07",
+          "confidence": 0.958
+        },
+        "plate": {
+          "value": "1-IJZ-405",
+          "confidence": 0.977
+        },
+        "customerNo": {
+          "value": "K-1004",
+          "confidence": 0.93
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.969
+        },
+        "material": {
+          "value": "17 03 02",
+          "confidence": 0.974
+        },
+        "gross": {
+          "value": 28309,
+          "confidence": 0.938
+        },
+        "tare": {
+          "value": 12090,
+          "confidence": 0.947
+        },
+        "net": {
+          "value": 16219,
+          "confidence": 0.946
+        },
+        "idFormNo": {
+          "value": "IDF-70507",
+          "confidence": 0.966
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.973
+        }
+      }
+    },
+    {
+      "id": "DOC-020",
+      "channel": "scan weegbrug",
+      "received": "2026-10-07T15:13",
+      "scenario": "clean",
+      "truth": {
+        "ticketNo": "WB-26-04320",
+        "date": "2026-10-07",
+        "plate": "1-STV-808",
+        "customerNo": "K-1008",
+        "direction": "in",
+        "material": "17 09 04",
+        "gross": 30466,
+        "tare": 14759,
+        "net": 15707,
+        "idFormNo": "IDF-78128",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04320",
+          "confidence": 0.944
+        },
+        "date": {
+          "value": "2026-10-07",
+          "confidence": 0.977
+        },
+        "plate": {
+          "value": "1-STV-808",
+          "confidence": 0.983
+        },
+        "customerNo": {
+          "value": "K-1008",
+          "confidence": 0.963
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.941
+        },
+        "material": {
+          "value": "17 09 04",
+          "confidence": 0.945
+        },
+        "gross": {
+          "value": 30466,
+          "confidence": 0.949
+        },
+        "tare": {
+          "value": 14759,
+          "confidence": 0.952
+        },
+        "net": {
+          "value": 15707,
+          "confidence": 0.97
+        },
+        "idFormNo": {
+          "value": "IDF-78128",
+          "confidence": 0.988
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.998
+        }
+      }
+    },
+    {
+      "id": "DOC-021",
+      "channel": "scan weegbrug",
+      "received": "2026-10-08T09:12",
+      "scenario": "old-ticket",
+      "truth": {
+        "ticketNo": "WB-26-04327",
+        "date": "2026-08-27",
+        "plate": "1-GRK-612",
+        "customerNo": "K-1006",
+        "direction": "uit",
+        "material": "ZS-02",
+        "gross": 37688,
+        "tare": 14887,
+        "net": 22801,
+        "idFormNo": null,
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04327",
+          "confidence": 0.947
+        },
+        "date": {
+          "value": "2026-08-27",
+          "confidence": 0.985
+        },
+        "plate": {
+          "value": "1-GRK-612",
+          "confidence": 0.961
+        },
+        "customerNo": {
+          "value": "K-1006",
+          "confidence": 0.958
+        },
+        "direction": {
+          "value": "uit",
+          "confidence": 0.97
+        },
+        "material": {
+          "value": "ZS-02",
+          "confidence": 0.932
+        },
+        "gross": {
+          "value": 37688,
+          "confidence": 0.961
+        },
+        "tare": {
+          "value": 14887,
+          "confidence": 0.978
+        },
+        "net": {
+          "value": 22801,
+          "confidence": 0.98
+        },
+        "idFormNo": {
+          "value": null,
+          "confidence": 0.954
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.93
+        }
+      }
+    },
+    {
+      "id": "DOC-022",
+      "channel": "scan weegbrug",
+      "received": "2026-10-07T10:36",
+      "scenario": "clean",
+      "truth": {
+        "ticketNo": "WB-26-04334",
+        "date": "2026-10-07",
+        "plate": "1-GWZ-500",
+        "customerNo": "K-1005",
+        "direction": "uit",
+        "material": "BG-040",
+        "gross": 22374,
+        "tare": 12953,
+        "net": 9421,
+        "idFormNo": null,
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04334",
+          "confidence": 0.97
+        },
+        "date": {
+          "value": "2026-10-07",
+          "confidence": 0.931
+        },
+        "plate": {
+          "value": "1-GWZ-500",
+          "confidence": 0.993
+        },
+        "customerNo": {
+          "value": "K-1005",
+          "confidence": 0.965
+        },
+        "direction": {
+          "value": "uit",
+          "confidence": 0.947
+        },
+        "material": {
+          "value": "BG-040",
+          "confidence": 0.977
+        },
+        "gross": {
+          "value": 22374,
+          "confidence": 0.94
+        },
+        "tare": {
+          "value": 12953,
+          "confidence": 0.962
+        },
+        "net": {
+          "value": 9421,
+          "confidence": 0.973
+        },
+        "idFormNo": {
+          "value": null,
+          "confidence": 0.936
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.969
+        }
+      }
+    },
+    {
+      "id": "DOC-023",
+      "channel": "scan weegbrug",
+      "received": "2026-10-07T10:44",
+      "scenario": "overload",
+      "truth": {
+        "ticketNo": "WB-26-04341",
+        "date": "2026-10-07",
+        "plate": "1-STV-808",
+        "customerNo": "K-1008",
+        "direction": "uit",
+        "material": "MG-031",
+        "gross": 46380,
+        "tare": 15100,
+        "net": 31280,
+        "idFormNo": null,
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04341",
+          "confidence": 0.966
+        },
+        "date": {
+          "value": "2026-10-07",
+          "confidence": 0.96
+        },
+        "plate": {
+          "value": "1-STV-808",
+          "confidence": 0.975
+        },
+        "customerNo": {
+          "value": "K-1008",
+          "confidence": 0.989
+        },
+        "direction": {
+          "value": "uit",
+          "confidence": 0.939
+        },
+        "material": {
+          "value": "MG-031",
+          "confidence": 0.979
+        },
+        "gross": {
+          "value": 46380,
+          "confidence": 0.937
+        },
+        "tare": {
+          "value": 15100,
+          "confidence": 0.993
+        },
+        "net": {
+          "value": 31280,
+          "confidence": 0.963
+        },
+        "idFormNo": {
+          "value": null,
+          "confidence": 0.933
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.994
+        }
+      }
+    },
+    {
+      "id": "DOC-024",
+      "channel": "scan weegbrug",
+      "received": "2026-10-06T15:10",
+      "scenario": "clean",
+      "truth": {
+        "ticketNo": "WB-26-04348",
+        "date": "2026-10-06",
+        "plate": "1-KSL-110",
+        "customerNo": "K-1010",
+        "direction": "in",
+        "material": "17 09 04",
+        "gross": 20399,
+        "tare": 12914,
+        "net": 7485,
+        "idFormNo": "IDF-73318",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04348",
+          "confidence": 0.988
+        },
+        "date": {
+          "value": "2026-10-06",
+          "confidence": 0.982
+        },
+        "plate": {
+          "value": "1-KSL-110",
+          "confidence": 0.932
+        },
+        "customerNo": {
+          "value": "K-1010",
+          "confidence": 0.937
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.988
+        },
+        "material": {
+          "value": "17 09 04",
+          "confidence": 0.941
+        },
+        "gross": {
+          "value": 20399,
+          "confidence": 0.94
+        },
+        "tare": {
+          "value": 12914,
+          "confidence": 0.938
+        },
+        "net": {
+          "value": 7485,
+          "confidence": 0.943
+        },
+        "idFormNo": {
+          "value": "IDF-73318",
+          "confidence": 0.997
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.995
+        }
+      }
+    },
+    {
+      "id": "DOC-025",
+      "channel": "mail transporteur",
+      "received": "2026-10-06T08:47",
+      "scenario": "silent-plate-misread",
+      "truth": {
+        "ticketNo": "WB-26-04355",
+        "date": "2026-10-06",
+        "plate": "1-DHK-101",
+        "customerNo": "K-1001",
+        "direction": "uit",
+        "material": "BG-040",
+        "gross": 32973,
+        "tare": 12394,
+        "net": 20579,
+        "idFormNo": null,
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04355",
+          "confidence": 0.973
+        },
+        "date": {
+          "value": "2026-10-06",
+          "confidence": 0.937
+        },
+        "plate": {
+          "value": "1-DHK-102",
+          "confidence": 0.97
+        },
+        "customerNo": {
+          "value": "K-1001",
+          "confidence": 0.995
+        },
+        "direction": {
+          "value": "uit",
+          "confidence": 0.991
+        },
+        "material": {
+          "value": "BG-040",
+          "confidence": 0.962
+        },
+        "gross": {
+          "value": 32973,
+          "confidence": 0.966
+        },
+        "tare": {
+          "value": 12394,
+          "confidence": 0.972
+        },
+        "net": {
+          "value": 20579,
+          "confidence": 0.997
+        },
+        "idFormNo": {
+          "value": null,
+          "confidence": 0.933
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.971
+        }
+      }
+    },
+    {
+      "id": "DOC-026",
+      "channel": "mail transporteur",
+      "received": "2026-10-07T07:25",
+      "scenario": "clean",
+      "truth": {
+        "ticketNo": "WB-26-04362",
+        "date": "2026-10-07",
+        "plate": "1-DHK-101",
+        "customerNo": "K-1001",
+        "direction": "in",
+        "material": "17 01 02",
+        "gross": 37762,
+        "tare": 12470,
+        "net": 25292,
+        "idFormNo": "IDF-73602",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04362",
+          "confidence": 0.978
+        },
+        "date": {
+          "value": "2026-10-07",
+          "confidence": 0.972
+        },
+        "plate": {
+          "value": "1-DHK-101",
+          "confidence": 0.98
+        },
+        "customerNo": {
+          "value": "K-1001",
+          "confidence": 0.993
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.938
+        },
+        "material": {
+          "value": "17 01 02",
+          "confidence": 0.945
+        },
+        "gross": {
+          "value": 37762,
+          "confidence": 0.978
+        },
+        "tare": {
+          "value": 12470,
+          "confidence": 0.941
+        },
+        "net": {
+          "value": 25292,
+          "confidence": 0.934
+        },
+        "idFormNo": {
+          "value": "IDF-73602",
+          "confidence": 0.955
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.984
+        }
+      }
+    },
+    {
+      "id": "DOC-027",
+      "channel": "scan weegbrug",
+      "received": "2026-10-07T12:15",
+      "scenario": "clean",
+      "truth": {
+        "ticketNo": "WB-26-04369",
+        "date": "2026-10-07",
+        "plate": "1-KSL-110",
+        "customerNo": "K-1010",
+        "direction": "uit",
+        "material": "BG-040",
+        "gross": 42646,
+        "tare": 15019,
+        "net": 27627,
+        "idFormNo": null,
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04369",
+          "confidence": 0.966
+        },
+        "date": {
+          "value": "2026-10-07",
+          "confidence": 0.96
+        },
+        "plate": {
+          "value": "1-KSL-110",
+          "confidence": 0.952
+        },
+        "customerNo": {
+          "value": "K-1010",
+          "confidence": 0.97
+        },
+        "direction": {
+          "value": "uit",
+          "confidence": 0.994
+        },
+        "material": {
+          "value": "BG-040",
+          "confidence": 0.998
+        },
+        "gross": {
+          "value": 42646,
+          "confidence": 0.981
+        },
+        "tare": {
+          "value": 15019,
+          "confidence": 0.953
+        },
+        "net": {
+          "value": 27627,
+          "confidence": 0.952
+        },
+        "idFormNo": {
+          "value": null,
+          "confidence": 0.949
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.954
+        }
+      }
+    },
+    {
+      "id": "DOC-028",
+      "channel": "scan weegbrug",
+      "received": "2026-10-07T13:13",
+      "scenario": "haulier",
+      "truth": {
+        "ticketNo": "WB-26-04376",
+        "date": "2026-10-07",
+        "plate": "1-ZWT-902",
+        "customerNo": "K-1006",
+        "direction": "in",
+        "material": "17 01 02",
+        "gross": 37689,
+        "tare": 13844,
+        "net": 23845,
+        "idFormNo": "IDF-73456",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04376",
+          "confidence": 0.953
+        },
+        "date": {
+          "value": "2026-10-07",
+          "confidence": 0.966
+        },
+        "plate": {
+          "value": "1-ZWT-902",
+          "confidence": 0.936
+        },
+        "customerNo": {
+          "value": "K-1006",
+          "confidence": 0.948
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.982
+        },
+        "material": {
+          "value": "17 01 02",
+          "confidence": 0.939
+        },
+        "gross": {
+          "value": 37689,
+          "confidence": 0.998
+        },
+        "tare": {
+          "value": 13844,
+          "confidence": 0.962
+        },
+        "net": {
+          "value": 23845,
+          "confidence": 0.95
+        },
+        "idFormNo": {
+          "value": "IDF-73456",
+          "confidence": 0.967
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.976
+        }
+      }
+    },
+    {
+      "id": "DOC-029",
+      "channel": "mail transporteur",
+      "received": "2026-10-05T08:51",
+      "scenario": "clean",
+      "truth": {
+        "ticketNo": "WB-26-04383",
+        "date": "2026-10-05",
+        "plate": "2-KRZ-211",
+        "customerNo": "K-1002",
+        "direction": "in",
+        "material": "17 03 02",
+        "gross": 24154,
+        "tare": 14792,
+        "net": 9362,
+        "idFormNo": "IDF-75288",
+        "soilRef": null
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04383",
+          "confidence": 0.969
+        },
+        "date": {
+          "value": "2026-10-05",
+          "confidence": 0.956
+        },
+        "plate": {
+          "value": "2-KRZ-211",
+          "confidence": 0.975
+        },
+        "customerNo": {
+          "value": "K-1002",
+          "confidence": 0.984
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.942
+        },
+        "material": {
+          "value": "17 03 02",
+          "confidence": 0.963
+        },
+        "gross": {
+          "value": 24154,
+          "confidence": 0.975
+        },
+        "tare": {
+          "value": 14792,
+          "confidence": 0.937
+        },
+        "net": {
+          "value": 9362,
+          "confidence": 0.989
+        },
+        "idFormNo": {
+          "value": "IDF-75288",
+          "confidence": 0.941
+        },
+        "soilRef": {
+          "value": null,
+          "confidence": 0.977
+        }
+      }
+    },
+    {
+      "id": "DOC-030",
+      "channel": "mail transporteur",
+      "received": "2026-10-06T08:01",
+      "scenario": "soil-with-ref",
+      "truth": {
+        "ticketNo": "WB-26-04390",
+        "date": "2026-10-06",
+        "plate": "1-PLV-330",
+        "customerNo": "K-1003",
+        "direction": "in",
+        "material": "17 05 04",
+        "gross": 21663,
+        "tare": 12732,
+        "net": 8931,
+        "idFormNo": "IDF-72681",
+        "soilRef": "TR-2026-018342"
+      },
+      "extracted": {
+        "ticketNo": {
+          "value": "WB-26-04390",
+          "confidence": 0.936
+        },
+        "date": {
+          "value": "2026-10-06",
+          "confidence": 0.966
+        },
+        "plate": {
+          "value": "1-PLV-330",
+          "confidence": 0.999
+        },
+        "customerNo": {
+          "value": "K-1003",
+          "confidence": 0.944
+        },
+        "direction": {
+          "value": "in",
+          "confidence": 0.949
+        },
+        "material": {
+          "value": "17 05 04",
+          "confidence": 0.975
+        },
+        "gross": {
+          "value": 21663,
+          "confidence": 0.943
+        },
+        "tare": {
+          "value": 12732,
+          "confidence": 0.966
+        },
+        "net": {
+          "value": 8931,
+          "confidence": 0.967
+        },
+        "idFormNo": {
+          "value": "IDF-72681",
+          "confidence": 0.993
+        },
+        "soilRef": {
+          "value": "TR-2026-018342",
+          "confidence": 0.952
+        }
+      }
+    }
+  ]
+}

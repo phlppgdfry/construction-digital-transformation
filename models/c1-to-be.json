@@ -1,0 +1,230 @@
+{
+  "id": "c1_tobe",
+  "case": "01-document-intelligence",
+  "file": "to-be",
+  "name": "TO-BE — document intelligence met menselijke controle",
+  "pool": "Halverdijk Recycling",
+  "description": "Gewenste werkwijze: AI leest de bon, elf regels beslissen of een mens moet kijken. Alleen schone bonnen gaan automatisch naar het ERP; asbest en dubbels nooit.",
+  "lanes": [
+    {
+      "id": "wb",
+      "name": "Weegbrug / vervoerder"
+    },
+    {
+      "id": "flow",
+      "name": "Power Automate + AI"
+    },
+    {
+      "id": "rev",
+      "name": "Administratie (reviewer)"
+    },
+    {
+      "id": "env",
+      "name": "Milieu-coördinator"
+    },
+    {
+      "id": "erp",
+      "name": "ERP / facturatie"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "s1",
+      "type": "startEvent",
+      "event": "message",
+      "name": "Bon gescand of gemaild",
+      "lane": "wb",
+      "col": 0
+    },
+    {
+      "id": "t1",
+      "type": "serviceTask",
+      "name": "Document ophalen (postvak / scanmap)",
+      "lane": "flow",
+      "col": 1
+    },
+    {
+      "id": "t2",
+      "type": "serviceTask",
+      "name": "Classificeren en velden extraheren (AI)",
+      "lane": "flow",
+      "col": 2,
+      "doc": "Azure AI Document Intelligence (custom extraction model) of AI Builder; geeft per veld een waarde en een confidence."
+    },
+    {
+      "id": "t3",
+      "type": "businessRuleTask",
+      "name": "Elf controles R01–R11",
+      "lane": "flow",
+      "col": 3
+    },
+    {
+      "id": "g1",
+      "type": "exclusiveGateway",
+      "name": "Uitkomst?",
+      "lane": "flow",
+      "col": 4
+    },
+    {
+      "id": "e2",
+      "type": "endEvent",
+      "name": "Gearchiveerd als dubbel",
+      "lane": "flow",
+      "col": 5
+    },
+    {
+      "id": "t5",
+      "type": "userTask",
+      "name": "Gemarkeerde velden nakijken en corrigeren",
+      "lane": "rev",
+      "col": 5
+    },
+    {
+      "id": "t6",
+      "type": "userTask",
+      "name": "Weigeren of uitzonderlijk aanvaarden",
+      "lane": "env",
+      "col": 6
+    },
+    {
+      "id": "g2",
+      "type": "exclusiveGateway",
+      "name": "Bon correct?",
+      "lane": "rev",
+      "col": 6
+    },
+    {
+      "id": "g3",
+      "type": "exclusiveGateway",
+      "name": "Aanvaarden?",
+      "lane": "env",
+      "col": 7
+    },
+    {
+      "id": "e3",
+      "type": "endEvent",
+      "name": "Afgewezen, vervoerder verwittigd",
+      "lane": "rev",
+      "col": 8
+    },
+    {
+      "id": "t7",
+      "type": "sendTask",
+      "name": "Klant en vervoerder verwittigen",
+      "lane": "env",
+      "col": 8
+    },
+    {
+      "id": "e4",
+      "type": "endEvent",
+      "name": "Lading geweigerd",
+      "lane": "env",
+      "col": 9
+    },
+    {
+      "id": "t4",
+      "type": "serviceTask",
+      "name": "Weging boeken in ERP (API, idempotent)",
+      "lane": "erp",
+      "col": 8
+    },
+    {
+      "id": "t8",
+      "type": "serviceTask",
+      "name": "Archiveren + KPI-log",
+      "lane": "erp",
+      "col": 9
+    },
+    {
+      "id": "e1",
+      "type": "endEvent",
+      "name": "Klaar voor facturatie",
+      "lane": "erp",
+      "col": 10
+    }
+  ],
+  "flows": [
+    {
+      "from": "s1",
+      "to": "t1"
+    },
+    {
+      "from": "t1",
+      "to": "t2"
+    },
+    {
+      "from": "t2",
+      "to": "t3"
+    },
+    {
+      "from": "t3",
+      "to": "g1"
+    },
+    {
+      "from": "g1",
+      "to": "e2",
+      "name": "dubbel"
+    },
+    {
+      "from": "g1",
+      "to": "t5",
+      "name": "nazicht"
+    },
+    {
+      "from": "g1",
+      "to": "t6",
+      "name": "geweigerd",
+      "bend": 22
+    },
+    {
+      "from": "g1",
+      "to": "t4",
+      "name": "alles ok",
+      "bend": 48,
+      "default": true
+    },
+    {
+      "from": "t5",
+      "to": "g2"
+    },
+    {
+      "from": "g2",
+      "to": "e3",
+      "name": "nee"
+    },
+    {
+      "from": "g2",
+      "to": "t4",
+      "name": "ja",
+      "bend": 40,
+      "default": true
+    },
+    {
+      "from": "t6",
+      "to": "g3"
+    },
+    {
+      "from": "g3",
+      "to": "t7",
+      "name": "nee",
+      "default": true
+    },
+    {
+      "from": "g3",
+      "to": "t4",
+      "name": "uitzondering"
+    },
+    {
+      "from": "t7",
+      "to": "e4"
+    },
+    {
+      "from": "t4",
+      "to": "t8"
+    },
+    {
+      "from": "t8",
+      "to": "e1"
+    }
+  ]
+}

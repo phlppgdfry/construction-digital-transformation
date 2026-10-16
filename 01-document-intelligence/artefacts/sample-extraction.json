@@ -1,0 +1,53 @@
+{
+  "documentId": "DOC-006",
+  "documentType": "weegbon",
+  "classificationConfidence": 0.991,
+  "model": "weegbon-v1",
+  "pages": 1,
+  "fields": {
+    "ticketNo": {
+      "value": "WB-26-04222",
+      "confidence": 0.975
+    },
+    "date": {
+      "value": "2026-10-06",
+      "confidence": 0.954
+    },
+    "plate": {
+      "value": "1-KSL-110",
+      "confidence": 0.936
+    },
+    "customerNo": {
+      "value": "K-1010",
+      "confidence": 0.951
+    },
+    "direction": {
+      "value": "in",
+      "confidence": 0.981
+    },
+    "material": {
+      "value": "17 01 07",
+      "confidence": 0.992
+    },
+    "gross": {
+      "value": 31590,
+      "confidence": 0.955
+    },
+    "tare": {
+      "value": 13240,
+      "confidence": 0.935
+    },
+    "net": {
+      "value": 13350,
+      "confidence": 0.96
+    },
+    "idFormNo": {
+      "value": "IDF-77872",
+      "confidence": 0.996
+    },
+    "soilRef": {
+      "value": null,
+      "confidence": 0.996
+    }
+  }
+}

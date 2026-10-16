@@ -1,0 +1,45 @@
+{
+  "id": "c3_tobe", "case": "03-material-requests", "file": "to-be",
+  "name": "TO-BE — digitale materiaalaanvraag met voorraadcheck en ERP-koppeling", "pool": "Halverdijk Group",
+  "description": "Gewenste werkwijze: aanvraag in de app, voorraad per depot via API, beslistabel DT-03 bepaalt of er goedkeuring nodig is. Reservatie en aankoopaanvraag gaan via een outbox met retry naar het ERP, en de ontvangst wordt op de werf bevestigd.",
+  "lanes": [
+    { "id": "wl", "name": "Werfleider (app)" },
+    { "id": "flow", "name": "Power Automate + regels" },
+    { "id": "appr", "name": "Projectleider / afdeling" },
+    { "id": "buy", "name": "Aankoop" },
+    { "id": "plan", "name": "Werf- en transport-planning" },
+    { "id": "erp", "name": "ERP (via API-laag)" }
+  ],
+  "nodes": [
+    { "id": "s1", "type": "startEvent", "name": "Materiaal nodig (bij voorkeur in weekplanning)", "lane": "wl", "col": 0 },
+    { "id": "t1", "type": "userTask", "name": "Aanvraag: werf, artikel, hoeveelheid, datum", "lane": "wl", "col": 1 },
+    { "id": "t2", "type": "serviceTask", "name": "Voorraad per depot opvragen (API)", "lane": "flow", "col": 2 },
+    { "id": "t3", "type": "businessRuleTask", "name": "Toewijzen, budget, spoed, route (DT-03)", "lane": "flow", "col": 3 },
+    { "id": "g1", "type": "exclusiveGateway", "name": "Goedkeuring nodig?", "lane": "flow", "col": 4 },
+    { "id": "t4", "type": "userTask", "name": "Goedkeuren in Teams of app", "lane": "appr", "col": 5 },
+    { "id": "g3", "type": "exclusiveGateway", "name": "Goedgekeurd?", "lane": "appr", "col": 6 },
+    { "id": "e2", "type": "endEvent", "name": "Afgewezen, werfleider verwittigd", "lane": "appr", "col": 7 },
+    { "id": "t6", "type": "serviceTask", "name": "Reservatie + aankoopaanvraag naar ERP (outbox, retry)", "lane": "flow", "col": 6 },
+    { "id": "g4", "type": "exclusiveGateway", "name": "Aankoop nodig?", "lane": "flow", "col": 7 },
+    { "id": "t8", "type": "userTask", "name": "Bestelling plaatsen bij leverancier", "lane": "buy", "col": 8 },
+    { "id": "t9", "type": "userTask", "name": "Levering inplannen (depot of leverancier)", "lane": "plan", "col": 9 },
+    { "id": "t12", "type": "userTask", "name": "Ontvangst bevestigen (foto leverbon)", "lane": "wl", "col": 10 },
+    { "id": "t13", "type": "serviceTask", "name": "Verbruik boeken op werf (ERP)", "lane": "erp", "col": 11 },
+    { "id": "e1", "type": "endEvent", "name": "Kosten op project, dezelfde dag", "lane": "erp", "col": 12 }
+  ],
+  "flows": [
+    { "from": "s1", "to": "t1" }, { "from": "t1", "to": "t2" }, { "from": "t2", "to": "t3" }, { "from": "t3", "to": "g1" },
+    { "from": "g1", "to": "t6", "name": "nee (DT-03.4)", "default": true },
+    { "from": "g1", "to": "t4", "name": "ja" },
+    { "from": "t4", "to": "g3" },
+    { "from": "g3", "to": "e2", "name": "nee" },
+    { "from": "g3", "to": "t6", "name": "ja", "default": true },
+    { "from": "t6", "to": "g4" },
+    { "from": "g4", "to": "t8", "name": "ja", "bend": 22 },
+    { "from": "g4", "to": "t9", "name": "nee", "bend": 48, "default": true },
+    { "from": "t8", "to": "t9" },
+    { "from": "t9", "to": "t12" },
+    { "from": "t12", "to": "t13" },
+    { "from": "t13", "to": "e1" }
+  ]
+}

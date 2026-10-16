@@ -1,0 +1,70 @@
+{
+  "name": "HV-CL-02 Schadeclaim goedkeuringsketen",
+  "description": "Start wanneer de beoordelaar de claim op 'Ter goedkeuring' zet. Loopt de keten uit hv_goedkeuringsketen niveau per niveau af met Approvals (Teams/Outlook). Eén afwijzing stopt de keten. Elke beslissing komt in de tijdlijn (audit). Referentie: transition() in src/claims.mjs.",
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": { "connectionReferenceLogicalName": "hv_shareddataverse", "api": { "name": "shared_commondataserviceforapps" } },
+      "shared_approvals": { "connectionReferenceLogicalName": "hv_sharedapprovals", "api": { "name": "shared_approvals" } }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": { "$connections": { "defaultValue": {}, "type": "Object" }, "$authentication": { "defaultValue": {}, "type": "SecureObject" } },
+      "triggers": {
+        "Ter_goedkeuring": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": { "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "SubscribeWebhookTrigger", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" }, "parameters": { "subscriptionRequest/message": 3, "subscriptionRequest/entityname": "hv_schadeclaim", "subscriptionRequest/scope": 4, "subscriptionRequest/filteringattributes": "hv_status", "subscriptionRequest/filterexpression": "hv_status eq 100000003" }, "authentication": "@parameters('$authentication')" }
+        }
+      },
+      "actions": {
+        "Keten": { "type": "InitializeVariable", "runAfter": {}, "inputs": { "variables": [{ "name": "keten", "type": "array", "value": "@split(triggerOutputs()?['body/hv_goedkeuringsketen'], '>')" }] } },
+        "Niveau": { "type": "InitializeVariable", "runAfter": { "Keten": ["Succeeded"] }, "inputs": { "variables": [{ "name": "niveau", "type": "integer", "value": 0 }] } },
+        "Afgewezen": { "type": "InitializeVariable", "runAfter": { "Niveau": ["Succeeded"] }, "inputs": { "variables": [{ "name": "afgewezen", "type": "boolean", "value": false }] } },
+        "Per_niveau": {
+          "type": "Until",
+          "runAfter": { "Afgewezen": ["Succeeded"] },
+          "expression": "@or(variables('afgewezen'), greaterOrEquals(variables('niveau'), length(variables('keten'))))",
+          "limit": { "count": 6, "timeout": "P14D" },
+          "actions": {
+            "Goedkeurder_zoeken": {
+              "type": "OpenApiConnection",
+              "runAfter": {},
+              "description": "Rol → persoon via tabel hv_goedkeurder (rol, afdeling, werf, vervanger bij afwezigheid).",
+              "inputs": { "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "ListRecords", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" }, "parameters": { "entityName": "hv_goedkeurders", "$filter": "hv_rol eq '@{variables('keten')[variables('niveau')]}' and (_hv_werf_value eq @{triggerOutputs()?['body/_hv_werf_value']} or _hv_werf_value eq null)", "$top": 1 }, "authentication": "@parameters('$authentication')" }
+            },
+            "Goedkeuring_vragen": {
+              "type": "OpenApiConnectionWebhook",
+              "runAfter": { "Goedkeurder_zoeken": ["Succeeded"] },
+              "inputs": { "host": { "connectionName": "shared_approvals", "operationId": "StartAndWaitForAnApproval", "apiId": "/providers/Microsoft.PowerApps/apis/shared_approvals" }, "parameters": { "approvalType": "Basic", "WebhookApprovalCreationInput/title": "Schadeclaim @{triggerOutputs()?['body/hv_dossiernummer']} — niveau @{add(variables('niveau'), 1)}/@{length(variables('keten'))} (@{variables('keten')[variables('niveau')]})", "WebhookApprovalCreationInput/assignedTo": "@{first(outputs('Goedkeurder_zoeken')?['body/value'])?['hv_email']}", "WebhookApprovalCreationInput/details": "Raming €@{triggerOutputs()?['body/hv_geschatbedrag']} · @{triggerOutputs()?['body/hv_categorie']} · @{triggerOutputs()?['body/hv_omschrijving']}", "WebhookApprovalCreationInput/itemLink": "https://halverdijk.crm4.dynamics.com/main.aspx?etn=hv_schadeclaim&id=@{triggerOutputs()?['body/hv_schadeclaimid']}", "WebhookApprovalCreationInput/enableNotifications": true }, "authentication": "@parameters('$authentication')" },
+              "limit": { "timeout": "P5D" }
+            },
+            "Tijdlijn": {
+              "type": "OpenApiConnection",
+              "runAfter": { "Goedkeuring_vragen": ["Succeeded"] },
+              "inputs": { "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "CreateRecord", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" }, "parameters": { "entityName": "hv_tijdlijns", "item/hv_Schadeclaim@odata.bind": "hv_schadeclaims(@{triggerOutputs()?['body/hv_schadeclaimid']})", "item/hv_gebeurtenis": "@{body('Goedkeuring_vragen')?['outcome']} door @{variables('keten')[variables('niveau')]}", "item/hv_door": "@{first(body('Goedkeuring_vragen')?['responses'])?['responder/email']}", "item/hv_opmerking": "@{first(body('Goedkeuring_vragen')?['responses'])?['comments']}" }, "authentication": "@parameters('$authentication')" }
+            },
+            "Uitkomst": {
+              "type": "If",
+              "runAfter": { "Tijdlijn": ["Succeeded"] },
+              "expression": { "equals": ["@body('Goedkeuring_vragen')?['outcome']", "Approve"] },
+              "actions": { "Volgend_niveau": { "type": "IncrementVariable", "runAfter": {}, "inputs": { "name": "niveau", "value": 1 } } },
+              "else": { "actions": { "Markeer_afgewezen": { "type": "SetVariable", "runAfter": {}, "inputs": { "name": "afgewezen", "value": true } } } }
+            }
+          }
+        },
+        "Eindstatus": {
+          "type": "OpenApiConnection",
+          "runAfter": { "Per_niveau": ["Succeeded"] },
+          "inputs": { "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "UpdateOnlyRecord", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" }, "parameters": { "entityName": "hv_schadeclaims", "recordId": "@triggerOutputs()?['body/hv_schadeclaimid']", "item/hv_status": "@if(variables('afgewezen'), 100000005, 100000004)" }, "authentication": "@parameters('$authentication')" }
+        },
+        "Geen_reactie": {
+          "type": "OpenApiConnection",
+          "runAfter": { "Per_niveau": ["TimedOut", "Failed"] },
+          "description": "Goedkeurder reageerde niet binnen 5 dagen: claim terug naar beoordelaar met melding, escalatie via HV-CL-03.",
+          "inputs": { "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "UpdateOnlyRecord", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" }, "parameters": { "entityName": "hv_schadeclaims", "recordId": "@triggerOutputs()?['body/hv_schadeclaimid']", "item/hv_status": 100000001, "item/hv_opmerking": "Goedkeuring verlopen op niveau @{add(variables('niveau'), 1)}" }, "authentication": "@parameters('$authentication')" }
+        }
+      },
+      "outputs": {}
+    }
+  }
+}

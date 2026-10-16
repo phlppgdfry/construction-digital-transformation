@@ -1,0 +1,45 @@
+{
+  "_note": "Dataverse-tabellen voor case 02 (prefix hv_). Ontwerp. Offline-profiel van de werfapp: hv_schadeclaim (eigen rijen, 30 dagen), hv_schadefoto (eigen rijen), hv_werf (actieve werven).",
+  "tables": [
+    {
+      "logicalName": "hv_schadeclaim", "displayName": "Schadeclaim", "ownership": "User/Team", "primaryName": "hv_dossiernummer",
+      "columns": [
+        { "name": "hv_dossiernummer", "type": "Autonumber", "format": "SCH-{DATETIMEUTC:yy}-{SEQNUM:4}" },
+        { "name": "hv_clientid", "type": "Text", "alternateKey": true, "note": "GUID uit de app; maakt offline sync idempotent" },
+        { "name": "hv_werf", "type": "Lookup", "target": "hv_werf" },
+        { "name": "hv_categorie", "type": "Choice (text code)", "options": ["eigen-materieel", "gehuurd-materieel", "derden-schade", "nutsleiding", "eigen-werf"] },
+        { "name": "hv_status", "type": "Choice", "options": { "100000000": "Gemeld", "100000001": "In beoordeling", "100000002": "Info gevraagd", "100000003": "Ter goedkeuring", "100000004": "Goedgekeurd", "100000005": "Afgewezen", "100000006": "In afhandeling", "100000007": "Afgesloten" } },
+        { "name": "hv_tijdstipschade", "type": "DateTime" },
+        { "name": "hv_gps", "type": "Text" },
+        { "name": "hv_omschrijving", "type": "Multiline text", "min": 20 },
+        { "name": "hv_geschatbedrag", "type": "Currency" },
+        { "name": "hv_typeleiding", "type": "Choice", "options": ["gas", "elektriciteit", "water", "telecom", "riolering"] },
+        { "name": "hv_klipreferentie", "type": "Text" },
+        { "name": "hv_leidingbeheerder", "type": "Text" },
+        { "name": "hv_beheerderverwittigd", "type": "Yes/No" },
+        { "name": "hv_huurreferentie", "type": "Text" },
+        { "name": "hv_derdebetrokken", "type": "Yes/No" },
+        { "name": "hv_naamderde", "type": "Text" },
+        { "name": "hv_derdeaansprakelijk", "type": "Yes/No", "note": "Start het verhaaltraject" },
+        { "name": "hv_ernst", "type": "Choice", "options": ["laag", "middel", "hoog", "kritiek"] },
+        { "name": "hv_goedkeuringsketen", "type": "Text", "note": "Bv. Fleetmanager>Projectleider>Afdelingsverantwoordelijke" },
+        { "name": "hv_deadlinebeoordeling", "type": "DateTime" },
+        { "name": "hv_deadlineverzekeraar", "type": "DateTime" },
+        { "name": "hv_aangifteverstuurd", "type": "Yes/No" },
+        { "name": "hv_geescaleerd", "type": "Yes/No" },
+        { "name": "hv_definitievekost", "type": "Currency" },
+        { "name": "hv_gerecupereerd", "type": "Currency" }
+      ],
+      "audit": true
+    },
+    { "logicalName": "hv_schadefoto", "displayName": "Schadefoto", "primaryName": "hv_naam", "columns": [ { "name": "hv_naam", "type": "Text" }, { "name": "hv_schadeclaim", "type": "Lookup", "target": "hv_schadeclaim", "cascadeDelete": "Cascade" }, { "name": "hv_afbeelding", "type": "Image (full size)" } ] },
+    { "logicalName": "hv_tijdlijn", "displayName": "Tijdlijn", "primaryName": "hv_gebeurtenis", "columns": [ { "name": "hv_schadeclaim", "type": "Lookup", "target": "hv_schadeclaim" }, { "name": "hv_gebeurtenis", "type": "Text" }, { "name": "hv_door", "type": "Text" }, { "name": "hv_opmerking", "type": "Multiline text" } ], "note": "Alleen create; geen update of delete (security role) = audit trail" },
+    { "logicalName": "hv_goedkeurder", "displayName": "Goedkeurder", "primaryName": "hv_rol", "columns": [ { "name": "hv_rol", "type": "Text" }, { "name": "hv_werf", "type": "Lookup", "target": "hv_werf", "note": "leeg = geldt voor alle werven" }, { "name": "hv_email", "type": "Text" }, { "name": "hv_vervanger", "type": "Text" } ], "note": "Rol → persoon. Beheerd door de afdelingsverantwoordelijken, niet in de flow hardgecodeerd." },
+    { "logicalName": "hv_werf", "displayName": "Werf", "primaryName": "hv_werfnr", "columns": [ { "name": "hv_werfnr", "type": "Text", "alternateKey": true }, { "name": "hv_naam", "type": "Text" }, { "name": "hv_actief", "type": "Yes/No" }, { "name": "hv_projectleider", "type": "Lookup", "target": "systemuser" }, { "name": "hv_afdeling", "type": "Lookup", "target": "businessunit" } ], "note": "Gedeeld met case 03; nachtelijke sync uit het ERP." }
+  ],
+  "securityRoles": [
+    { "name": "HV Werfleider", "privileges": "hv_schadeclaim: create, read (user), hv_schadefoto: create, read (user), hv_werf: read" },
+    { "name": "HV Beoordelaar", "privileges": "hv_schadeclaim: read/write (business unit), hv_tijdlijn: create/read" },
+    { "name": "HV Claims & verzekeringen", "privileges": "hv_schadeclaim: read/write (organisatie)" }
+  ]
+}

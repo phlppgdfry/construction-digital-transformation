@@ -1,0 +1,77 @@
+{
+  "name": "HV-MA-02 ERP-outbox verzenden (retry + dead-letter)",
+  "description": "Elke minuut: berichten in hv_outbox met status 'Wachtend' en volgende poging ≤ nu worden naar de ERP-facade gestuurd. 2xx → 'Verzonden'. 503/429/timeout → poging +1 en volgende poging na 1, 5, 15, 60 en 240 minuten. Na de laatste poging → 'Dead-letter' + ticket functioneel beheer. 4xx (behalve 429) → meteen 'Dead-letter', want opnieuw proberen helpt niet. Referentie: deliverOutbox() in src/materials.mjs.",
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": { "connectionReferenceLogicalName": "hv_shareddataverse", "api": { "name": "shared_commondataserviceforapps" } },
+      "shared_teams": { "connectionReferenceLogicalName": "hv_sharedteams", "api": { "name": "shared_teams" } }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": { "defaultValue": {}, "type": "Object" },
+        "$authentication": { "defaultValue": {}, "type": "SecureObject" },
+        "Retry-schema minuten (hv_RetryMinutes)": { "defaultValue": [1, 5, 15, 60, 240], "type": "Array" },
+        "ERP API basis-URL (hv_ErpApiBaseUrl)": { "defaultValue": "https://api.halverdijk.example/erp/v1", "type": "String" }
+      },
+      "triggers": { "Elke_minuut": { "type": "Recurrence", "recurrence": { "frequency": "Minute", "interval": 1 } } },
+      "actions": {
+        "Klaar_om_te_verzenden": {
+          "type": "OpenApiConnection",
+          "runAfter": {},
+          "inputs": { "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "ListRecords", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" }, "parameters": { "entityName": "hv_outboxes", "$filter": "hv_status eq 100000000 and hv_volgendepoging le @{utcNow()}", "$orderby": "createdon asc", "$top": 50 }, "authentication": "@parameters('$authentication')" }
+        },
+        "Per_bericht": {
+          "type": "Foreach",
+          "runAfter": { "Klaar_om_te_verzenden": ["Succeeded"] },
+          "foreach": "@outputs('Klaar_om_te_verzenden')?['body/value']",
+          "runtimeConfiguration": { "concurrency": { "repetitions": 1 } },
+          "actions": {
+            "Versturen": {
+              "type": "Http",
+              "runAfter": {},
+              "inputs": { "method": "POST", "uri": "@{parameters('ERP API basis-URL (hv_ErpApiBaseUrl)')}/@{items('Per_bericht')?['hv_endpoint']}", "headers": { "Idempotency-Key": "@items('Per_bericht')?['hv_idempotencykey']", "Content-Type": "application/json" }, "body": "@json(items('Per_bericht')?['hv_body'])", "authentication": { "type": "ManagedServiceIdentity", "audience": "api://halverdijk-erp-api" }, "retryPolicy": { "type": "none" } }
+            },
+            "Resultaat": {
+              "type": "Switch",
+              "runAfter": { "Versturen": ["Succeeded", "Failed", "TimedOut"] },
+              "expression": "@if(and(greaterOrEquals(coalesce(outputs('Versturen')?['statusCode'], 0), 200), less(coalesce(outputs('Versturen')?['statusCode'], 0), 300)), 'ok', if(or(equals(outputs('Versturen')?['statusCode'], 429), greaterOrEquals(coalesce(outputs('Versturen')?['statusCode'], 503), 500)), 'tijdelijk', 'definitief'))",
+              "cases": {
+                "Gelukt": {
+                  "case": "ok",
+                  "actions": { "Status_verzonden": { "type": "OpenApiConnection", "runAfter": {}, "inputs": { "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "UpdateOnlyRecord", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" }, "parameters": { "entityName": "hv_outboxes", "recordId": "@items('Per_bericht')?['hv_outboxid']", "item/hv_status": 100000001, "item/hv_antwoord": "@{body('Versturen')}" }, "authentication": "@parameters('$authentication')" } } }
+                },
+                "Tijdelijke_fout": {
+                  "case": "tijdelijk",
+                  "actions": {
+                    "Nog_pogingen_over": {
+                      "type": "If",
+                      "runAfter": {},
+                      "expression": { "less": ["@items('Per_bericht')?['hv_pogingen']", "@length(parameters('Retry-schema minuten (hv_RetryMinutes)'))"] },
+                      "actions": { "Opnieuw_plannen": { "type": "OpenApiConnection", "runAfter": {}, "inputs": { "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "UpdateOnlyRecord", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" }, "parameters": { "entityName": "hv_outboxes", "recordId": "@items('Per_bericht')?['hv_outboxid']", "item/hv_pogingen": "@add(items('Per_bericht')?['hv_pogingen'], 1)", "item/hv_volgendepoging": "@addMinutes(utcNow(), parameters('Retry-schema minuten (hv_RetryMinutes)')[items('Per_bericht')?['hv_pogingen']])", "item/hv_laatstefout": "@{outputs('Versturen')?['statusCode']}" }, "authentication": "@parameters('$authentication')" } } },
+                      "else": { "actions": { "Dead_letter_na_retries": { "type": "OpenApiConnection", "runAfter": {}, "inputs": { "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "UpdateOnlyRecord", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" }, "parameters": { "entityName": "hv_outboxes", "recordId": "@items('Per_bericht')?['hv_outboxid']", "item/hv_status": 100000009 }, "authentication": "@parameters('$authentication')" } } } }
+                    }
+                  }
+                },
+                "Definitieve_fout": {
+                  "case": "definitief",
+                  "actions": { "Dead_letter_meteen": { "type": "OpenApiConnection", "runAfter": {}, "inputs": { "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "UpdateOnlyRecord", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" }, "parameters": { "entityName": "hv_outboxes", "recordId": "@items('Per_bericht')?['hv_outboxid']", "item/hv_status": 100000009, "item/hv_laatstefout": "@{body('Versturen')}" }, "authentication": "@parameters('$authentication')" } } }
+                }
+              },
+              "default": { "actions": {} }
+            },
+            "Ticket_bij_dead_letter": {
+              "type": "If",
+              "runAfter": { "Resultaat": ["Succeeded"] },
+              "expression": { "or": [{ "equals": ["@outputs('Dead_letter_meteen')?['statusCode']", 204] }, { "equals": ["@outputs('Dead_letter_na_retries')?['statusCode']", 204] }] },
+              "actions": { "Functioneel_beheer": { "type": "OpenApiConnection", "runAfter": {}, "inputs": { "host": { "connectionName": "shared_teams", "operationId": "PostMessageToConversation", "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams" }, "parameters": { "poster": "Flow bot", "location": "Channel", "body/recipient/channelId": "functioneel-beheer", "body/messageBody": "ERP-bericht @{items('Per_bericht')?['hv_idempotencykey']} (@{items('Per_bericht')?['hv_endpoint']}) staat in dead-letter. Runbook: 06-implement.md §Runbook." }, "authentication": "@parameters('$authentication')" } } },
+              "else": { "actions": {} }
+            }
+          }
+        }
+      },
+      "outputs": {}
+    }
+  }
+}

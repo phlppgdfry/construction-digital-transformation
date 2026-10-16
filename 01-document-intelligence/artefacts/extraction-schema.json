@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://halverdijk.example/schemas/weegbon-extractie.json",
+  "title": "Weegbon — extractie-uitvoer",
+  "description": "Wat de extractiestap (Azure AI Document Intelligence custom model 'weegbon-v1' of AI Builder) per document teruggeeft, na mapping in de flow. Elk veld heeft een waarde en een confidence tussen 0 en 1. Velden die het model niet vindt, krijgen value null en confidence 0.",
+  "type": "object",
+  "required": ["documentId", "documentType", "fields"],
+  "additionalProperties": false,
+  "properties": {
+    "documentId": { "type": "string", "pattern": "^DOC-[0-9]{3,}$" },
+    "documentType": { "enum": ["weegbon", "identificatieformulier", "leveringsbon", "onbekend"] },
+    "classificationConfidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "model": { "type": "string", "examples": ["weegbon-v1"] },
+    "pages": { "type": "integer", "minimum": 1 },
+    "fields": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ticketNo", "date", "plate", "customerNo", "direction", "material", "gross", "tare", "net", "idFormNo", "soilRef"],
+      "properties": {
+        "ticketNo": { "$ref": "#/$defs/textField", "description": "Bonnummer van de weegbrug, bv. WB-26-04187" },
+        "date": { "$ref": "#/$defs/dateField" },
+        "plate": { "$ref": "#/$defs/textField", "description": "Belgische nummerplaat, genormaliseerd naar 1-ABC-123" },
+        "customerNo": { "$ref": "#/$defs/textField", "description": "Klantnummer uit het ERP, bv. K-1004" },
+        "direction": { "type": "object", "required": ["value", "confidence"], "properties": { "value": { "enum": ["in", "uit", null] }, "confidence": { "$ref": "#/$defs/confidence" } } },
+        "material": { "$ref": "#/$defs/textField", "description": "EURAL-code bij inkomend afval (bv. 17 01 07), productcode bij uitgaande verkoop (bv. MG-031)" },
+        "gross": { "$ref": "#/$defs/weightField" },
+        "tare": { "$ref": "#/$defs/weightField" },
+        "net": { "$ref": "#/$defs/weightField" },
+        "idFormNo": { "$ref": "#/$defs/textField", "description": "Nummer van het identificatieformulier (afvaltransport)" },
+        "soilRef": { "$ref": "#/$defs/textField", "description": "Traceerbaarheidsreferentie voor uitgegraven bodem" }
+      }
+    }
+  },
+  "$defs": {
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "textField": { "type": "object", "required": ["value", "confidence"], "properties": { "value": { "type": ["string", "null"] }, "confidence": { "$ref": "#/$defs/confidence" } } },
+    "dateField": { "type": "object", "required": ["value", "confidence"], "properties": { "value": { "type": ["string", "null"], "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" }, "confidence": { "$ref": "#/$defs/confidence" } } },
+    "weightField": { "type": "object", "required": ["value", "confidence"], "properties": { "value": { "type": ["integer", "null"], "minimum": 0, "maximum": 80000, "description": "kilogram" }, "confidence": { "$ref": "#/$defs/confidence" } } }
+  }
+}

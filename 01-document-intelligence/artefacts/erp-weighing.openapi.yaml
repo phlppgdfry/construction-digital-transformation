@@ -1,0 +1,77 @@
+openapi: 3.0.3
+info:
+  title: Halverdijk ERP-facade — weegtickets
+  version: 1.0.0
+  description: |
+    Contract tussen de documentflow (Power Automate) en het ERP, via een API-laag (Azure API Management + Function).
+    Fictief ontwerp: het echte ERP is nog niet gekend. Daarom zit het contract op de facade en niet op het ERP zelf.
+    Een ERP-wissel raakt dan alleen de facade.
+servers:
+  - url: https://api.halverdijk.example/erp/v1
+security:
+  - entraId: []
+paths:
+  /weighing-tickets:
+    post:
+      operationId: postWeighingTicket
+      summary: Weging boeken (inkomend afval of uitgaande verkoop)
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          description: Bonnummer van de weegbrug. Een tweede POST met dezelfde sleutel geeft 200 met de bestaande boeking terug, nooit een tweede boeking.
+          schema: { type: string, example: WB-26-04201 }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WeighingTicket' }
+      responses:
+        '201': { description: Geboekt, content: { application/json: { schema: { $ref: '#/components/schemas/Booked' } } } }
+        '200': { description: Al eerder geboekt met dezelfde Idempotency-Key, content: { application/json: { schema: { $ref: '#/components/schemas/Booked' } } } }
+        '409': { description: Bonnummer bestaat met andere inhoud, content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
+        '422': { description: Inhoudelijke fout (onbekende klant, artikel geblokkeerd), content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
+        '503': { description: ERP niet bereikbaar; flow probeert opnieuw (exponentieel, 4×), content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
+components:
+  securitySchemes:
+    entraId:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://login.microsoftonline.com/halverdijk.example/oauth2/v2.0/token
+          scopes: { api://halverdijk-erp-api/.default: toegang tot de ERP-facade }
+  schemas:
+    WeighingTicket:
+      type: object
+      required: [correlationId, weighingTicket, postingDate, customerNo, vehiclePlate, direction, itemCode, quantityTonnes, approvedBy, source]
+      properties:
+        correlationId: { type: string, example: wb-WB-26-04201 }
+        weighingTicket: { type: string }
+        postingDate: { type: string, format: date }
+        customerNo: { type: string, pattern: '^K-[0-9]{4}$' }
+        vehiclePlate: { type: string }
+        direction: { type: string, enum: [INBOUND_WASTE, OUTBOUND_PRODUCT] }
+        itemCode: { type: string, description: EURAL-code of productcode }
+        quantityTonnes: { type: number, minimum: 0 }
+        unitPrice: { type: number, nullable: true }
+        lineAmount: { type: number, nullable: true }
+        wasteIdForm: { type: string, nullable: true }
+        soilTraceRef: { type: string, nullable: true }
+        approvedBy: { type: string, description: '"auto" of het e-mailadres van de reviewer' }
+        source: { type: string, enum: [document-intelligence, manual] }
+    Booked:
+      type: object
+      required: [ticketId, status]
+      properties:
+        ticketId: { type: string }
+        status: { type: string, enum: [booked] }
+    Problem:
+      type: object
+      description: RFC 9457 problem details
+      required: [type, title, status]
+      properties:
+        type: { type: string }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+        correlationId: { type: string }

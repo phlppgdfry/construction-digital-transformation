@@ -1,0 +1,1125 @@
+{
+  "_note": "60 fictieve materiaalaanvragen (AS-IS): kanaal, verwittigingstermijn, behandeltijd en fouten. Worden in de TO-BE opnieuw door de regelmotor gestuurd (replay).",
+  "requests": [
+    {
+      "requestNo": "MA-25-001",
+      "channel": "mail",
+      "projectNo": "W-2604",
+      "lines": [
+        {
+          "itemNo": "SC-150",
+          "qty": 11
+        },
+        {
+          "itemNo": "KB-160",
+          "qty": 54
+        }
+      ],
+      "noticeHours": 36,
+      "handlingHours": 26,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-002",
+      "channel": "whatsapp",
+      "projectNo": "W-2604",
+      "lines": [
+        {
+          "itemNo": "KB-160",
+          "qty": 36
+        },
+        {
+          "itemNo": "MG-031",
+          "qty": 30
+        }
+      ],
+      "noticeHours": 208,
+      "handlingHours": 6,
+      "wrongItemOrQty": false,
+      "deliveredLate": true
+    },
+    {
+      "requestNo": "MA-25-003",
+      "channel": "mail",
+      "projectNo": "W-2601",
+      "lines": [
+        {
+          "itemNo": "BS-IC1",
+          "qty": 60
+        },
+        {
+          "itemNo": "GT-525",
+          "qty": 15
+        }
+      ],
+      "noticeHours": 191,
+      "handlingHours": 43,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-004",
+      "channel": "telefoon",
+      "projectNo": "W-2602",
+      "lines": [
+        {
+          "itemNo": "KB-160",
+          "qty": 60
+        },
+        {
+          "itemNo": "HK-350",
+          "qty": 15
+        }
+      ],
+      "noticeHours": 166,
+      "handlingHours": 24,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-005",
+      "channel": "telefoon",
+      "projectNo": "W-2604",
+      "lines": [
+        {
+          "itemNo": "SB-F45",
+          "qty": 10
+        }
+      ],
+      "noticeHours": 11,
+      "handlingHours": 4,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-006",
+      "channel": "telefoon",
+      "projectNo": "W-2601",
+      "lines": [
+        {
+          "itemNo": "MG-031",
+          "qty": 65
+        },
+        {
+          "itemNo": "RB-400",
+          "qty": 18
+        }
+      ],
+      "noticeHours": 6,
+      "handlingHours": 29,
+      "wrongItemOrQty": false,
+      "deliveredLate": true
+    },
+    {
+      "requestNo": "MA-25-007",
+      "channel": "telefoon",
+      "projectNo": "W-2601",
+      "lines": [
+        {
+          "itemNo": "ZS-02",
+          "qty": 40
+        },
+        {
+          "itemNo": "RB-400",
+          "qty": 30
+        }
+      ],
+      "noticeHours": 3,
+      "handlingHours": 15,
+      "wrongItemOrQty": false,
+      "deliveredLate": true
+    },
+    {
+      "requestNo": "MA-25-008",
+      "channel": "mail",
+      "projectNo": "W-2602",
+      "lines": [
+        {
+          "itemNo": "BS-IC1",
+          "qty": 36
+        },
+        {
+          "itemNo": "AB-4C",
+          "qty": 15
+        }
+      ],
+      "noticeHours": 159,
+      "handlingHours": 16,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-009",
+      "channel": "telefoon",
+      "projectNo": "W-2603",
+      "lines": [
+        {
+          "itemNo": "ZS-02",
+          "qty": 50
+        }
+      ],
+      "noticeHours": 18,
+      "handlingHours": 15,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-010",
+      "channel": "telefoon",
+      "projectNo": "W-2604",
+      "lines": [
+        {
+          "itemNo": "SB-F45",
+          "qty": 15
+        },
+        {
+          "itemNo": "KB-160",
+          "qty": 54
+        }
+      ],
+      "noticeHours": 166,
+      "handlingHours": 22,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-011",
+      "channel": "mail",
+      "projectNo": "W-2602",
+      "lines": [
+        {
+          "itemNo": "SB-F45",
+          "qty": 10
+        },
+        {
+          "itemNo": "MG-031",
+          "qty": 30
+        },
+        {
+          "itemNo": "BG-040",
+          "qty": 45
+        }
+      ],
+      "noticeHours": 199,
+      "handlingHours": 45,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-012",
+      "channel": "telefoon",
+      "projectNo": "W-2602",
+      "lines": [
+        {
+          "itemNo": "AB-4C",
+          "qty": 35
+        },
+        {
+          "itemNo": "BS-IC1",
+          "qty": 18
+        },
+        {
+          "itemNo": "KB-160",
+          "qty": 24
+        }
+      ],
+      "noticeHours": 209,
+      "handlingHours": 27,
+      "wrongItemOrQty": true,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-013",
+      "channel": "telefoon",
+      "projectNo": "W-2602",
+      "lines": [
+        {
+          "itemNo": "ZS-02",
+          "qty": 15
+        },
+        {
+          "itemNo": "BS-IC1",
+          "qty": 42
+        }
+      ],
+      "noticeHours": 16,
+      "handlingHours": 11,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-014",
+      "channel": "telefoon",
+      "projectNo": "W-2604",
+      "lines": [
+        {
+          "itemNo": "AB-4C",
+          "qty": 30
+        },
+        {
+          "itemNo": "KB-160",
+          "qty": 54
+        }
+      ],
+      "noticeHours": 177,
+      "handlingHours": 17,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-015",
+      "channel": "whatsapp",
+      "projectNo": "W-2603",
+      "lines": [
+        {
+          "itemNo": "BS-IC1",
+          "qty": 48
+        },
+        {
+          "itemNo": "ZS-02",
+          "qty": 20
+        },
+        {
+          "itemNo": "BG-040",
+          "qty": 60
+        }
+      ],
+      "noticeHours": 22,
+      "handlingHours": 10,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-016",
+      "channel": "telefoon",
+      "projectNo": "W-2602",
+      "lines": [
+        {
+          "itemNo": "RB-400",
+          "qty": 12
+        },
+        {
+          "itemNo": "ZS-02",
+          "qty": 10
+        }
+      ],
+      "noticeHours": 142,
+      "handlingHours": 21,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-017",
+      "channel": "telefoon",
+      "projectNo": "W-2601",
+      "lines": [
+        {
+          "itemNo": "HK-350",
+          "qty": 14
+        },
+        {
+          "itemNo": "SB-F45",
+          "qty": 15
+        }
+      ],
+      "noticeHours": 144,
+      "handlingHours": 12,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-018",
+      "channel": "mail",
+      "projectNo": "W-2603",
+      "lines": [
+        {
+          "itemNo": "RB-400",
+          "qty": 48
+        },
+        {
+          "itemNo": "HK-350",
+          "qty": 7
+        },
+        {
+          "itemNo": "SC-150",
+          "qty": 8
+        }
+      ],
+      "noticeHours": 77,
+      "handlingHours": 6,
+      "wrongItemOrQty": false,
+      "deliveredLate": true
+    },
+    {
+      "requestNo": "MA-25-019",
+      "channel": "telefoon",
+      "projectNo": "W-2604",
+      "lines": [
+        {
+          "itemNo": "KB-160",
+          "qty": 48
+        }
+      ],
+      "noticeHours": 126,
+      "handlingHours": 3,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-020",
+      "channel": "mail",
+      "projectNo": "W-2603",
+      "lines": [
+        {
+          "itemNo": "HK-350",
+          "qty": 16
+        }
+      ],
+      "noticeHours": 7,
+      "handlingHours": 22,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-021",
+      "channel": "whatsapp",
+      "projectNo": "W-2602",
+      "lines": [
+        {
+          "itemNo": "ZS-02",
+          "qty": 75
+        }
+      ],
+      "noticeHours": 31,
+      "handlingHours": 19,
+      "wrongItemOrQty": true,
+      "deliveredLate": true
+    },
+    {
+      "requestNo": "MA-25-022",
+      "channel": "whatsapp",
+      "projectNo": "W-2602",
+      "lines": [
+        {
+          "itemNo": "SB-F45",
+          "qty": 9
+        },
+        {
+          "itemNo": "HK-350",
+          "qty": 11
+        },
+        {
+          "itemNo": "MG-031",
+          "qty": 30
+        }
+      ],
+      "noticeHours": 19,
+      "handlingHours": 17,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-023",
+      "channel": "telefoon",
+      "projectNo": "W-2602",
+      "lines": [
+        {
+          "itemNo": "AB-4C",
+          "qty": 55
+        },
+        {
+          "itemNo": "BS-IC1",
+          "qty": 60
+        },
+        {
+          "itemNo": "HK-350",
+          "qty": 14
+        }
+      ],
+      "noticeHours": 90,
+      "handlingHours": 13,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-024",
+      "channel": "telefoon",
+      "projectNo": "W-2602",
+      "lines": [
+        {
+          "itemNo": "RB-315",
+          "qty": 54
+        }
+      ],
+      "noticeHours": 124,
+      "handlingHours": 12,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-025",
+      "channel": "telefoon",
+      "projectNo": "W-2604",
+      "lines": [
+        {
+          "itemNo": "GT-525",
+          "qty": 5
+        },
+        {
+          "itemNo": "MG-031",
+          "qty": 40
+        }
+      ],
+      "noticeHours": 130,
+      "handlingHours": 4,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-026",
+      "channel": "telefoon",
+      "projectNo": "W-2604",
+      "lines": [
+        {
+          "itemNo": "AB-4C",
+          "qty": 70
+        },
+        {
+          "itemNo": "HK-350",
+          "qty": 11
+        }
+      ],
+      "noticeHours": 78,
+      "handlingHours": 28,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-027",
+      "channel": "mail",
+      "projectNo": "W-2604",
+      "lines": [
+        {
+          "itemNo": "MG-031",
+          "qty": 60
+        },
+        {
+          "itemNo": "HK-350",
+          "qty": 3
+        },
+        {
+          "itemNo": "ZS-02",
+          "qty": 75
+        }
+      ],
+      "noticeHours": 119,
+      "handlingHours": 9,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-028",
+      "channel": "mail",
+      "projectNo": "W-2603",
+      "lines": [
+        {
+          "itemNo": "SC-150",
+          "qty": 4
+        }
+      ],
+      "noticeHours": 3,
+      "handlingHours": 43,
+      "wrongItemOrQty": false,
+      "deliveredLate": true
+    },
+    {
+      "requestNo": "MA-25-029",
+      "channel": "telefoon",
+      "projectNo": "W-2603",
+      "lines": [
+        {
+          "itemNo": "BS-IC1",
+          "qty": 54
+        }
+      ],
+      "noticeHours": 17,
+      "handlingHours": 29,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-030",
+      "channel": "telefoon",
+      "projectNo": "W-2603",
+      "lines": [
+        {
+          "itemNo": "ZS-02",
+          "qty": 50
+        },
+        {
+          "itemNo": "MG-031",
+          "qty": 65
+        }
+      ],
+      "noticeHours": 89,
+      "handlingHours": 12,
+      "wrongItemOrQty": false,
+      "deliveredLate": true
+    },
+    {
+      "requestNo": "MA-25-031",
+      "channel": "mail",
+      "projectNo": "W-2601",
+      "lines": [
+        {
+          "itemNo": "BS-IC1",
+          "qty": 54
+        }
+      ],
+      "noticeHours": 121,
+      "handlingHours": 15,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-032",
+      "channel": "telefoon",
+      "projectNo": "W-2602",
+      "lines": [
+        {
+          "itemNo": "BG-040",
+          "qty": 45
+        },
+        {
+          "itemNo": "MG-031",
+          "qty": 60
+        }
+      ],
+      "noticeHours": 177,
+      "handlingHours": 10,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-033",
+      "channel": "whatsapp",
+      "projectNo": "W-2603",
+      "lines": [
+        {
+          "itemNo": "KB-160",
+          "qty": 18
+        }
+      ],
+      "noticeHours": 138,
+      "handlingHours": 14,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-034",
+      "channel": "telefoon",
+      "projectNo": "W-2601",
+      "lines": [
+        {
+          "itemNo": "SC-150",
+          "qty": 10
+        },
+        {
+          "itemNo": "HK-350",
+          "qty": 15
+        },
+        {
+          "itemNo": "RB-315",
+          "qty": 54
+        }
+      ],
+      "noticeHours": 115,
+      "handlingHours": 6,
+      "wrongItemOrQty": false,
+      "deliveredLate": true
+    },
+    {
+      "requestNo": "MA-25-035",
+      "channel": "telefoon",
+      "projectNo": "W-2601",
+      "lines": [
+        {
+          "itemNo": "MG-031",
+          "qty": 70
+        },
+        {
+          "itemNo": "SC-150",
+          "qty": 4
+        }
+      ],
+      "noticeHours": 12,
+      "handlingHours": 11,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-036",
+      "channel": "telefoon",
+      "projectNo": "W-2601",
+      "lines": [
+        {
+          "itemNo": "BG-040",
+          "qty": 70
+        },
+        {
+          "itemNo": "ZS-02",
+          "qty": 30
+        }
+      ],
+      "noticeHours": 186,
+      "handlingHours": 23,
+      "wrongItemOrQty": true,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-037",
+      "channel": "whatsapp",
+      "projectNo": "W-2604",
+      "lines": [
+        {
+          "itemNo": "BS-IC1",
+          "qty": 36
+        },
+        {
+          "itemNo": "ZS-02",
+          "qty": 70
+        }
+      ],
+      "noticeHours": 23,
+      "handlingHours": 12,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-038",
+      "channel": "mail",
+      "projectNo": "W-2604",
+      "lines": [
+        {
+          "itemNo": "SB-F45",
+          "qty": 13
+        },
+        {
+          "itemNo": "RB-315",
+          "qty": 24
+        }
+      ],
+      "noticeHours": 117,
+      "handlingHours": 40,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-039",
+      "channel": "telefoon",
+      "projectNo": "W-2601",
+      "lines": [
+        {
+          "itemNo": "MG-031",
+          "qty": 50
+        }
+      ],
+      "noticeHours": 65,
+      "handlingHours": 28,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-040",
+      "channel": "telefoon",
+      "projectNo": "W-2602",
+      "lines": [
+        {
+          "itemNo": "PG-031",
+          "qty": 20
+        },
+        {
+          "itemNo": "GT-525",
+          "qty": 8
+        },
+        {
+          "itemNo": "ZS-02",
+          "qty": 80
+        }
+      ],
+      "noticeHours": 17,
+      "handlingHours": 15,
+      "wrongItemOrQty": false,
+      "deliveredLate": true
+    },
+    {
+      "requestNo": "MA-25-041",
+      "channel": "telefoon",
+      "projectNo": "W-2604",
+      "lines": [
+        {
+          "itemNo": "SC-150",
+          "qty": 4
+        },
+        {
+          "itemNo": "SB-F45",
+          "qty": 8
+        }
+      ],
+      "noticeHours": 21,
+      "handlingHours": 11,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-042",
+      "channel": "telefoon",
+      "projectNo": "W-2601",
+      "lines": [
+        {
+          "itemNo": "ZS-02",
+          "qty": 10
+        },
+        {
+          "itemNo": "RB-315",
+          "qty": 12
+        }
+      ],
+      "noticeHours": 12,
+      "handlingHours": 30,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-043",
+      "channel": "mail",
+      "projectNo": "W-2604",
+      "lines": [
+        {
+          "itemNo": "SB-F45",
+          "qty": 2
+        }
+      ],
+      "noticeHours": 177,
+      "handlingHours": 33,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-044",
+      "channel": "telefoon",
+      "projectNo": "W-2601",
+      "lines": [
+        {
+          "itemNo": "SC-150",
+          "qty": 7
+        }
+      ],
+      "noticeHours": 180,
+      "handlingHours": 5,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-045",
+      "channel": "mail",
+      "projectNo": "W-2602",
+      "lines": [
+        {
+          "itemNo": "MG-031",
+          "qty": 15
+        },
+        {
+          "itemNo": "BS-IC1",
+          "qty": 42
+        }
+      ],
+      "noticeHours": 107,
+      "handlingHours": 11,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-046",
+      "channel": "mail",
+      "projectNo": "W-2603",
+      "lines": [
+        {
+          "itemNo": "HK-350",
+          "qty": 11
+        },
+        {
+          "itemNo": "BS-IC1",
+          "qty": 48
+        }
+      ],
+      "noticeHours": 14,
+      "handlingHours": 41,
+      "wrongItemOrQty": false,
+      "deliveredLate": true
+    },
+    {
+      "requestNo": "MA-25-047",
+      "channel": "mail",
+      "projectNo": "W-2601",
+      "lines": [
+        {
+          "itemNo": "KB-160",
+          "qty": 36
+        },
+        {
+          "itemNo": "BS-IC1",
+          "qty": 60
+        }
+      ],
+      "noticeHours": 146,
+      "handlingHours": 40,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-048",
+      "channel": "telefoon",
+      "projectNo": "W-2604",
+      "lines": [
+        {
+          "itemNo": "AB-4C",
+          "qty": 30
+        }
+      ],
+      "noticeHours": 199,
+      "handlingHours": 21,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-049",
+      "channel": "mail",
+      "projectNo": "W-2601",
+      "lines": [
+        {
+          "itemNo": "MG-031",
+          "qty": 70
+        },
+        {
+          "itemNo": "SC-150",
+          "qty": 15
+        }
+      ],
+      "noticeHours": 104,
+      "handlingHours": 8,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-050",
+      "channel": "telefoon",
+      "projectNo": "W-2603",
+      "lines": [
+        {
+          "itemNo": "AB-4C",
+          "qty": 60
+        },
+        {
+          "itemNo": "SB-F45",
+          "qty": 3
+        }
+      ],
+      "noticeHours": 149,
+      "handlingHours": 6,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-051",
+      "channel": "telefoon",
+      "projectNo": "W-2604",
+      "lines": [
+        {
+          "itemNo": "RB-400",
+          "qty": 24
+        },
+        {
+          "itemNo": "AB-4C",
+          "qty": 75
+        },
+        {
+          "itemNo": "ZS-02",
+          "qty": 40
+        }
+      ],
+      "noticeHours": 83,
+      "handlingHours": 6,
+      "wrongItemOrQty": true,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-052",
+      "channel": "telefoon",
+      "projectNo": "W-2603",
+      "lines": [
+        {
+          "itemNo": "MG-031",
+          "qty": 70
+        }
+      ],
+      "noticeHours": 5,
+      "handlingHours": 12,
+      "wrongItemOrQty": false,
+      "deliveredLate": true
+    },
+    {
+      "requestNo": "MA-25-053",
+      "channel": "whatsapp",
+      "projectNo": "W-2602",
+      "lines": [
+        {
+          "itemNo": "BS-IC1",
+          "qty": 60
+        },
+        {
+          "itemNo": "RB-315",
+          "qty": 42
+        }
+      ],
+      "noticeHours": 164,
+      "handlingHours": 1,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-054",
+      "channel": "mail",
+      "projectNo": "W-2603",
+      "lines": [
+        {
+          "itemNo": "BS-IC1",
+          "qty": 54
+        },
+        {
+          "itemNo": "BG-040",
+          "qty": 35
+        }
+      ],
+      "noticeHours": 118,
+      "handlingHours": 11,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-055",
+      "channel": "mail",
+      "projectNo": "W-2602",
+      "lines": [
+        {
+          "itemNo": "AB-4C",
+          "qty": 70
+        },
+        {
+          "itemNo": "HK-350",
+          "qty": 14
+        }
+      ],
+      "noticeHours": 131,
+      "handlingHours": 38,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-056",
+      "channel": "mail",
+      "projectNo": "W-2601",
+      "lines": [
+        {
+          "itemNo": "HK-350",
+          "qty": 8
+        },
+        {
+          "itemNo": "BG-040",
+          "qty": 65
+        }
+      ],
+      "noticeHours": 35,
+      "handlingHours": 41,
+      "wrongItemOrQty": false,
+      "deliveredLate": true
+    },
+    {
+      "requestNo": "MA-25-057",
+      "channel": "mail",
+      "projectNo": "W-2601",
+      "lines": [
+        {
+          "itemNo": "MG-031",
+          "qty": 50
+        },
+        {
+          "itemNo": "ZS-02",
+          "qty": 55
+        }
+      ],
+      "noticeHours": 197,
+      "handlingHours": 11,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-058",
+      "channel": "telefoon",
+      "projectNo": "W-2601",
+      "lines": [
+        {
+          "itemNo": "KB-160",
+          "qty": 30
+        },
+        {
+          "itemNo": "MG-031",
+          "qty": 65
+        }
+      ],
+      "noticeHours": 64,
+      "handlingHours": 27,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-059",
+      "channel": "whatsapp",
+      "projectNo": "W-2602",
+      "lines": [
+        {
+          "itemNo": "SB-F45",
+          "qty": 12
+        },
+        {
+          "itemNo": "BS-IC1",
+          "qty": 54
+        }
+      ],
+      "noticeHours": 164,
+      "handlingHours": 3,
+      "wrongItemOrQty": false,
+      "deliveredLate": false
+    },
+    {
+      "requestNo": "MA-25-060",
+      "channel": "mail",
+      "projectNo": "W-2604",
+      "lines": [
+        {
+          "itemNo": "SC-150",
+          "qty": 18
+        },
+        {
+          "itemNo": "MG-031",
+          "qty": 45
+        }
+      ],
+      "noticeHours": 181,
+      "handlingHours": 35,
+      "wrongItemOrQty": false,
+      "deliveredLate": true
+    }
+  ]
+}

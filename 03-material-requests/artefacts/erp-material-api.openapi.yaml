@@ -1,0 +1,218 @@
+openapi: 3.0.3
+info:
+  title: Halverdijk ERP-facade — materiaal, voorraad en projectkosten
+  version: 1.0.0
+  description: |
+    Integratiecontract tussen de Power Platform-oplossing en het ERP, via een eigen API-laag
+    (Azure API Management + Azure Functions). Ontworpen ERP-agnostisch: het huidige ERP van de fictieve
+    Halverdijk Group is niet gekend, dus de facade vertaalt naar wat er werkelijk staat (bv. Business Central
+    OData/API-pagina's of een on-premises ERP via de data gateway).
+
+    Afspraken:
+    * Elke schrijfoperatie vraagt een `Idempotency-Key`. Dezelfde sleutel twee keer = één boeking.
+    * Fouten volgen RFC 9457 (`application/problem+json`) met een `correlationId` voor functioneel beheer.
+    * 503 en 429 zijn tijdelijk (de outbox probeert opnieuw: na 1, 5, 15, 60 en 240 minuten). 4xx zijn definitief: geen retry, ticket.
+    * Voorraad is een momentopname. De reservatie is de enige echte claim op voorraad.
+servers:
+  - url: https://api.halverdijk.example/erp/v1
+security:
+  - entraId: []
+tags:
+  - name: stamgegevens
+  - name: voorraad
+  - name: aanvragen
+  - name: kosten
+paths:
+  /items:
+    get:
+      tags: [stamgegevens]
+      operationId: listItems
+      summary: Catalogus van aanvraagbare artikelen
+      parameters:
+        - { in: query, name: category, schema: { type: string, enum: [granulaten, asfalt, riolering, signalisatie, kleinmateriaal] } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Item' } } } } }
+  /stock:
+    get:
+      tags: [voorraad]
+      operationId: getStock
+      summary: Beschikbare voorraad per depot (on hand min reservaties)
+      parameters:
+        - { in: query, name: itemNo, required: true, schema: { type: string } }
+        - { in: query, name: depotNo, schema: { type: string } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/StockLevel' } } } } }
+        '404': { $ref: '#/components/responses/Problem' }
+        '503': { $ref: '#/components/responses/Problem' }
+  /projects/{projectNo}/budget:
+    get:
+      tags: [kosten]
+      operationId: getProjectBudget
+      summary: Resterend budget per kostencategorie
+      parameters:
+        - { in: path, name: projectNo, required: true, schema: { type: string, pattern: '^W-[0-9]{4}$' } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Budget' } } } }
+        '404': { $ref: '#/components/responses/Problem' }
+  /reservations:
+    post:
+      tags: [aanvragen]
+      operationId: createReservation
+      summary: Voorraad reserveren voor een goedgekeurde aanvraaglijn
+      parameters: [ { $ref: '#/components/parameters/IdempotencyKey' } ]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/Reservation' } } } }
+      responses:
+        '201': { description: Gereserveerd, content: { application/json: { schema: { $ref: '#/components/schemas/Ack' } } } }
+        '200': { description: Al gereserveerd met dezelfde sleutel (idempotent), content: { application/json: { schema: { $ref: '#/components/schemas/Ack' } } } }
+        '409': { description: Voorraad intussen onvoldoende — aanvraag terug naar planning, content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
+        '422': { $ref: '#/components/responses/Problem' }
+        '429': { $ref: '#/components/responses/Problem' }
+        '503': { $ref: '#/components/responses/Problem' }
+  /purchase-requisitions:
+    post:
+      tags: [aanvragen]
+      operationId: createPurchaseRequisition
+      summary: Aankoopaanvraag voor externe of ontbrekende artikelen
+      parameters: [ { $ref: '#/components/parameters/IdempotencyKey' } ]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PurchaseRequisition' } } } }
+      responses:
+        '201': { description: Aangemaakt, content: { application/json: { schema: { $ref: '#/components/schemas/Ack' } } } }
+        '200': { description: Bestond al (idempotent), content: { application/json: { schema: { $ref: '#/components/schemas/Ack' } } } }
+        '422': { $ref: '#/components/responses/Problem' }
+        '503': { $ref: '#/components/responses/Problem' }
+  /goods-issues:
+    post:
+      tags: [kosten]
+      operationId: postGoodsIssue
+      summary: Verbruik boeken op de werf na ontvangstbevestiging
+      parameters: [ { $ref: '#/components/parameters/IdempotencyKey' } ]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/GoodsIssue' } } } }
+      responses:
+        '201': { description: Geboekt, content: { application/json: { schema: { $ref: '#/components/schemas/Ack' } } } }
+        '200': { description: Al geboekt (idempotent), content: { application/json: { schema: { $ref: '#/components/schemas/Ack' } } } }
+        '422': { $ref: '#/components/responses/Problem' }
+        '503': { $ref: '#/components/responses/Problem' }
+  /project-costs:
+    post:
+      tags: [kosten]
+      operationId: postProjectCost
+      summary: Schadekost of recuperatie boeken op een project (gebruikt door case 02)
+      parameters: [ { $ref: '#/components/parameters/IdempotencyKey' } ]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ProjectCost' } } } }
+      responses:
+        '201': { description: Geboekt, content: { application/json: { schema: { $ref: '#/components/schemas/Ack' } } } }
+        '200': { description: Al geboekt (idempotent), content: { application/json: { schema: { $ref: '#/components/schemas/Ack' } } } }
+        '422': { $ref: '#/components/responses/Problem' }
+        '503': { $ref: '#/components/responses/Problem' }
+components:
+  securitySchemes:
+    entraId:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://login.microsoftonline.com/halverdijk.example/oauth2/v2.0/token
+          scopes: { api://halverdijk-erp-api/.default: toegang tot de ERP-facade }
+  parameters:
+    IdempotencyKey:
+      in: header
+      name: Idempotency-Key
+      required: true
+      description: Stabiele sleutel per bedoelde boeking (bv. hash van aanvraagnr + artikel + depot + hoeveelheid). Wordt 30 dagen bewaard.
+      schema: { type: string, minLength: 8, maxLength: 64 }
+  responses:
+    Problem:
+      description: Fout (RFC 9457)
+      content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } }
+  schemas:
+    Item:
+      type: object
+      required: [itemNo, label, unit, unitCost, category, source]
+      properties:
+        itemNo: { type: string, example: MG-031 }
+        label: { type: string }
+        unit: { type: string, enum: [t, m3, m, st, rol] }
+        unitCost: { type: number }
+        category: { type: string }
+        source: { type: string, enum: [intern, extern] }
+        recycled: { type: boolean }
+        leadDays: { type: integer }
+        recycledAlternative: { type: string, nullable: true }
+    StockLevel:
+      type: object
+      required: [itemNo, depotNo, available, asOf]
+      properties:
+        itemNo: { type: string }
+        depotNo: { type: string, enum: [DEP-OOST, DEP-WEST, REC-BRK, ASF] }
+        onHand: { type: number }
+        reserved: { type: number }
+        available: { type: number, description: onHand − reserved; voor productie op bestelling (asfalt, stabilisé) null }
+        madeToOrder: { type: boolean }
+        asOf: { type: string, format: date-time }
+    Budget:
+      type: object
+      properties:
+        projectNo: { type: string }
+        active: { type: boolean }
+        remaining: { type: object, additionalProperties: { type: number } }
+    Reservation:
+      type: object
+      required: [requestNo, projectNo, itemNo, depotNo, quantity, unit, requiredDate]
+      properties:
+        requestNo: { type: string, example: MA-26-0101 }
+        projectNo: { type: string, example: W-2604 }
+        itemNo: { type: string }
+        depotNo: { type: string }
+        quantity: { type: number, exclusiveMinimum: true, minimum: 0 }
+        unit: { type: string }
+        requiredDate: { type: string, format: date-time }
+    PurchaseRequisition:
+      type: object
+      required: [requestNo, projectNo, itemNo, quantity, unit, requiredDate]
+      properties:
+        requestNo: { type: string }
+        projectNo: { type: string }
+        itemNo: { type: string }
+        quantity: { type: number }
+        unit: { type: string }
+        requiredDate: { type: string, format: date-time }
+        rushReason: { type: string, nullable: true }
+    GoodsIssue:
+      type: object
+      required: [requestNo, projectNo, lines, receivedAt, receivedBy]
+      properties:
+        requestNo: { type: string }
+        projectNo: { type: string }
+        receivedAt: { type: string, format: date-time }
+        receivedBy: { type: string }
+        deliveryNotePhoto: { type: string, description: URL naar de foto van de leverbon in SharePoint }
+        lines:
+          type: array
+          items:
+            type: object
+            required: [itemNo, quantity]
+            properties: { itemNo: { type: string }, quantity: { type: number }, depotNo: { type: string } }
+    ProjectCost:
+      type: object
+      required: [projectNo, costType, amount, reference]
+      properties:
+        projectNo: { type: string }
+        costType: { type: string, enum: [schade, recuperatie] }
+        amount: { type: number }
+        reference: { type: string, example: SCH-26-0007 }
+    Ack:
+      type: object
+      required: [id, status]
+      properties:
+        id: { type: string }
+        status: { type: string }
+        correlationId: { type: string }
+    Problem:
+      type: object
+      required: [type, title, status]
+      properties:
+        type: { type: string, format: uri }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+        correlationId: { type: string }
+        retryable: { type: boolean }

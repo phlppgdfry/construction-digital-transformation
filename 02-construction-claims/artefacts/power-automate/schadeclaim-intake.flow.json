@@ -1,0 +1,110 @@
+{
+  "name": "HV-CL-01 Schadeclaim intake en triage",
+  "description": "Start wanneer de werfapp een schadeclaim aanmaakt (ook na offline synchronisatie). Valideert opnieuw op de server, kent dossiernummer, ernst, eigenaar, goedkeuringsketen (DT-02) en deadlines toe, verwittigt betrokkenen en maakt bij verzekerde schade het aangifteconcept. Referentie-implementatie: src/claims.mjs (triage, createClaim).",
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": { "connectionReferenceLogicalName": "hv_shareddataverse", "api": { "name": "shared_commondataserviceforapps" } },
+      "shared_teams": { "connectionReferenceLogicalName": "hv_sharedteams", "api": { "name": "shared_teams" } },
+      "shared_office365": { "connectionReferenceLogicalName": "hv_sharedoffice365", "api": { "name": "shared_office365" } }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": { "defaultValue": {}, "type": "Object" },
+        "$authentication": { "defaultValue": {}, "type": "SecureObject" },
+        "Drempel verzekeraar (hv_InsurerThreshold)": { "defaultValue": 15000, "type": "Int" },
+        "Aangiftetermijn dagen (hv_InsurerDeadlineDays)": { "defaultValue": 8, "type": "Int" },
+        "Postvak claims (hv_ClaimsMailbox)": { "defaultValue": "claims@halverdijk.example", "type": "String" }
+      },
+      "triggers": {
+        "Schadeclaim_aangemaakt": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "SubscribeWebhookTrigger", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" },
+            "parameters": { "subscriptionRequest/message": 1, "subscriptionRequest/entityname": "hv_schadeclaim", "subscriptionRequest/scope": 4, "subscriptionRequest/filterexpression": "hv_status eq 100000000" },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Claim": { "type": "Compose", "runAfter": {}, "inputs": "@triggerOutputs()?['body']" },
+        "Werf_ophalen": {
+          "type": "OpenApiConnection",
+          "runAfter": { "Claim": ["Succeeded"] },
+          "inputs": { "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "GetItem", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" }, "parameters": { "entityName": "hv_werfs", "recordId": "@outputs('Claim')?['_hv_werf_value']", "$select": "hv_werfnr,hv_actief,_hv_projectleider_value,_hv_afdeling_value" }, "authentication": "@parameters('$authentication')" }
+        },
+        "Server_validatie": {
+          "type": "If",
+          "runAfter": { "Werf_ophalen": ["Succeeded"] },
+          "expression": { "or": [{ "equals": ["@outputs('Werf_ophalen')?['body/hv_actief']", false] }, { "less": ["@length(coalesce(outputs('Claim')?['hv_omschrijving'], ''))", 20] }] },
+          "actions": {
+            "Info_vragen": {
+              "type": "OpenApiConnection",
+              "runAfter": {},
+              "inputs": { "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "UpdateOnlyRecord", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" }, "parameters": { "entityName": "hv_schadeclaims", "recordId": "@outputs('Claim')?['hv_schadeclaimid']", "item/hv_status": 100000002, "item/hv_opmerking": "Servervalidatie: werf afgesloten of omschrijving te kort." }, "authentication": "@parameters('$authentication')" }
+            },
+            "Stop_onvolledig": { "type": "Terminate", "runAfter": { "Info_vragen": ["Succeeded"] }, "inputs": { "runStatus": "Succeeded" } }
+          },
+          "else": { "actions": {} }
+        },
+        "Ernst": {
+          "type": "Compose",
+          "runAfter": { "Server_validatie": ["Succeeded"] },
+          "inputs": "@if(and(equals(outputs('Claim')?['hv_categorie'], 'nutsleiding'), or(contains(createArray('gas','elektriciteit'), outputs('Claim')?['hv_typeleiding']), not(outputs('Claim')?['hv_beheerderverwittigd']))), 'kritiek', if(greaterOrEquals(outputs('Claim')?['hv_geschatbedrag'], parameters('Drempel verzekeraar (hv_InsurerThreshold)')), 'hoog', if(or(greaterOrEquals(outputs('Claim')?['hv_geschatbedrag'], 2500), outputs('Claim')?['hv_derdebetrokken']), 'middel', 'laag')))"
+        },
+        "Goedkeuringsketen": {
+          "type": "Compose",
+          "runAfter": { "Ernst": ["Succeeded"] },
+          "description": "DT-02. Zelfde logica als artefacts/power-fx/dt-02-goedkeuringsketen.fx en approvalChain() in src/claims.mjs.",
+          "inputs": "@concat(if(contains(createArray('eigen-materieel','gehuurd-materieel'), outputs('Claim')?['hv_categorie']), 'Fleetmanager>', if(contains(createArray('derden-schade','nutsleiding'), outputs('Claim')?['hv_categorie']), 'Claims & verzekeringen>', '')), if(lessOrEquals(outputs('Claim')?['hv_geschatbedrag'], 2500), 'Projectleider', if(lessOrEquals(outputs('Claim')?['hv_geschatbedrag'], 15000), 'Projectleider>Afdelingsverantwoordelijke', 'Projectleider>Afdelingsverantwoordelijke>Directie')))"
+        },
+        "SLA_uren": {
+          "type": "Compose",
+          "runAfter": { "Ernst": ["Succeeded"] },
+          "inputs": "@json('{\"kritiek\":2,\"hoog\":24,\"middel\":48,\"laag\":72}')[outputs('Ernst')]"
+        },
+        "Verzekering_nodig": {
+          "type": "Compose",
+          "runAfter": { "Ernst": ["Succeeded"] },
+          "inputs": "@or(greaterOrEquals(outputs('Claim')?['hv_geschatbedrag'], parameters('Drempel verzekeraar (hv_InsurerThreshold)')), contains(createArray('derden-schade','nutsleiding'), outputs('Claim')?['hv_categorie']), equals(outputs('Claim')?['hv_derdebetrokken'], true))"
+        },
+        "Dossier_bijwerken": {
+          "type": "OpenApiConnection",
+          "runAfter": { "Goedkeuringsketen": ["Succeeded"], "SLA_uren": ["Succeeded"], "Verzekering_nodig": ["Succeeded"] },
+          "inputs": {
+            "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "UpdateOnlyRecord", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" },
+            "parameters": {
+              "entityName": "hv_schadeclaims", "recordId": "@outputs('Claim')?['hv_schadeclaimid']",
+              "item/hv_status": 100000001,
+              "item/hv_ernst": "@outputs('Ernst')",
+              "item/hv_goedkeuringsketen": "@outputs('Goedkeuringsketen')",
+              "item/hv_deadlinebeoordeling": "@addHours(utcNow(), outputs('SLA_uren'))",
+              "item/hv_deadlineverzekeraar": "@if(outputs('Verzekering_nodig'), addDays(outputs('Claim')?['hv_tijdstipschade'], parameters('Aangiftetermijn dagen (hv_InsurerDeadlineDays)')), null)"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Teams_kaart_eigenaar": {
+          "type": "OpenApiConnection",
+          "runAfter": { "Dossier_bijwerken": ["Succeeded"] },
+          "inputs": { "host": { "connectionName": "shared_teams", "operationId": "PostCardToConversation", "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams" }, "parameters": { "poster": "Flow bot", "location": "Chat with Flow bot", "body/recipient": "@outputs('Werf_ophalen')?['body/_hv_projectleider_value@OData.Community.Display.V1.FormattedValue']", "body/messageBody": "Zie adaptive-card-nieuwe-claim.json" }, "authentication": "@parameters('$authentication')" }
+        },
+        "Aangifteconcept_indien_verzekerd": {
+          "type": "If",
+          "runAfter": { "Dossier_bijwerken": ["Succeeded"] },
+          "expression": { "equals": ["@outputs('Verzekering_nodig')", true] },
+          "actions": {
+            "Concept_mail_claims": {
+              "type": "OpenApiConnection",
+              "runAfter": {},
+              "inputs": { "host": { "connectionName": "shared_office365", "operationId": "SendEmailV2", "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365" }, "parameters": { "emailMessage/To": "@parameters('Postvak claims (hv_ClaimsMailbox)')", "emailMessage/Subject": "Aangifte voorbereiden: @{outputs('Dossier_bijwerken')?['body/hv_dossiernummer']} (deadline @{formatDateTime(outputs('Dossier_bijwerken')?['body/hv_deadlineverzekeraar'], 'dd/MM')})", "emailMessage/Body": "<p>Alle gegevens en foto's staan in het dossier. De verzekeraar krijgt pas iets na controle door Claims &amp; verzekeringen.</p>" }, "authentication": "@parameters('$authentication')" }
+            }
+          },
+          "else": { "actions": {} }
+        }
+      },
+      "outputs": {}
+    }
+  }
+}

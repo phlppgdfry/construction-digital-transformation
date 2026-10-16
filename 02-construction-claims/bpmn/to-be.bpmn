@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Defs_c2_tobe" targetNamespace="https://halverdijk.example/bpmn" exporter="construction-digital-transformation/scripts/bpmn.mjs" exporterVersion="1.0">
+  <bpmn:collaboration id="Collab_c2_tobe">
+    <bpmn:documentation>Gewenste werkwijze: de werfleider meldt in de app (ook offline). De flow maakt het dossier, triageert, verwittigt en start de aangifte. Goedkeuring volgt beslistabel DT-02 en de kosten landen op het project.</bpmn:documentation>
+    <bpmn:participant id="Pool_c2_tobe" name="Halverdijk Aannemingen" processRef="Process_c2_tobe" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_c2_tobe" name="TO-BE — digitale schadeclaim van werf tot afsluiting" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_c2_tobe">
+      <bpmn:lane id="Lane_c2_tobe_wl" name="Werfleider (werfapp)">
+        <bpmn:flowNodeRef>s1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>g0</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>e0</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t6</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_c2_tobe_flow" name="Power Automate">
+        <bpmn:flowNodeRef>t2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>p1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t3</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>e5</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t11</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>e1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_c2_tobe_ass" name="Beoordelaar (fleet / claims / PL)">
+        <bpmn:flowNodeRef>t4</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>g2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t7</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t10</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_c2_tobe_app" name="Goedkeurders (DT-02)">
+        <bpmn:flowNodeRef>t8</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>g4</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>e7</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_c2_tobe_ext" name="Verzekeraar / derden">
+        <bpmn:flowNodeRef>t5</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>e6</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="s1" name="Schade vastgesteld">
+      <bpmn:outgoing>Flow_c2_tobe_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="t1" name="Melden in app: foto's, GPS, categorie">
+      <bpmn:documentation>Werkt offline; synchroniseert met een client-id zodat dubbel verzenden geen dubbel dossier geeft.</bpmn:documentation>
+      <bpmn:incoming>Flow_c2_tobe_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_c2_tobe_2</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="g0" name="Personen-letsel?" default="Flow_c2_tobe_4">
+      <bpmn:incoming>Flow_c2_tobe_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_c2_tobe_3</bpmn:outgoing>
+      <bpmn:outgoing>Flow_c2_tobe_4</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="e0" name="Procedure arbeidsongeval">
+      <bpmn:incoming>Flow_c2_tobe_3</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="t2" name="Dossier aanmaken + triage (ernst, eigenaar)">
+      <bpmn:incoming>Flow_c2_tobe_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_c2_tobe_5</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:parallelGateway id="p1" name="">
+      <bpmn:incoming>Flow_c2_tobe_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_c2_tobe_6</bpmn:outgoing>
+      <bpmn:outgoing>Flow_c2_tobe_7</bpmn:outgoing>
+      <bpmn:outgoing>Flow_c2_tobe_8</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:sendTask id="t3" name="Betrokkenen verwittigen (Teams / mail)">
+      <bpmn:incoming>Flow_c2_tobe_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_c2_tobe_9</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="e5" name="Verwittigd">
+      <bpmn:incoming>Flow_c2_tobe_9</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="t4" name="Beoordelen: oorzaak, aansprakelijk-heid, raming">
+      <bpmn:incoming>Flow_c2_tobe_7</bpmn:incoming>
+      <bpmn:incoming>Flow_c2_tobe_13</bpmn:incoming>
+      <bpmn:outgoing>Flow_c2_tobe_11</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sendTask id="t5" name="Aangifte-concept naar verzekeraar (≤ 8 dagen)">
+      <bpmn:incoming>Flow_c2_tobe_8</bpmn:incoming>
+      <bpmn:outgoing>Flow_c2_tobe_10</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="e6" name="Aangifte verstuurd">
+      <bpmn:incoming>Flow_c2_tobe_10</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="g2" name="Info volledig?" default="Flow_c2_tobe_14">
+      <bpmn:incoming>Flow_c2_tobe_11</bpmn:incoming>
+      <bpmn:outgoing>Flow_c2_tobe_12</bpmn:outgoing>
+      <bpmn:outgoing>Flow_c2_tobe_14</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="t6" name="Aanvullen in app">
+      <bpmn:incoming>Flow_c2_tobe_12</bpmn:incoming>
+      <bpmn:outgoing>Flow_c2_tobe_13</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:businessRuleTask id="t7" name="Goedkeurings-keten bepalen (DT-02)">
+      <bpmn:incoming>Flow_c2_tobe_14</bpmn:incoming>
+      <bpmn:outgoing>Flow_c2_tobe_15</bpmn:outgoing>
+    </bpmn:businessRuleTask>
+    <bpmn:userTask id="t8" name="Goedkeuren in Teams (per niveau)">
+      <bpmn:incoming>Flow_c2_tobe_15</bpmn:incoming>
+      <bpmn:incoming>Flow_c2_tobe_17</bpmn:incoming>
+      <bpmn:outgoing>Flow_c2_tobe_16</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="g4" name="Beslissing?" default="Flow_c2_tobe_19">
+      <bpmn:incoming>Flow_c2_tobe_16</bpmn:incoming>
+      <bpmn:outgoing>Flow_c2_tobe_17</bpmn:outgoing>
+      <bpmn:outgoing>Flow_c2_tobe_18</bpmn:outgoing>
+      <bpmn:outgoing>Flow_c2_tobe_19</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="e7" name="Afgewezen, melder geïnformeerd">
+      <bpmn:incoming>Flow_c2_tobe_18</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="t10" name="Herstel, vergoeding of verhaal afhandelen">
+      <bpmn:incoming>Flow_c2_tobe_19</bpmn:incoming>
+      <bpmn:outgoing>Flow_c2_tobe_20</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="t11" name="Kosten en recuperatie boeken op project (ERP)">
+      <bpmn:incoming>Flow_c2_tobe_20</bpmn:incoming>
+      <bpmn:outgoing>Flow_c2_tobe_21</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="e1" name="Dossier afgesloten">
+      <bpmn:incoming>Flow_c2_tobe_21</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_c2_tobe_1" sourceRef="s1" targetRef="t1" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_2" sourceRef="t1" targetRef="g0" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_3" sourceRef="g0" targetRef="e0" name="ja" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_4" sourceRef="g0" targetRef="t2" name="nee" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_5" sourceRef="t2" targetRef="p1" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_6" sourceRef="p1" targetRef="t3" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_7" sourceRef="p1" targetRef="t4" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_8" sourceRef="p1" targetRef="t5" name="indien verzekerd" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_9" sourceRef="t3" targetRef="e5" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_10" sourceRef="t5" targetRef="e6" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_11" sourceRef="t4" targetRef="g2" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_12" sourceRef="g2" targetRef="t6" name="nee" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_13" sourceRef="t6" targetRef="t4" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_14" sourceRef="g2" targetRef="t7" name="ja" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_15" sourceRef="t7" targetRef="t8" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_16" sourceRef="t8" targetRef="g4" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_17" sourceRef="g4" targetRef="t8" name="volgend niveau" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_18" sourceRef="g4" targetRef="e7" name="afgewezen" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_19" sourceRef="g4" targetRef="t10" name="laatste ok" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_20" sourceRef="t10" targetRef="t11" />
+    <bpmn:sequenceFlow id="Flow_c2_tobe_21" sourceRef="t11" targetRef="e1" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_c2_tobe">
+    <bpmndi:BPMNPlane id="Plane_c2_tobe" bpmnElement="Collab_c2_tobe">
+      <bpmndi:BPMNShape id="Pool_c2_tobe_di" bpmnElement="Pool_c2_tobe" isHorizontal="true"><dc:Bounds x="20" y="20" width="2200" height="650" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_c2_tobe_wl_di" bpmnElement="Lane_c2_tobe_wl" isHorizontal="true"><dc:Bounds x="50" y="20" width="2170" height="130" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_c2_tobe_flow_di" bpmnElement="Lane_c2_tobe_flow" isHorizontal="true"><dc:Bounds x="50" y="150" width="2170" height="130" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_c2_tobe_ass_di" bpmnElement="Lane_c2_tobe_ass" isHorizontal="true"><dc:Bounds x="50" y="280" width="2170" height="130" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_c2_tobe_app_di" bpmnElement="Lane_c2_tobe_app" isHorizontal="true"><dc:Bounds x="50" y="410" width="2170" height="130" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_c2_tobe_ext_di" bpmnElement="Lane_c2_tobe_ext" isHorizontal="true"><dc:Bounds x="50" y="540" width="2170" height="130" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="s1_di" bpmnElement="s1"><dc:Bounds x="132" y="67" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="100" y="107" width="100" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t1_di" bpmnElement="t1"><dc:Bounds x="242" y="51" width="116" height="68" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="g0_di" bpmnElement="g0" isMarkerVisible="true"><dc:Bounds x="425" y="60" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="400" y="114" width="100" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="e0_di" bpmnElement="e0"><dc:Bounds x="582" y="67" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="550" y="107" width="100" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t2_di" bpmnElement="t2"><dc:Bounds x="542" y="181" width="116" height="68" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="p1_di" bpmnElement="p1"><dc:Bounds x="725" y="190" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="700" y="244" width="100" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t3_di" bpmnElement="t3"><dc:Bounds x="842" y="181" width="116" height="68" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="e5_di" bpmnElement="e5"><dc:Bounds x="1032" y="197" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="1000" y="237" width="100" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t4_di" bpmnElement="t4"><dc:Bounds x="842" y="311" width="116" height="68" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t5_di" bpmnElement="t5"><dc:Bounds x="992" y="571" width="116" height="68" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="e6_di" bpmnElement="e6"><dc:Bounds x="1182" y="587" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="1150" y="627" width="100" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="g2_di" bpmnElement="g2" isMarkerVisible="true"><dc:Bounds x="1025" y="320" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="1000" y="374" width="100" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t6_di" bpmnElement="t6"><dc:Bounds x="1142" y="51" width="116" height="68" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t7_di" bpmnElement="t7"><dc:Bounds x="1292" y="311" width="116" height="68" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t8_di" bpmnElement="t8"><dc:Bounds x="1442" y="441" width="116" height="68" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="g4_di" bpmnElement="g4" isMarkerVisible="true"><dc:Bounds x="1625" y="450" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="1600" y="504" width="100" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="e7_di" bpmnElement="e7"><dc:Bounds x="1782" y="457" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="1750" y="497" width="100" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t10_di" bpmnElement="t10"><dc:Bounds x="1742" y="311" width="116" height="68" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t11_di" bpmnElement="t11"><dc:Bounds x="1892" y="181" width="116" height="68" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="e1_di" bpmnElement="e1"><dc:Bounds x="2082" y="197" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="2050" y="237" width="100" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_1_di" bpmnElement="Flow_c2_tobe_1"><di:waypoint x="168" y="85" /><di:waypoint x="242" y="85" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_2_di" bpmnElement="Flow_c2_tobe_2"><di:waypoint x="358" y="85" /><di:waypoint x="425" y="85" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_3_di" bpmnElement="Flow_c2_tobe_3"><di:waypoint x="475" y="85" /><di:waypoint x="582" y="85" /><bpmndi:BPMNLabel><dc:Bounds x="481" y="67" width="40" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_4_di" bpmnElement="Flow_c2_tobe_4"><di:waypoint x="450" y="110" /><di:waypoint x="450" y="215" /><di:waypoint x="542" y="215" /><bpmndi:BPMNLabel><dc:Bounds x="456" y="197" width="40" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_5_di" bpmnElement="Flow_c2_tobe_5"><di:waypoint x="658" y="215" /><di:waypoint x="725" y="215" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_6_di" bpmnElement="Flow_c2_tobe_6"><di:waypoint x="775" y="215" /><di:waypoint x="842" y="215" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_7_di" bpmnElement="Flow_c2_tobe_7"><di:waypoint x="750" y="240" /><di:waypoint x="750" y="345" /><di:waypoint x="842" y="345" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_8_di" bpmnElement="Flow_c2_tobe_8"><di:waypoint x="775" y="215" /><di:waypoint x="797" y="215" /><di:waypoint x="797" y="605" /><di:waypoint x="992" y="605" /><bpmndi:BPMNLabel><dc:Bounds x="803" y="587" width="96" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_9_di" bpmnElement="Flow_c2_tobe_9"><di:waypoint x="958" y="215" /><di:waypoint x="1032" y="215" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_10_di" bpmnElement="Flow_c2_tobe_10"><di:waypoint x="1108" y="605" /><di:waypoint x="1182" y="605" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_11_di" bpmnElement="Flow_c2_tobe_11"><di:waypoint x="958" y="345" /><di:waypoint x="1025" y="345" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_12_di" bpmnElement="Flow_c2_tobe_12"><di:waypoint x="1075" y="345" /><di:waypoint x="1115" y="345" /><di:waypoint x="1115" y="85" /><di:waypoint x="1142" y="85" /><bpmndi:BPMNLabel><dc:Bounds x="1121" y="67" width="40" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_13_di" bpmnElement="Flow_c2_tobe_13"><di:waypoint x="1200" y="119" /><di:waypoint x="1200" y="398" /><di:waypoint x="900" y="398" /><di:waypoint x="900" y="379" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_14_di" bpmnElement="Flow_c2_tobe_14"><di:waypoint x="1075" y="345" /><di:waypoint x="1292" y="345" /><bpmndi:BPMNLabel><dc:Bounds x="1081" y="327" width="40" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_15_di" bpmnElement="Flow_c2_tobe_15"><di:waypoint x="1350" y="379" /><di:waypoint x="1350" y="475" /><di:waypoint x="1442" y="475" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_16_di" bpmnElement="Flow_c2_tobe_16"><di:waypoint x="1558" y="475" /><di:waypoint x="1625" y="475" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_17_di" bpmnElement="Flow_c2_tobe_17"><di:waypoint x="1650" y="500" /><di:waypoint x="1650" y="528" /><di:waypoint x="1500" y="528" /><di:waypoint x="1500" y="509" /><bpmndi:BPMNLabel><dc:Bounds x="1508" y="512" width="84" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_18_di" bpmnElement="Flow_c2_tobe_18"><di:waypoint x="1675" y="475" /><di:waypoint x="1782" y="475" /><bpmndi:BPMNLabel><dc:Bounds x="1681" y="457" width="54" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_19_di" bpmnElement="Flow_c2_tobe_19"><di:waypoint x="1650" y="450" /><di:waypoint x="1650" y="345" /><di:waypoint x="1742" y="345" /><bpmndi:BPMNLabel><dc:Bounds x="1656" y="327" width="60" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_20_di" bpmnElement="Flow_c2_tobe_20"><di:waypoint x="1800" y="311" /><di:waypoint x="1800" y="215" /><di:waypoint x="1892" y="215" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_c2_tobe_21_di" bpmnElement="Flow_c2_tobe_21"><di:waypoint x="2008" y="215" /><di:waypoint x="2082" y="215" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,48 @@
+{
+  "name": "HV-CL-03 SLA- en aangiftebewaking",
+  "description": "Elk uur tijdens werkuren: claims in beoordeling waarvan de beoordelingsdeadline verstreken is, of verzekerde claims zonder aangifte twee dagen voor de deadline, worden geëscaleerd naar de afdelingsverantwoordelijke. Referentie: slaStatus() in src/claims.mjs.",
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": { "connectionReferenceLogicalName": "hv_shareddataverse", "api": { "name": "shared_commondataserviceforapps" } },
+      "shared_teams": { "connectionReferenceLogicalName": "hv_sharedteams", "api": { "name": "shared_teams" } }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": { "$connections": { "defaultValue": {}, "type": "Object" }, "$authentication": { "defaultValue": {}, "type": "SecureObject" } },
+      "triggers": {
+        "Elk_uur_werkdagen": { "type": "Recurrence", "recurrence": { "frequency": "Week", "interval": 1, "timeZone": "Romance Standard Time", "schedule": { "weekDays": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "hours": ["7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17"], "minutes": [0] } } }
+      },
+      "actions": {
+        "Beoordeling_te_laat": {
+          "type": "OpenApiConnection",
+          "runAfter": {},
+          "inputs": { "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "ListRecords", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" }, "parameters": { "entityName": "hv_schadeclaims", "$filter": "(hv_status eq 100000001 or hv_status eq 100000002) and hv_deadlinebeoordeling lt @{utcNow()} and hv_geescaleerd ne true" }, "authentication": "@parameters('$authentication')" }
+        },
+        "Aangifte_dreigt": {
+          "type": "OpenApiConnection",
+          "runAfter": {},
+          "inputs": { "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "ListRecords", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" }, "parameters": { "entityName": "hv_schadeclaims", "$filter": "hv_deadlineverzekeraar ne null and hv_aangifteverstuurd ne true and hv_deadlineverzekeraar lt @{addDays(utcNow(), 2)}" }, "authentication": "@parameters('$authentication')" }
+        },
+        "Per_te_late_claim": {
+          "type": "Foreach",
+          "runAfter": { "Beoordeling_te_laat": ["Succeeded"], "Aangifte_dreigt": ["Succeeded"] },
+          "foreach": "@union(outputs('Beoordeling_te_laat')?['body/value'], outputs('Aangifte_dreigt')?['body/value'])",
+          "actions": {
+            "Escaleren": {
+              "type": "OpenApiConnection",
+              "runAfter": {},
+              "inputs": { "host": { "connectionName": "shared_teams", "operationId": "PostMessageToConversation", "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams" }, "parameters": { "poster": "Flow bot", "location": "Chat with Flow bot", "body/recipient": "@{items('Per_te_late_claim')?['_hv_afdelingsverantwoordelijke_value@OData.Community.Display.V1.FormattedValue']}", "body/messageBody": "Schadeclaim @{items('Per_te_late_claim')?['hv_dossiernummer']} loopt achter: beoordeling of aangifte niet op tijd." }, "authentication": "@parameters('$authentication')" }
+            },
+            "Markeer_geescaleerd": {
+              "type": "OpenApiConnection",
+              "runAfter": { "Escaleren": ["Succeeded"] },
+              "inputs": { "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "UpdateOnlyRecord", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" }, "parameters": { "entityName": "hv_schadeclaims", "recordId": "@items('Per_te_late_claim')?['hv_schadeclaimid']", "item/hv_geescaleerd": true }, "authentication": "@parameters('$authentication')" }
+            }
+          }
+        }
+      },
+      "outputs": {}
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "_note": "Illustratieve aannames voor een fictieve organisatie. Elke waarde is een hypothese die in een echt project met een nulmeting en de proceseigenaar gevalideerd moet worden. Licentie- en AI-prijzen zijn ordes van grootte (lijstprijs-niveau), geen offerte; controleer ze altijd bij de licentiepartner.",
+  "common": {
+    "workingDaysPerYear": 225,
+    "adminCostPerHour": 45,
+    "siteManagerCostPerHour": 62,
+    "implementationDayRate": 650,
+    "horizonYears": 3,
+    "timeRealisationFactor": 0.6,
+    "rampUpYear1": 0.5,
+    "maintenanceShareOfOneOff": 0.15,
+    "_explain": "timeRealisationFactor: welk deel van de vrijgekomen uren echt anders ingezet wordt (de rest is comfort, geen geld). rampUpYear1: in jaar 1 wordt maar de helft van de baten gehaald. maintenanceShareOfOneOff: jaarlijks onderhoud/doorontwikkeling als deel van de eenmalige kost."
+  },
+  "platform": {
+    "_note": "Gedeeld over de drie cases: één Power Apps Premium-licentie per gebruiker dekt alle apps. Elke case draagt een derde.",
+    "siteUsers": 45,
+    "officeUsers": 12,
+    "powerAppsPremiumPerUserMonth": 19,
+    "casesSharing": 3
+  },
+  "case01": {
+    "documentsPerDay": 140,
+    "manualMinutesPerDocument": 3.5,
+    "manualErrorRate": 0.025,
+    "minutes": {
+      "auto": 0.4,
+      "review": 2.0,
+      "escalate": 8,
+      "reject": 0.5
+    },
+    "extractionCostPerPage": 0.03,
+    "powerAutomateProcessPerMonth": 140,
+    "implementationDays": 45,
+    "auditSampleShare": 0.05,
+    "internalHours": 120
+  },
+  "case02": {
+    "claimsPerYear": 140,
+    "registerMinutesAsIs": 35,
+    "followUpMinutes": 20,
+    "registerMinutesToBe": 8,
+    "followUpsToBe": 0.3,
+    "avgLossPerLateDeclaration": 1200,
+    "lateDeclarationShareToBe": 0.05,
+    "implementationDays": 40,
+    "internalHours": 260
+  },
+  "case03": {
+    "requestsPerYear": 2600,
+    "handlingMinutesAsIs": 18,
+    "handlingMinutesToBe": {
+      "automatisch": 1,
+      "goedkeuring": 4
+    },
+    "rushExtraTransportCost": 145,
+    "rushShareTarget": 0.2,
+    "wrongDeliveryCost": 220,
+    "wrongShareTarget": 0.02,
+    "powerAutomateProcessPerMonth": 140,
+    "integrationRunCostPerYear": 2400,
+    "implementationDays": 60,
+    "internalHours": 240
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "id": "c3_asis", "case": "03-material-requests", "file": "as-is",
+  "name": "AS-IS — materiaal aanvragen via telefoon, mail en WhatsApp", "pool": "Halverdijk Group",
+  "description": "Huidige werkwijze (fictief): de werfleider belt of stuurt een bericht, het depot kijkt de voorraad na, leveringen worden telefonisch gepland en de kosten worden dagen later geboekt.",
+  "lanes": [
+    { "id": "wl", "name": "Werfleider" },
+    { "id": "dep", "name": "Depot / breekwerf" },
+    { "id": "buy", "name": "Aankoop" },
+    { "id": "plan", "name": "Transportplanning" },
+    { "id": "adm", "name": "Administratie" }
+  ],
+  "nodes": [
+    { "id": "s1", "type": "startEvent", "name": "Materiaal nodig", "lane": "wl", "col": 0 },
+    { "id": "t1", "type": "manualTask", "name": "Bellen, mailen of WhatsApp naar depot", "lane": "wl", "col": 1 },
+    { "id": "t2", "type": "manualTask", "name": "Voorraad nakijken (rondlopen, Excel)", "lane": "dep", "col": 2 },
+    { "id": "g1", "type": "exclusiveGateway", "name": "Op voorraad?", "lane": "dep", "col": 3 },
+    { "id": "t3", "type": "userTask", "name": "Offerte en bestelling bij leverancier", "lane": "buy", "col": 4 },
+    { "id": "t4", "type": "manualTask", "name": "Levering telefonisch inplannen", "lane": "plan", "col": 5 },
+    { "id": "t5", "type": "manualTask", "name": "Leveren met papieren leverbon", "lane": "plan", "col": 6 },
+    { "id": "g2", "type": "exclusiveGateway", "name": "Juist en op tijd?", "lane": "wl", "col": 7 },
+    { "id": "t7", "type": "manualTask", "name": "Nabestellen of retour (spoed)", "lane": "wl", "col": 8 },
+    { "id": "t6", "type": "userTask", "name": "Leverbon ingeven, kosten op werf boeken", "lane": "adm", "col": 8 },
+    { "id": "e1", "type": "endEvent", "name": "Kosten geboekt (dagen later)", "lane": "adm", "col": 9 }
+  ],
+  "flows": [
+    { "from": "s1", "to": "t1" }, { "from": "t1", "to": "t2" }, { "from": "t2", "to": "g1" },
+    { "from": "g1", "to": "t3", "name": "nee" },
+    { "from": "g1", "to": "t4", "name": "ja", "bend": 40, "default": true },
+    { "from": "t3", "to": "t4" }, { "from": "t4", "to": "t5" }, { "from": "t5", "to": "g2" },
+    { "from": "g2", "to": "t7", "name": "nee" },
+    { "from": "t7", "to": "t1" },
+    { "from": "g2", "to": "t6", "name": "ja", "bend": 40, "default": true },
+    { "from": "t6", "to": "e1" }
+  ]
+}

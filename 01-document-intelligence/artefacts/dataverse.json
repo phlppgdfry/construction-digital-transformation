@@ -1,0 +1,53 @@
+{
+  "_note": "Dataverse-tabellen voor case 01 (publisher-prefix hv_). Ontwerp, niet geëxporteerd uit een omgeving. Choice-waarden komen overeen met de flow-definities.",
+  "tables": [
+    {
+      "logicalName": "hv_document", "displayName": "Document", "ownership": "Organization", "primaryName": "hv_documentnr",
+      "columns": [
+        { "name": "hv_documentnr", "type": "Autonumber", "format": "DOC-{SEQNUM:6}" },
+        { "name": "hv_bonnummer", "type": "Text", "max": 20, "alternateKey": true, "note": "Bonnummer van de weegbrug; alternatieve sleutel = tweede verdedigingslinie tegen dubbels" },
+        { "name": "hv_kanaal", "type": "Choice", "options": { "100000000": "Scan weegbrug", "100000001": "Mail vervoerder" } },
+        { "name": "hv_status", "type": "Choice", "options": { "100000000": "Ontvangen", "100000002": "Nazicht", "100000003": "Escalatie", "100000004": "Geboekt", "100000005": "Dubbel", "100000006": "Goedgekeurd", "100000007": "Afgewezen", "100000009": "Fout" } },
+        { "name": "hv_bestand", "type": "Image/File", "note": "Origineel document; archief na 7 jaar volgens bewaarbeleid" },
+        { "name": "hv_klantnummer", "type": "Text", "max": 10 },
+        { "name": "hv_bevindingen", "type": "Multiline text (JSON)" },
+        { "name": "hv_reviewer", "type": "Text" },
+        { "name": "hv_gereviewdop", "type": "DateTime" },
+        { "name": "hv_erpreferentie", "type": "Text" },
+        { "name": "hv_foutmelding", "type": "Multiline text" }
+      ]
+    },
+    {
+      "logicalName": "hv_veld", "displayName": "Geëxtraheerd veld", "ownership": "Organization", "primaryName": "hv_veldnaam",
+      "columns": [
+        { "name": "hv_document", "type": "Lookup", "target": "hv_document", "cascadeDelete": "Cascade" },
+        { "name": "hv_veldnaam", "type": "Text" },
+        { "name": "hv_waarde", "type": "Text" },
+        { "name": "hv_confidence", "type": "Decimal", "precision": 3 },
+        { "name": "hv_gecorrigeerd", "type": "Yes/No", "note": "Voedt de KPI 'correcties per veld' en het hertrainen van het model" }
+      ]
+    },
+    {
+      "logicalName": "hv_klant", "displayName": "Klant (kopie uit ERP)", "ownership": "Organization", "primaryName": "hv_klantnr",
+      "columns": [
+        { "name": "hv_klantnr", "type": "Text", "alternateKey": true },
+        { "name": "hv_naam", "type": "Text" },
+        { "name": "hv_actief", "type": "Yes/No" }
+      ],
+      "note": "Nachtelijke synchronisatie uit het ERP (read-only). Nummerplaten in hv_nummerplaat (1:N)."
+    },
+    {
+      "logicalName": "hv_nummerplaat", "displayName": "Nummerplaat", "ownership": "Organization", "primaryName": "hv_plaat",
+      "columns": [
+        { "name": "hv_plaat", "type": "Text", "alternateKey": true },
+        { "name": "hv_klant", "type": "Lookup", "target": "hv_klant" },
+        { "name": "hv_vervoerder", "type": "Yes/No" }
+      ]
+    }
+  ],
+  "securityRoles": [
+    { "name": "HV Reviewer recyclage", "privileges": "hv_document: read/write (business unit), hv_veld: read/write, hv_klant: read" },
+    { "name": "HV Milieucoördinator", "privileges": "als reviewer + mag escalaties afhandelen" },
+    { "name": "HV Integratie (service principal)", "privileges": "hv_document: create/write (organisatie), geen delete" }
+  ]
+}

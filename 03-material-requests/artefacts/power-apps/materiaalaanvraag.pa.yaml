@@ -1,0 +1,142 @@
+# Halverdijk Werfapp — scherm "Materiaal aanvragen" (canvas app, telefoonlay-out, Power Apps source code format *.pa.yaml)
+# Toont per lijn meteen de beschikbaarheid per depot (via de custom connector op de ERP-facade),
+# markeert spoed (< 48 u) en vraagt dan een reden, en toont een gerecycleerd alternatief waar dat bestaat.
+# De definitieve beslissing (DT-03) neemt de server-flow HV-MA-01. De app toont alleen een voorspelling.
+App:
+  Properties:
+    Formulas: |-
+      =HvRood = ColorValue("#E20000");
+      HvNavy = ColorValue("#242A38");
+      SpoedUren = 48;
+      IsSpoed = DateDiff(Now(), dteLevering.SelectedDate + Time(Value(drpUur.Selected.Value), 0, 0), TimeUnit.Hours) < SpoedUren;
+      Waarde = Sum(colLijnen, Hoeveelheid * Artikel.Eenheidsprijs);
+      VerwachteRoute = If(Waarde > 10000, "Projectleider + afdeling", Waarde > 1000 || CountRows(Filter(colLijnen, Artikel.Bron = "extern")) > 0, "Projectleider", "Automatisch goedgekeurd");
+      SpoedRedenen = ["onvoorziene werfsituatie", "planning gewijzigd door opdrachtgever", "eerdere levering onvolledig", "vergeten te bestellen"];
+
+Screens:
+  scrAanvraag:
+    Properties:
+      Fill: =Color.White
+      OnVisible: =Clear(colLijnen)
+    Children:
+      - drpWerf:
+          Control: Classic/DropDown@2.3.1
+          Properties:
+            Items: =Filter(Werven, Actief = true)
+            X: =16
+            Y: =16
+            Width: =Parent.Width - 32
+      - dteLevering:
+          Control: Classic/DatePicker@2.6.0
+          Properties:
+            DefaultDate: =Today() + 3
+            X: =16
+            Y: =72
+            Width: =(Parent.Width - 40) * 0.6
+      - drpUur:
+          Control: Classic/DropDown@2.3.1
+          Properties:
+            Items: =["06", "07", "08", "10", "13"]
+            X: =(Parent.Width - 40) * 0.6 + 24
+            Y: =72
+            Width: =(Parent.Width - 40) * 0.4
+      - lblSpoed:
+          Control: Label@2.5.1
+          Properties:
+            Text: |-
+              ="Spoedaanvraag: levering binnen 48 uur. Kies een reden; transportplanning wordt verwittigd."
+            Visible: =IsSpoed
+            Color: =HvRood
+            X: =16
+            Y: =124
+            Width: =Parent.Width - 32
+      - drpSpoedReden:
+          Control: Classic/DropDown@2.3.1
+          Properties:
+            Items: =SpoedRedenen
+            Visible: =IsSpoed
+            X: =16
+            Y: =168
+            Width: =Parent.Width - 32
+      - cmbArtikel:
+          Control: Classic/ComboBox@2.4.0
+          Properties:
+            Items: =HvErpFacade.listItems().value
+            DisplayFields: =["label"]
+            SearchFields: =["label", "itemNo"]
+            X: =16
+            Y: =224
+            Width: =(Parent.Width - 40) * 0.65
+      - txtAantal:
+          Control: TextInput@2.3.2
+          Properties:
+            Format: =TextFormat.Number
+            HintText: =Coalesce(cmbArtikel.Selected.unit, "aantal")
+            X: =(Parent.Width - 40) * 0.65 + 24
+            Y: =224
+            Width: =(Parent.Width - 40) * 0.35
+      - btnLijn:
+          Control: Button@2.2.0
+          Properties:
+            Text: ="+ lijn toevoegen"
+            X: =16
+            Y: =280
+            Width: =Parent.Width - 32
+            OnSelect: |-
+              =Collect(colLijnen, {
+                Artikel: {Nr: cmbArtikel.Selected.itemNo, Label: cmbArtikel.Selected.label, Eenheid: cmbArtikel.Selected.unit, Eenheidsprijs: cmbArtikel.Selected.unitCost, Bron: cmbArtikel.Selected.source, Alternatief: cmbArtikel.Selected.recycledAlternative},
+                Hoeveelheid: Value(txtAantal.Text),
+                Voorraad: Sum(HvErpFacade.getStock({itemNo: cmbArtikel.Selected.itemNo}).value, available)
+              });
+              Reset(cmbArtikel); Reset(txtAantal)
+      - galLijnen:
+          Control: Gallery@2.15.0
+          Variant: Vertical
+          Properties:
+            Items: =colLijnen
+            X: =0
+            Y: =336
+            Width: =Parent.Width
+            Height: =Parent.Height - 336 - 140
+            TemplateSize: =76
+          Children:
+            - lblLijn:
+                Control: Label@2.5.1
+                Properties:
+                  Text: =ThisItem.Hoeveelheid & " " & ThisItem.Artikel.Eenheid & " " & ThisItem.Artikel.Label
+                  FontWeight: =FontWeight.Semibold
+                  X: =16
+                  Width: =Parent.TemplateWidth - 32
+            - lblBeschikbaar:
+                Control: Label@2.5.1
+                Properties:
+                  Text: |-
+                    =If(ThisItem.Artikel.Bron = "extern", "Extern artikel — aankoop bestelt", ThisItem.Voorraad >= ThisItem.Hoeveelheid, "Op voorraad", "Tekort: " & (ThisItem.Hoeveelheid - ThisItem.Voorraad) & " " & ThisItem.Artikel.Eenheid) & If(!IsBlank(ThisItem.Artikel.Alternatief), " · gerecycleerd alternatief " & ThisItem.Artikel.Alternatief & " (projectleider beslist)", "")
+                  Color: =If(ThisItem.Artikel.Bron = "intern" && ThisItem.Voorraad < ThisItem.Hoeveelheid, HvRood, HvNavy)
+                  X: =16
+                  Y: =34
+                  Width: =Parent.TemplateWidth - 32
+      - lblSamenvatting:
+          Control: Label@2.5.1
+          Properties:
+            Text: ="Waarde € " & Text(Waarde, "#,##0") & " · " & VerwachteRoute
+            FontWeight: =FontWeight.Bold
+            X: =16
+            Y: =Parent.Height - 132
+            Width: =Parent.Width - 32
+      - btnIndienen:
+          Control: Button@2.2.0
+          Properties:
+            Text: ="Aanvraag indienen"
+            Fill: =HvRood
+            X: =16
+            Y: =Parent.Height - 76
+            Width: =Parent.Width - 32
+            DisplayMode: =If(CountRows(colLijnen) > 0 && !IsBlank(drpWerf.Selected) && (!IsSpoed || !IsBlank(drpSpoedReden.Selected)), DisplayMode.Edit, DisplayMode.Disabled)
+            OnSelect: |-
+              =With({a: Patch(Materiaalaanvragen, Defaults(Materiaalaanvragen), {Werf: drpWerf.Selected, 'Leveren op': dteLevering.SelectedDate + Time(Value(drpUur.Selected.Value), 0, 0), Spoed: IsSpoed, Spoedreden: drpSpoedReden.Selected.Value, Status: 'Status (Materiaalaanvragen)'.Concept})},
+                ForAll(colLijnen As l, Patch(Aanvraaglijnen, Defaults(Aanvraaglijnen), {Aanvraag: a, Artikelnr: l.Artikel.Nr, Hoeveelheid: l.Hoeveelheid}));
+                Patch(Materiaalaanvragen, a, {Status: 'Status (Materiaalaanvragen)'.Ingediend})
+              );
+              Notify("Aanvraag ingediend. " & VerwachteRoute & ".", NotificationType.Success);
+              Navigate(scrMijnAanvragen)

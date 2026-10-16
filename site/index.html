@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bouw digitaal — drie transformatiecases</title>
+  <meta name="description" content="Portfolio business transformation analyst: drie uitgewerkte digitaliseringscases voor een fictieve Vlaamse bouwgroep — document-AI, schadeclaims en materiaalaanvragen — van workshop tot KPI.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="./"><img class="brand-mark" src="assets/mark.svg" alt=""><span>Halverdijk<small>fictieve bouwgroep · portfolio</small></span></a>
+    <nav aria-label="Hoofdnavigatie">
+      <a href="#cases">Cases</a>
+      <a href="#methode">Werkwijze</a>
+      <a href="#architectuur">Architectuur</a>
+      <a href="#vragen">Lastige vragen</a>
+      <a href="demo/">Werfportaal-demo</a>
+      <a href="https://github.com/phlppgdfry/construction-digital-transformation">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Business transformation · bouw &amp; infra</span>
+      <h1>Drie processen. Eén werkwijze.</h1>
+      <p class="lede">Van werfprobleem tot gemeten resultaat: document-AI voor weegbonnen, schadeclaims van werf tot afsluiting, en materiaalaanvragen met voorraadcheck en ERP-koppeling. Elke case volgt dezelfde zeven stappen.</p>
+      <div class="cta-row">
+        <a class="btn" href="demo/?tour">Rondleiding van 2 minuten</a>
+        <a class="btn on-dark ghost" href="#cases">Bekijk de cases</a>
+      </div>
+      <p class="notice">Onafhankelijke portfolio. Halverdijk Group is fictief; namen, cijfers en documenten zijn verzonnen. Er is geen relatie met een bestaand bedrijf en er worden geen resultaten geclaimd. Workshops zijn gesimuleerd, integraties zijn doelontwerpen, en de demo draait volledig in je browser.</p>
+    </div>
+  </section>
+
+  <div class="stat-row" aria-label="Kerncijfers uit het model">
+    <div class="stat"><b><!--n:c1.autoPct-->66,7%<!--/n--></b><span>weegbonnen automatisch geboekt (testset)</span></div>
+    <div class="stat"><b><!--n:c2.latePct-->54%<!--/n--> → <!--n:c2.lateTarget-->5%<!--/n--></b><span>te late verzekeringsaangiftes, nu → doel</span></div>
+    <div class="stat"><b><!--n:c3.autoPct-->43%<!--/n--></b><span>materiaalaanvragen zonder goedkeuring (replay)</span></div>
+    <div class="stat"><b>25/25</b><span>beslisregels identiek in Power Fx en code</span></div>
+    <div class="stat"><b><!--n:bpmn.models-->6<!--/n--></b><span>BPMN 2.0-modellen, gevalideerd in CI</span></div>
+  </div>
+
+  <section class="section" id="cases">
+    <div class="wrap">
+      <div class="section-title"><h2>De drie cases</h2><span class="muted">elk met discover → measure, prototype en artefacten</span></div>
+      <div class="grid cards-3">
+        <article class="card" id="case-01">
+          <span class="num">CASE 01 · DOCUMENT INTELLIGENCE</span>
+          <h3>Weegbonnen zonder overtypen</h3>
+          <p>AI leest de bon, elf regels beslissen of een mens moet kijken. Asbest en dubbels komen nooit automatisch in het ERP.</p>
+          <ul class="facts">
+            <li><b><!--n:c1.auto-->20<!--/n-->/<!--n:c1.n-->30<!--/n--></b>automatisch, <!--n:c1.review-->8<!--/n--> nazicht, <!--n:c1.escalate-->1<!--/n--> escalatie, <!--n:c1.reject-->1<!--/n--> dubbel</li>
+            <li><b><!--n:c1.accuracy-->98,8%<!--/n--></b>veldnauwkeurigheid, <!--n:c1.silent-->1<!--/n--> stille fout eerlijk benoemd</li>
+            <li><b><!--n:c1.bc.payback-->26,9 maanden<!--/n--></b>terugverdientijd: marginaal, compliance beslist</li>
+          </ul>
+          <div class="links">
+            <a class="btn small" href="demo/?case=documenten">Demo</a>
+            <a class="btn small ghost" href="https://github.com/phlppgdfry/construction-digital-transformation/tree/main/01-document-intelligence">Analyse</a>
+          </div>
+        </article>
+        <article class="card" id="case-02">
+          <span class="num">CASE 02 · CLAIMS MANAGEMENT</span>
+          <h3>Schadeclaims van werf tot afsluiting</h3>
+          <p>Offline melden met foto's en GPS, automatisch dossier en triage, goedkeuring uit één beslistabel, aangifte die niet meer te laat vertrekt.</p>
+          <ul class="facts">
+            <li><b><!--n:c2.medianRegister-->3 dagen<!--/n--></b>mediaan tot registratie vandaag</li>
+            <li><b><!--n:c2.incomplete-->55%<!--/n--></b>van de eerste meldingen onvolledig</li>
+            <li><b><!--n:c2.bc.payback-->17,7 maanden<!--/n--></b>terugverdientijd; rendabel vanaf <!--n:c2.breakEvenLoss-->€153<!--/n--> verlies per te late aangifte</li>
+          </ul>
+          <div class="links">
+            <a class="btn small" href="demo/?case=claims">Demo</a>
+            <a class="btn small ghost" href="https://github.com/phlppgdfry/construction-digital-transformation/tree/main/02-construction-claims">Analyse</a>
+          </div>
+        </article>
+        <article class="card" id="case-03">
+          <span class="num">CASE 03 · MATERIAL REQUESTS</span>
+          <h3>Materiaal aanvragen met live voorraad</h3>
+          <p>Voorraad per depot, dichtstbijzijnde depot eerst, beslistabel voor goedkeuring, en een ERP-koppeling die een storing overleeft.</p>
+          <ul class="facts">
+            <li><b><!--n:c3.rushPct-->33%<!--/n--></b>spoedaanvragen, <!--n:c3.lateRushPct-->40%<!--/n--> daarvan toch te laat</li>
+            <li><b><!--n:c3.auto-->26<!--/n-->/<!--n:c3.n-->60<!--/n--></b>historische aanvragen zouden automatisch goedgekeurd zijn</li>
+            <li><b><!--n:c3.bc.payback-->14,3 maanden<!--/n--></b>terugverdientijd; ook positief als spoed niet daalt</li>
+          </ul>
+          <div class="links">
+            <a class="btn small" href="demo/?case=materiaal">Demo</a>
+            <a class="btn small ghost" href="https://github.com/phlppgdfry/construction-digital-transformation/tree/main/03-material-requests">Analyse</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section grey" id="methode">
+    <div class="wrap">
+      <div class="section-title"><h2>Werkwijze in zeven stappen</h2><span class="muted">dezelfde vragen bij elk project</span></div>
+      <ol class="steps">
+        <li><b>Discover</b><span>stakeholders, workshops op de werf, probleemstelling</span></li>
+        <li><b>Analyse</b><span>AS-IS in BPMN, nulmeting, requirements, uitzonderingen</span></li>
+        <li><b>Design</b><span>TO-BE, beslistabellen, user stories, datamodel</span></li>
+        <li><b>Validate</b><span>opties, businesscase met gevoeligheid, MVP</span></li>
+        <li><b>Integrate</b><span>Power Apps, Power Automate, AI, API naar ERP</span></li>
+        <li><b>Implement</b><span>UAT, training, uitrol, fallback, runbook</span></li>
+        <li><b>Measure</b><span>KPI-kaarten, dashboard, benefits review</span></li>
+      </ol>
+      <p class="measure" style="margin-top:22px">Het doel is niet zoveel mogelijk code. Het doel is beslissen welk probleem opgelost moet worden, hoe, met welke technologie, en wanneer het geslaagd is. <a href="https://github.com/phlppgdfry/construction-digital-transformation/tree/main/shared-methodology">Gedeelde methodiek en templates →</a></p>
+    </div>
+  </section>
+
+  <section class="section" id="processen">
+    <div class="wrap">
+      <div class="section-title"><h2>TO-BE-processen</h2><span class="muted">rood = geautomatiseerd · bron: BPMN 2.0-bestanden in de repo</span></div>
+      <div class="tabs-row" role="tablist" aria-label="Kies een proces">
+        <button class="btn small" role="tab" aria-selected="true" data-bpmn="c1_tobe">01 Weegbonnen</button>
+        <button class="btn small ghost" role="tab" aria-selected="false" data-bpmn="c2_tobe">02 Schadeclaims</button>
+        <button class="btn small ghost" role="tab" aria-selected="false" data-bpmn="c3_tobe">03 Materiaal</button>
+      </div>
+      <figure class="figure">
+        <img id="bpmn-img" src="assets/bpmn/c1_tobe.svg" alt="TO-BE-proces weegbonnen in BPMN">
+        <figcaption>Gegenereerd uit <code>models/*.json</code>; dezelfde bron levert geldige <code>.bpmn</code>-bestanden die in bpmn.io of Camunda Modeler openen.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section navy" id="architectuur">
+    <div class="wrap">
+      <div class="section-title"><h2>Doelarchitectuur</h2><span style="opacity:.75">conceptueel; echte integraties hangen af van ERP, licenties en security</span></div>
+      <svg viewBox="0 0 1100 330" role="img" aria-label="Werfapp en backoffice op Dataverse, flows naar Teams en AI, ERP via API-facade" style="width:100%;background:#2d2e3b;border-top:4px solid #e20000">
+        <style>.b{fill:#fff;stroke:none}.t{font:600 15px Figtree,Arial,sans-serif;fill:#242a38}.s{font:13px Figtree,Arial,sans-serif;fill:#6c6c6c}.r{fill:#e20000}.l{stroke:#fff;stroke-width:2;fill:none;marker-end:url(#a)}.lab{font:600 12px Figtree,Arial,sans-serif;fill:#fff}</style>
+        <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#fff"/></marker></defs>
+        <rect class="b" x="30" y="40" width="190" height="70" rx="3"/><text class="t" x="45" y="70">Werfapp (canvas)</text><text class="s" x="45" y="92">offline · foto · GPS</text>
+        <rect class="b" x="30" y="200" width="190" height="70" rx="3"/><text class="t" x="45" y="230">Backoffice-apps</text><text class="s" x="45" y="252">review · claims · planning</text>
+        <rect class="b" x="320" y="110" width="200" height="90" rx="3"/><rect class="r" x="320" y="110" width="200" height="6"/><text class="t" x="335" y="145">Dataverse</text><text class="s" x="335" y="167">claims · aanvragen · docs</text><text class="s" x="335" y="186">outbox · tijdlijn (audit)</text>
+        <rect class="b" x="600" y="110" width="200" height="90" rx="3"/><rect class="r" x="600" y="110" width="200" height="6"/><text class="t" x="615" y="145">Power Automate</text><text class="s" x="615" y="167">triage · regels · Approvals</text><text class="s" x="615" y="186">retry · dead-letter</text>
+        <rect class="b" x="600" y="10" width="200" height="60" rx="3"/><text class="t" x="615" y="37">Teams</text><text class="s" x="615" y="57">meldingen · goedkeuring</text>
+        <rect class="b" x="600" y="250" width="200" height="60" rx="3"/><text class="t" x="615" y="277">Document Intelligence</text><text class="s" x="615" y="297">extractie + confidence</text>
+        <rect class="b" x="870" y="110" width="200" height="90" rx="3"/><rect class="r" x="870" y="110" width="200" height="6"/><text class="t" x="885" y="145">ERP-facade (OpenAPI)</text><text class="s" x="885" y="167">API Management + Functions</text><text class="s" x="885" y="186">idempotent · RFC 9457</text>
+        <path class="l" d="M220 75 H270 V140 H318"/><path class="l" d="M220 235 H270 V170 H318"/>
+        <path class="l" d="M520 155 H598"/><text class="lab" x="530" y="146">trigger</text>
+        <path class="l" d="M700 110 V72"/><path class="l" d="M700 200 V248"/>
+        <path class="l" d="M800 155 H868"/><text class="lab" x="808" y="146">HTTPS</text>
+        <text class="lab" x="885" y="230">→ ERP (bron voor financiën,</text><text class="lab" x="885" y="248">voorraad en projectkosten)</text>
+      </svg>
+      <div class="grid cards-3" style="margin-top:22px">
+        <div><h3>Waarom Dataverse?</h3><p style="opacity:.85">Offline op de werf, echte relaties, unieke sleutels tegen dubbels, audit. De premiumlicentie zit in elke businesscase.</p></div>
+        <div><h3>Waarom een API-facade?</h3><p style="opacity:.85">Eén contract naar het ERP, ongeacht welk ERP. Een ERP-wissel raakt alleen de facade, niet tien flows.</p></div>
+        <div><h3>Wat als het ERP plat ligt?</h3><p style="opacity:.85">Outbox, retry na 1–5–15–60–240 min, idempotency-key, dead-letter met runbook. In de demo kun je het ERP uitzetten.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="vragen">
+    <div class="wrap">
+      <div class="section-title"><h2>Lastige vragen</h2><span class="muted">wat een stuurgroep of IT-team terecht vraagt</span></div>
+      <div class="qa">
+        <details open><summary>Waarom Dataverse in plaats van SharePoint?</summary><p>Omdat offline melden, relaties (claim → foto's → tijdlijn) en unieke sleutels hier niet onderhandelbaar zijn. Prijs: ±<!--n:p.licenseYear-->€12.996<!--/n--> per jaar voor <!--n:p.users-->57<!--/n--> gebruikers (aanname), meegerekend in de businesscases. Bij één klein proces zonder offline zou ik met SharePoint starten.</p></details>
+        <details><summary>Wat gebeurt er als de ERP-API onbereikbaar is?</summary><p>De werf merkt niets. De berichten staan in een outbox, worden opnieuw verstuurd met dezelfde idempotency-key (dus nooit dubbel geboekt) en gaan na de laatste poging naar dead-letter met een ticket voor functioneel beheer.</p></details>
+        <details><summary>Wie mag een claim goedkeuren?</summary><p>Beslistabel DT-02: tot €2.500 de projectleider, tot €15.000 ook de afdeling, daarboven ook de directie. Bij machines beoordeelt de fleetmanager eerst, bij derden en leidingen claims &amp; verzekeringen. In Power Fx getest met de echte engine: 11/11 gevallen identiek.</p></details>
+        <details><summary>Welke informatie is verplicht?</summary><p>Alleen wat later niet meer te achterhalen is: werf, tijdstip, locatie, categorie, minstens één foto, een korte omschrijving en een ruwe raming. Per categorie komt er iets bij (KLIP-referentie bij leidingen). Wat het kantoor kan opzoeken, vraagt de app niet.</p></details>
+        <details><summary>Wat als de werfleider geen internet heeft?</summary><p>De app werkt offline-first en synchroniseert later met een client-id. Twee keer verzenden geeft één dossier. Kritieke leidingschade blijft een telefoonplicht, en dat zegt de app ook.</p></details>
+        <details><summary>Wat als de AI zich vergist?</summary><p>Dan vangt een regel de fout. Een zelfverzekerde leesfout (8 als 3, confidence 0,96) wordt gevonden door netto = bruto − tarra. Op de testset bleef <!--n:c1.silent-->1<!--/n--> stille fout over; die wordt afgedekt met een steekproef van 5%.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section grey" id="grenzen">
+    <div class="wrap">
+      <div class="section-title"><h2>Eerlijke grenzen</h2></div>
+      <ul class="limits measure">
+        <li>Halverdijk Group, de documenten, dossiers en aanvragen zijn fictief. De cijfers zijn aannames in <code>data/assumptions.json</code> of komen uit verzonnen datasets.</li>
+        <li>Workshops en gebruikersvalidatie zijn uitgeschreven als scenario. Ze hebben niet met echte medewerkers plaatsgevonden.</li>
+        <li>De Power Automate-flows, Power Apps-schermen en Dataverse-tabellen zijn ontwerp-artefacten (geldige JSON/YAML, getest op structuur). Ze zijn niet in een productieomgeving geïmporteerd.</li>
+        <li>De beslisregels zijn wél uitgevoerd in de echte Power Fx-engine (<code>pac power-fx run</code>) en vergeleken met de regelmotor.</li>
+        <li>De demo gebruikt dezelfde regelmotor als de tests, maar de AI-extractie en het ERP worden gesimuleerd.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p><strong>Bouw digitaal</strong> — portfolio van Philippe Godfroy. Onafhankelijk en fictief, zonder relatie met of goedkeuring van een bestaand bedrijf.</p>
+    <p><a href="https://github.com/phlppgdfry/construction-digital-transformation">Broncode, analyses en artefacten op GitHub</a> · <a href="demo/">Werfportaal-demo</a> · <a href="https://phlppgdfry.github.io/analyst-portfolio/">Alle analistcases</a></p>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll("[data-bpmn]").forEach((b) => b.addEventListener("click", () => {
+    document.querySelectorAll("[data-bpmn]").forEach((x) => { x.classList.add("ghost"); x.setAttribute("aria-selected", "false"); });
+    b.classList.remove("ghost"); b.setAttribute("aria-selected", "true");
+    const img = document.getElementById("bpmn-img");
+    img.src = `assets/bpmn/${b.dataset.bpmn}.svg`;
+    img.alt = `TO-BE-proces ${b.textContent}`;
+  }));
+</script>
+</body>
+</html>

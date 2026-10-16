@@ -1,0 +1,90 @@
+{
+  "name": "HV-DI-02 Weegbon controleren (child flow)",
+  "description": "Voert de elf controles R01–R11 uit op de extractie-uitvoer en geeft een beslissing terug. Drempels komen uit omgevingsvariabelen zodat de functioneel beheerder ze na de pilot kan herijken zonder de flow te wijzigen. De referentie-implementatie van de regels is src/documents.mjs (getest); deze flow is de Power Automate-vertaling.",
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": { "connectionReferenceLogicalName": "hv_shareddataverse", "api": { "name": "shared_commondataserviceforapps" } }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": { "defaultValue": {}, "type": "Object" },
+        "$authentication": { "defaultValue": {}, "type": "SecureObject" },
+        "Confidence-drempel (hv_ConfidenceThreshold)": { "defaultValue": 0.85, "type": "Float" },
+        "Netto-tolerantie kg (hv_NetToleranceKg)": { "defaultValue": 20, "type": "Int" },
+        "Max bruto kg (hv_MaxGrossKg)": { "defaultValue": 44000, "type": "Int" },
+        "Max ouderdom dagen (hv_MaxAgeDays)": { "defaultValue": 30, "type": "Int" }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Button",
+          "inputs": { "schema": { "type": "object", "properties": { "extractie": { "type": "object" } }, "required": ["extractie"] } }
+        }
+      },
+      "actions": {
+        "Bevindingen": { "type": "InitializeVariable", "runAfter": {}, "inputs": { "variables": [{ "name": "bevindingen", "type": "array", "value": [] }] } },
+        "Velden": { "type": "Compose", "runAfter": { "Bevindingen": ["Succeeded"] }, "inputs": "@triggerBody()?['extractie']?['fields']" },
+        "Klant_opzoeken": {
+          "type": "OpenApiConnection",
+          "runAfter": { "Velden": ["Succeeded"] },
+          "inputs": { "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "ListRecords", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" }, "parameters": { "entityName": "hv_klants", "$filter": "hv_klantnr eq '@{outputs('Velden')?['customerNo']?['value']}'", "$expand": "hv_klant_nummerplaat($select=hv_plaat)", "$top": 1 }, "authentication": "@parameters('$authentication')" }
+        },
+        "Eerder_ontvangen_bon": {
+          "type": "OpenApiConnection",
+          "runAfter": { "Velden": ["Succeeded"] },
+          "inputs": { "host": { "connectionName": "shared_commondataserviceforapps", "operationId": "ListRecords", "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" }, "parameters": { "entityName": "hv_documents", "$filter": "hv_bonnummer eq '@{outputs('Velden')?['ticketNo']?['value']}' and hv_status ne 100000005", "$top": 1 }, "authentication": "@parameters('$authentication')" }
+        },
+        "R02_confidence": {
+          "type": "Foreach",
+          "runAfter": { "Klant_opzoeken": ["Succeeded"], "Eerder_ontvangen_bon": ["Succeeded"] },
+          "foreach": "@createArray('ticketNo','date','plate','customerNo','direction','material','gross','tare','net')",
+          "actions": {
+            "Onder_drempel": {
+              "type": "If",
+              "runAfter": {},
+              "expression": { "less": ["@float(outputs('Velden')?[item()]?['confidence'])", "@parameters('Confidence-drempel (hv_ConfidenceThreshold)')"] },
+              "actions": { "R02_toevoegen": { "type": "AppendToArrayVariable", "runAfter": {}, "inputs": { "name": "bevindingen", "value": { "regel": "R02", "ernst": "review", "veld": "@item()" } } } },
+              "else": { "actions": {} }
+            }
+          }
+        },
+        "R03_netto": {
+          "type": "If",
+          "runAfter": { "R02_confidence": ["Succeeded"] },
+          "expression": { "greater": ["@abs(sub(sub(outputs('Velden')?['gross']?['value'], outputs('Velden')?['tare']?['value']), outputs('Velden')?['net']?['value']))", "@parameters('Netto-tolerantie kg (hv_NetToleranceKg)')"] },
+          "actions": { "R03_toevoegen": { "type": "AppendToArrayVariable", "runAfter": {}, "inputs": { "name": "bevindingen", "value": { "regel": "R03", "ernst": "review", "veld": "net" } } } },
+          "else": { "actions": {} }
+        },
+        "R04_klant": {
+          "type": "If",
+          "runAfter": { "R03_netto": ["Succeeded"] },
+          "expression": { "or": [{ "equals": ["@length(outputs('Klant_opzoeken')?['body/value'])", 0] }, { "equals": ["@first(outputs('Klant_opzoeken')?['body/value'])?['hv_actief']", false] }] },
+          "actions": { "R04_toevoegen": { "type": "AppendToArrayVariable", "runAfter": {}, "inputs": { "name": "bevindingen", "value": { "regel": "R04", "ernst": "review", "veld": "customerNo" } } } },
+          "else": { "actions": {} }
+        },
+        "R09_dubbel": {
+          "type": "If",
+          "runAfter": { "R04_klant": ["Succeeded"] },
+          "expression": { "greater": ["@length(outputs('Eerder_ontvangen_bon')?['body/value'])", 0] },
+          "actions": { "R09_toevoegen": { "type": "AppendToArrayVariable", "runAfter": {}, "inputs": { "name": "bevindingen", "value": { "regel": "R09", "ernst": "reject", "veld": "ticketNo" } } } },
+          "else": { "actions": {} },
+          "description": "R05–R08, R10 en R11 volgen hetzelfde patroon (If + AppendToArrayVariable) en zijn hier weggelaten om het artefact leesbaar te houden."
+        },
+        "Beslissing": {
+          "type": "Compose",
+          "runAfter": { "R09_dubbel": ["Succeeded"] },
+          "inputs": "@if(contains(string(variables('bevindingen')), '\"reject\"'), 'reject', if(contains(string(variables('bevindingen')), '\"block\"'), 'escalate', if(greater(length(variables('bevindingen')), 0), 'review', 'auto')))"
+        },
+        "Antwoord": {
+          "type": "Response",
+          "kind": "PowerApp",
+          "runAfter": { "Beslissing": ["Succeeded"] },
+          "inputs": { "statusCode": 200, "body": { "beslissing": "@outputs('Beslissing')", "bevindingen": "@variables('bevindingen')" }, "schema": { "type": "object", "properties": { "beslissing": { "type": "string" }, "bevindingen": { "type": "array" } } } }
+        }
+      },
+      "outputs": {}
+    }
+  }
+}

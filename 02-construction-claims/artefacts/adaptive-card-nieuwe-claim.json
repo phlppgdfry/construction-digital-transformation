@@ -1,0 +1,15 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.5",
+  "body": [
+    { "type": "Container", "style": "attention", "items": [ { "type": "TextBlock", "text": "Nieuwe schadeclaim ${dossiernummer}", "weight": "Bolder", "size": "Medium" }, { "type": "TextBlock", "text": "Ernst: ${ernst} · beoordelen vóór ${deadline}", "spacing": "None", "isSubtle": true } ] },
+    { "type": "FactSet", "facts": [ { "title": "Werf", "value": "${werf}" }, { "title": "Categorie", "value": "${categorie}" }, { "title": "Raming", "value": "€ ${bedrag}" }, { "title": "Melder", "value": "${melder}" }, { "title": "Goedkeuring", "value": "${keten}" } ] },
+    { "type": "TextBlock", "text": "${omschrijving}", "wrap": true },
+    { "type": "ImageSet", "imageSize": "Medium", "images": [ { "type": "Image", "url": "${foto1}" } ] }
+  ],
+  "actions": [
+    { "type": "Action.OpenUrl", "title": "Dossier openen", "url": "${link}" },
+    { "type": "Action.Submit", "title": "Info vragen aan werfleider", "data": { "actie": "requestInfo", "dossier": "${dossiernummer}" } }
+  ]
+}

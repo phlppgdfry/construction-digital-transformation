@@ -1,0 +1,142 @@
+# Halverdijk — Weegbon Review (canvas app, Power Apps source code format *.pa.yaml)
+# Twee schermen: de nazichtwachtrij en het detail van één bon met de gemarkeerde velden.
+# Gebruik: in Power Apps Studio een leeg scherm openen, "Paste code" op dit YAML-blok, of
+# per scherm via de tree view (Code view). Tabellen: zie ../dataverse.json.
+# Ontwerpkeuze: de app beslist niets zelf. Wie op "Goedkeuren" drukt, zet de status;
+# flow HV-DI-03 boekt daarna in het ERP met hetzelfde idempotency-key als de automatische route.
+App:
+  Properties:
+    Theme: =PowerAppsTheme
+    Formulas: |-
+      =Drempel = 0.85;
+      HvRood = ColorValue("#E20000");
+      HvNavy = ColorValue("#242A38");
+      HvGrijs = ColorValue("#EFEFEF");
+      StatusNazicht = 'Status (Documenten)'.Nazicht;
+      StatusEscalatie = 'Status (Documenten)'.Escalatie;
+      MijnWachtrij = Filter(Documenten, Status = StatusNazicht || (Status = StatusEscalatie && User().Email = "milieu@halverdijk.example"));
+
+Screens:
+  scrWachtrij:
+    Properties:
+      Fill: =HvGrijs
+    Children:
+      - conKop:
+          Control: GroupContainer@1.3.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =HvNavy
+            Height: =72
+            Width: =Parent.Width
+          Children:
+            - lblTitel:
+                Control: Label@2.5.1
+                Properties:
+                  Text: ="Weegbonnen — nazicht (" & CountRows(MijnWachtrij) & ")"
+                  Color: =Color.White
+                  FontWeight: =FontWeight.Bold
+                  Size: =20
+                  X: =24
+                  Width: =Parent.Width - 48
+                  Height: =72
+      - galWachtrij:
+          Control: Gallery@2.15.0
+          Variant: Vertical
+          Properties:
+            Items: =SortByColumns(MijnWachtrij, "createdon", SortOrder.Ascending)
+            Y: =72
+            Height: =Parent.Height - 72
+            Width: =Parent.Width
+            TemplateSize: =84
+            OnSelect: |-
+              =Navigate(scrDetail, ScreenTransition.Cover, {Bon: ThisItem})
+          Children:
+            - lblBonnr:
+                Control: Label@2.5.1
+                Properties:
+                  Text: =ThisItem.Bonnummer & " · " & ThisItem.Klantnummer
+                  FontWeight: =FontWeight.Semibold
+                  X: =24
+                  Y: =8
+                  Width: =Parent.TemplateWidth - 200
+            - lblRegels:
+                Control: Label@2.5.1
+                Properties:
+                  Text: =Concat(Filter(ThisItem.Bevindingen, true), Regel & " ", "")
+                  Color: =HvRood
+                  X: =24
+                  Y: =40
+                  Width: =Parent.TemplateWidth - 200
+            - lblWacht:
+                Control: Label@2.5.1
+                Properties:
+                  Text: =DateDiff(ThisItem.'Created On', Now(), TimeUnit.Hours) & " u in wachtrij"
+                  Align: =Align.Right
+                  X: =Parent.TemplateWidth - 180
+                  Y: =24
+                  Width: =156
+                  Color: =If(DateDiff(ThisItem.'Created On', Now(), TimeUnit.Hours) > 4, HvRood, HvNavy)
+
+  scrDetail:
+    Properties:
+      Fill: =Color.White
+    Children:
+      - imgBon:
+          Control: Image@2.2.3
+          Properties:
+            Image: =Bon.Bestand.Full
+            X: =0
+            Y: =0
+            Width: =Parent.Width * 0.5
+            Height: =Parent.Height
+      - galVelden:
+          Control: Gallery@2.15.0
+          Variant: Vertical
+          Properties:
+            Items: =Bon.Velden
+            X: =Parent.Width * 0.5 + 16
+            Y: =16
+            Width: =Parent.Width * 0.5 - 32
+            Height: =Parent.Height - 120
+            TemplateSize: =64
+          Children:
+            - lblVeld:
+                Control: Label@2.5.1
+                Properties:
+                  Text: =ThisItem.Veldnaam & "  (" & Text(ThisItem.Confidence, "0.00") & ")"
+                  Color: =If(ThisItem.Confidence < Drempel || ThisItem.Veldnaam in Bon.Bevindingen.Veld, HvRood, HvNavy)
+                  Width: =200
+            - txtWaarde:
+                Control: TextInput@2.3.2
+                Properties:
+                  Default: =ThisItem.Waarde
+                  X: =210
+                  Width: =Parent.TemplateWidth - 220
+                  BorderColor: =If(ThisItem.Confidence < Drempel, HvRood, HvGrijs)
+      - btnGoedkeuren:
+          Control: Button@2.2.0
+          Properties:
+            Text: ="Goedkeuren en boeken"
+            Fill: =HvRood
+            X: =Parent.Width * 0.5 + 16
+            Y: =Parent.Height - 88
+            Width: =240
+            DisplayMode: =If(Bon.Status = StatusEscalatie && User().Email <> "milieu@halverdijk.example", DisplayMode.Disabled, DisplayMode.Edit)
+            OnSelect: |-
+              =ForAll(galVelden.AllItems As r, Patch(Velden, LookUp(Velden, Veldnaam = r.Veldnaam && Document.Document = Bon.Document), {Waarde: r.txtWaarde.Text, Gecorrigeerd: r.txtWaarde.Text <> r.Waarde}));
+              Patch(Documenten, Bon, {Status: 'Status (Documenten)'.Goedgekeurd, Reviewer: User().Email, 'Gereviewd op': Now()});
+              Notify("Bon " & Bon.Bonnummer & " goedgekeurd; de flow boekt in het ERP.", NotificationType.Success);
+              Back()
+      - btnAfwijzen:
+          Control: Button@2.2.0
+          Properties:
+            Text: ="Afwijzen"
+            Fill: =Color.White
+            Color: =HvNavy
+            BorderColor: =HvNavy
+            X: =Parent.Width * 0.5 + 272
+            Y: =Parent.Height - 88
+            Width: =160
+            OnSelect: |-
+              =Patch(Documenten, Bon, {Status: 'Status (Documenten)'.Afgewezen, Reviewer: User().Email, 'Gereviewd op': Now()});
+              Back()
