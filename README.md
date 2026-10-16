@@ -4,7 +4,7 @@
 
 > **Onafhankelijke portfolio.** Halverdijk Group is **fictief**. Namen, documenten, dossiers, cijfers en personen zijn verzonnen. De cases zijn geïnspireerd op publiek beschreven uitdagingen van bouw- en recyclagebedrijven. Het zijn **geen interne projecten van een bestaand bedrijf**, er is geen relatie met of goedkeuring van een werkgever, en er worden geen gerealiseerde resultaten geclaimd. Workshops zijn gesimuleerd, integraties zijn doelontwerpen.
 
-**[Live site](https://phlppgdfry.github.io/construction-digital-transformation/)** · **[Werfportaal-demo met rondleiding van 2 minuten](https://phlppgdfry.github.io/construction-digital-transformation/demo/?tour)** · **[Start hier (5 min)](START-HERE.md)** · **[Bewijs per vaardigheid](EVIDENCE.md)** · **[Case study](CASE_STUDY.md)**
+**[Live site](https://phlppgdfry.github.io/construction-digital-transformation/)** · **[Werfportaal-demo met rondleiding van 2 minuten](https://phlppgdfry.github.io/construction-digital-transformation/demo/?tour)** · **[Start hier (5 min)](START-HERE.md)** · **[Bewijs per vaardigheid](EVIDENCE.md)** · **[Case study](CASE_STUDY.md)** · **[Backlog (GitHub Project)](https://github.com/users/phlppgdfry/projects/8)**
 
 ## De drie cases
 
