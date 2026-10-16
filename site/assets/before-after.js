@@ -23,6 +23,10 @@
   const set = (p) => {
     pos = Math.max(0, Math.min(100, p));
     root.style.setProperty("--pos", `${pos}%`);
+    // near an edge the side labels would sit on top of the content: hide them, and keep the knob inside the frame
+    root.classList.toggle("ba-edge", pos < 14 || pos > 86);
+    const w = root.clientWidth, x = (pos / 100) * w, r = 30;
+    root.style.setProperty("--knob-x", `${Math.max(0, r - x) - Math.max(0, x - (w - r))}px`);
     range.value = String(Math.round(pos));
     range.setAttribute("aria-valuetext", pos > 60 ? "vooral vandaag" : pos < 40 ? "vooral straks" : "half vandaag, half straks");
   };

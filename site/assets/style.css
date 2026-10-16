@@ -231,3 +231,6 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .ba-after .ba-top { flex-direction: row-reverse; }
 .ba-delta tbody th { background: none; color: var(--navy); text-transform: none; letter-spacing: 0; font-size: 15px; font-weight: 600; font-family: var(--body); }
 .ba-delta thead th { background: var(--grey-2); }
+.ba-side { transition: opacity .2s; }
+.ba.ba-edge .ba-side { opacity: 0; }
+.ba-knob { left: var(--knob-x, 0px); }
