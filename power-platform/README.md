@@ -13,7 +13,7 @@ De drie cases draaien niet alleen als ontwerp en browserdemo. Ze zijn ook **gebo
 | Model-driven app | **Halverdijk Backoffice**: weegbonnen, schadeclaims met tijdlijn, aanvragen met lijnen en outbox, ERP-sandbox | [App openen](https://halverdijkdev.crm17.dynamics.com/main.aspx?appid=fb7afac1-35c9-f111-a05c-6045bd29a82d) |
 | Power Automate | 7 cloud flows, allemaal aan | [Flows](https://make.powerautomate.com/environments/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/flows) |
 | Approvals | goedkeuringen voor schadeclaims (DT-02) en materiaalaanvragen (DT-03) | [Ontvangen goedkeuringen](https://make.powerautomate.com/environments/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/approvals/received) |
-| Werfapp | Power Apps **code app** (React + gegenereerde Dataverse-services), [broncode](werfapp/) | [App openen](https://apps.powerapps.com/play/e/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/app/860ecef4-4d59-4b2d-931a-415a252f2780): gepubliceerd; afspelen vraagt een Power Apps Premium- of Developer Plan-licentie |
+| Werfapp | Power Apps **code app** (React + gegenereerde Dataverse-services), [broncode](werfapp/) | [App openen](https://apps.powerapps.com/play/e/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/app/860ecef4-4d59-4b2d-931a-415a252f2780) |
 
 ## De zeven flows
 
@@ -54,7 +54,8 @@ Details per rij: [VERIFICATION.md](VERIFICATION.md).
 | ![Gaslek-dossier](screenshots/09-app-schadeclaim-gaslek.jpg) Gaslek: kritiek, vijf partijen verwittigd, DT-02-keten | ![Tijdlijn](screenshots/10-app-schadeclaim-tijdlijn.jpg) Tijdlijn (audit) van het dossier |
 | ![Materiaalaanvragen](screenshots/11-app-materiaalaanvragen.jpg) Aanvragen met DT-03-route, regel en budgetcontrole | ![Toewijzing](screenshots/12-app-aanvraaglijnen-toewijzing.jpg) Toewijzing per depot, dichtste eerst |
 | ![Outbox tijdens storing](screenshots/13-app-outbox-tijdens-storing.jpg) Outbox tijdens de storing: 2 pogingen, 503 | ![Outbox na herstel](screenshots/14-app-outbox-na-herstel.jpg) Na het herstel: verzonden in poging 3 |
-| ![Approvals](screenshots/15-approvals-ontvangen.jpg) Echte goedkeuringsaanvragen in Power Automate (en Teams/Outlook) | |
+| ![Approvals](screenshots/15-approvals-ontvangen.jpg) Echte goedkeuringsaanvragen in Power Automate (en Teams/Outlook) | ![Werfapp mijn status](screenshots/18-werfapp-mijn-status.jpg) Werfapp (code app): status van claims en aanvragen, live uit Dataverse |
+| ![Werfapp schade melden](screenshots/16-werfapp-schade-melden.jpg) Werfapp: schade melden, validatie uit dezelfde regelmotor als de tests | ![Werfapp materiaal](screenshots/17-werfapp-materiaal.jpg) Werfapp: materiaal aanvragen met beschikbaarheid en verwachte route |
 
 ## Opnieuw opbouwen (in een eigen ontwikkelomgeving)
 
@@ -84,7 +85,7 @@ Of importeer [`solution/release/HalverdijkTransformatie_managed.zip`](solution/r
 | Onderdeel | Status |
 |---|---|
 | Dataverse, model-driven app, 7 flows, Approvals | gebouwd, aan, geverifieerd |
-| Werfapp (code app) | code apps staan aan in de omgeving; de app is **gepubliceerd** in de solution. Afspelen vereist een Power Apps-licentie voor de gebruiker (gratis Power Apps Developer Plan of Premium); die moet de eigenaar van het account zelf activeren. |
+| Werfapp (code app) | gepubliceerd en werkend: leest werven, artikels, voorraad, claims en aanvragen live uit Dataverse. Vereist een Power Apps-licentie per gebruiker; hier het gratis **Power Apps Developer Plan**. Code apps zitten (nog) niet in de Dataverse-solution-export: de broncode staat in [`werfapp/`](werfapp/) en wordt uitgerold met `pac code push` |
 
 ## Eerlijke grenzen
 
