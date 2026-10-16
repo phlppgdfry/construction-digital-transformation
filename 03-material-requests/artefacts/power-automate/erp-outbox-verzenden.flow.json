@@ -1,5 +1,6 @@
 {
   "name": "HV-MA-02 ERP-outbox verzenden (retry + dead-letter)",
+  "status": "Ontwerp (HTTP naar de ERP-facade, tijdelijke en definitieve fouten). Gebouwd en draaiend: power-platform/flows/HV-MA-02.md.",
   "description": "Elke minuut: berichten in hv_outbox met status 'Wachtend' en volgende poging ≤ nu worden naar de ERP-facade gestuurd. 2xx → 'Verzonden'. 503/429/timeout → poging +1 en volgende poging na 1, 5, 15, 60 en 240 minuten. Na de laatste poging → 'Dead-letter' + ticket functioneel beheer. 4xx (behalve 429) → meteen 'Dead-letter', want opnieuw proberen helpt niet. Referentie: deliverOutbox() in src/materials.mjs.",
   "properties": {
     "connectionReferences": {

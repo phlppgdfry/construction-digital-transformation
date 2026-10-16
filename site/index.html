@@ -169,7 +169,29 @@
         <figure class="figure"><img style="width:100%" src="assets/pp/13-app-outbox-tijdens-storing.jpg" alt="ERP-outbox tijdens een storing met 503 en geplande nieuwe poging"><figcaption>ERP-storing: retry met 503, daarna precies één boeking.</figcaption></figure>
         <figure class="figure"><img style="width:100%" src="assets/pp/18-werfapp-mijn-status.jpg" alt="Werfapp als Power Apps code app met status van claims en aanvragen"><figcaption>Werfapp (Power Apps code app): status live uit Dataverse.</figcaption></figure>
       </div>
-      <div class="cta-row" style="margin-top:18px"><a class="btn" href="https://github.com/phlppgdfry/construction-digital-transformation/tree/main/power-platform">Solution, scripts en verificatie</a></div>
+      <h3 id="flows" style="margin-top:34px">De zeven flows, elk uitgelegd</h3>
+      <p class="measure">Elke flow heeft een spec in gewone taal: doel, trigger, wat hij leest en schrijft, stappen met een diagram, beslisregels, foutafhandeling, bewijs met een echte run, en het verschil met het doelontwerp. De technische stappenlijst onderaan elke spec wordt bij elke build uit de code gegenereerd, zodat de uitleg niet kan afwijken van wat draait.</p>
+      <div class="table-wrap" style="margin-top:14px">
+        <table>
+          <thead><tr><th>Flow</th><th>Case</th><th>Start wanneer</th><th>Wat hij doet</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><b>HV-DI-01</b> Weegbon controleren en boeken</td><td>01</td><td>weegbon toegevoegd</td><td>elf regels; automatisch boeken of naar nazicht, escalatie of dubbel</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-DI-01.md">spec</a></td></tr>
+            <tr><td><b>HV-DI-02</b> Weegbon na nazicht boeken</td><td>01</td><td>status → Goedgekeurd</td><td>servercontrole op dubbel en geweigerd materiaal, dan de gecorrigeerde waarden boeken</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-DI-02.md">spec</a></td></tr>
+            <tr><td><b>HV-CL-01</b> Schadeclaim intake en triage</td><td>02</td><td>claim gemeld</td><td>ernst, eigenaar, DT-02-keten, deadlines, verwittigingen, tijdlijn</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-CL-01.md">spec</a></td></tr>
+            <tr><td><b>HV-CL-02</b> Schadeclaim goedkeuringsketen</td><td>02</td><td>status → Ter goedkeuring</td><td>Approvals per niveau; één afwijzing stopt de keten</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-CL-02.md">spec</a></td></tr>
+            <tr><td><b>HV-CL-03</b> SLA-bewaking</td><td>02</td><td>elk uur</td><td>te late beoordelingen escaleren</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-CL-03.md">spec</a></td></tr>
+            <tr><td><b>HV-MA-01</b> Materiaalaanvraag verwerken</td><td>03</td><td>status → Ingediend</td><td>dichtste depot eerst, budget, DT-03, goedkeuring, berichten in de outbox</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-MA-01.md">spec</a></td></tr>
+            <tr><td><b>HV-MA-02</b> ERP-outbox verzenden</td><td>03</td><td>elke 5 minuten</td><td>naar het ERP met retry 1-5-15-60-240 min en dead-letter</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-MA-02.md">spec</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="grid cards-3" style="margin-top:18px">
+        <figure class="figure"><img style="width:100%" src="assets/pp/24-flow-hv-di-02-run.jpg" alt="Run van HV-DI-02 met een keuze in drie gevallen: dubbel, geweigerd, boeken"><figcaption>HV-DI-02: de server controleert opnieuw, wat de app ook stuurde.</figcaption></figure>
+        <figure class="figure"><img style="width:100%" src="assets/pp/25-flow-hv-cl-01-run.jpg" alt="Run van HV-CL-01: werf en ernst parallel, dan dossier en tijdlijn"><figcaption>HV-CL-01: van melding naar dossier met tijdlijn.</figcaption></figure>
+        <figure class="figure"><img style="width:100%" src="assets/pp/29-flow-hv-ma-02-run-storing.jpg" alt="Run van HV-MA-02 tijdens een ERP-storing: de tak niet bereikbaar plant een nieuwe poging"><figcaption>HV-MA-02 tijdens de storing: nieuwe poging gepland, geen boeking.</figcaption></figure>
+      </div>
+      <p class="measure" style="margin-top:14px">De drie apps hebben elk een eigen spec: de <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/apps/werfapp.md">werfapp</a>, <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/apps/weegbon-nakijken.md">Weegbon Nakijken</a> en de <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/apps/backoffice.md">backoffice-app</a>.</p>
+      <div class="cta-row" style="margin-top:18px"><a class="btn" href="https://github.com/phlppgdfry/construction-digital-transformation/tree/main/power-platform">Solution, scripts en verificatie</a><a class="btn ghost" href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/README.md">De zeven flows</a></div>
     </div>
   </section>
 

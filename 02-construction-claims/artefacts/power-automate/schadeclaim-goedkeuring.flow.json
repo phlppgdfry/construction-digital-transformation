@@ -1,5 +1,6 @@
 {
   "name": "HV-CL-02 Schadeclaim goedkeuringsketen",
+  "status": "Ontwerp. Gebouwd en draaiend: power-platform/flows/HV-CL-02.md.",
   "description": "Start wanneer de beoordelaar de claim op 'Ter goedkeuring' zet. Loopt de keten uit hv_goedkeuringsketen niveau per niveau af met Approvals (Teams/Outlook). Eén afwijzing stopt de keten. Elke beslissing komt in de tijdlijn (audit). Referentie: transition() in src/claims.mjs.",
   "properties": {
     "connectionReferences": {

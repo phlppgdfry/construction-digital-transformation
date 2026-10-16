@@ -36,12 +36,14 @@ sequenceDiagram
 
 ## Artefacten
 
+> **Ontwerp en gebouwd.** De flowbestanden hieronder zijn het doelontwerp, met postvak, Document Intelligence en een echte ERP-API. Wat echt draait in de ontwikkelomgeving staat per flow beschreven, in gewone taal en met bewijs: [HV-DI-01 Weegbon controleren en boeken](../power-platform/flows/HV-DI-01.md) en [HV-DI-02 Weegbon na nazicht boeken](../power-platform/flows/HV-DI-02.md). Overzicht: [de zeven flows](../power-platform/flows/README.md).
+
 | Artefact | Wat het toont |
 |---|---|
 | [extraction-schema.json](artefacts/extraction-schema.json) | contract tussen extractie en regels: elf velden, elk met waarde en confidence |
 | [sample-extraction.json](artefacts/sample-extraction.json) | echte uitvoer voor DOC-006 (de zelfverzekerde leesfout) |
-| [weegbon-verwerken.flow.json](artefacts/power-automate/weegbon-verwerken.flow.json) | hoofdflow: trigger op postvak, DI-aanroep met polling, child flow, switch op beslissing, try/catch |
-| [weegbon-controleren.childflow.json](artefacts/power-automate/weegbon-controleren.childflow.json) | de regels als child flow met drempels uit omgevingsvariabelen |
+| [weegbon-verwerken.flow.json](artefacts/power-automate/weegbon-verwerken.flow.json) | ontwerp hoofdflow: trigger op postvak, DI-aanroep met polling, child flow, switch op beslissing, try/catch |
+| [weegbon-controleren.childflow.json](artefacts/power-automate/weegbon-controleren.childflow.json) | ontwerp: de regels als child flow met drempels uit omgevingsvariabelen (gebouwd: in HV-DI-01) |
 | [controles.fx](artefacts/power-fx/controles.fx) + [RESULTS.md](artefacts/power-fx/RESULTS.md) | R02/R03/R11 in Power Fx, uitgevoerd met de echte engine, 6/6 gelijk aan de JS-motor |
 | [review-app.pa.yaml](artefacts/power-apps/review-app.pa.yaml) | review-app als Power Apps-broncode |
 | [dataverse.json](artefacts/dataverse.json) | tabellen, sleutels, security roles |

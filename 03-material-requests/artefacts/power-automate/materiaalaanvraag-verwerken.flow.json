@@ -1,5 +1,6 @@
 {
   "name": "HV-MA-01 Materiaalaanvraag verwerken",
+  "status": "Ontwerp (voorraad via de ERP-facade). Gebouwd en draaiend: power-platform/flows/HV-MA-01.md.",
   "description": "Start bij een nieuwe aanvraag uit de app. Vraagt voorraad en budget op via de ERP-facade, past beslistabel DT-03 toe, vraagt zo nodig goedkeuring en zet de ERP-berichten in de outbox (hv_outbox). Versturen zelf doet HV-MA-02, zodat een ERP-storing de aanvraag niet blokkeert. Referentie-implementatie: evaluate() en approvalRoute() in src/materials.mjs.",
   "properties": {
     "connectionReferences": {

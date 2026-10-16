@@ -1,5 +1,6 @@
 {
   "name": "HV-CL-01 Schadeclaim intake en triage",
+  "status": "Ontwerp (doelarchitectuur met Teams-kaart en conceptmail). Gebouwd en draaiend: power-platform/flows/HV-CL-01.md.",
   "description": "Start wanneer de werfapp een schadeclaim aanmaakt (ook na offline synchronisatie). Valideert opnieuw op de server, kent dossiernummer, ernst, eigenaar, goedkeuringsketen (DT-02) en deadlines toe, verwittigt betrokkenen en maakt bij verzekerde schade het aangifteconcept. Referentie-implementatie: src/claims.mjs (triage, createClaim).",
   "properties": {
     "connectionReferences": {

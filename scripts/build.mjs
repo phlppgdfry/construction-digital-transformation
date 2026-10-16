@@ -2,7 +2,8 @@
 //  1. BPMN 2.0 XML + SVG per process model      → <case>/bpmn/*.bpmn|svg and site/assets/bpmn/
 //  2. all KPI and business-case numbers         → site/data/facts.json + site/data/model.json
 //  3. the shared engines and datasets           → site/assets/lib/ and site/data/
-//  4. every <!--n:key-->…<!--/n--> marker in Markdown and HTML gets the current value.
+//  4. every <!--n:key-->…<!--/n--> marker in Markdown and HTML gets the current value, and every
+//     <!--actions:HV-XX-NN-->…<!--/actions--> marker the step list of that Power Automate flow.
 // CI runs this and fails if the working tree changes (a document drifted from the model).
 import { readFileSync, writeFileSync, readdirSync, mkdirSync, copyFileSync, statSync } from "node:fs";
 import { join, dirname, relative } from "node:path";
@@ -10,6 +11,8 @@ import { fileURLToPath } from "node:url";
 import { toXml, toSvg } from "./bpmn.mjs";
 import { compute, NOW } from "../src/metrics.mjs";
 import { RULES } from "../src/documents.mjs";
+import { FLOWS } from "../power-platform/flows/definitions.mjs";
+import { describeFlow } from "../power-platform/flows/describe.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const j = (p) => JSON.parse(readFileSync(join(ROOT, p), "utf8"));
@@ -53,6 +56,11 @@ for (const f of ["master-data.json", "documents.json", "claims-history.json", "r
 const ruleTable = ["| Regel | Controle | Bij falen | Waarom |", "|---|---|---|---|", ...RULES.map((r) => `| ${r.id} | ${r.title} | ${{ review: "nazicht door administratie", block: "escalatie milieucoördinator", reject: "weigeren als dubbel" }[r.severity]} | ${r.why} |`)].join("\n");
 const fired = ["| Regel | Afgegaan op testset |", "|---|---|", ...RULES.map((r) => `| ${r.id} ${r.title} | ${model.case01.rulesFired[r.id]} |`)].join("\n");
 
+// generated step list per Power Automate flow (between markers <!--actions:HV-XX-NN-->…<!--/actions-->)
+const pp = j("power-platform/model.json");
+const sets = Object.fromEntries(pp.tables.map((t) => [t.name, `${t.name}s`]));
+const flowSteps = Object.fromEntries(FLOWS.map((f) => [f.name.slice(0, 8), describeFlow(f.build(sets), pp.tables)]));
+
 // 4. markers
 const SKIP = new Set(["node_modules", ".git", "lib", "data"]);
 function* files(dir) {
@@ -73,6 +81,10 @@ for (const p of files(ROOT)) {
   });
   after = after.replace(/<!--rules:c1-->[\s\S]*?<!--\/rules-->/g, `<!--rules:c1-->\n${ruleTable}\n<!--/rules-->`);
   after = after.replace(/<!--fired:c1-->[\s\S]*?<!--\/fired-->/g, `<!--fired:c1-->\n${fired}\n<!--/fired-->`);
+  after = after.replace(/<!--actions:(HV-[A-Z]{2}-\d{2})-->[\s\S]*?<!--\/actions-->/g, (_m, id) => {
+    if (!(id in flowSteps)) { unknown.push(`${relative(ROOT, p)}: flow ${id}`); return _m; }
+    return `<!--actions:${id}-->\n${flowSteps[id]}\n<!--/actions-->`;
+  });
   if (after !== before) { writeFileSync(p, after); touched += 1; }
 }
 if (unknown.length) {

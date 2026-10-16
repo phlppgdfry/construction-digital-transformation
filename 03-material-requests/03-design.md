@@ -31,7 +31,7 @@ Eerste passende rij wint.
 
 Spoed verandert de goedkeuring niet. Wel wordt transportplanning meteen verwittigd, en de reden wordt bijgehouden.
 
-Getest in drie lagen: [`approvalRoute()`](../src/materials.mjs), [dt-03-route.fx](artefacts/power-fx/dt-03-route.fx) ([8/8 gelijk in de echte Power Fx-engine](artefacts/power-fx/RESULTS.md)) en de actie `Route_DT03` in [de flow](artefacts/power-automate/materiaalaanvraag-verwerken.flow.json).
+Getest in drie lagen: [`approvalRoute()`](../src/materials.mjs), [dt-03-route.fx](artefacts/power-fx/dt-03-route.fx) ([8/8 gelijk in de echte Power Fx-engine](artefacts/power-fx/RESULTS.md)) en de actie `Route_DT03` in [de ontwerpflow](artefacts/power-automate/materiaalaanvraag-verwerken.flow.json). De gebouwde flow [HV-MA-01](../power-platform/flows/HV-MA-01.md) past dezelfde tabel toe, 4/4 gelijk in de [verificatie](../power-platform/VERIFICATION.md).
 
 ## Statusmodel
 

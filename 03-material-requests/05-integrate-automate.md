@@ -69,10 +69,12 @@ De outbox is getest: herstel na 20 minuten, dead-letter na de laatste poging, en
 
 ## Artefacten
 
+> **Ontwerp en gebouwd.** De flowbestanden hieronder zijn het doelontwerp, met de ERP-facade. Wat echt draait in de ontwikkelomgeving staat per flow beschreven, in gewone taal en met bewijs: [HV-MA-01 Materiaalaanvraag verwerken](../power-platform/flows/HV-MA-01.md) en [HV-MA-02 ERP-outbox verzenden](../power-platform/flows/HV-MA-02.md). Overzicht: [de zeven flows](../power-platform/flows/README.md).
+
 | Artefact | Wat |
 |---|---|
-| [materiaalaanvraag-verwerken.flow.json](artefacts/power-automate/materiaalaanvraag-verwerken.flow.json) | budget, voorraad, toewijzing, DT-03, Approvals, outbox, planning |
-| [erp-outbox-verzenden.flow.json](artefacts/power-automate/erp-outbox-verzenden.flow.json) | outbox met retry-schema en dead-letter |
+| [materiaalaanvraag-verwerken.flow.json](artefacts/power-automate/materiaalaanvraag-verwerken.flow.json) | ontwerp: budget, voorraad, toewijzing, DT-03, Approvals, outbox, planning |
+| [erp-outbox-verzenden.flow.json](artefacts/power-automate/erp-outbox-verzenden.flow.json) | ontwerp: outbox met retry-schema en dead-letter |
 | [materiaalaanvraag.pa.yaml](artefacts/power-apps/materiaalaanvraag.pa.yaml) | werfapp-scherm met live voorraad, spoed en alternatieven |
 | [dataverse.json](artefacts/dataverse.json) | aanvraag, lijnen, outbox, custom APIs |
 | [dt-03-route.fx](artefacts/power-fx/dt-03-route.fx) | DT-03 in Power Fx |

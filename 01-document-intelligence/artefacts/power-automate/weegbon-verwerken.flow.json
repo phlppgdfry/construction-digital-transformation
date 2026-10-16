@@ -1,5 +1,6 @@
 {
   "name": "HV-DI-01 Weegbon verwerken",
+  "status": "Ontwerp (doelarchitectuur met postvak, Document Intelligence en ERP-API). Gebouwd en draaiend: power-platform/flows/HV-DI-01.md; na het nakijken: power-platform/flows/HV-DI-02.md.",
   "description": "Cloud flow (Power Automate). Haalt weegbonnen uit het gedeelde postvak, laat Azure AI Document Intelligence de velden lezen, roept de child flow met de elf controles aan en boekt, zet in nazicht, escaleert of weigert. Ontwerp-artefact: importeren vraagt eigen verbindingen en omgevingsvariabelen.",
   "properties": {
     "connectionReferences": {

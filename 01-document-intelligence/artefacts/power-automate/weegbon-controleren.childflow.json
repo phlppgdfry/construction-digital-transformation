@@ -1,5 +1,6 @@
 {
   "name": "HV-DI-02 Weegbon controleren (child flow)",
+  "status": "Ontwerp (child flow met de regels). In de gebouwde versie zitten alle elf regels in HV-DI-01: power-platform/flows/HV-DI-01.md. De gebouwde HV-DI-02 is een andere flow (boeken na nazicht): power-platform/flows/HV-DI-02.md.",
   "description": "Voert de elf controles R01–R11 uit op de extractie-uitvoer en geeft een beslissing terug. Drempels komen uit omgevingsvariabelen zodat de functioneel beheerder ze na de pilot kan herijken zonder de flow te wijzigen. De referentie-implementatie van de regels is src/documents.mjs (getest); deze flow is de Power Automate-vertaling.",
   "properties": {
     "connectionReferences": {

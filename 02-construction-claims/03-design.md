@@ -53,7 +53,8 @@ Plus: raming ≥ €15.000, schade aan derden of aan leidingen → **verzekering
 Implementaties die tegen dezelfde gevallen getest worden:
 - JavaScript: [`approvalChain()`](../src/claims.mjs), [tests](../tests/claims.test.mjs);
 - Power Fx: [dt-02-goedkeuringsketen.fx](artefacts/power-fx/dt-02-goedkeuringsketen.fx), [resultaat met de echte engine](artefacts/power-fx/RESULTS.md);
-- flow-expressie: actie `Goedkeuringsketen` in [schadeclaim-intake.flow.json](artefacts/power-automate/schadeclaim-intake.flow.json).
+- flow-expressie: actie `Goedkeuringsketen` in [schadeclaim-intake.flow.json](artefacts/power-automate/schadeclaim-intake.flow.json) (ontwerp);
+- de gebouwde flow [HV-CL-01](../power-platform/flows/HV-CL-01.md), 5/5 gelijk aan de motor in de [verificatie](../power-platform/VERIFICATION.md).
 
 ## Statusmodel
 

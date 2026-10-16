@@ -43,17 +43,29 @@ Er zijn twee apps: de **werfapp** voor de werf (case 02 en 03) en de **backoffic
 
 ## De zeven flows
 
-| Flow | Trigger | Wat hij doet | Case |
-|---|---|---|---|
-| HV-DI-01 Weegbon controleren en boeken | rij toegevoegd in Weegbonnen | elf regels R01–R11; automatisch boeken in de ERP-sandbox (idempotency-key = bonnummer) of nazicht / escalatie / dubbel | 01 |
-| HV-DI-02 Weegbon na nazicht boeken | status → Goedgekeurd | controleert opnieuw op dubbel en geweigerd materiaal (wat de app ook stuurde) en boekt de gecorrigeerde waarden idempotent | 01 |
-| HV-CL-01 Schadeclaim intake en triage | rij toegevoegd in Schadeclaims | ernst, eigenaar, DT-02-keten, SLA- en verzekeringsdeadline, verwittigingen, tijdlijn | 02 |
-| HV-CL-02 Schadeclaim goedkeuringsketen | status → Ter goedkeuring | Approvals per niveau; één afwijzing stopt de keten; elke beslissing in de tijdlijn | 02 |
-| HV-CL-03 SLA-bewaking | elk uur | te late beoordelingen escaleren | 02 |
-| HV-MA-01 Materiaalaanvraag verwerken | status → Ingediend | voorraad per depot (dichtste eerst), budget per categorie, DT-03, Approvals, ERP-berichten in de outbox | 03 |
-| HV-MA-02 ERP-outbox verzenden | elke 5 minuten | naar de ERP-sandbox met retry 1-5-15-60-240 min, dead-letter, reservatie in voorraad | 03 |
+| Flow | Trigger | Wat hij doet | Case | Spec |
+|---|---|---|---|---|
+| HV-DI-01 Weegbon controleren en boeken | rij toegevoegd in Weegbonnen | elf regels R01–R11; automatisch boeken in de ERP-sandbox (idempotency-key = bonnummer) of nazicht / escalatie / dubbel | 01 | [HV-DI-01](flows/HV-DI-01.md) |
+| HV-DI-02 Weegbon na nazicht boeken | status → Goedgekeurd | controleert opnieuw op dubbel en geweigerd materiaal (wat de app ook stuurde) en boekt de gecorrigeerde waarden idempotent | 01 | [HV-DI-02](flows/HV-DI-02.md) |
+| HV-CL-01 Schadeclaim intake en triage | rij toegevoegd in Schadeclaims | ernst, eigenaar, DT-02-keten, SLA- en verzekeringsdeadline, verwittigingen, tijdlijn | 02 | [HV-CL-01](flows/HV-CL-01.md) |
+| HV-CL-02 Schadeclaim goedkeuringsketen | status → Ter goedkeuring | Approvals per niveau; één afwijzing stopt de keten; elke beslissing in de tijdlijn | 02 | [HV-CL-02](flows/HV-CL-02.md) |
+| HV-CL-03 SLA-bewaking | elk uur | te late beoordelingen escaleren | 02 | [HV-CL-03](flows/HV-CL-03.md) |
+| HV-MA-01 Materiaalaanvraag verwerken | status → Ingediend | voorraad per depot (dichtste eerst), budget per categorie, DT-03, Approvals, ERP-berichten in de outbox | 03 | [HV-MA-01](flows/HV-MA-01.md) |
+| HV-MA-02 ERP-outbox verzenden | elke 5 minuten | naar de ERP-sandbox met retry 1-5-15-60-240 min, dead-letter, reservatie in voorraad | 03 | [HV-MA-02](flows/HV-MA-02.md) |
+
+Elke flow heeft een **spec in gewone taal**: doel, trigger, wat hij leest en schrijft, stappen met een diagram, beslisregels, foutafhandeling, configuratie, bewijs met een echte run, beheer, en het verschil met het doelontwerp. Onderaan elke spec staat de technische stappenlijst; die genereert `npm run build` uit de code, en CI faalt als ze niet meer klopt. Overzicht en afspraken: [flows/README.md](flows/README.md).
 
 De definities staan als code in [`flows/definitions.mjs`](flows/definitions.mjs) (reviewbaar en te diffen) en als export in [`solution/src/Workflows/`](solution/src/Workflows/). Drempels zijn **omgevingsvariabelen**: `hv_ConfidenceThreshold`, `hv_AutoApproveMax`, `hv_PlApproveMax`, `hv_InsurerThreshold` en de schakelaar `hv_ErpBeschikbaar` waarmee je een ERP-storing simuleert.
+
+## De drie apps
+
+| App | Voor wie | Spec |
+|---|---|---|
+| Werfapp (code app) | werfleiders: schade melden, materiaal aanvragen, status volgen | [apps/werfapp.md](apps/werfapp.md) |
+| Weegbon Nakijken (code app) | administratie en milieucoördinator: bonnen nakijken en corrigeren | [apps/weegbon-nakijken.md](apps/weegbon-nakijken.md) |
+| Halverdijk Backoffice (model-driven) | kantoor: alles opvolgen, beoordelen, stamgegevens | [apps/backoffice.md](apps/backoffice.md) |
+
+Elke app-spec beschrijft de schermen, welke tabellen de app leest en schrijft, de validaties en wie wat mag, welke flow er daarna start, en de grenzen.
 
 ## Bewezen: de echte flows beslissen hetzelfde als de geteste motor
 
@@ -84,7 +96,10 @@ Details per rij: [VERIFICATION.md](VERIFICATION.md).
 | ![Approvals](screenshots/15-approvals-ontvangen.jpg) Echte goedkeuringsaanvragen in Power Automate (en Teams/Outlook) | ![Werfapp mijn status](screenshots/18-werfapp-mijn-status.jpg) Werfapp (code app): status van claims en aanvragen, live uit Dataverse |
 | ![Nakijken wachtrij](screenshots/19-nakijken-wachtrij.jpg) Weegbon Nakijken: de wachtrij, met de regel per bon en rood na 4 uur | ![DOC-006 met scan](screenshots/20-nakijken-doc006-scan-r03.jpg) DOC-006: de scan toont 18350 kg, de AI las 13350; regel R03 en netto in het rood |
 | ![DOC-006 gecorrigeerd](screenshots/21-nakijken-doc006-gecorrigeerd.jpg) Na de correctie: groen, geen regel faalt meer, goedkeuren mogelijk | ![Asbest bij milieucoördinator](screenshots/22-nakijken-doc013-asbest-milieu.jpg) Asbest: alleen de milieucoördinator ziet de bon, en kan enkel weigeren |
-| ![DOC-006 geboekt](screenshots/23-backoffice-doc006-geboekt.jpg) Backoffice: DOC-006 geboekt met het gecorrigeerde gewicht | |
+| ![DOC-006 geboekt](screenshots/23-backoffice-doc006-geboekt.jpg) Backoffice: DOC-006 geboekt met het gecorrigeerde gewicht | ![Run HV-DI-02](screenshots/24-flow-hv-di-02-run.jpg) HV-DI-02: de servercontrole met drie gevallen (dubbel, geweigerd, boeken) |
+| ![Run HV-CL-01](screenshots/25-flow-hv-cl-01-run.jpg) HV-CL-01: triage van een melding | ![Run HV-CL-02](screenshots/26-flow-hv-cl-02-run-wacht.jpg) HV-CL-02: wacht op de goedkeuring van niveau 1 |
+| ![Run HV-CL-03](screenshots/27-flow-hv-cl-03-run.jpg) HV-CL-03: uurlijkse controle, geen te late claims | ![Run HV-MA-01](screenshots/28-flow-hv-ma-01-run.jpg) HV-MA-01: vier opzoekingen parallel, daarna per lijn |
+| ![Run HV-MA-02](screenshots/29-flow-hv-ma-02-run-storing.jpg) HV-MA-02 tijdens de storing: tak "ERP niet bereikbaar" | |
 | ![Werfapp schade melden](screenshots/16-werfapp-schade-melden.jpg) Werfapp: schade melden, validatie uit dezelfde regelmotor als de tests | ![Werfapp materiaal](screenshots/17-werfapp-materiaal.jpg) Werfapp: materiaal aanvragen met beschikbaarheid en verwachte route |
 
 ## Opnieuw opbouwen (in een eigen ontwikkelomgeving)

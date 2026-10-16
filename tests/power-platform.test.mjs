@@ -44,6 +44,29 @@ for (const f of FLOWS) {
   });
 }
 
+test("every flow has a spec with a generated step list, and every spec belongs to a flow", () => {
+  const specs = readdirSync(new URL("../power-platform/flows/", import.meta.url)).filter((f) => /^HV-.*\.md$/.test(f));
+  assert.deepEqual(specs.map((f) => f.slice(0, 8)).sort(), FLOWS.map((f) => f.name.slice(0, 8)).sort());
+  for (const f of FLOWS) {
+    const id = f.name.slice(0, 8);
+    const md = text(`power-platform/flows/${id}.md`);
+    assert.match(md, new RegExp(`^# ${f.name}$`, "m"), `${id}.md title matches the flow name`);
+    assert.match(md, new RegExp(`<!--actions:${id}-->\\n\\*Gegenereerd[\\s\\S]+?<!--/actions-->`), `${id}.md has the generated step list (run npm run build)`);
+    for (const name of Object.keys(f.build(S).actions)) assert.ok(md.includes(`\`${name}\``), `${id}.md lists ${name}`);
+  }
+});
+
+test("the design flows in the cases point to the built flows", () => {
+  for (const dir of ["01-document-intelligence", "02-construction-claims", "03-material-requests"]) {
+    const base = new URL(`../${dir}/artefacts/power-automate/`, import.meta.url);
+    for (const f of readdirSync(base).filter((x) => x.endsWith(".json"))) {
+      const flow = json(`${dir}/artefacts/power-automate/${f}`);
+      assert.match(flow.status ?? "", /^Ontwerp/, `${f}: status`);
+      for (const m of flow.status.matchAll(/power-platform\/flows\/(HV-[A-Z]{2}-\d{2})\.md/g)) assert.ok(existsSync(new URL(`../power-platform/flows/${m[1]}.md`, import.meta.url)), m[1]);
+    }
+  }
+});
+
 test("the exported solution is in the repo, unpacked and as managed/unmanaged zip", () => {
   assert.ok(existsSync(new URL("../power-platform/solution/release/HalverdijkTransformatie_managed.zip", import.meta.url)));
   assert.ok(existsSync(new URL("../power-platform/solution/release/HalverdijkTransformatie_unmanaged.zip", import.meta.url)));

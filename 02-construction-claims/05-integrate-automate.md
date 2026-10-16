@@ -36,7 +36,9 @@ Conceptueel ontwerp, geen bevestiging van een bestaande architectuur. De echte i
 
 ## Flows
 
-| Flow | Trigger | Wat | Bestand |
+> **Ontwerp en gebouwd.** De bestanden in deze tabel zijn het doelontwerp (met Teams-kaart, conceptmail en herinnering na 5 dagen). Wat echt draait in de ontwikkelomgeving staat per flow beschreven, in gewone taal en met bewijs: [HV-CL-01](../power-platform/flows/HV-CL-01.md), [HV-CL-02](../power-platform/flows/HV-CL-02.md) en [HV-CL-03](../power-platform/flows/HV-CL-03.md). Overzicht: [de zeven flows](../power-platform/flows/README.md).
+
+| Flow | Trigger | Wat | Ontwerp |
 |---|---|---|---|
 | HV-CL-01 Intake en triage | Dataverse: claim aangemaakt (status Gemeld) | servervalidatie, ernst, DT-02-keten, SLA, deadlines, Teams-kaart, aangifteconcept | [schadeclaim-intake.flow.json](artefacts/power-automate/schadeclaim-intake.flow.json) |
 | HV-CL-02 Goedkeuringsketen | Dataverse: status → Ter goedkeuring | per niveau Approvals (Start and wait), tijdlijn, stoppen bij weigering, terug na 5 dagen | [schadeclaim-goedkeuring.flow.json](artefacts/power-automate/schadeclaim-goedkeuring.flow.json) |
