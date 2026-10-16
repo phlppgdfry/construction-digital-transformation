@@ -75,6 +75,14 @@ test("the exported solution is in the repo, unpacked and as managed/unmanaged zi
   assert.match(text("power-platform/solution/src/Other/Solution.xml"), /<UniqueName>HalverdijkTransformatie<\/UniqueName>/);
 });
 
+test("the KPI dashboard and its six charts are in the solution export", () => {
+  const src = new URL("../power-platform/solution/src/", import.meta.url);
+  assert.equal(readdirSync(new URL("Dashboards/", src)).filter((f) => f.endsWith(".xml")).length, 1);
+  const charts = readdirSync(new URL("Entities/", src)).flatMap((e) => { try { return readdirSync(new URL(`Entities/${e}/Visualizations/`, src)); } catch { return []; } });
+  assert.equal(charts.length, 6);
+  assert.match(text("power-platform/solution/src/AppModuleSiteMaps/hv_backoffice/AppModuleSiteMap.xml"), /pagetype=dashboard/);
+});
+
 test("VERIFICATION.md records identical results for all three cases", () => {
   const v = text("power-platform/VERIFICATION.md");
   assert.match(v, /\*\*30\/30 identiek\*\*/);

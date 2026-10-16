@@ -22,6 +22,7 @@
   <EntityRelationships />
   <OrganizationSettings />
   <optionsets />
+  <Dashboards />
   <CustomControls />
   <AppModuleSiteMaps />
   <AppModules />

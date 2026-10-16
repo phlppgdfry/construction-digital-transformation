@@ -7,20 +7,20 @@
     <FormActivationState>1</FormActivationState>
     <form>
       <tabs>
-        <tab verticallayout="true" id="{8dc5a6b5-9481-4ca7-b7c1-0241fd8acb96}" IsUserDefined="1">
+        <tab verticallayout="true" id="{ea415b9d-ccb2-4814-8494-0d76225d87fb}" IsUserDefined="1">
           <labels>
             <label description="Materiaalaanvraag" languagecode="1033" />
           </labels>
           <columns>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{a7ffc5d9-e056-4b20-afe2-f6af221f09af}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{98360d53-c1eb-41a3-8b4c-ba155c74ffa6}">
                   <labels>
                     <label description="Gegevens" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{f46847e1-8108-487d-b30f-79f3833579d0}">
+                      <cell id="{40b4872d-8129-4ae2-a5e5-1aaebe4b65e6}">
                         <labels>
                           <label description="Aanvraagnummer" languagecode="1033" />
                         </labels>
@@ -28,7 +28,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{f1986734-de82-4418-9a3c-920bc8a927f0}">
+                      <cell id="{2c5aad0a-ae81-43c8-962a-5c0c82226ae9}">
                         <labels>
                           <label description="Werf" languagecode="1033" />
                         </labels>
@@ -36,7 +36,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{db63beaa-44e4-4a68-be21-d544fd4238a9}">
+                      <cell id="{af6ffb2d-b82f-4c19-9ab1-48f6aeada0af}">
                         <labels>
                           <label description="Aanvrager" languagecode="1033" />
                         </labels>
@@ -44,7 +44,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{330512d7-ac1b-4f3c-8661-b4f55c7af166}">
+                      <cell id="{a8b7449d-b7fb-4727-ade3-11bb1c5f7837}">
                         <labels>
                           <label description="Leveren op" languagecode="1033" />
                         </labels>
@@ -52,7 +52,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{31d6a403-db99-4796-92e2-c9b04e42ec56}">
+                      <cell id="{adec5735-f6f8-4497-ab93-0cb163337678}">
                         <labels>
                           <label description="Spoed (&lt; 48 u)" languagecode="1033" />
                         </labels>
@@ -60,7 +60,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{833bff6e-1f41-4944-8db0-8589d2cca5e5}">
+                      <cell id="{ca0b53f0-9b2b-4213-be19-65d7f906e94d}">
                         <labels>
                           <label description="Spoedreden" languagecode="1033" />
                         </labels>
@@ -73,13 +73,13 @@
             </column>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{1e32b792-8de2-4a7c-93df-1db6fbafd7d0}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{36a89142-eaf9-4123-b2cd-fb7a86e5b747}">
                   <labels>
                     <label description="Details" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{a9e75a53-67d1-4f10-983a-cc9e1e15d375}">
+                      <cell id="{7bf71cf2-6200-4bb2-8e7e-fcb86f4b5987}">
                         <labels>
                           <label description="Status" languagecode="1033" />
                         </labels>
@@ -87,7 +87,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{cf8db149-17ed-468e-9bd4-465c7e6e6866}">
+                      <cell id="{c2fb685e-2dfa-4a69-9486-19434f24dec5}">
                         <labels>
                           <label description="Waarde (€)" languagecode="1033" />
                         </labels>
@@ -95,7 +95,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{65092486-6801-43c0-8dd5-b6700b6ee848}">
+                      <cell id="{0d507373-dcd5-48de-a9a1-e52a84c9df89}">
                         <labels>
                           <label description="Budget overschreden" languagecode="1033" />
                         </labels>
@@ -103,7 +103,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{ff4b8081-8923-42a6-963e-706c994a5b4e}">
+                      <cell id="{a2916309-a706-4c3e-9931-ab8c14e72d69}">
                         <labels>
                           <label description="Aankoop nodig" languagecode="1033" />
                         </labels>
@@ -111,7 +111,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{0e2e0713-0909-4d46-a624-39b0e0761e8a}">
+                      <cell id="{b5656d67-a4b5-4b42-8698-cc3ce68f7332}">
                         <labels>
                           <label description="Route (DT-03)" languagecode="1033" />
                         </labels>
@@ -119,7 +119,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{8c3b2837-f799-44db-89f5-df0b2b11cdfd}">
+                      <cell id="{71761dbb-87ea-4df1-9ff7-a3b3de9ee4e6}">
                         <labels>
                           <label description="Regel DT-03" languagecode="1033" />
                         </labels>
@@ -132,24 +132,24 @@
             </column>
           </columns>
         </tab>
-        <tab verticallayout="true" id="{a93e9f53-a916-47b3-94be-0f9b54f346b9}" IsUserDefined="1">
+        <tab verticallayout="true" id="{9ff35482-9567-45f2-9d79-4999da080ce8}" IsUserDefined="1">
           <labels>
             <label description="Gerelateerd" languagecode="1033" />
           </labels>
           <columns>
             <column width="100%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{becd85e6-d788-4d21-9f4f-48e6f5768476}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{c9d6be74-c26c-435c-b075-afb55d961eae}">
                   <labels>
                     <label description="Aanvraaglijnen en toewijzing" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{8024c8e1-a3e8-4e2e-97f8-9df8933db05a}" rowspan="6" colspan="1">
+                      <cell id="{82eb3543-80a5-485d-8ada-159e15766ca2}" rowspan="6" colspan="1">
                         <labels>
                           <label description="Aanvraaglijnen en toewijzing" languagecode="1033" />
                         </labels>
-                        <control id="sg_hv_aanvraaglijn" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true" uniqueid="{c1f07ce7-515e-4791-bb8a-a487f2bdf0ba}">
+                        <control id="sg_hv_aanvraaglijn" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true" uniqueid="{4cabc4e8-2553-451a-bb66-0ecdba87fef7}">
                           <parameters>
                             <RecordsPerPage>10</RecordsPerPage>
                             <AutoExpand>Fixed</AutoExpand>
@@ -174,17 +174,17 @@
                     <row />
                   </rows>
                 </section>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{ad9d2170-8f0e-4a9d-a4c1-fbfd4f809111}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{8301c4ad-618b-46c1-a0b3-226638f34cbb}">
                   <labels>
                     <label description="ERP-berichten (outbox)" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{8b5cca51-45e4-41ce-bc8b-14c9a41c1d16}" rowspan="6" colspan="1">
+                      <cell id="{0f8fd190-04d8-4f13-b357-64e21769c17e}" rowspan="6" colspan="1">
                         <labels>
                           <label description="ERP-berichten (outbox)" languagecode="1033" />
                         </labels>
-                        <control id="sg_hv_outbox" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true" uniqueid="{182a9b1b-24ed-4c2f-88ae-1e3b7a7c6a43}">
+                        <control id="sg_hv_outbox" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true" uniqueid="{681c98c3-bc49-4df8-a5df-b8ae25f8f50d}">
                           <parameters>
                             <RecordsPerPage>10</RecordsPerPage>
                             <AutoExpand>Fixed</AutoExpand>

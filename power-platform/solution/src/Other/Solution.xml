@@ -108,6 +108,7 @@
       <RootComponent type="29" id="{ee33fa78-32c9-f111-a05c-6045bd29a82d}" behavior="0" />
       <RootComponent type="431" schemaName="hv_document hv_bestand" behavior="0" />
       <RootComponent type="432" schemaName="hv_document" behavior="0" />
+      <RootComponent type="60" id="{35b6719f-6ec9-f111-a05c-6045bd29a82d}" behavior="0" />
       <RootComponent type="62" schemaName="hv_backoffice" behavior="0" />
       <RootComponent type="80" schemaName="hv_HalverdijkBackoffice" behavior="0" />
     </RootComponents>

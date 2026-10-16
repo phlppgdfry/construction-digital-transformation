@@ -27,6 +27,13 @@
     <AppModuleComponent type="1" schemaName="entity" />
     <AppModuleComponent type="1" schemaName="entity" />
     <AppModuleComponent type="1" schemaName="entity" />
+    <AppModuleComponent type="59" id="{f90b7093-6ec9-f111-a05c-6045bd29a82d}" />
+    <AppModuleComponent type="59" id="{fc0b7093-6ec9-f111-a05c-6045bd29a82d}" />
+    <AppModuleComponent type="59" id="{ff0b7093-6ec9-f111-a05c-6045bd29a82d}" />
+    <AppModuleComponent type="59" id="{020c7093-6ec9-f111-a05c-6045bd29a82d}" />
+    <AppModuleComponent type="59" id="{050c7093-6ec9-f111-a05c-6045bd29a82d}" />
+    <AppModuleComponent type="59" id="{080c7093-6ec9-f111-a05c-6045bd29a82d}" />
+    <AppModuleComponent type="60" id="{35b6719f-6ec9-f111-a05c-6045bd29a82d}" />
     <AppModuleComponent type="62" schemaName="hv_backoffice" />
   </AppModuleComponents>
   <AppModuleRoleMaps>

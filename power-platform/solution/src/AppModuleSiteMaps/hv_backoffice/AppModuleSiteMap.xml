@@ -6,6 +6,21 @@
   <ShowPinned>True</ShowPinned>
   <ShowRecents>True</ShowRecents>
   <SiteMap IntroducedVersion="7.0.0.0">
+    <Area Id="hv_area_overzicht" ShowGroups="true">
+      <Titles>
+        <Title LCID="1033" Title="Overzicht" />
+      </Titles>
+      <Group Id="hv_area_overzicht_g0" IsProfile="false">
+        <Titles>
+          <Title LCID="1033" Title="KPI's" />
+        </Titles>
+        <SubArea Id="hv_dashboard" Url="/main.aspx?pagetype=dashboard&amp;id=35b6719f-6ec9-f111-a05c-6045bd29a82d&amp;type=system" DefaultDashboard="35b6719f-6ec9-f111-a05c-6045bd29a82d">
+          <Titles>
+            <Title LCID="1033" Title="KPI-dashboard" />
+          </Titles>
+        </SubArea>
+      </Group>
+    </Area>
     <Area Id="hv_area_c1" ShowGroups="true">
       <Titles>
         <Title LCID="1033" Title="01 Weegbonnen" />

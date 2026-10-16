@@ -7,20 +7,20 @@
     <FormActivationState>1</FormActivationState>
     <form>
       <tabs>
-        <tab verticallayout="true" id="{3a4ce524-72c8-4248-a9be-94b29ff0f72d}" IsUserDefined="1">
+        <tab verticallayout="true" id="{1100051c-354c-4edd-a13b-25657df90762}" IsUserDefined="1">
           <labels>
             <label description="Weegbon" languagecode="1033" />
           </labels>
           <columns>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{98060af0-0da5-4928-9d0e-c81eae114e9f}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{c059f2b2-88e8-451b-86a4-9dc79631afd1}">
                   <labels>
                     <label description="Gegevens" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{d5706f90-fdfd-4374-965b-3a507e19aa20}">
+                      <cell id="{032c0a7c-9bd0-4f82-af54-bfea29edecf6}">
                         <labels>
                           <label description="Documentnummer" languagecode="1033" />
                         </labels>
@@ -28,7 +28,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{95650c1b-8ad8-4d51-83b4-6c53e1c2586c}">
+                      <cell id="{53fc356c-71d9-4da2-a2ef-b3b471f6cf88}">
                         <labels>
                           <label description="Kanaal" languagecode="1033" />
                         </labels>
@@ -36,7 +36,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{da98be07-c171-45d6-83cb-78a6d5b70874}">
+                      <cell id="{d1fed8b7-7061-4c66-a190-420bf3adfd1d}">
                         <labels>
                           <label description="Ontvangen" languagecode="1033" />
                         </labels>
@@ -44,7 +44,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{098d2509-85ab-4154-887d-6a3851a41bf2}">
+                      <cell id="{bae0206e-89ce-4c41-85a9-390f075e2810}">
                         <labels>
                           <label description="Bonnummer" languagecode="1033" />
                         </labels>
@@ -52,7 +52,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{a80512ac-38aa-4f2a-96b3-e8d4799b9ad8}">
+                      <cell id="{8768fd89-5edf-4974-867a-45c7eb89c01a}">
                         <labels>
                           <label description="Datum bon" languagecode="1033" />
                         </labels>
@@ -60,7 +60,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{9232bf84-2fcf-4b17-b5f9-e5e7440b1d85}">
+                      <cell id="{c02494a4-8fdc-45f9-bd44-882dee7852d6}">
                         <labels>
                           <label description="Nummerplaat" languagecode="1033" />
                         </labels>
@@ -68,7 +68,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{6e619541-819a-4d43-a9aa-7cbfefdb8bef}">
+                      <cell id="{0f68b4ed-789b-4f5e-9167-63f392827e9f}">
                         <labels>
                           <label description="Klantnummer" languagecode="1033" />
                         </labels>
@@ -76,7 +76,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{f91d7b68-fb31-4ab9-a685-fa867f684b12}">
+                      <cell id="{c558504a-297b-4187-ad7c-2314154e9884}">
                         <labels>
                           <label description="Richting" languagecode="1033" />
                         </labels>
@@ -84,7 +84,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{6a32e893-1216-4ecc-9b32-e9972ee7cb9c}">
+                      <cell id="{f0962ca5-d00d-4392-a4b7-526ad57caf13}">
                         <labels>
                           <label description="Materiaal (code)" languagecode="1033" />
                         </labels>
@@ -92,7 +92,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{3521c2de-a5d7-4407-96cd-cb32e7b4bda1}">
+                      <cell id="{5d8a83d9-4ef1-4195-b0e0-cb48be5e86f2}">
                         <labels>
                           <label description="Bruto (kg)" languagecode="1033" />
                         </labels>
@@ -100,11 +100,27 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{57514c8d-5ff3-43ff-8e5b-b262b5d3dd0c}">
+                      <cell id="{7e960d01-f564-4d56-bf92-b281da5011a4}">
                         <labels>
                           <label description="Tarra (kg)" languagecode="1033" />
                         </labels>
                         <control id="hv_tarra" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="hv_tarra" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{7a029b51-80d7-4df4-bc21-bfed9e7c1d04}">
+                        <labels>
+                          <label description="Netto (kg)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_netto" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="hv_netto" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{e419fa33-234a-49c7-a7e9-d8881d162d52}">
+                        <labels>
+                          <label description="ID-formulier" languagecode="1033" />
+                        </labels>
+                        <control id="hv_idformulier" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_idformulier" />
                       </cell>
                     </row>
                   </rows>
@@ -113,29 +129,13 @@
             </column>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{1fb850d3-4359-43bc-96ab-62d58dd4516a}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{839d9d22-b2a9-4283-9502-5b096f5376b6}">
                   <labels>
                     <label description="Details" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{7ac24d2b-098c-4d6d-96c6-3c5a66b8a08d}">
-                        <labels>
-                          <label description="Netto (kg)" languagecode="1033" />
-                        </labels>
-                        <control id="hv_netto" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="hv_netto" />
-                      </cell>
-                    </row>
-                    <row>
-                      <cell id="{bf1f30f1-3b5f-47d3-bd4a-9cf43c3053d0}">
-                        <labels>
-                          <label description="ID-formulier" languagecode="1033" />
-                        </labels>
-                        <control id="hv_idformulier" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_idformulier" />
-                      </cell>
-                    </row>
-                    <row>
-                      <cell id="{5e959124-763e-4e1f-80da-9a2d761038a6}">
+                      <cell id="{25ef42b9-e29b-4618-9c04-f789393e7d69}">
                         <labels>
                           <label description="Traceerbaarheidsreferentie" languagecode="1033" />
                         </labels>
@@ -143,7 +143,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{2f61687c-5727-4779-bd19-afeddf819589}">
+                      <cell id="{b54ce53a-914d-4731-96e7-730f880ad2b4}">
                         <labels>
                           <label description="Confidence per veld (JSON)" languagecode="1033" />
                         </labels>
@@ -151,7 +151,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{27e5bc7d-4ba2-43fc-b332-045a6ef32b0d}">
+                      <cell id="{31ed65d7-2d75-4b8f-9960-c72a3909df94}">
                         <labels>
                           <label description="Laagste confidence" languagecode="1033" />
                         </labels>
@@ -159,7 +159,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{310598bd-25a1-4e39-912b-59fd010a7cfa}">
+                      <cell id="{8bb66eff-8814-414a-98c6-499ca8ff1f7d}">
                         <labels>
                           <label description="Beslissing regels" languagecode="1033" />
                         </labels>
@@ -167,7 +167,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{81b18a2e-5e58-43c2-860a-18f0b3acb1bb}">
+                      <cell id="{1396e704-df31-462c-b998-834e14b6b71c}">
                         <labels>
                           <label description="Bevindingen (regels)" languagecode="1033" />
                         </labels>
@@ -175,7 +175,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{2eb23939-8e1c-4638-a0e0-3a90cfac2865}">
+                      <cell id="{1bd72d0a-e6ae-43a5-a5ff-cde51fdb7581}">
                         <labels>
                           <label description="Status" languagecode="1033" />
                         </labels>
@@ -183,7 +183,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{62509f87-629e-48c1-aa09-4d68f50276ec}">
+                      <cell id="{bdbc41bc-51e5-4cf6-9465-e41f19d79f76}">
                         <labels>
                           <label description="Reviewer" languagecode="1033" />
                         </labels>
@@ -191,7 +191,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{b4e49a19-bbe5-44be-bb84-4439a24609b5}">
+                      <cell id="{8561ba40-01ca-43a0-aee7-539c2ce7bd53}">
                         <labels>
                           <label description="ERP-referentie" languagecode="1033" />
                         </labels>
@@ -199,11 +199,35 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{61bc9d40-390d-4fc7-b90e-9d3961f353f7}">
+                      <cell id="{84117d52-f006-4a2b-a55b-4d07f4c956b8}">
                         <labels>
                           <label description="Testscenario (demo)" languagecode="1033" />
                         </labels>
                         <control id="hv_scenario" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_scenario" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c1485f52-3576-4b7d-9113-d000ebefc37e}">
+                        <labels>
+                          <label description="Correcties (audit)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_correcties" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="hv_correcties" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{d8171dfa-cf6d-40cc-a406-012d08f2a9d4}">
+                        <labels>
+                          <label description="Gereviewd op" languagecode="1033" />
+                        </labels>
+                        <control id="hv_gereviewdop" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="hv_gereviewdop" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{76e1ce04-0a1e-4244-ae84-6279b3adc256}">
+                        <labels>
+                          <label description="Opmerking reviewer" languagecode="1033" />
+                        </labels>
+                        <control id="hv_reviewopmerking" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="hv_reviewopmerking" />
                       </cell>
                     </row>
                   </rows>

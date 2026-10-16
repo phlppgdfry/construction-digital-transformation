@@ -15,6 +15,7 @@ Kantoor ziet alles wat de flows deden, per case, in lijsten en formulieren die P
 
 | Gebied | Groep | Tabellen |
 |---|---|---|
+| **Overzicht** (startpagina) | KPI's | het KPI-dashboard, zie hieronder |
 | **01 Weegbonnen** | Recyclage | Weegbon, ERP-boeking (sandbox) |
 | | Stamgegevens | Klant, Nummerplaat, Materiaalcode (acceptatielijst) |
 | **02 Schadeclaims** | Dossiers | Schadeclaim, Tijdlijn |
@@ -38,6 +39,25 @@ Op de formulieren staan de gerelateerde rijen als subraster: de **tijdlijn** bij
 | ![Weegbonnen](../screenshots/07-app-weegbonnen.jpg) Weegbonnen met status, beslissing en ERP-referentie | ![Schadeclaims](../screenshots/08-app-schadeclaims.jpg) Schadeclaims met ernst, eigenaar, keten en deadlines |
 | ![Toewijzing](../screenshots/12-app-aanvraaglijnen-toewijzing.jpg) Aanvraaglijnen: toewijzing per depot | ![Outbox](../screenshots/13-app-outbox-tijdens-storing.jpg) ERP-outbox tijdens de storingstest |
 
+## KPI-dashboard
+
+De app opent op het dashboard *Halverdijk — Overzicht*: zes grafieken, rechtstreeks op de Dataverse-tabellen, dus altijd de stand van nu. Elke grafiek beantwoordt één vraag uit fase 7 (Measure & improve).
+
+| Grafiek | De vraag erachter | Hoort bij |
+|---|---|---|
+| Weegbonnen per beslissing | Welk deel boekt de flow zelf, welk deel ziet een mens? | [C1-K1 automatisch geboekt](../../01-document-intelligence/07-measure-improve.md) |
+| Weegbonnen per status | Hoeveel bonnen wachten op nazicht of escalatie? | werkvoorraad administratie |
+| Schadeclaims per ernst | Hoeveel kritieke en hoge dossiers lopen er? | [case 02 · KPI's](../../02-construction-claims/07-measure-improve.md) |
+| Geraamde schade per categorie (€) | Waar zit de schade in euro? | case 02 |
+| Materiaalaanvragen per goedkeuringsroute | Welk deel gaat automatisch door (DT-03.4)? | [case 03 · KPI's](../../03-material-requests/07-measure-improve.md) |
+| ERP-outbox per status | Staat er iets in dead-letter? | runbook functioneel beheer |
+
+Klik op een stuk van een grafiek en je ziet de rijen erachter. Opgebouwd door [`provision-dashboard.mjs`](../scripts/provision-dashboard.mjs) (systeemgrafieken + systeemdashboard, in de solution).
+
+| | |
+|---|---|
+| ![KPI-dashboard, bovenste rij](../screenshots/30-backoffice-kpi-dashboard.jpg) Weegbonnen per beslissing en status, claims per ernst | ![KPI-dashboard, onderste rij](../screenshots/31-backoffice-kpi-dashboard-2.jpg) Schade per categorie, aanvragen per route, outbox per status |
+
 ## Wie doet hier wat
 
 | Rol | In de app | Start een flow? |
@@ -52,12 +72,13 @@ Op de formulieren staan de gerelateerde rijen als subraster: de **tijdlijn** bij
 
 - In deze ontwikkelomgeving is er één gebruiker met alle rechten. In productie krijgt elke rol een beveiligingsrol met alleen zijn tabellen.
 - De tabellen met "(ERP-sandbox)" staan voor het ERP. In productie komen die gegevens uit het ERP zelf, via de ERP-facade ([OpenAPI](../../03-material-requests/artefacts/erp-material-api.openapi.yaml)).
-- Het dashboard met de KPI's uit fase 7 is niet gebouwd in de app; de cijfers staan op de [site](../../site/index.html).
+- Het dashboard in de app telt wat in Dataverse staat. KPI's over tijd en geld (doorlooptijd, uren, baten, trend per week) horen in Power BI, zoals ontworpen in fase 7; die cijfers staan nu op de [site](../../site/index.html), berekend uit het model.
 
 ## Opnieuw opbouwen
 
 ```sh
-node power-platform/scripts/provision-app.mjs   # formulieren, weergaven, sitemap, app module
+node power-platform/scripts/provision-dashboard.mjs   # zes grafieken + het KPI-dashboard
+node power-platform/scripts/provision-app.mjs         # formulieren, weergaven, sitemap (dashboard eerst), app module
 ```
 
 De app zit in de solution-export ([`solution/`](../solution/)) en komt mee bij `pac solution import`.

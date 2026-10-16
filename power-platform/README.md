@@ -35,7 +35,7 @@ Er zijn twee apps: de **werfapp** voor de werf (case 02 en 03) en de **backoffic
 |---|---|---|
 | Solution | `HalverdijkTransformatie` (uitgever `hv`): tabellen, flows, app, sitemap, omgevingsvariabelen, connection references | [Power Apps → Oplossingen](https://make.powerapps.com/environments/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/solutions) |
 | Dataverse | 17 tabellen, 20 relaties, 14 alternatieve sleutels, 5 omgevingsvariabelen | [Tabellen](https://make.powerapps.com/environments/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/entities) |
-| Model-driven app | **Halverdijk Backoffice**: weegbonnen, schadeclaims met tijdlijn, aanvragen met lijnen en outbox, ERP-sandbox | [App openen](https://halverdijkdev.crm17.dynamics.com/main.aspx?appid=fb7afac1-35c9-f111-a05c-6045bd29a82d) |
+| Model-driven app | **Halverdijk Backoffice**: opent op een KPI-dashboard (zes grafieken); weegbonnen, schadeclaims met tijdlijn, aanvragen met lijnen en outbox, ERP-sandbox | [App openen](https://halverdijkdev.crm17.dynamics.com/main.aspx?appid=fb7afac1-35c9-f111-a05c-6045bd29a82d) |
 | Power Automate | 7 cloud flows, allemaal aan | [Flows](https://make.powerautomate.com/environments/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/flows) |
 | Approvals | goedkeuringen voor schadeclaims (DT-02) en materiaalaanvragen (DT-03) | [Ontvangen goedkeuringen](https://make.powerautomate.com/environments/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/approvals/received) |
 | Weegbon Nakijken | Power Apps **code app** voor de administratie en de milieucoördinator: wachtrij, scan, correcties, live hercontrole met de regelmotor, [broncode](reviewapp/) | [App openen](https://apps.powerapps.com/play/e/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/app/68d4a079-d2e6-476e-a7fa-f904ea317801) — deep link: `?doc=DOC-006` |
@@ -99,7 +99,7 @@ Details per rij: [VERIFICATION.md](VERIFICATION.md).
 | ![DOC-006 geboekt](screenshots/23-backoffice-doc006-geboekt.jpg) Backoffice: DOC-006 geboekt met het gecorrigeerde gewicht | ![Run HV-DI-02](screenshots/24-flow-hv-di-02-run.jpg) HV-DI-02: de servercontrole met drie gevallen (dubbel, geweigerd, boeken) |
 | ![Run HV-CL-01](screenshots/25-flow-hv-cl-01-run.jpg) HV-CL-01: triage van een melding | ![Run HV-CL-02](screenshots/26-flow-hv-cl-02-run-wacht.jpg) HV-CL-02: wacht op de goedkeuring van niveau 1 |
 | ![Run HV-CL-03](screenshots/27-flow-hv-cl-03-run.jpg) HV-CL-03: uurlijkse controle, geen te late claims | ![Run HV-MA-01](screenshots/28-flow-hv-ma-01-run.jpg) HV-MA-01: vier opzoekingen parallel, daarna per lijn |
-| ![Run HV-MA-02](screenshots/29-flow-hv-ma-02-run-storing.jpg) HV-MA-02 tijdens de storing: tak "ERP niet bereikbaar" | |
+| ![Run HV-MA-02](screenshots/29-flow-hv-ma-02-run-storing.jpg) HV-MA-02 tijdens de storing: tak "ERP niet bereikbaar" | ![KPI-dashboard](screenshots/30-backoffice-kpi-dashboard.jpg) Backoffice: het KPI-dashboard, live op Dataverse |
 | ![Werfapp schade melden](screenshots/16-werfapp-schade-melden.jpg) Werfapp: schade melden, validatie uit dezelfde regelmotor als de tests | ![Werfapp materiaal](screenshots/17-werfapp-materiaal.jpg) Werfapp: materiaal aanvragen met beschikbaarheid en verwachte route |
 
 ## Opnieuw opbouwen (in een eigen ontwikkelomgeving)
@@ -110,6 +110,7 @@ az login --tenant <tenant-id>
 # 2. structuur, stamgegevens, app en flows
 node scripts/provision-schema.mjs     # publisher, solution, 17 tabellen, sleutels, omgevingsvariabelen
 node scripts/seed-master.mjs          # werven, depots, artikels, voorraad, klanten, acceptatielijst, goedkeurders
+node scripts/provision-dashboard.mjs  # zes grafieken + KPI-dashboard
 node scripts/provision-app.mjs        # formulieren, weergaven, sitemap, model-driven app
 node scripts/provision-flows.mjs      # connection references + 7 flows (daarna --activate)
 # 3. scenario's door de echte flows sturen en vergelijken
@@ -130,6 +131,7 @@ Of importeer [`solution/release/HalverdijkTransformatie_managed.zip`](solution/r
 | Onderdeel | Status |
 |---|---|
 | Dataverse, model-driven app, 7 flows, Approvals | gebouwd, aan, geverifieerd |
+| KPI-dashboard in de backoffice-app | gebouwd: zes grafieken op Dataverse, startpagina van de app ([spec](apps/backoffice.md#kpi-dashboard)) |
 | Weegbon Nakijken (code app) | gepubliceerd en werkend, met dezelfde licentie (Developer Plan). Klikken via geautomatiseerde browserbesturing kwamen niet in het app-kader; de screenshots zijn daarom gemaakt via deep links (`?doc=…&fix=…&role=…`), en de goedkeuring van DOC-006 via de Web API met exact de wijziging die de app stuurt |
 | Werfapp (code app) | gepubliceerd en werkend: leest werven, artikels, voorraad, claims en aanvragen live uit Dataverse. Vereist een Power Apps-licentie per gebruiker; hier het gratis **Power Apps Developer Plan**. Code apps zitten (nog) niet in de Dataverse-solution-export: de broncode staat in [`werfapp/`](werfapp/) en wordt uitgerold met `pac code push` |
 

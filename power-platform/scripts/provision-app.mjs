@@ -2,6 +2,7 @@
 import { readFileSync } from "node:fs";
 import { randomUUID } from "node:crypto";
 import { get, post, patch, CONFIG } from "./dv.mjs";
+const DASHBOARD = "Halverdijk — Overzicht"; // same name as in provision-dashboard.mjs
 
 const model = JSON.parse(readFileSync(new URL("../model.json", import.meta.url)));
 const byName = Object.fromEntries(model.tables.map((t) => [t.name, t]));
@@ -65,7 +66,10 @@ const AREAS = [
   ["hv_area_c3", "03 Materiaal", [["Aanvragen", ["hv_materiaalaanvraag", "hv_aanvraaglijn", "hv_outbox"]], ["ERP-sandbox", ["hv_artikel", "hv_voorraad", "hv_depot", "hv_afstand", "hv_werfbudget"]]]],
 ];
 const T = (s) => `<Titles><Title LCID="1033" Title="${esc(s)}" /></Titles>`;
-const sitemapxml = `<SiteMap IntroducedVersion="7.0.0.0">${AREAS.map(([id, title, groups]) => `<Area Id="${id}" ShowGroups="true">${T(title)}${groups.map(([gt, ents], i) => `<Group Id="${id}_g${i}" IsProfile="false">${T(gt)}${ents.map((e) => `<SubArea Id="${id}_${e}" Entity="${e}">${T(byName[e].plural)}</SubArea>`).join("")}</Group>`).join("")}</Area>`).join("")}</SiteMap>`;
+// KPI dashboard (provision-dashboard.mjs) as the first page, when it exists
+const dash = (await get(`systemforms?$select=formid&$filter=type eq 0 and name eq '${DASHBOARD}'`, { solution: null })).json.value[0];
+const dashArea = dash ? `<Area Id="hv_area_overzicht" ShowGroups="true">${T("Overzicht")}<Group Id="hv_area_overzicht_g0" IsProfile="false">${T("KPI's")}<SubArea Id="hv_dashboard" Url="/main.aspx?pagetype=dashboard&amp;id=${dash.formid}&amp;type=system" DefaultDashboard="${dash.formid}">${T("KPI-dashboard")}</SubArea></Group></Area>` : "";
+const sitemapxml = `<SiteMap IntroducedVersion="7.0.0.0">${dashArea}${AREAS.map(([id, title, groups]) => `<Area Id="${id}" ShowGroups="true">${T(title)}${groups.map(([gt, ents], i) => `<Group Id="${id}_g${i}" IsProfile="false">${T(gt)}${ents.map((e) => `<SubArea Id="${id}_${e}" Entity="${e}">${T(byName[e].plural)}</SubArea>`).join("")}</Group>`).join("")}</Area>`).join("")}</SiteMap>`;
 let sm = (await get(`sitemaps?$select=sitemapid&$filter=sitemapnameunique eq 'hv_backoffice'`, { solution: null })).json.value[0];
 if (sm) await patch(`sitemaps(${sm.sitemapid})`, { sitemapxml });
 else { const r = await post("sitemaps", { sitemapname: "Halverdijk Backoffice", sitemapnameunique: "hv_backoffice", sitemapxml, isappaware: true }); sm = { sitemapid: r.headers.get("OData-EntityId").match(/\(([0-9a-f-]{36})\)/)[1] }; }
@@ -77,8 +81,11 @@ if (!app) {
 }
 const entities = [];
 for (const t of model.tables) entities.push({ "@odata.type": "Microsoft.Dynamics.CRM.entity", entityid: (await get(`EntityDefinitions(LogicalName='${t.name}')?$select=MetadataId`)).json.MetadataId });
-await post("AddAppComponents", { AppId: app.appmoduleid, Components: [{ "@odata.type": "Microsoft.Dynamics.CRM.sitemap", sitemapid: sm.sitemapid }, ...entities] });
+const charts = (await get(`savedqueryvisualizations?$select=savedqueryvisualizationid&$filter=startswith(name,'KPI 0')`, { solution: null })).json.value.map((c) => ({ "@odata.type": "Microsoft.Dynamics.CRM.savedqueryvisualization", savedqueryvisualizationid: c.savedqueryvisualizationid }));
+await post("AddAppComponents", { AppId: app.appmoduleid, Components: [{ "@odata.type": "Microsoft.Dynamics.CRM.sitemap", sitemapid: sm.sitemapid }, ...entities, ...(dash ? [{ "@odata.type": "Microsoft.Dynamics.CRM.systemform", formid: dash.formid }] : []), ...charts] });
 const v = await get(`ValidateApp(AppModuleId=${app.appmoduleid})`, { solution: null });
 console.log("validate:", v.json.AppValidationResponse?.ValidationSuccess, (v.json.AppValidationResponse?.ValidationIssueList ?? []).map((i) => i.Message).slice(0, 5));
 await post("PublishXml", { ParameterXml: `<importexportxml><appmodules><appmodule>${app.appmoduleid}</appmodule></appmodules><sitemaps><sitemap>${sm.sitemapid}</sitemap></sitemaps><entities>${model.tables.map((t) => `<entity>${t.name}</entity>`).join("")}</entities></importexportxml>` });
+// a changed sitemap only reaches the app after a full publish
+await post("PublishAllXml", {}, { solution: null });
 console.log(`app ${app.appmoduleid} published: ${CONFIG.url}/main.aspx?appid=${app.appmoduleid}`);

@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <LocalizedNames>
+    <LocalizedName description="Halverdijk — Overzicht" languagecode="1033" />
+  </LocalizedNames>
+  <Descriptions>
+    <Description description="KPI's van de drie cases (fictief): weegbonnen per beslissing en status, schadeclaims per ernst en geraamde schade, materiaalaanvragen per route, ERP-outbox per status." languagecode="1033" />
+  </Descriptions>
+  <FormId>{35b6719f-6ec9-f111-a05c-6045bd29a82d}</FormId>
+  <IsCustomizable>1</IsCustomizable>
+  <IsDefault>0</IsDefault>
+  <FormXml>
+    <forms type="dashboard">
+      <form>
+        <tabs>
+          <tab name="overzicht" verticallayout="true" id="{378e8749-8840-4ddf-a55f-981532c9936a}">
+            <labels>
+              <label description="Overzicht" languagecode="1033" />
+            </labels>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section name="kpi" showlabel="false" showbar="false" columns="111" id="{78756cb3-3dff-423d-adcc-1edafa7653b1}">
+                    <labels>
+                      <label description="KPI's" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{465553e1-c96e-4d37-93fe-d0ab59142b75}" showlabel="false" rowspan="12" colspan="1" auto="false">
+                          <labels>
+                            <label description="KPI 01 · Weegbonnen per beslissing" languagecode="1033" />
+                          </labels>
+                          <control id="chart_f90b7093" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}">
+                            <parameters>
+                              <ViewId>{04a17492-be67-4ac3-85e6-f71203528068}</ViewId>
+                              <IsUserView>false</IsUserView>
+                              <RelationshipName />
+                              <TargetEntityType>hv_document</TargetEntityType>
+                              <AutoExpand>Fixed</AutoExpand>
+                              <EnableQuickFind>false</EnableQuickFind>
+                              <EnableViewPicker>false</EnableViewPicker>
+                              <EnableJumpBar>false</EnableJumpBar>
+                              <ChartGridMode>Chart</ChartGridMode>
+                              <VisualizationId>{f90b7093-6ec9-f111-a05c-6045bd29a82d}</VisualizationId>
+                              <IsUserChart>false</IsUserChart>
+                              <EnableChartPicker>false</EnableChartPicker>
+                              <RecordsPerPage>10</RecordsPerPage>
+                            </parameters>
+                          </control>
+                        </cell>
+                        <cell id="{236c8ed1-ef29-4da9-9909-a860a8281340}" showlabel="false" rowspan="12" colspan="1" auto="false">
+                          <labels>
+                            <label description="KPI 01 · Weegbonnen per status" languagecode="1033" />
+                          </labels>
+                          <control id="chart_fc0b7093" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}">
+                            <parameters>
+                              <ViewId>{04a17492-be67-4ac3-85e6-f71203528068}</ViewId>
+                              <IsUserView>false</IsUserView>
+                              <RelationshipName />
+                              <TargetEntityType>hv_document</TargetEntityType>
+                              <AutoExpand>Fixed</AutoExpand>
+                              <EnableQuickFind>false</EnableQuickFind>
+                              <EnableViewPicker>false</EnableViewPicker>
+                              <EnableJumpBar>false</EnableJumpBar>
+                              <ChartGridMode>Chart</ChartGridMode>
+                              <VisualizationId>{fc0b7093-6ec9-f111-a05c-6045bd29a82d}</VisualizationId>
+                              <IsUserChart>false</IsUserChart>
+                              <EnableChartPicker>false</EnableChartPicker>
+                              <RecordsPerPage>10</RecordsPerPage>
+                            </parameters>
+                          </control>
+                        </cell>
+                        <cell id="{57140ad5-7225-44f1-afb7-4ad7a92d0205}" showlabel="false" rowspan="12" colspan="1" auto="false">
+                          <labels>
+                            <label description="KPI 02 · Schadeclaims per ernst" languagecode="1033" />
+                          </labels>
+                          <control id="chart_ff0b7093" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}">
+                            <parameters>
+                              <ViewId>{af622161-b981-4955-a9e9-ccd757114044}</ViewId>
+                              <IsUserView>false</IsUserView>
+                              <RelationshipName />
+                              <TargetEntityType>hv_schadeclaim</TargetEntityType>
+                              <AutoExpand>Fixed</AutoExpand>
+                              <EnableQuickFind>false</EnableQuickFind>
+                              <EnableViewPicker>false</EnableViewPicker>
+                              <EnableJumpBar>false</EnableJumpBar>
+                              <ChartGridMode>Chart</ChartGridMode>
+                              <VisualizationId>{ff0b7093-6ec9-f111-a05c-6045bd29a82d}</VisualizationId>
+                              <IsUserChart>false</IsUserChart>
+                              <EnableChartPicker>false</EnableChartPicker>
+                              <RecordsPerPage>10</RecordsPerPage>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row>
+                        <cell id="{94584dfa-bf8e-4fb1-9043-2854e974c468}" showlabel="false" rowspan="12" colspan="1" auto="false">
+                          <labels>
+                            <label description="KPI 02 · Geraamde schade per categorie (€)" languagecode="1033" />
+                          </labels>
+                          <control id="chart_020c7093" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}">
+                            <parameters>
+                              <ViewId>{af622161-b981-4955-a9e9-ccd757114044}</ViewId>
+                              <IsUserView>false</IsUserView>
+                              <RelationshipName />
+                              <TargetEntityType>hv_schadeclaim</TargetEntityType>
+                              <AutoExpand>Fixed</AutoExpand>
+                              <EnableQuickFind>false</EnableQuickFind>
+                              <EnableViewPicker>false</EnableViewPicker>
+                              <EnableJumpBar>false</EnableJumpBar>
+                              <ChartGridMode>Chart</ChartGridMode>
+                              <VisualizationId>{020c7093-6ec9-f111-a05c-6045bd29a82d}</VisualizationId>
+                              <IsUserChart>false</IsUserChart>
+                              <EnableChartPicker>false</EnableChartPicker>
+                              <RecordsPerPage>10</RecordsPerPage>
+                            </parameters>
+                          </control>
+                        </cell>
+                        <cell id="{997c479c-358c-4c1c-b329-b4944d4d26d6}" showlabel="false" rowspan="12" colspan="1" auto="false">
+                          <labels>
+                            <label description="KPI 03 · Materiaalaanvragen per goedkeuringsroute" languagecode="1033" />
+                          </labels>
+                          <control id="chart_050c7093" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}">
+                            <parameters>
+                              <ViewId>{a6a6f703-1a8c-41b9-b842-b02aa176a34c}</ViewId>
+                              <IsUserView>false</IsUserView>
+                              <RelationshipName />
+                              <TargetEntityType>hv_materiaalaanvraag</TargetEntityType>
+                              <AutoExpand>Fixed</AutoExpand>
+                              <EnableQuickFind>false</EnableQuickFind>
+                              <EnableViewPicker>false</EnableViewPicker>
+                              <EnableJumpBar>false</EnableJumpBar>
+                              <ChartGridMode>Chart</ChartGridMode>
+                              <VisualizationId>{050c7093-6ec9-f111-a05c-6045bd29a82d}</VisualizationId>
+                              <IsUserChart>false</IsUserChart>
+                              <EnableChartPicker>false</EnableChartPicker>
+                              <RecordsPerPage>10</RecordsPerPage>
+                            </parameters>
+                          </control>
+                        </cell>
+                        <cell id="{4db1889a-0058-40be-9dc3-2f509e59261d}" showlabel="false" rowspan="12" colspan="1" auto="false">
+                          <labels>
+                            <label description="KPI 03 · ERP-outbox per status" languagecode="1033" />
+                          </labels>
+                          <control id="chart_080c7093" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}">
+                            <parameters>
+                              <ViewId>{4029ba18-5684-47d7-8814-844c0451c98b}</ViewId>
+                              <IsUserView>false</IsUserView>
+                              <RelationshipName />
+                              <TargetEntityType>hv_outbox</TargetEntityType>
+                              <AutoExpand>Fixed</AutoExpand>
+                              <EnableQuickFind>false</EnableQuickFind>
+                              <EnableViewPicker>false</EnableViewPicker>
+                              <EnableJumpBar>false</EnableJumpBar>
+                              <ChartGridMode>Chart</ChartGridMode>
+                              <VisualizationId>{080c7093-6ec9-f111-a05c-6045bd29a82d}</VisualizationId>
+                              <IsUserChart>false</IsUserChart>
+                              <EnableChartPicker>false</EnableChartPicker>
+                              <RecordsPerPage>10</RecordsPerPage>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+          </tab>
+        </tabs>
+      </form>
+    </forms>
+  </FormXml>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <IsTabletEnabled>0</IsTabletEnabled>
+</Dashboard>

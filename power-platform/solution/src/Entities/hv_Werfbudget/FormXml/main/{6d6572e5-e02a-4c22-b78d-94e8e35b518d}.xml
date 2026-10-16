@@ -7,20 +7,20 @@
     <FormActivationState>1</FormActivationState>
     <form>
       <tabs>
-        <tab verticallayout="true" id="{3f2185f7-e409-49da-9eb7-10f500398d3c}" IsUserDefined="1">
+        <tab verticallayout="true" id="{a82a690c-02ab-454d-97c3-f8f0b74a9f60}" IsUserDefined="1">
           <labels>
             <label description="Werfbudget" languagecode="1033" />
           </labels>
           <columns>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{f5e60a22-9d1b-498a-bfed-b6c1a3df0bda}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{bdf2ddae-8ab9-474e-adeb-5ca0658e7618}">
                   <labels>
                     <label description="Gegevens" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{15e745db-d2d1-46bd-a6f3-c82ed51684e3}">
+                      <cell id="{5623ff5f-97ad-4be4-aa79-3db079c36879}">
                         <labels>
                           <label description="Naam" languagecode="1033" />
                         </labels>
@@ -28,7 +28,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{faa2e08c-4f77-44e6-ac1f-a552f21231c4}">
+                      <cell id="{87e67def-5b7c-4b94-ac27-bf232479f6c4}">
                         <labels>
                           <label description="Werf" languagecode="1033" />
                         </labels>
@@ -41,13 +41,13 @@
             </column>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{475f9f8e-c3b4-468f-82c9-9fe2956b5ab1}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{0e83a6e1-f03a-440a-9c54-5493b0e66d34}">
                   <labels>
                     <label description="Details" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{b1179020-dce3-4d9c-9fba-e997c8ed8882}">
+                      <cell id="{7d8eab53-f31d-40ec-86ae-a69a14b06349}">
                         <labels>
                           <label description="Categorie" languagecode="1033" />
                         </labels>
@@ -55,7 +55,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{ac62d719-cb1a-4cff-a065-15f2bace90ff}">
+                      <cell id="{9928f25c-d173-42c7-9ff9-4f8d91792e91}">
                         <labels>
                           <label description="Resterend budget (€)" languagecode="1033" />
                         </labels>

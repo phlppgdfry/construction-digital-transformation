@@ -7,20 +7,20 @@
     <FormActivationState>1</FormActivationState>
     <form>
       <tabs>
-        <tab verticallayout="true" id="{94334c80-611e-4062-9191-8157c8af09c0}" IsUserDefined="1">
+        <tab verticallayout="true" id="{70fac06e-11a6-4ff0-a50f-cd5db218b20c}" IsUserDefined="1">
           <labels>
             <label description="Aanvraaglijn" languagecode="1033" />
           </labels>
           <columns>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{9fa4d638-13dc-4533-ae77-ba14c2c711e6}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{62fbd062-0658-4ba6-afd4-401508790329}">
                   <labels>
                     <label description="Gegevens" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{ba9a9e2e-c7ba-4b9f-b0f8-a4d8059692e7}">
+                      <cell id="{036a3d25-5873-47d1-b7f1-d8481c7b6a1e}">
                         <labels>
                           <label description="Lijn" languagecode="1033" />
                         </labels>
@@ -28,7 +28,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{219653b8-4eaa-477a-8668-86423fa11ddc}">
+                      <cell id="{da8c617e-7358-4061-a52e-5d30532280ab}">
                         <labels>
                           <label description="Aanvraag" languagecode="1033" />
                         </labels>
@@ -36,7 +36,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{cc476be7-98dd-4fd6-a7c9-fef1313e61b7}">
+                      <cell id="{ba185688-7a46-40f3-9e84-7beec463a50a}">
                         <labels>
                           <label description="Artikel" languagecode="1033" />
                         </labels>
@@ -44,7 +44,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{5aab8256-4800-41d4-afe9-60e82c001697}">
+                      <cell id="{c47a0d04-a3dd-4f44-93a6-8b612cb68d86}">
                         <labels>
                           <label description="Hoeveelheid" languagecode="1033" />
                         </labels>
@@ -52,7 +52,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{45824685-1c09-4a04-b1fe-be455b8df9aa}">
+                      <cell id="{9605d45c-ad5e-41d0-bf39-5a5ee5c0a80d}">
                         <labels>
                           <label description="Toewijzing per depot" languagecode="1033" />
                         </labels>
@@ -65,13 +65,13 @@
             </column>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{dd362746-aeed-47b7-804e-3b2808ec8fdb}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{af29ea31-c65c-4780-8361-3840bf198278}">
                   <labels>
                     <label description="Details" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{9349a032-fc4c-45d2-b2e6-64ad8d312e43}">
+                      <cell id="{9e32c7d2-91a9-4dc8-8dfe-f28030626f95}">
                         <labels>
                           <label description="Tekort" languagecode="1033" />
                         </labels>
@@ -79,7 +79,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{5711a650-1a51-42af-858f-0e997a1238a9}">
+                      <cell id="{c780416c-03b6-40f3-be1e-d4ab52665a4c}">
                         <labels>
                           <label description="Aankoop" languagecode="1033" />
                         </labels>
@@ -87,7 +87,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{c91a9c4c-025d-426d-89e0-54ae5bc535d3}">
+                      <cell id="{cc41115d-9399-4835-a2b4-9970e2cd5807}">
                         <labels>
                           <label description="Waarde (€)" languagecode="1033" />
                         </labels>
@@ -95,7 +95,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{b553ca47-cf60-4e15-a72a-38dbc2564fbc}">
+                      <cell id="{6ae7be4c-d77e-40e3-b7bf-7829801daf08}">
                         <labels>
                           <label description="Gerecycleerd alternatief" languagecode="1033" />
                         </labels>
