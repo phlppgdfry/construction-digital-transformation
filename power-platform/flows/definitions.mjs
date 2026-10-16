@@ -95,11 +95,36 @@ export function weegbonControleren(S) {
 
 export function weegbonNaNazicht(S) {
   const t = (c) => `triggerOutputs()?['body/${c}']`;
+  const code = "outputs('Materiaalcode')?['body/value']";
+  const isIn = `equals(${t("hv_richting")}, 100000000)`;
+  // Server-side guard: whatever the app sent, never book a duplicate or refused material.
+  const verdict = `if(greater(length(outputs('Al_geboekt')?['body/value']), 0), 'dubbel', if(or(equals(length(${code}), 0), and(${isIn}, not(equals(first(${code})?['hv_soort'], 100000000))), and(not(${isIn}), not(equals(first(${code})?['hv_soort'], 100000002)))), 'geweigerd', 'ok'))`;
+  const upd = (status, note, after) => dv("UpdateOnlyRecord", { entityName: S.hv_document, recordId: `@${t("hv_documentid")}`, "item/hv_status": status, "item/hv_reviewopmerking": note }, after);
   return definition(
     { Weegbon_goedgekeurd: trigger("hv_document", 3, { "subscriptionRequest/filteringattributes": "hv_status", "subscriptionRequest/filterexpression": "hv_status eq 100000006" }) },
     {
-      ERP_boeking: dv("CreateRecord", { entityName: S.hv_erpboeking, "item/hv_idempotencykey": `wb-@{${t("hv_bonnummer")}}`, "item/hv_soort": 100000000, "item/hv_referentie": `@${t("hv_documentnr")}`, "item/hv_payload": `@{concat('{"weighingTicket":"', ${t("hv_bonnummer")}, '","netKg":', string(${t("hv_netto")}), ',"approvedBy":"', coalesce(${t("hv_reviewer")}, 'reviewer'), '"}')}` }),
-      Status_geboekt: dv("UpdateOnlyRecord", { entityName: S.hv_document, recordId: `@${t("hv_documentid")}`, "item/hv_status": 100000004, "item/hv_erpreferentie": `wb-@{${t("hv_bonnummer")}}` }, any("ERP_boeking")),
+      Materiaalcode: dv("ListRecords", { entityName: S.hv_materiaalcode, $filter: `hv_code eq '@{${t("hv_materiaal")}}'`, $top: 1 }),
+      Al_geboekt: dv("ListRecords", { entityName: S.hv_document, $filter: `hv_bonnummer eq '@{${t("hv_bonnummer")}}' and hv_documentid ne @{${t("hv_documentid")}} and hv_status eq 100000004`, $top: 1 }),
+      Controle: compose(`@${verdict}`, ok("Materiaalcode", "Al_geboekt")),
+      Volgens_controle: {
+        type: "Switch", runAfter: ok("Controle"), expression: "@outputs('Controle')",
+        cases: {
+          Dubbel: { case: "dubbel", actions: { Status_dubbel: upd(100000005, "@{concat(coalesce(" + t("hv_reviewopmerking") + ", ''), ' | Server: bonnummer al geboekt, niet opnieuw geboekt.')}") } },
+          Geweigerd: { case: "geweigerd", actions: { Status_escalatie: upd(100000003, "@{concat(coalesce(" + t("hv_reviewopmerking") + ", ''), ' | Server: materiaal niet toegelaten, terug naar escalatie.')}") } },
+          Boeken: {
+            case: "ok",
+            actions: {
+              ERP_boeking: dv("CreateRecord", {
+                entityName: S.hv_erpboeking, "item/hv_idempotencykey": `wb-@{${t("hv_bonnummer")}}`, "item/hv_soort": 100000000, "item/hv_referentie": `@${t("hv_documentnr")}`,
+                "item/hv_bedrag": `@mul(div(float(${t("hv_netto")}), 1000), float(coalesce(first(${code})?['hv_prijsperton'], 0)))`,
+                "item/hv_payload": `@{concat('{"weighingTicket":"', ${t("hv_bonnummer")}, '","netKg":', string(${t("hv_netto")}), ',"approvedBy":"', coalesce(${t("hv_reviewer")}, 'reviewer'), '"}')}`,
+              }),
+              Status_geboekt: dv("UpdateOnlyRecord", { entityName: S.hv_document, recordId: `@${t("hv_documentid")}`, "item/hv_status": 100000004, "item/hv_erpreferentie": `@{if(equals(actions('ERP_boeking')?['status'], 'Succeeded'), concat('wb-', ${t("hv_bonnummer")}), concat('wb-', ${t("hv_bonnummer")}, ' (al geboekt, idempotent)'))}` }, any("ERP_boeking")),
+            },
+          },
+        },
+        default: { actions: {} },
+      },
     },
   );
 }
@@ -381,7 +406,7 @@ export function outboxVerzenden(S) {
 
 export const FLOWS = [
   { name: "HV-DI-01 Weegbon controleren en boeken", build: weegbonControleren, description: "Case 01: elf regels R01–R11 op elke nieuwe weegbon; automatisch boeken in de ERP-sandbox, of nazicht / escalatie / dubbel." },
-  { name: "HV-DI-02 Weegbon na nazicht boeken", build: weegbonNaNazicht, description: "Case 01: een door de reviewer goedgekeurde weegbon idempotent boeken." },
+  { name: "HV-DI-02 Weegbon na nazicht boeken", build: weegbonNaNazicht, description: "Case 01: een door de reviewer goedgekeurde weegbon opnieuw controleren (dubbel, geweigerd materiaal) en met de gecorrigeerde waarden idempotent boeken." },
   { name: "HV-CL-01 Schadeclaim intake en triage", build: schadeclaimIntake, description: "Case 02: ernst, eigenaar, DT-02-goedkeuringsketen, deadlines en tijdlijn bij een nieuwe schademelding." },
   { name: "HV-CL-02 Schadeclaim goedkeuringsketen", build: schadeclaimGoedkeuring, description: "Case 02: goedkeuring per niveau via Approvals; één afwijzing stopt de keten." },
   { name: "HV-CL-03 SLA-bewaking", build: slaBewaking, description: "Case 02: elk uur claims escaleren waarvan de beoordelingsdeadline verstreken is." },

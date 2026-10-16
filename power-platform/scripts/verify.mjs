@@ -59,10 +59,25 @@ out.push(`## Case 03 — materiaalaanvragen (flows HV-MA-01 en HV-MA-02)\n\n**${
   "### Toewijzing per depot (door de flow)\n", row("Lijn", "Toewijzing"), row("---", "---"), ...lines.map((l) => row(l.hv_naam, l.hv_toewijzing ?? "")), "",
   "### ERP-outbox (door HV-MA-02 naar de ERP-sandbox)\n", row("Idempotency-key", "Status", "Pogingen", "Laatste resultaat"), row("---", "---", "---", "---"), ...outbox.map((b) => row(b.hv_idempotencykey, OB[b.hv_status], b.hv_pogingen ?? 0, b.hv_laatstefout ?? "")), "");
 
+// ---------------------------------------------------------------- case 01: review (nakijken)
+const rv = (await get("hv_documents?$select=hv_documentnr,hv_status,hv_netto,hv_correcties,hv_erpreferentie&$filter=hv_documentnr eq 'DOC-006' or hv_documentnr eq 'DOC-013' or hv_documentnr eq 'DOC-019'&$orderby=hv_documentnr asc", o)).json.value;
+const keys = { "DOC-006": "wb-WB-26-04222", "DOC-013": "wb-WB-26-04271", "DOC-019": "wb-WB-26-04208" };
+const bookings = (await get("hv_erpboekings?$select=hv_idempotencykey,hv_bedrag", o)).json.value;
+const expect = { "DOC-006": [100000004, "gecorrigeerd en geboekt"], "DOC-013": [100000003, "terug naar escalatie, niet geboekt"], "DOC-019": [100000005, "dubbel, niet opnieuw geboekt"] };
+let rvOk = 0;
+const rvRows = rv.map((r) => {
+  const n = bookings.filter((b) => b.hv_idempotencykey === keys[r.hv_documentnr]).length;
+  const corr = (() => { try { return JSON.parse(r.hv_correcties ?? "[]").map((c) => `${c.veld}: ${c.oud} → ${c.nieuw}`).join(", "); } catch { return ""; } })();
+  const ok = r.hv_status === expect[r.hv_documentnr][0] && n === (r.hv_documentnr === "DOC-013" ? 0 : 1);
+  if (ok) rvOk++;
+  return row(r.hv_documentnr, expect[r.hv_documentnr][1], STAT[r.hv_status], corr || "—", String(n), r.hv_documentnr === "DOC-006" ? String(r.hv_netto) : "—", ok ? "ja" : "**NEE**");
+});
+out.push(`## Case 01 — nakijken (app "Weegbon Nakijken" + flow HV-DI-02)\n\n**${rvOk}/${rvRows.length} zoals verwacht.** DOC-006 werd gecorrigeerd en goedgekeurd met exact de wijziging die de app bij *Goedkeuren* stuurt (\`approvalPatch()\` uit \`src/review.mjs\`), via de Web API (\`scripts/review-scenario.mjs\`). Het scherm met dezelfde correctie staat in de screenshots. DOC-013 (asbest) en DOC-019 (dubbel) werden bewust buiten de app om op *Goedgekeurd* gezet, om de servercontrole in de flow te testen.\n`, row("Document", "Verwacht", "Status nu", "Correcties", "ERP-boekingen voor dit bonnummer", "Geboekt netto (kg)", "Gelijk"), row(...Array(7).fill("---")), ...rvRows, "");
+
 writeFileSync(new URL("../VERIFICATION.md", import.meta.url), `# Verificatie in Power Platform
 
 Wat de echte Power Automate-flows in de ontwikkelomgeving **${CONFIG.name}** in Dataverse schreven, naast de uitkomst van de geteste regelmotor in \`src/\`. Gegenereerd door \`node power-platform/scripts/verify.mjs\` op ${new Date().toISOString().slice(0, 16).replace("T", " ")} UTC. Niet met de hand aanpassen.
 
 ${out.join("\n")}
 `);
-console.log(`docs ${dSame}/${dRows.length}, claims ${cSame}/${cTable.length}, requests ${rSame}/${rTable.length}`);
+console.log(`docs ${dSame}/${dRows.length}, claims ${cSame}/${cTable.length}, requests ${rSame}/${rTable.length}, review ${rvOk}/${rvRows.length}`);

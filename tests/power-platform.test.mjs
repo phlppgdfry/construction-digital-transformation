@@ -57,4 +57,6 @@ test("VERIFICATION.md records identical results for all three cases", () => {
   assert.match(v, /\*\*30\/30 identiek\*\*/);
   assert.match(v, /\*\*5\/5 identiek\*\*/);
   assert.match(v, /\*\*4\/4 identiek\*\*/);
+  assert.match(v, /\*\*3\/3 zoals verwacht\.\*\*/);
+  assert.match(v, /\*\*3\/3 zoals verwacht\.\*\*/);
 });

@@ -29,7 +29,7 @@ const SUBGRIDS = {
 };
 
 function columnsOf(t) {
-  const cols = [[t.primary[0], "text", t.primary[1]], ...(t.lookups ?? []).map(([n, , d]) => [n, "lookup", d]), ...(t.columns ?? [])];
+  const cols = [[t.primary[0], "text", t.primary[1]], ...(t.lookups ?? []).map(([n, , d]) => [n, "lookup", d]), ...(t.columns ?? []).filter((c) => c[1] !== "image")];
   return cols;
 }
 const cell = ([name, type, display]) => `<cell id="${g()}"><labels><label description="${esc(display)}" languagecode="1033" /></labels><control id="${name}" classid="${CLASS[type]}" datafieldname="${name}" /></cell>`;

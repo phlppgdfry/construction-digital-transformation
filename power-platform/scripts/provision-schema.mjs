@@ -42,6 +42,7 @@ function attributeMetadata([name, type, display, extra]) {
     case "bool": return { "@odata.type": "Microsoft.Dynamics.CRM.BooleanAttributeMetadata", ...base, DefaultValue: false, OptionSet: { TrueOption: { Value: 1, Label: label("Ja") }, FalseOption: { Value: 0, Label: label("Nee") } } };
     case "datetime": return { "@odata.type": "Microsoft.Dynamics.CRM.DateTimeAttributeMetadata", ...base, Format: "DateAndTime", DateTimeBehavior: { Value: "UserLocal" } };
     case "date": return { "@odata.type": "Microsoft.Dynamics.CRM.DateTimeAttributeMetadata", ...base, Format: "DateOnly", DateTimeBehavior: { Value: "DateOnly" } };
+    case "image": return { "@odata.type": "Microsoft.Dynamics.CRM.ImageAttributeMetadata", SchemaName: schemaName(name), DisplayName: label(display), RequiredLevel: { Value: "None" }, CanStoreFullImage: true, IsPrimaryImage: false, MaxSizeInKB: 10240 };
     case "choice": {
       const options = typeof extra === "string" ? model.choices[extra] : extra;
       return { "@odata.type": "Microsoft.Dynamics.CRM.PicklistAttributeMetadata", ...base, OptionSet: { "@odata.type": "Microsoft.Dynamics.CRM.OptionSetMetadata", IsGlobal: false, OptionSetType: "Picklist", Options: Object.entries(options).map(([v, l]) => ({ Value: Number(v), Label: label(l) })) } };

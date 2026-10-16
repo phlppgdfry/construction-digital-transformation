@@ -1,6 +1,6 @@
 # Verificatie in Power Platform
 
-Wat de echte Power Automate-flows in de ontwikkelomgeving **Halverdijk Dev** in Dataverse schreven, naast de uitkomst van de geteste regelmotor in `src/`. Gegenereerd door `node power-platform/scripts/verify.mjs` op 2026-10-16 08:13 UTC. Niet met de hand aanpassen.
+Wat de echte Power Automate-flows in de ontwikkelomgeving **Halverdijk Dev** in Dataverse schreven, naast de uitkomst van de geteste regelmotor in `src/`. Gegenereerd door `node power-platform/scripts/verify.mjs` op 2026-10-16 12:49 UTC. Niet met de hand aanpassen.
 
 ## Case 01 — weegbonnen (flow HV-DI-01)
 
@@ -13,7 +13,7 @@ Wat de echte Power Automate-flows in de ontwikkelomgeving **Halverdijk Dev** in 
 | DOC-003 | review | review | R02, R03 | R02, R03 | Nazicht |  | ja |
 | DOC-004 | auto | auto | — | — | Geboekt | wb-WB-26-04208 | ja |
 | DOC-005 | auto | auto | — | — | Geboekt | wb-WB-26-04215 | ja |
-| DOC-006 | review | review | R03 | R03 | Nazicht |  | ja |
+| DOC-006 | review | review | R03 | R03 | Geboekt | wb-WB-26-04222 | ja |
 | DOC-007 | auto | auto | — | — | Geboekt | wb-WB-26-04229 | ja |
 | DOC-008 | review | review | R04 | R04 | Nazicht |  | ja |
 | DOC-009 | auto | auto | — | — | Geboekt | wb-WB-26-04243 | ja |
@@ -85,4 +85,14 @@ Wat de echte Power Automate-flows in de ontwikkelomgeving **Halverdijk Dev** in 
 | MA-26-1004-SB-F45-DEP-OOST | Verzonden | 3 | 201 geboekt |
 | MA-26-1004-SB-F45-DEP-WEST | Verzonden | 3 | 201 geboekt |
 | MA-26-1004-HK-350-DEP-OOST | Verzonden | 3 | 201 geboekt |
+
+## Case 01 — nakijken (app "Weegbon Nakijken" + flow HV-DI-02)
+
+**3/3 zoals verwacht.** DOC-006 werd gecorrigeerd en goedgekeurd met exact de wijziging die de app bij *Goedkeuren* stuurt (`approvalPatch()` uit `src/review.mjs`), via de Web API (`scripts/review-scenario.mjs`). Het scherm met dezelfde correctie staat in de screenshots. DOC-013 (asbest) en DOC-019 (dubbel) werden bewust buiten de app om op *Goedgekeurd* gezet, om de servercontrole in de flow te testen.
+
+| Document | Verwacht | Status nu | Correcties | ERP-boekingen voor dit bonnummer | Geboekt netto (kg) | Gelijk |
+| --- | --- | --- | --- | --- | --- | --- |
+| DOC-006 | gecorrigeerd en geboekt | Geboekt | net: 13350 → 18350 | 1 | 18350 | ja |
+| DOC-013 | terug naar escalatie, niet geboekt | Escalatie | — | 0 | — | ja |
+| DOC-019 | dubbel, niet opnieuw geboekt | Dubbel | — | 1 | — | ja |
 

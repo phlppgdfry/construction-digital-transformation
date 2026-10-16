@@ -1,0 +1,618 @@
+{
+  "name": "hv_document",
+  "title": "Weegbonnen",
+  "schema": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "x-ms-dataverse-entity": true,
+      "x-ms-dataverse-entityset": "hv_documents",
+      "x-ms-dataverse-primary-id": "hv_documentid",
+      "x-ms-dataverse-primary-name": "hv_documentnr",
+      "properties": {
+        "createdby": {
+          "type": "string",
+          "title": "Created By",
+          "x-ms-dataverse-attribute": "createdby",
+          "x-ms-dataverse-type": "LookupType",
+          "x-ms-schema-name": "CreatedBy",
+          "x-ms-read-only": true
+        },
+        "createdbyname": {
+          "type": "string",
+          "title": "createdbyname",
+          "x-ms-dataverse-attribute": "createdbyname",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "CreatedByName",
+          "x-ms-read-only": true,
+          "maxLength": 100
+        },
+        "createdbyyominame": {
+          "type": "string",
+          "title": "createdbyyominame",
+          "x-ms-dataverse-attribute": "createdbyyominame",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "CreatedByYomiName",
+          "x-ms-read-only": true,
+          "required": true,
+          "maxLength": 100
+        },
+        "createdon": {
+          "type": "string",
+          "title": "Created On",
+          "x-ms-dataverse-attribute": "createdon",
+          "x-ms-dataverse-type": "DateTimeType",
+          "x-ms-schema-name": "CreatedOn",
+          "x-ms-read-only": true
+        },
+        "createdonbehalfby": {
+          "type": "string",
+          "title": "Created By (Delegate)",
+          "x-ms-dataverse-attribute": "createdonbehalfby",
+          "x-ms-dataverse-type": "LookupType",
+          "x-ms-schema-name": "CreatedOnBehalfBy",
+          "x-ms-read-only": true
+        },
+        "createdonbehalfbyname": {
+          "type": "string",
+          "title": "createdonbehalfbyname",
+          "x-ms-dataverse-attribute": "createdonbehalfbyname",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "CreatedOnBehalfByName",
+          "x-ms-read-only": true,
+          "maxLength": 100
+        },
+        "createdonbehalfbyyominame": {
+          "type": "string",
+          "title": "createdonbehalfbyyominame",
+          "x-ms-dataverse-attribute": "createdonbehalfbyyominame",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "CreatedOnBehalfByYomiName",
+          "x-ms-read-only": true,
+          "required": true,
+          "maxLength": 100
+        },
+        "hv_beslissing": {
+          "type": "string",
+          "title": "Beslissing regels",
+          "x-ms-dataverse-attribute": "hv_beslissing",
+          "x-ms-dataverse-type": "PicklistType",
+          "x-ms-schema-name": "hv_Beslissing",
+          "enum": [
+            "Automatisch",
+            "Nazicht",
+            "Escalatie",
+            "Dubbel"
+          ],
+          "x-ms-enum-values": [
+            100000000,
+            100000001,
+            100000002,
+            100000003
+          ],
+          "Color": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "baf670b6-2ac9-f111-a05c-6045bd29a82d",
+          "x-ms-isGlobal": false,
+          "x-ms-optionsetdisplayname": "Beslissing regels",
+          "x-ms-optionSetType": "Picklist"
+        },
+        "hv_beslissingname": {
+          "type": "string",
+          "title": "hv_beslissingname",
+          "x-ms-dataverse-attribute": "hv_beslissingname",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "hv_beslissingName",
+          "x-ms-read-only": true
+        },
+        "hv_bestand": {
+          "type": "string",
+          "title": "Scan (origineel)",
+          "x-ms-dataverse-attribute": "hv_bestand",
+          "x-ms-dataverse-type": "ImageType",
+          "x-ms-schema-name": "hv_Bestand"
+        },
+        "hv_bestand_timestamp": {
+          "type": "string",
+          "title": "hv_bestand_timestamp",
+          "x-ms-dataverse-attribute": "hv_bestand_timestamp",
+          "x-ms-dataverse-type": "BigIntType",
+          "x-ms-schema-name": "hv_Bestand_Timestamp",
+          "x-ms-read-only": true
+        },
+        "hv_bestand_url": {
+          "type": "string",
+          "title": "hv_bestand_url",
+          "x-ms-dataverse-attribute": "hv_bestand_url",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "hv_Bestand_URL",
+          "x-ms-read-only": true,
+          "maxLength": 200
+        },
+        "hv_bestandid": {
+          "type": "string",
+          "title": "hv_bestandid",
+          "x-ms-dataverse-attribute": "hv_bestandid",
+          "x-ms-dataverse-type": "UniqueidentifierType",
+          "x-ms-schema-name": "hv_BestandId",
+          "x-ms-read-only": true
+        },
+        "hv_bevindingen": {
+          "type": "string",
+          "title": "Bevindingen (regels)",
+          "x-ms-dataverse-attribute": "hv_bevindingen",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "hv_Bevindingen",
+          "maxLength": 4000
+        },
+        "hv_bonnummer": {
+          "type": "string",
+          "title": "Bonnummer",
+          "x-ms-dataverse-attribute": "hv_bonnummer",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "hv_Bonnummer",
+          "maxLength": 20
+        },
+        "hv_bruto": {
+          "type": "string",
+          "title": "Bruto (kg)",
+          "x-ms-dataverse-attribute": "hv_bruto",
+          "x-ms-dataverse-type": "IntegerType",
+          "x-ms-schema-name": "hv_Bruto"
+        },
+        "hv_confidence": {
+          "type": "string",
+          "title": "Confidence per veld (JSON)",
+          "x-ms-dataverse-attribute": "hv_confidence",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "hv_Confidence",
+          "maxLength": 4000
+        },
+        "hv_correcties": {
+          "type": "string",
+          "title": "Correcties (audit)",
+          "x-ms-dataverse-attribute": "hv_correcties",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "hv_Correcties",
+          "maxLength": 4000
+        },
+        "hv_datum": {
+          "type": "string",
+          "title": "Datum bon",
+          "x-ms-dataverse-attribute": "hv_datum",
+          "x-ms-dataverse-type": "DateTimeType",
+          "x-ms-schema-name": "hv_Datum"
+        },
+        "hv_documentid": {
+          "type": "string",
+          "title": "Weegbon",
+          "x-ms-dataverse-attribute": "hv_documentid",
+          "x-ms-dataverse-type": "UniqueidentifierType",
+          "x-ms-schema-name": "hv_DocumentId",
+          "x-ms-dataverse-primary-id": true,
+          "required": true,
+          "x-ms-keyType": "primary"
+        },
+        "hv_documentnr": {
+          "type": "string",
+          "title": "Documentnummer",
+          "x-ms-dataverse-attribute": "hv_documentnr",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "hv_Documentnr",
+          "x-ms-dataverse-primary-name": true,
+          "maxLength": 850
+        },
+        "hv_erpreferentie": {
+          "type": "string",
+          "title": "ERP-referentie",
+          "x-ms-dataverse-attribute": "hv_erpreferentie",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "hv_Erpreferentie",
+          "maxLength": 60
+        },
+        "hv_gereviewdop": {
+          "type": "string",
+          "title": "Gereviewd op",
+          "x-ms-dataverse-attribute": "hv_gereviewdop",
+          "x-ms-dataverse-type": "DateTimeType",
+          "x-ms-schema-name": "hv_Gereviewdop"
+        },
+        "hv_idformulier": {
+          "type": "string",
+          "title": "ID-formulier",
+          "x-ms-dataverse-attribute": "hv_idformulier",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "hv_Idformulier",
+          "maxLength": 30
+        },
+        "hv_kanaal": {
+          "type": "string",
+          "title": "Kanaal",
+          "x-ms-dataverse-attribute": "hv_kanaal",
+          "x-ms-dataverse-type": "PicklistType",
+          "x-ms-schema-name": "hv_Kanaal",
+          "enum": [
+            "Scan weegbrug",
+            "Mail vervoerder"
+          ],
+          "x-ms-enum-values": [
+            100000000,
+            100000001
+          ],
+          "Color": [
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "7f8963aa-2ac9-f111-a05c-6045bd29a82d",
+          "x-ms-isGlobal": false,
+          "x-ms-optionsetdisplayname": "Kanaal",
+          "x-ms-optionSetType": "Picklist"
+        },
+        "hv_kanaalname": {
+          "type": "string",
+          "title": "hv_kanaalname",
+          "x-ms-dataverse-attribute": "hv_kanaalname",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "hv_kanaalName",
+          "x-ms-read-only": true
+        },
+        "hv_klantnummer": {
+          "type": "string",
+          "title": "Klantnummer",
+          "x-ms-dataverse-attribute": "hv_klantnummer",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "hv_Klantnummer",
+          "maxLength": 10
+        },
+        "hv_materiaal": {
+          "type": "string",
+          "title": "Materiaal (code)",
+          "x-ms-dataverse-attribute": "hv_materiaal",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "hv_Materiaal",
+          "maxLength": 20
+        },
+        "hv_minconfidence": {
+          "type": "string",
+          "title": "Laagste confidence",
+          "x-ms-dataverse-attribute": "hv_minconfidence",
+          "x-ms-dataverse-type": "DecimalType",
+          "x-ms-schema-name": "hv_Minconfidence"
+        },
+        "hv_netto": {
+          "type": "string",
+          "title": "Netto (kg)",
+          "x-ms-dataverse-attribute": "hv_netto",
+          "x-ms-dataverse-type": "IntegerType",
+          "x-ms-schema-name": "hv_Netto"
+        },
+        "hv_ontvangen": {
+          "type": "string",
+          "title": "Ontvangen",
+          "x-ms-dataverse-attribute": "hv_ontvangen",
+          "x-ms-dataverse-type": "DateTimeType",
+          "x-ms-schema-name": "hv_Ontvangen"
+        },
+        "hv_plaat": {
+          "type": "string",
+          "title": "Nummerplaat",
+          "x-ms-dataverse-attribute": "hv_plaat",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "hv_Plaat",
+          "maxLength": 20
+        },
+        "hv_reviewer": {
+          "type": "string",
+          "title": "Reviewer",
+          "x-ms-dataverse-attribute": "hv_reviewer",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "hv_Reviewer",
+          "maxLength": 100
+        },
+        "hv_reviewopmerking": {
+          "type": "string",
+          "title": "Opmerking reviewer",
+          "x-ms-dataverse-attribute": "hv_reviewopmerking",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "hv_Reviewopmerking",
+          "maxLength": 2000
+        },
+        "hv_richting": {
+          "type": "string",
+          "title": "Richting",
+          "x-ms-dataverse-attribute": "hv_richting",
+          "x-ms-dataverse-type": "PicklistType",
+          "x-ms-schema-name": "hv_Richting",
+          "enum": [
+            "Aanvoer (afval)",
+            "Afvoer (product)"
+          ],
+          "x-ms-enum-values": [
+            100000000,
+            100000001
+          ],
+          "Color": [
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "f4645eb0-2ac9-f111-a05c-6045bd29a82d",
+          "x-ms-isGlobal": false,
+          "x-ms-optionsetdisplayname": "Richting",
+          "x-ms-optionSetType": "Picklist"
+        },
+        "hv_richtingname": {
+          "type": "string",
+          "title": "hv_richtingname",
+          "x-ms-dataverse-attribute": "hv_richtingname",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "hv_richtingName",
+          "x-ms-read-only": true
+        },
+        "hv_scenario": {
+          "type": "string",
+          "title": "Testscenario (demo)",
+          "x-ms-dataverse-attribute": "hv_scenario",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "hv_Scenario",
+          "maxLength": 40
+        },
+        "hv_status": {
+          "type": "string",
+          "title": "Status",
+          "x-ms-dataverse-attribute": "hv_status",
+          "x-ms-dataverse-type": "PicklistType",
+          "x-ms-schema-name": "hv_Status",
+          "enum": [
+            "Ontvangen",
+            "Nazicht",
+            "Escalatie",
+            "Geboekt",
+            "Dubbel",
+            "Goedgekeurd",
+            "Afgewezen",
+            "Fout"
+          ],
+          "x-ms-enum-values": [
+            100000000,
+            100000002,
+            100000003,
+            100000004,
+            100000005,
+            100000006,
+            100000007,
+            100000009
+          ],
+          "Color": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "c0f670b6-2ac9-f111-a05c-6045bd29a82d",
+          "x-ms-isGlobal": false,
+          "x-ms-optionsetdisplayname": "Status",
+          "x-ms-optionSetType": "Picklist"
+        },
+        "hv_statusname": {
+          "type": "string",
+          "title": "hv_statusname",
+          "x-ms-dataverse-attribute": "hv_statusname",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "hv_statusName",
+          "x-ms-read-only": true
+        },
+        "hv_tarra": {
+          "type": "string",
+          "title": "Tarra (kg)",
+          "x-ms-dataverse-attribute": "hv_tarra",
+          "x-ms-dataverse-type": "IntegerType",
+          "x-ms-schema-name": "hv_Tarra"
+        },
+        "hv_traceerbaarheid": {
+          "type": "string",
+          "title": "Traceerbaarheidsreferentie",
+          "x-ms-dataverse-attribute": "hv_traceerbaarheid",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "hv_Traceerbaarheid",
+          "maxLength": 40
+        },
+        "importsequencenumber": {
+          "type": "string",
+          "title": "Import Sequence Number",
+          "x-ms-dataverse-attribute": "importsequencenumber",
+          "x-ms-dataverse-type": "IntegerType",
+          "x-ms-schema-name": "ImportSequenceNumber"
+        },
+        "modifiedby": {
+          "type": "string",
+          "title": "Modified By",
+          "x-ms-dataverse-attribute": "modifiedby",
+          "x-ms-dataverse-type": "LookupType",
+          "x-ms-schema-name": "ModifiedBy",
+          "x-ms-read-only": true
+        },
+        "modifiedbyname": {
+          "type": "string",
+          "title": "modifiedbyname",
+          "x-ms-dataverse-attribute": "modifiedbyname",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "ModifiedByName",
+          "x-ms-read-only": true,
+          "maxLength": 100
+        },
+        "modifiedbyyominame": {
+          "type": "string",
+          "title": "modifiedbyyominame",
+          "x-ms-dataverse-attribute": "modifiedbyyominame",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "ModifiedByYomiName",
+          "x-ms-read-only": true,
+          "required": true,
+          "maxLength": 100
+        },
+        "modifiedon": {
+          "type": "string",
+          "title": "Modified On",
+          "x-ms-dataverse-attribute": "modifiedon",
+          "x-ms-dataverse-type": "DateTimeType",
+          "x-ms-schema-name": "ModifiedOn",
+          "x-ms-read-only": true
+        },
+        "modifiedonbehalfby": {
+          "type": "string",
+          "title": "Modified By (Delegate)",
+          "x-ms-dataverse-attribute": "modifiedonbehalfby",
+          "x-ms-dataverse-type": "LookupType",
+          "x-ms-schema-name": "ModifiedOnBehalfBy",
+          "x-ms-read-only": true
+        },
+        "modifiedonbehalfbyname": {
+          "type": "string",
+          "title": "modifiedonbehalfbyname",
+          "x-ms-dataverse-attribute": "modifiedonbehalfbyname",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "ModifiedOnBehalfByName",
+          "x-ms-read-only": true,
+          "maxLength": 100
+        },
+        "modifiedonbehalfbyyominame": {
+          "type": "string",
+          "title": "modifiedonbehalfbyyominame",
+          "x-ms-dataverse-attribute": "modifiedonbehalfbyyominame",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "ModifiedOnBehalfByYomiName",
+          "x-ms-read-only": true,
+          "required": true,
+          "maxLength": 100
+        },
+        "organizationid": {
+          "type": "string",
+          "title": "Organization Id",
+          "x-ms-dataverse-attribute": "organizationid",
+          "x-ms-dataverse-type": "LookupType",
+          "x-ms-schema-name": "OrganizationId",
+          "x-ms-read-only": true
+        },
+        "organizationidname": {
+          "type": "string",
+          "title": "organizationidname",
+          "x-ms-dataverse-attribute": "organizationidname",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "OrganizationIdName",
+          "x-ms-read-only": true,
+          "required": true,
+          "maxLength": 160
+        },
+        "overriddencreatedon": {
+          "type": "string",
+          "title": "Record Created On",
+          "x-ms-dataverse-attribute": "overriddencreatedon",
+          "x-ms-dataverse-type": "DateTimeType",
+          "x-ms-schema-name": "OverriddenCreatedOn"
+        },
+        "statecode": {
+          "type": "string",
+          "title": "Status",
+          "x-ms-dataverse-attribute": "statecode",
+          "x-ms-dataverse-type": "StateType",
+          "x-ms-schema-name": "statecode",
+          "required": true,
+          "enum": [
+            "Active",
+            "Inactive"
+          ],
+          "x-ms-enum-values": [
+            0,
+            1
+          ],
+          "Color": [
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "f737c6b8-0f6a-46d1-aeec-ef635a289ccb",
+          "x-ms-isGlobal": false,
+          "x-ms-optionsetdisplayname": "Status",
+          "x-ms-optionSetType": "State"
+        },
+        "statecodename": {
+          "type": "string",
+          "title": "statecodename",
+          "x-ms-dataverse-attribute": "statecodename",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "statecodeName",
+          "x-ms-read-only": true
+        },
+        "statuscode": {
+          "type": "string",
+          "title": "Status Reason",
+          "x-ms-dataverse-attribute": "statuscode",
+          "x-ms-dataverse-type": "StatusType",
+          "x-ms-schema-name": "statuscode",
+          "enum": [
+            "Active",
+            "Inactive"
+          ],
+          "x-ms-enum-values": [
+            1,
+            2
+          ],
+          "Color": [
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "f8d0e672-ae5f-457f-965e-fec76a0c2e3d",
+          "x-ms-isGlobal": false,
+          "x-ms-optionsetdisplayname": "Status Reason",
+          "x-ms-optionSetType": "Status"
+        },
+        "statuscodename": {
+          "type": "string",
+          "title": "statuscodename",
+          "x-ms-dataverse-attribute": "statuscodename",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "statuscodeName",
+          "x-ms-read-only": true
+        },
+        "timezoneruleversionnumber": {
+          "type": "string",
+          "title": "Time Zone Rule Version Number",
+          "x-ms-dataverse-attribute": "timezoneruleversionnumber",
+          "x-ms-dataverse-type": "IntegerType",
+          "x-ms-schema-name": "TimeZoneRuleVersionNumber"
+        },
+        "utcconversiontimezonecode": {
+          "type": "string",
+          "title": "UTC Conversion Time Zone Code",
+          "x-ms-dataverse-attribute": "utcconversiontimezonecode",
+          "x-ms-dataverse-type": "IntegerType",
+          "x-ms-schema-name": "UTCConversionTimeZoneCode"
+        },
+        "versionnumber": {
+          "type": "string",
+          "title": "Version Number",
+          "x-ms-dataverse-attribute": "versionnumber",
+          "x-ms-dataverse-type": "BigIntType",
+          "x-ms-schema-name": "VersionNumber",
+          "x-ms-read-only": true
+        }
+      },
+      "required": [
+        "createdbyyominame",
+        "createdonbehalfbyyominame",
+        "hv_documentid",
+        "modifiedbyyominame",
+        "modifiedonbehalfbyyominame",
+        "organizationidname",
+        "statecode"
+      ]
+    }
+  }
+}

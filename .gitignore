@@ -3,3 +3,5 @@ node_modules/
 power-platform/werfapp/node_modules/
 power-platform/werfapp/dist/
 power-platform/environment.local.json
+power-platform/reviewapp/node_modules/
+power-platform/reviewapp/dist/

@@ -1,0 +1,45 @@
+{
+  "version": "1.0",
+  "appId": "68d4a079-d2e6-476e-a7fa-f904ea317801",
+  "appDisplayName": "Halverdijk Weegbon Nakijken",
+  "region": "prod",
+  "environmentId": "7a2e1ae0-c020-efc7-9cfc-9e6536c3415d",
+  "description": " ",
+  "buildPath": "./dist",
+  "buildEntryPoint": "index.html",
+  "localAppUrl": "http://localhost:3000",
+  "logoPath": "Default",
+  "connectionReferences": {
+    "74caa66c-b147-4a92-b81a-fcfe9da740e4": {
+      "id": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+      "displayName": "Microsoft Dataverse",
+      "dataSources": [
+        "commondataserviceforapps"
+      ],
+      "dataSets": {}
+    }
+  },
+  "databaseReferences": {
+    "default.cds": {
+      "dataSources": {
+        "weegbonnen": {
+          "entitySetName": "hv_documents",
+          "logicalName": "hv_document"
+        },
+        "klanten_erp_sandbox_": {
+          "entitySetName": "hv_klants",
+          "logicalName": "hv_klant"
+        },
+        "nummerplaten": {
+          "entitySetName": "hv_nummerplaats",
+          "logicalName": "hv_nummerplaat"
+        },
+        "materiaalcodes_acceptatielijst_": {
+          "entitySetName": "hv_materiaalcodes",
+          "logicalName": "hv_materiaalcode"
+        }
+      },
+      "environmentVariableName": ""
+    }
+  }
+}

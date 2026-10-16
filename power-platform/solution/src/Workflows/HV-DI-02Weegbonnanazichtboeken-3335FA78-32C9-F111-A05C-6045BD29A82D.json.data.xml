@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Workflow WorkflowId="{3335fa78-32c9-f111-a05c-6045bd29a82d}" Name="HV-DI-02 Weegbon na nazicht boeken" Description="Case 01: een door de reviewer goedgekeurde weegbon idempotent boeken." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Workflow WorkflowId="{3335fa78-32c9-f111-a05c-6045bd29a82d}" Name="HV-DI-02 Weegbon na nazicht boeken" Description="Case 01: een door de reviewer goedgekeurde weegbon opnieuw controleren (dubbel, geweigerd materiaal) en met de gecorrigeerde waarden idempotent boeken." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <JsonFileName>/Workflows/HV-DI-02Weegbonnanazichtboeken-3335FA78-32C9-F111-A05C-6045BD29A82D.json</JsonFileName>
   <Type>1</Type>
   <Subprocess>0</Subprocess>
@@ -25,6 +25,6 @@
     <LocalizedName languagecode="1033" description="HV-DI-02 Weegbon na nazicht boeken" />
   </LocalizedNames>
   <Descriptions>
-    <Description languagecode="1033" description="Case 01: een door de reviewer goedgekeurde weegbon idempotent boeken." />
+    <Description languagecode="1033" description="Case 01: een door de reviewer goedgekeurde weegbon opnieuw controleren (dubbel, geweigerd materiaal) en met de gecorrigeerde waarden idempotent boeken." />
   </Descriptions>
 </Workflow>

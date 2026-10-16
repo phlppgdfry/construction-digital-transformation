@@ -1,84 +1,1109 @@
 {
   "_note": "Bron voor de Dataverse-tabellen in de solution HalverdijkTransformatie. scripts/provision-schema.mjs maakt alles idempotent aan. Kolomformaat: [logische naam, type, weergavenaam, extra]. Tabellen met '(ERP-sandbox)' staan in voor het ERP, dat in deze portfolio niet bestaat.",
   "choices": {
-    "categorie": { "100000000": "Granulaten", "100000001": "Asfalt", "100000002": "Riolering", "100000003": "Signalisatie", "100000004": "Kleinmateriaal" }
+    "categorie": {
+      "100000000": "Granulaten",
+      "100000001": "Asfalt",
+      "100000002": "Riolering",
+      "100000003": "Signalisatie",
+      "100000004": "Kleinmateriaal"
+    }
   },
   "tables": [
-    { "name": "hv_werf", "display": "Werf", "plural": "Werven", "ownership": "OrganizationOwned", "primary": ["hv_werfnr", "Werfnummer"],
-      "columns": [["hv_naam", "text", "Naam", 200], ["hv_type", "text", "Type werk", 100], ["hv_actief", "bool", "Actief"], ["hv_projectleider", "text", "Projectleider (rol)", 100], ["hv_afdeling", "text", "Afdeling", 100]],
-      "keys": [["hv_werfnr"]] },
-    { "name": "hv_depot", "display": "Depot", "plural": "Depots", "ownership": "OrganizationOwned", "primary": ["hv_depotnr", "Depotnummer"],
-      "columns": [["hv_naam", "text", "Naam", 200]], "keys": [["hv_depotnr"]] },
-    { "name": "hv_afstand", "display": "Afstand werf–depot", "plural": "Afstanden werf–depot", "ownership": "OrganizationOwned", "primary": ["hv_naam", "Naam"],
-      "columns": [["hv_km", "int", "Kilometer"]], "lookups": [["hv_werf", "hv_werf", "Werf"], ["hv_depot", "hv_depot", "Depot"]], "keys": [["hv_naam"]] },
-    { "name": "hv_werfbudget", "display": "Werfbudget", "plural": "Werfbudgetten", "ownership": "OrganizationOwned", "primary": ["hv_naam", "Naam"],
-      "columns": [["hv_categorie", "choice", "Categorie", "categorie"], ["hv_budget", "decimal", "Resterend budget (€)"]], "lookups": [["hv_werf", "hv_werf", "Werf"]], "keys": [["hv_naam"]] },
-    { "name": "hv_artikel", "display": "Artikel (ERP-sandbox)", "plural": "Artikels (ERP-sandbox)", "ownership": "OrganizationOwned", "primary": ["hv_artikelnr", "Artikelnummer"],
-      "columns": [["hv_omschrijving", "text", "Omschrijving", 200], ["hv_eenheid", "text", "Eenheid", 10], ["hv_eenheidsprijs", "decimal", "Eenheidsprijs (€)"], ["hv_categorie", "choice", "Categorie", "categorie"],
-        ["hv_bron", "choice", "Bron", { "100000000": "Intern (eigen depot of productie)", "100000001": "Extern (leverancier)" }], ["hv_gerecycleerd", "bool", "Gerecycleerd"], ["hv_levertijddagen", "int", "Levertijd (werkdagen)"],
-        ["hv_alternatief", "text", "Gerecycleerd alternatief", 20], ["hv_alleenweekdagen", "bool", "Alleen op weekdagen"], ["hv_opbestelling", "bool", "Productie op bestelling"]],
-      "keys": [["hv_artikelnr"]] },
-    { "name": "hv_voorraad", "display": "Voorraad (ERP-sandbox)", "plural": "Voorraden (ERP-sandbox)", "ownership": "OrganizationOwned", "primary": ["hv_naam", "Artikel@depot"],
-      "columns": [["hv_opvoorraad", "decimal", "Op voorraad"], ["hv_gereserveerd", "decimal", "Gereserveerd"]], "lookups": [["hv_artikel", "hv_artikel", "Artikel"], ["hv_depot", "hv_depot", "Depot"]], "keys": [["hv_naam"]] },
-    { "name": "hv_klant", "display": "Klant (ERP-sandbox)", "plural": "Klanten (ERP-sandbox)", "ownership": "OrganizationOwned", "primary": ["hv_klantnr", "Klantnummer"],
-      "columns": [["hv_naam", "text", "Naam", 200], ["hv_actief", "bool", "Actief"]], "keys": [["hv_klantnr"]] },
-    { "name": "hv_nummerplaat", "display": "Nummerplaat", "plural": "Nummerplaten", "ownership": "OrganizationOwned", "primary": ["hv_plaat", "Nummerplaat"],
-      "columns": [["hv_vervoerder", "bool", "Geregistreerde vervoerder"]], "lookups": [["hv_klant", "hv_klant", "Klant"]], "keys": [["hv_plaat"]] },
-    { "name": "hv_materiaalcode", "display": "Materiaalcode (acceptatielijst)", "plural": "Materiaalcodes (acceptatielijst)", "ownership": "OrganizationOwned", "primary": ["hv_code", "Code"],
-      "columns": [["hv_omschrijving", "text", "Omschrijving", 200], ["hv_soort", "choice", "Soort", { "100000000": "Aanvaard afval", "100000001": "Geweigerd afval", "100000002": "Product (verkoop)" }],
-        ["hv_prijsperton", "decimal", "Prijs per ton (€)"], ["hv_bodemref", "bool", "Traceerbaarheidsreferentie verplicht"]], "keys": [["hv_code"]] },
-    { "name": "hv_document", "display": "Weegbon", "plural": "Weegbonnen", "ownership": "OrganizationOwned", "primary": ["hv_documentnr", "Documentnummer"],
-      "columns": [["hv_kanaal", "choice", "Kanaal", { "100000000": "Scan weegbrug", "100000001": "Mail vervoerder" }], ["hv_ontvangen", "datetime", "Ontvangen"],
-        ["hv_bonnummer", "text", "Bonnummer", 20], ["hv_datum", "date", "Datum bon"], ["hv_plaat", "text", "Nummerplaat", 20], ["hv_klantnummer", "text", "Klantnummer", 10],
-        ["hv_richting", "choice", "Richting", { "100000000": "Aanvoer (afval)", "100000001": "Afvoer (product)" }], ["hv_materiaal", "text", "Materiaal (code)", 20],
-        ["hv_bruto", "int", "Bruto (kg)"], ["hv_tarra", "int", "Tarra (kg)"], ["hv_netto", "int", "Netto (kg)"], ["hv_idformulier", "text", "ID-formulier", 30], ["hv_traceerbaarheid", "text", "Traceerbaarheidsreferentie", 40],
-        ["hv_confidence", "memo", "Confidence per veld (JSON)", 4000], ["hv_minconfidence", "decimal", "Laagste confidence"],
-        ["hv_beslissing", "choice", "Beslissing regels", { "100000000": "Automatisch", "100000001": "Nazicht", "100000002": "Escalatie", "100000003": "Dubbel" }],
-        ["hv_bevindingen", "memo", "Bevindingen (regels)", 4000],
-        ["hv_status", "choice", "Status", { "100000000": "Ontvangen", "100000002": "Nazicht", "100000003": "Escalatie", "100000004": "Geboekt", "100000005": "Dubbel", "100000006": "Goedgekeurd", "100000007": "Afgewezen", "100000009": "Fout" }],
-        ["hv_reviewer", "text", "Reviewer", 100], ["hv_erpreferentie", "text", "ERP-referentie", 60], ["hv_scenario", "text", "Testscenario (demo)", 40]],
-      "keys": [["hv_documentnr"]] },
-    { "name": "hv_erpboeking", "display": "ERP-boeking (sandbox)", "plural": "ERP-boekingen (sandbox)", "ownership": "OrganizationOwned", "primary": ["hv_idempotencykey", "Idempotency-key"],
-      "columns": [["hv_soort", "choice", "Soort", { "100000000": "Weegticket", "100000001": "Reservatie", "100000002": "Aankoopaanvraag", "100000003": "Verbruik", "100000004": "Projectkost" }],
-        ["hv_referentie", "text", "Referentie", 60], ["hv_payload", "memo", "Payload (JSON)", 8000], ["hv_bedrag", "decimal", "Bedrag (€)"]],
-      "keys": [["hv_idempotencykey"]] },
-    { "name": "hv_schadeclaim", "display": "Schadeclaim", "plural": "Schadeclaims", "ownership": "UserOwned", "primary": ["hv_dossiernummer", "Dossiernummer", "SCH-{DATETIMEUTC:yy}-{SEQNUM:4}"],
-      "columns": [["hv_clientid", "text", "Client-ID (offline)", 60], ["hv_melder", "text", "Melder", 100],
-        ["hv_categorie", "choice", "Categorie", { "100000000": "Eigen materieel", "100000001": "Gehuurd materieel", "100000002": "Eigendom van derden", "100000003": "Kabel of leiding (KLIP)", "100000004": "Eigen werk / werfinrichting" }],
-        ["hv_status", "choice", "Status", { "100000000": "Gemeld", "100000001": "In beoordeling", "100000002": "Info gevraagd", "100000003": "Ter goedkeuring", "100000004": "Goedgekeurd", "100000005": "Afgewezen", "100000006": "In afhandeling", "100000007": "Afgesloten" }],
-        ["hv_tijdstipschade", "datetime", "Tijdstip schade"], ["hv_locatie", "text", "Locatie", 200], ["hv_gps", "text", "GPS", 40], ["hv_omschrijving", "memo", "Omschrijving", 4000], ["hv_geschatbedrag", "decimal", "Geschat bedrag (€)"],
-        ["hv_typeleiding", "choice", "Type leiding", { "100000000": "Gas", "100000001": "Elektriciteit", "100000002": "Water", "100000003": "Telecom", "100000004": "Riolering" }],
-        ["hv_klipreferentie", "text", "KLIP-referentie", 40], ["hv_leidingbeheerder", "text", "Leidingbeheerder", 100], ["hv_beheerderverwittigd", "bool", "Leidingbeheerder verwittigd"],
-        ["hv_huurreferentie", "text", "Huurreferentie", 40], ["hv_derdebetrokken", "bool", "Derde betrokken"], ["hv_naamderde", "text", "Naam derde", 100], ["hv_derdeaansprakelijk", "bool", "Derde aansprakelijk"],
-        ["hv_letsel", "bool", "Personenletsel"], ["hv_aantalfotos", "int", "Aantal foto's"],
-        ["hv_ernst", "choice", "Ernst", { "100000000": "Laag", "100000001": "Middel", "100000002": "Hoog", "100000003": "Kritiek" }],
-        ["hv_eigenaar", "text", "Eigenaar (rol)", 100], ["hv_verwittigd", "memo", "Verwittigd", 1000], ["hv_goedkeuringsketen", "text", "Goedkeuringsketen (DT-02)", 200], ["hv_goedkeuringsniveau", "int", "Goedgekeurde niveaus"],
-        ["hv_deadlinebeoordeling", "datetime", "Beoordelen vóór"], ["hv_deadlineverzekeraar", "datetime", "Aangifte verzekeraar vóór"], ["hv_aangifteverstuurd", "bool", "Aangifte verstuurd"], ["hv_geescaleerd", "bool", "Geëscaleerd"]],
-      "lookups": [["hv_werf", "hv_werf", "Werf"]], "keys": [["hv_clientid"]] },
-    { "name": "hv_tijdlijn", "display": "Tijdlijn", "plural": "Tijdlijn", "ownership": "OrganizationOwned", "primary": ["hv_gebeurtenis", "Gebeurtenis"],
-      "columns": [["hv_door", "text", "Door", 100], ["hv_opmerking", "memo", "Opmerking", 2000]], "lookups": [["hv_schadeclaim", "hv_schadeclaim", "Schadeclaim"]] },
-    { "name": "hv_goedkeurder", "display": "Goedkeurder", "plural": "Goedkeurders", "ownership": "OrganizationOwned", "primary": ["hv_rol", "Rol"],
-      "columns": [["hv_email", "text", "E-mail", 100], ["hv_vervanger", "text", "Vervanger", 100]], "keys": [["hv_rol"]] },
-    { "name": "hv_materiaalaanvraag", "display": "Materiaalaanvraag", "plural": "Materiaalaanvragen", "ownership": "UserOwned", "primary": ["hv_aanvraagnr", "Aanvraagnummer", "MA-{DATETIMEUTC:yy}-{SEQNUM:4}"],
-      "columns": [["hv_aanvrager", "text", "Aanvrager", 100], ["hv_leverenop", "datetime", "Leveren op"], ["hv_spoed", "bool", "Spoed (< 48 u)"],
-        ["hv_spoedreden", "choice", "Spoedreden", { "100000000": "Onvoorziene werfsituatie", "100000001": "Planning gewijzigd door opdrachtgever", "100000002": "Eerdere levering onvolledig", "100000003": "Vergeten te bestellen" }],
-        ["hv_status", "choice", "Status", { "100000000": "Concept", "100000001": "Ingediend", "100000002": "Ter goedkeuring", "100000003": "Goedgekeurd", "100000004": "Gepland", "100000005": "Geleverd", "100000006": "Ontvangen", "100000009": "Afgewezen" }],
-        ["hv_waarde", "decimal", "Waarde (€)"], ["hv_budgetoverschreden", "bool", "Budget overschreden"], ["hv_aankoopnodig", "bool", "Aankoop nodig"], ["hv_route", "text", "Route (DT-03)", 200], ["hv_regel", "text", "Regel DT-03", 100]],
-      "lookups": [["hv_werf", "hv_werf", "Werf"]] },
-    { "name": "hv_aanvraaglijn", "display": "Aanvraaglijn", "plural": "Aanvraaglijnen", "ownership": "OrganizationOwned", "primary": ["hv_naam", "Lijn"],
-      "columns": [["hv_hoeveelheid", "decimal", "Hoeveelheid"], ["hv_toewijzing", "memo", "Toewijzing per depot", 2000], ["hv_tekort", "decimal", "Tekort"], ["hv_aankoop", "decimal", "Aankoop"], ["hv_waarde", "decimal", "Waarde (€)"], ["hv_alternatief", "text", "Gerecycleerd alternatief", 200]],
-      "lookups": [["hv_aanvraag", "hv_materiaalaanvraag", "Aanvraag"], ["hv_artikel", "hv_artikel", "Artikel"]] },
-    { "name": "hv_outbox", "display": "ERP-outbox", "plural": "ERP-outbox", "ownership": "OrganizationOwned", "primary": ["hv_idempotencykey", "Idempotency-key"],
-      "columns": [["hv_endpoint", "choice", "Endpoint", { "100000000": "weighing-tickets", "100000001": "reservations", "100000002": "purchase-requisitions", "100000003": "goods-issues", "100000004": "project-costs" }],
-        ["hv_body", "memo", "Body (JSON)", 8000], ["hv_status", "choice", "Status", { "100000000": "Wachtend", "100000001": "Verzonden", "100000009": "Dead-letter" }],
-        ["hv_pogingen", "int", "Pogingen"], ["hv_volgendepoging", "datetime", "Volgende poging"], ["hv_laatstefout", "memo", "Laatste fout", 2000], ["hv_referentie", "text", "Referentie", 60]],
-      "lookups": [["hv_aanvraag", "hv_materiaalaanvraag", "Aanvraag"]], "keys": [["hv_idempotencykey"]] }
+    {
+      "name": "hv_werf",
+      "display": "Werf",
+      "plural": "Werven",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_werfnr",
+        "Werfnummer"
+      ],
+      "columns": [
+        [
+          "hv_naam",
+          "text",
+          "Naam",
+          200
+        ],
+        [
+          "hv_type",
+          "text",
+          "Type werk",
+          100
+        ],
+        [
+          "hv_actief",
+          "bool",
+          "Actief"
+        ],
+        [
+          "hv_projectleider",
+          "text",
+          "Projectleider (rol)",
+          100
+        ],
+        [
+          "hv_afdeling",
+          "text",
+          "Afdeling",
+          100
+        ]
+      ],
+      "keys": [
+        [
+          "hv_werfnr"
+        ]
+      ]
+    },
+    {
+      "name": "hv_depot",
+      "display": "Depot",
+      "plural": "Depots",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_depotnr",
+        "Depotnummer"
+      ],
+      "columns": [
+        [
+          "hv_naam",
+          "text",
+          "Naam",
+          200
+        ]
+      ],
+      "keys": [
+        [
+          "hv_depotnr"
+        ]
+      ]
+    },
+    {
+      "name": "hv_afstand",
+      "display": "Afstand werf–depot",
+      "plural": "Afstanden werf–depot",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_naam",
+        "Naam"
+      ],
+      "columns": [
+        [
+          "hv_km",
+          "int",
+          "Kilometer"
+        ]
+      ],
+      "lookups": [
+        [
+          "hv_werf",
+          "hv_werf",
+          "Werf"
+        ],
+        [
+          "hv_depot",
+          "hv_depot",
+          "Depot"
+        ]
+      ],
+      "keys": [
+        [
+          "hv_naam"
+        ]
+      ]
+    },
+    {
+      "name": "hv_werfbudget",
+      "display": "Werfbudget",
+      "plural": "Werfbudgetten",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_naam",
+        "Naam"
+      ],
+      "columns": [
+        [
+          "hv_categorie",
+          "choice",
+          "Categorie",
+          "categorie"
+        ],
+        [
+          "hv_budget",
+          "decimal",
+          "Resterend budget (€)"
+        ]
+      ],
+      "lookups": [
+        [
+          "hv_werf",
+          "hv_werf",
+          "Werf"
+        ]
+      ],
+      "keys": [
+        [
+          "hv_naam"
+        ]
+      ]
+    },
+    {
+      "name": "hv_artikel",
+      "display": "Artikel (ERP-sandbox)",
+      "plural": "Artikels (ERP-sandbox)",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_artikelnr",
+        "Artikelnummer"
+      ],
+      "columns": [
+        [
+          "hv_omschrijving",
+          "text",
+          "Omschrijving",
+          200
+        ],
+        [
+          "hv_eenheid",
+          "text",
+          "Eenheid",
+          10
+        ],
+        [
+          "hv_eenheidsprijs",
+          "decimal",
+          "Eenheidsprijs (€)"
+        ],
+        [
+          "hv_categorie",
+          "choice",
+          "Categorie",
+          "categorie"
+        ],
+        [
+          "hv_bron",
+          "choice",
+          "Bron",
+          {
+            "100000000": "Intern (eigen depot of productie)",
+            "100000001": "Extern (leverancier)"
+          }
+        ],
+        [
+          "hv_gerecycleerd",
+          "bool",
+          "Gerecycleerd"
+        ],
+        [
+          "hv_levertijddagen",
+          "int",
+          "Levertijd (werkdagen)"
+        ],
+        [
+          "hv_alternatief",
+          "text",
+          "Gerecycleerd alternatief",
+          20
+        ],
+        [
+          "hv_alleenweekdagen",
+          "bool",
+          "Alleen op weekdagen"
+        ],
+        [
+          "hv_opbestelling",
+          "bool",
+          "Productie op bestelling"
+        ]
+      ],
+      "keys": [
+        [
+          "hv_artikelnr"
+        ]
+      ]
+    },
+    {
+      "name": "hv_voorraad",
+      "display": "Voorraad (ERP-sandbox)",
+      "plural": "Voorraden (ERP-sandbox)",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_naam",
+        "Artikel@depot"
+      ],
+      "columns": [
+        [
+          "hv_opvoorraad",
+          "decimal",
+          "Op voorraad"
+        ],
+        [
+          "hv_gereserveerd",
+          "decimal",
+          "Gereserveerd"
+        ]
+      ],
+      "lookups": [
+        [
+          "hv_artikel",
+          "hv_artikel",
+          "Artikel"
+        ],
+        [
+          "hv_depot",
+          "hv_depot",
+          "Depot"
+        ]
+      ],
+      "keys": [
+        [
+          "hv_naam"
+        ]
+      ]
+    },
+    {
+      "name": "hv_klant",
+      "display": "Klant (ERP-sandbox)",
+      "plural": "Klanten (ERP-sandbox)",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_klantnr",
+        "Klantnummer"
+      ],
+      "columns": [
+        [
+          "hv_naam",
+          "text",
+          "Naam",
+          200
+        ],
+        [
+          "hv_actief",
+          "bool",
+          "Actief"
+        ]
+      ],
+      "keys": [
+        [
+          "hv_klantnr"
+        ]
+      ]
+    },
+    {
+      "name": "hv_nummerplaat",
+      "display": "Nummerplaat",
+      "plural": "Nummerplaten",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_plaat",
+        "Nummerplaat"
+      ],
+      "columns": [
+        [
+          "hv_vervoerder",
+          "bool",
+          "Geregistreerde vervoerder"
+        ]
+      ],
+      "lookups": [
+        [
+          "hv_klant",
+          "hv_klant",
+          "Klant"
+        ]
+      ],
+      "keys": [
+        [
+          "hv_plaat"
+        ]
+      ]
+    },
+    {
+      "name": "hv_materiaalcode",
+      "display": "Materiaalcode (acceptatielijst)",
+      "plural": "Materiaalcodes (acceptatielijst)",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_code",
+        "Code"
+      ],
+      "columns": [
+        [
+          "hv_omschrijving",
+          "text",
+          "Omschrijving",
+          200
+        ],
+        [
+          "hv_soort",
+          "choice",
+          "Soort",
+          {
+            "100000000": "Aanvaard afval",
+            "100000001": "Geweigerd afval",
+            "100000002": "Product (verkoop)"
+          }
+        ],
+        [
+          "hv_prijsperton",
+          "decimal",
+          "Prijs per ton (€)"
+        ],
+        [
+          "hv_bodemref",
+          "bool",
+          "Traceerbaarheidsreferentie verplicht"
+        ]
+      ],
+      "keys": [
+        [
+          "hv_code"
+        ]
+      ]
+    },
+    {
+      "name": "hv_document",
+      "display": "Weegbon",
+      "plural": "Weegbonnen",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_documentnr",
+        "Documentnummer"
+      ],
+      "columns": [
+        [
+          "hv_kanaal",
+          "choice",
+          "Kanaal",
+          {
+            "100000000": "Scan weegbrug",
+            "100000001": "Mail vervoerder"
+          }
+        ],
+        [
+          "hv_ontvangen",
+          "datetime",
+          "Ontvangen"
+        ],
+        [
+          "hv_bonnummer",
+          "text",
+          "Bonnummer",
+          20
+        ],
+        [
+          "hv_datum",
+          "date",
+          "Datum bon"
+        ],
+        [
+          "hv_plaat",
+          "text",
+          "Nummerplaat",
+          20
+        ],
+        [
+          "hv_klantnummer",
+          "text",
+          "Klantnummer",
+          10
+        ],
+        [
+          "hv_richting",
+          "choice",
+          "Richting",
+          {
+            "100000000": "Aanvoer (afval)",
+            "100000001": "Afvoer (product)"
+          }
+        ],
+        [
+          "hv_materiaal",
+          "text",
+          "Materiaal (code)",
+          20
+        ],
+        [
+          "hv_bruto",
+          "int",
+          "Bruto (kg)"
+        ],
+        [
+          "hv_tarra",
+          "int",
+          "Tarra (kg)"
+        ],
+        [
+          "hv_netto",
+          "int",
+          "Netto (kg)"
+        ],
+        [
+          "hv_idformulier",
+          "text",
+          "ID-formulier",
+          30
+        ],
+        [
+          "hv_traceerbaarheid",
+          "text",
+          "Traceerbaarheidsreferentie",
+          40
+        ],
+        [
+          "hv_confidence",
+          "memo",
+          "Confidence per veld (JSON)",
+          4000
+        ],
+        [
+          "hv_minconfidence",
+          "decimal",
+          "Laagste confidence"
+        ],
+        [
+          "hv_beslissing",
+          "choice",
+          "Beslissing regels",
+          {
+            "100000000": "Automatisch",
+            "100000001": "Nazicht",
+            "100000002": "Escalatie",
+            "100000003": "Dubbel"
+          }
+        ],
+        [
+          "hv_bevindingen",
+          "memo",
+          "Bevindingen (regels)",
+          4000
+        ],
+        [
+          "hv_status",
+          "choice",
+          "Status",
+          {
+            "100000000": "Ontvangen",
+            "100000002": "Nazicht",
+            "100000003": "Escalatie",
+            "100000004": "Geboekt",
+            "100000005": "Dubbel",
+            "100000006": "Goedgekeurd",
+            "100000007": "Afgewezen",
+            "100000009": "Fout"
+          }
+        ],
+        [
+          "hv_reviewer",
+          "text",
+          "Reviewer",
+          100
+        ],
+        [
+          "hv_erpreferentie",
+          "text",
+          "ERP-referentie",
+          60
+        ],
+        [
+          "hv_scenario",
+          "text",
+          "Testscenario (demo)",
+          40
+        ],
+        [
+          "hv_bestand",
+          "image",
+          "Scan (origineel)"
+        ],
+        [
+          "hv_correcties",
+          "memo",
+          "Correcties (audit)",
+          4000
+        ],
+        [
+          "hv_gereviewdop",
+          "datetime",
+          "Gereviewd op"
+        ],
+        [
+          "hv_reviewopmerking",
+          "memo",
+          "Opmerking reviewer",
+          2000
+        ]
+      ],
+      "keys": [
+        [
+          "hv_documentnr"
+        ]
+      ]
+    },
+    {
+      "name": "hv_erpboeking",
+      "display": "ERP-boeking (sandbox)",
+      "plural": "ERP-boekingen (sandbox)",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_idempotencykey",
+        "Idempotency-key"
+      ],
+      "columns": [
+        [
+          "hv_soort",
+          "choice",
+          "Soort",
+          {
+            "100000000": "Weegticket",
+            "100000001": "Reservatie",
+            "100000002": "Aankoopaanvraag",
+            "100000003": "Verbruik",
+            "100000004": "Projectkost"
+          }
+        ],
+        [
+          "hv_referentie",
+          "text",
+          "Referentie",
+          60
+        ],
+        [
+          "hv_payload",
+          "memo",
+          "Payload (JSON)",
+          8000
+        ],
+        [
+          "hv_bedrag",
+          "decimal",
+          "Bedrag (€)"
+        ]
+      ],
+      "keys": [
+        [
+          "hv_idempotencykey"
+        ]
+      ]
+    },
+    {
+      "name": "hv_schadeclaim",
+      "display": "Schadeclaim",
+      "plural": "Schadeclaims",
+      "ownership": "UserOwned",
+      "primary": [
+        "hv_dossiernummer",
+        "Dossiernummer",
+        "SCH-{DATETIMEUTC:yy}-{SEQNUM:4}"
+      ],
+      "columns": [
+        [
+          "hv_clientid",
+          "text",
+          "Client-ID (offline)",
+          60
+        ],
+        [
+          "hv_melder",
+          "text",
+          "Melder",
+          100
+        ],
+        [
+          "hv_categorie",
+          "choice",
+          "Categorie",
+          {
+            "100000000": "Eigen materieel",
+            "100000001": "Gehuurd materieel",
+            "100000002": "Eigendom van derden",
+            "100000003": "Kabel of leiding (KLIP)",
+            "100000004": "Eigen werk / werfinrichting"
+          }
+        ],
+        [
+          "hv_status",
+          "choice",
+          "Status",
+          {
+            "100000000": "Gemeld",
+            "100000001": "In beoordeling",
+            "100000002": "Info gevraagd",
+            "100000003": "Ter goedkeuring",
+            "100000004": "Goedgekeurd",
+            "100000005": "Afgewezen",
+            "100000006": "In afhandeling",
+            "100000007": "Afgesloten"
+          }
+        ],
+        [
+          "hv_tijdstipschade",
+          "datetime",
+          "Tijdstip schade"
+        ],
+        [
+          "hv_locatie",
+          "text",
+          "Locatie",
+          200
+        ],
+        [
+          "hv_gps",
+          "text",
+          "GPS",
+          40
+        ],
+        [
+          "hv_omschrijving",
+          "memo",
+          "Omschrijving",
+          4000
+        ],
+        [
+          "hv_geschatbedrag",
+          "decimal",
+          "Geschat bedrag (€)"
+        ],
+        [
+          "hv_typeleiding",
+          "choice",
+          "Type leiding",
+          {
+            "100000000": "Gas",
+            "100000001": "Elektriciteit",
+            "100000002": "Water",
+            "100000003": "Telecom",
+            "100000004": "Riolering"
+          }
+        ],
+        [
+          "hv_klipreferentie",
+          "text",
+          "KLIP-referentie",
+          40
+        ],
+        [
+          "hv_leidingbeheerder",
+          "text",
+          "Leidingbeheerder",
+          100
+        ],
+        [
+          "hv_beheerderverwittigd",
+          "bool",
+          "Leidingbeheerder verwittigd"
+        ],
+        [
+          "hv_huurreferentie",
+          "text",
+          "Huurreferentie",
+          40
+        ],
+        [
+          "hv_derdebetrokken",
+          "bool",
+          "Derde betrokken"
+        ],
+        [
+          "hv_naamderde",
+          "text",
+          "Naam derde",
+          100
+        ],
+        [
+          "hv_derdeaansprakelijk",
+          "bool",
+          "Derde aansprakelijk"
+        ],
+        [
+          "hv_letsel",
+          "bool",
+          "Personenletsel"
+        ],
+        [
+          "hv_aantalfotos",
+          "int",
+          "Aantal foto's"
+        ],
+        [
+          "hv_ernst",
+          "choice",
+          "Ernst",
+          {
+            "100000000": "Laag",
+            "100000001": "Middel",
+            "100000002": "Hoog",
+            "100000003": "Kritiek"
+          }
+        ],
+        [
+          "hv_eigenaar",
+          "text",
+          "Eigenaar (rol)",
+          100
+        ],
+        [
+          "hv_verwittigd",
+          "memo",
+          "Verwittigd",
+          1000
+        ],
+        [
+          "hv_goedkeuringsketen",
+          "text",
+          "Goedkeuringsketen (DT-02)",
+          200
+        ],
+        [
+          "hv_goedkeuringsniveau",
+          "int",
+          "Goedgekeurde niveaus"
+        ],
+        [
+          "hv_deadlinebeoordeling",
+          "datetime",
+          "Beoordelen vóór"
+        ],
+        [
+          "hv_deadlineverzekeraar",
+          "datetime",
+          "Aangifte verzekeraar vóór"
+        ],
+        [
+          "hv_aangifteverstuurd",
+          "bool",
+          "Aangifte verstuurd"
+        ],
+        [
+          "hv_geescaleerd",
+          "bool",
+          "Geëscaleerd"
+        ]
+      ],
+      "lookups": [
+        [
+          "hv_werf",
+          "hv_werf",
+          "Werf"
+        ]
+      ],
+      "keys": [
+        [
+          "hv_clientid"
+        ]
+      ]
+    },
+    {
+      "name": "hv_tijdlijn",
+      "display": "Tijdlijn",
+      "plural": "Tijdlijn",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_gebeurtenis",
+        "Gebeurtenis"
+      ],
+      "columns": [
+        [
+          "hv_door",
+          "text",
+          "Door",
+          100
+        ],
+        [
+          "hv_opmerking",
+          "memo",
+          "Opmerking",
+          2000
+        ]
+      ],
+      "lookups": [
+        [
+          "hv_schadeclaim",
+          "hv_schadeclaim",
+          "Schadeclaim"
+        ]
+      ]
+    },
+    {
+      "name": "hv_goedkeurder",
+      "display": "Goedkeurder",
+      "plural": "Goedkeurders",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_rol",
+        "Rol"
+      ],
+      "columns": [
+        [
+          "hv_email",
+          "text",
+          "E-mail",
+          100
+        ],
+        [
+          "hv_vervanger",
+          "text",
+          "Vervanger",
+          100
+        ]
+      ],
+      "keys": [
+        [
+          "hv_rol"
+        ]
+      ]
+    },
+    {
+      "name": "hv_materiaalaanvraag",
+      "display": "Materiaalaanvraag",
+      "plural": "Materiaalaanvragen",
+      "ownership": "UserOwned",
+      "primary": [
+        "hv_aanvraagnr",
+        "Aanvraagnummer",
+        "MA-{DATETIMEUTC:yy}-{SEQNUM:4}"
+      ],
+      "columns": [
+        [
+          "hv_aanvrager",
+          "text",
+          "Aanvrager",
+          100
+        ],
+        [
+          "hv_leverenop",
+          "datetime",
+          "Leveren op"
+        ],
+        [
+          "hv_spoed",
+          "bool",
+          "Spoed (< 48 u)"
+        ],
+        [
+          "hv_spoedreden",
+          "choice",
+          "Spoedreden",
+          {
+            "100000000": "Onvoorziene werfsituatie",
+            "100000001": "Planning gewijzigd door opdrachtgever",
+            "100000002": "Eerdere levering onvolledig",
+            "100000003": "Vergeten te bestellen"
+          }
+        ],
+        [
+          "hv_status",
+          "choice",
+          "Status",
+          {
+            "100000000": "Concept",
+            "100000001": "Ingediend",
+            "100000002": "Ter goedkeuring",
+            "100000003": "Goedgekeurd",
+            "100000004": "Gepland",
+            "100000005": "Geleverd",
+            "100000006": "Ontvangen",
+            "100000009": "Afgewezen"
+          }
+        ],
+        [
+          "hv_waarde",
+          "decimal",
+          "Waarde (€)"
+        ],
+        [
+          "hv_budgetoverschreden",
+          "bool",
+          "Budget overschreden"
+        ],
+        [
+          "hv_aankoopnodig",
+          "bool",
+          "Aankoop nodig"
+        ],
+        [
+          "hv_route",
+          "text",
+          "Route (DT-03)",
+          200
+        ],
+        [
+          "hv_regel",
+          "text",
+          "Regel DT-03",
+          100
+        ]
+      ],
+      "lookups": [
+        [
+          "hv_werf",
+          "hv_werf",
+          "Werf"
+        ]
+      ]
+    },
+    {
+      "name": "hv_aanvraaglijn",
+      "display": "Aanvraaglijn",
+      "plural": "Aanvraaglijnen",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_naam",
+        "Lijn"
+      ],
+      "columns": [
+        [
+          "hv_hoeveelheid",
+          "decimal",
+          "Hoeveelheid"
+        ],
+        [
+          "hv_toewijzing",
+          "memo",
+          "Toewijzing per depot",
+          2000
+        ],
+        [
+          "hv_tekort",
+          "decimal",
+          "Tekort"
+        ],
+        [
+          "hv_aankoop",
+          "decimal",
+          "Aankoop"
+        ],
+        [
+          "hv_waarde",
+          "decimal",
+          "Waarde (€)"
+        ],
+        [
+          "hv_alternatief",
+          "text",
+          "Gerecycleerd alternatief",
+          200
+        ]
+      ],
+      "lookups": [
+        [
+          "hv_aanvraag",
+          "hv_materiaalaanvraag",
+          "Aanvraag"
+        ],
+        [
+          "hv_artikel",
+          "hv_artikel",
+          "Artikel"
+        ]
+      ]
+    },
+    {
+      "name": "hv_outbox",
+      "display": "ERP-outbox",
+      "plural": "ERP-outbox",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_idempotencykey",
+        "Idempotency-key"
+      ],
+      "columns": [
+        [
+          "hv_endpoint",
+          "choice",
+          "Endpoint",
+          {
+            "100000000": "weighing-tickets",
+            "100000001": "reservations",
+            "100000002": "purchase-requisitions",
+            "100000003": "goods-issues",
+            "100000004": "project-costs"
+          }
+        ],
+        [
+          "hv_body",
+          "memo",
+          "Body (JSON)",
+          8000
+        ],
+        [
+          "hv_status",
+          "choice",
+          "Status",
+          {
+            "100000000": "Wachtend",
+            "100000001": "Verzonden",
+            "100000009": "Dead-letter"
+          }
+        ],
+        [
+          "hv_pogingen",
+          "int",
+          "Pogingen"
+        ],
+        [
+          "hv_volgendepoging",
+          "datetime",
+          "Volgende poging"
+        ],
+        [
+          "hv_laatstefout",
+          "memo",
+          "Laatste fout",
+          2000
+        ],
+        [
+          "hv_referentie",
+          "text",
+          "Referentie",
+          60
+        ]
+      ],
+      "lookups": [
+        [
+          "hv_aanvraag",
+          "hv_materiaalaanvraag",
+          "Aanvraag"
+        ]
+      ],
+      "keys": [
+        [
+          "hv_idempotencykey"
+        ]
+      ]
+    }
   ],
   "environmentVariables": [
-    { "schemaName": "hv_ErpBeschikbaar", "display": "ERP-sandbox bereikbaar", "type": "boolean", "value": "yes" },
-    { "schemaName": "hv_ConfidenceThreshold", "display": "Confidence-drempel weegbonnen", "type": "decimal", "value": "0.85" },
-    { "schemaName": "hv_AutoApproveMax", "display": "Max bedrag automatische goedkeuring materiaal (€)", "type": "decimal", "value": "1000" },
-    { "schemaName": "hv_PlApproveMax", "display": "Max bedrag projectleider materiaal (€)", "type": "decimal", "value": "10000" },
-    { "schemaName": "hv_InsurerThreshold", "display": "Drempel verzekeringsaangifte schade (€)", "type": "decimal", "value": "15000" }
+    {
+      "schemaName": "hv_ErpBeschikbaar",
+      "display": "ERP-sandbox bereikbaar",
+      "type": "boolean",
+      "value": "yes"
+    },
+    {
+      "schemaName": "hv_ConfidenceThreshold",
+      "display": "Confidence-drempel weegbonnen",
+      "type": "decimal",
+      "value": "0.85"
+    },
+    {
+      "schemaName": "hv_AutoApproveMax",
+      "display": "Max bedrag automatische goedkeuring materiaal (€)",
+      "type": "decimal",
+      "value": "1000"
+    },
+    {
+      "schemaName": "hv_PlApproveMax",
+      "display": "Max bedrag projectleider materiaal (€)",
+      "type": "decimal",
+      "value": "10000"
+    },
+    {
+      "schemaName": "hv_InsurerThreshold",
+      "display": "Drempel verzekeringsaangifte schade (€)",
+      "type": "decimal",
+      "value": "15000"
+    }
   ]
 }
