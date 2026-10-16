@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{11539690-0d2c-4894-b276-673e468d9700}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="hv_code" select="1" icon="1" preview="1">
+        <row name="result" id="hv_materiaalcodeid">
+          <cell name="hv_code" width="160" />
+          <cell name="hv_omschrijving" width="130" />
+          <cell name="hv_soort" width="130" />
+          <cell name="hv_prijsperton" width="130" />
+          <cell name="hv_bodemref" width="130" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="hv_materiaalcode">
+          <attribute name="hv_code" />
+          <attribute name="hv_omschrijving" />
+          <attribute name="hv_soort" />
+          <attribute name="hv_prijsperton" />
+          <attribute name="hv_bodemref" />
+          <attribute name="hv_materiaalcodeid" />
+          <order attribute="createdon" descending="true" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+          </filter>
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Active Materiaalcodes (acceptatielijst)" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

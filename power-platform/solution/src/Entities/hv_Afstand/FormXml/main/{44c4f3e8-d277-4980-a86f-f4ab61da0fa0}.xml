@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{44c4f3e8-d277-4980-a86f-f4ab61da0fa0}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{30eebbb4-307b-45e5-921e-6deff7eea7df}" IsUserDefined="1">
+          <labels>
+            <label description="Afstand werf–depot" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{075e6afb-2b22-4073-a03b-92aaf46ffa57}">
+                  <labels>
+                    <label description="Gegevens" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{776d17b3-30e2-45af-a381-542222ffffa3}">
+                        <labels>
+                          <label description="Naam" languagecode="1033" />
+                        </labels>
+                        <control id="hv_naam" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_naam" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{d300aad4-6cbd-43eb-acde-68a6303d3ca0}">
+                        <labels>
+                          <label description="Werf" languagecode="1033" />
+                        </labels>
+                        <control id="hv_werf" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="hv_werf" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{cd1f53a3-4088-4f92-8795-5acc651f45a8}">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{050337ee-3a40-428f-a377-f8bf595ec6fc}">
+                        <labels>
+                          <label description="Depot" languagecode="1033" />
+                        </labels>
+                        <control id="hv_depot" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="hv_depot" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0690f4fe-140f-4f1f-94f7-da9d6f183de8}">
+                        <labels>
+                          <label description="Kilometer" languagecode="1033" />
+                        </labels>
+                        <control id="hv_km" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="hv_km" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Afstand werf–depot" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

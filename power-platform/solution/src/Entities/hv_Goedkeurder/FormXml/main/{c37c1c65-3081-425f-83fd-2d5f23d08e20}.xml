@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{c37c1c65-3081-425f-83fd-2d5f23d08e20}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{647aafcd-286c-45bc-a999-41662e1f23ff}" IsUserDefined="1">
+          <labels>
+            <label description="Goedkeurder" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{955fd422-fb9e-4ebc-91e4-d4f9cdeef5b1}">
+                  <labels>
+                    <label description="Gegevens" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{5dcbaa0b-76e0-400b-b320-778ed270fbcf}">
+                        <labels>
+                          <label description="Rol" languagecode="1033" />
+                        </labels>
+                        <control id="hv_rol" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_rol" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{6fb151f1-8486-4a21-8417-f8825489fca3}">
+                        <labels>
+                          <label description="E-mail" languagecode="1033" />
+                        </labels>
+                        <control id="hv_email" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_email" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{b3fb02b4-0b18-45de-a024-a3669d81acd3}">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{0a15da12-1495-4c27-974e-45c8e5c4b685}">
+                        <labels>
+                          <label description="Vervanger" languagecode="1033" />
+                        </labels>
+                        <control id="hv_vervanger" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_vervanger" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Goedkeurder" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

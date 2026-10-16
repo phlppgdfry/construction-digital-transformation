@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{735d8814-26d1-4964-b32e-18904f108053}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{94334c80-611e-4062-9191-8157c8af09c0}" IsUserDefined="1">
+          <labels>
+            <label description="Aanvraaglijn" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{9fa4d638-13dc-4533-ae77-ba14c2c711e6}">
+                  <labels>
+                    <label description="Gegevens" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{ba9a9e2e-c7ba-4b9f-b0f8-a4d8059692e7}">
+                        <labels>
+                          <label description="Lijn" languagecode="1033" />
+                        </labels>
+                        <control id="hv_naam" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_naam" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{219653b8-4eaa-477a-8668-86423fa11ddc}">
+                        <labels>
+                          <label description="Aanvraag" languagecode="1033" />
+                        </labels>
+                        <control id="hv_aanvraag" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="hv_aanvraag" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{cc476be7-98dd-4fd6-a7c9-fef1313e61b7}">
+                        <labels>
+                          <label description="Artikel" languagecode="1033" />
+                        </labels>
+                        <control id="hv_artikel" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="hv_artikel" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5aab8256-4800-41d4-afe9-60e82c001697}">
+                        <labels>
+                          <label description="Hoeveelheid" languagecode="1033" />
+                        </labels>
+                        <control id="hv_hoeveelheid" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="hv_hoeveelheid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{45824685-1c09-4a04-b1fe-be455b8df9aa}">
+                        <labels>
+                          <label description="Toewijzing per depot" languagecode="1033" />
+                        </labels>
+                        <control id="hv_toewijzing" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="hv_toewijzing" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{dd362746-aeed-47b7-804e-3b2808ec8fdb}">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{9349a032-fc4c-45d2-b2e6-64ad8d312e43}">
+                        <labels>
+                          <label description="Tekort" languagecode="1033" />
+                        </labels>
+                        <control id="hv_tekort" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="hv_tekort" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5711a650-1a51-42af-858f-0e997a1238a9}">
+                        <labels>
+                          <label description="Aankoop" languagecode="1033" />
+                        </labels>
+                        <control id="hv_aankoop" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="hv_aankoop" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c91a9c4c-025d-426d-89e0-54ae5bc535d3}">
+                        <labels>
+                          <label description="Waarde (€)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_waarde" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="hv_waarde" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{b553ca47-cf60-4e15-a72a-38dbc2564fbc}">
+                        <labels>
+                          <label description="Gerecycleerd alternatief" languagecode="1033" />
+                        </labels>
+                        <control id="hv_alternatief" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_alternatief" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Aanvraaglijn" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

@@ -1,0 +1,336 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{00508734-4530-47d2-b486-86efce3e21e3}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{0e5ac8ae-ddca-4570-89c2-4a2a9c579d98}" IsUserDefined="1">
+          <labels>
+            <label description="Schadeclaim" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{3c1b8bf0-ea34-42f9-b90c-447c1638b4f6}">
+                  <labels>
+                    <label description="Gegevens" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{75d82d2d-2bf2-4aa3-8df4-85c5d8d358d0}">
+                        <labels>
+                          <label description="Dossiernummer" languagecode="1033" />
+                        </labels>
+                        <control id="hv_dossiernummer" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_dossiernummer" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{f0e8d2d9-44d4-44c2-88a7-307c38e26111}">
+                        <labels>
+                          <label description="Werf" languagecode="1033" />
+                        </labels>
+                        <control id="hv_werf" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="hv_werf" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{d039ba54-1f1b-4d85-85b0-6678e6baa9e2}">
+                        <labels>
+                          <label description="Client-ID (offline)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_clientid" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_clientid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{30373c11-2d3a-4ee4-a1da-3e8ed51d05f5}">
+                        <labels>
+                          <label description="Melder" languagecode="1033" />
+                        </labels>
+                        <control id="hv_melder" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_melder" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{19aab438-aff7-4311-8796-4e63d981fe15}">
+                        <labels>
+                          <label description="Categorie" languagecode="1033" />
+                        </labels>
+                        <control id="hv_categorie" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_categorie" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{b8f89c56-49ca-474f-a99b-9e003b55c4f7}">
+                        <labels>
+                          <label description="Status" languagecode="1033" />
+                        </labels>
+                        <control id="hv_status" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_status" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{4d03e51b-2ab2-4416-814a-f67805073de7}">
+                        <labels>
+                          <label description="Tijdstip schade" languagecode="1033" />
+                        </labels>
+                        <control id="hv_tijdstipschade" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="hv_tijdstipschade" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5e87dfdd-ce68-4ece-93fd-dd84b230962e}">
+                        <labels>
+                          <label description="Locatie" languagecode="1033" />
+                        </labels>
+                        <control id="hv_locatie" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_locatie" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5d353d41-e51d-4b59-a9f0-c227e665aec0}">
+                        <labels>
+                          <label description="GPS" languagecode="1033" />
+                        </labels>
+                        <control id="hv_gps" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_gps" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{8403631e-44b6-494d-b329-638612a66c30}">
+                        <labels>
+                          <label description="Omschrijving" languagecode="1033" />
+                        </labels>
+                        <control id="hv_omschrijving" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="hv_omschrijving" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{b1ffa5ab-f4df-4d35-aebf-c80294a5f456}">
+                        <labels>
+                          <label description="Geschat bedrag (€)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_geschatbedrag" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="hv_geschatbedrag" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{19e0a1f2-96c7-4686-85b5-f6ad074e9934}">
+                        <labels>
+                          <label description="Type leiding" languagecode="1033" />
+                        </labels>
+                        <control id="hv_typeleiding" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_typeleiding" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{3c39ec6c-f62d-4ee1-ada5-0bfae0ba32f2}">
+                        <labels>
+                          <label description="KLIP-referentie" languagecode="1033" />
+                        </labels>
+                        <control id="hv_klipreferentie" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_klipreferentie" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{2c34d236-49e2-4463-a1bd-1aeb0f4a53e3}">
+                        <labels>
+                          <label description="Leidingbeheerder" languagecode="1033" />
+                        </labels>
+                        <control id="hv_leidingbeheerder" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_leidingbeheerder" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{2a601d61-da13-4aa7-926f-d7e53ae3fa25}">
+                        <labels>
+                          <label description="Leidingbeheerder verwittigd" languagecode="1033" />
+                        </labels>
+                        <control id="hv_beheerderverwittigd" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="hv_beheerderverwittigd" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{904705c6-bfee-455f-b52f-ee13aae69086}">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{63b50338-06c1-4b40-ad16-2dd7d0b4b7d3}">
+                        <labels>
+                          <label description="Huurreferentie" languagecode="1033" />
+                        </labels>
+                        <control id="hv_huurreferentie" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_huurreferentie" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{07423aff-ec35-475f-b92f-d1844720978f}">
+                        <labels>
+                          <label description="Derde betrokken" languagecode="1033" />
+                        </labels>
+                        <control id="hv_derdebetrokken" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="hv_derdebetrokken" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{b75c58f7-9c18-4f70-ae37-1a0f3123b2fe}">
+                        <labels>
+                          <label description="Naam derde" languagecode="1033" />
+                        </labels>
+                        <control id="hv_naamderde" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_naamderde" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{63c3a07e-e480-467e-8ab3-72fb52b95334}">
+                        <labels>
+                          <label description="Derde aansprakelijk" languagecode="1033" />
+                        </labels>
+                        <control id="hv_derdeaansprakelijk" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="hv_derdeaansprakelijk" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{9c131130-0a03-47b2-a299-1101f66e395b}">
+                        <labels>
+                          <label description="Personenletsel" languagecode="1033" />
+                        </labels>
+                        <control id="hv_letsel" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="hv_letsel" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{27df973c-77ce-4afe-8125-88f2415b326e}">
+                        <labels>
+                          <label description="Aantal foto's" languagecode="1033" />
+                        </labels>
+                        <control id="hv_aantalfotos" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="hv_aantalfotos" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{1652908f-bc8a-4301-b097-7bff6eabca2c}">
+                        <labels>
+                          <label description="Ernst" languagecode="1033" />
+                        </labels>
+                        <control id="hv_ernst" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_ernst" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{58e30895-d20e-42be-82f5-caa6f826973f}">
+                        <labels>
+                          <label description="Eigenaar (rol)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_eigenaar" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_eigenaar" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{15042670-dd1c-4af6-aa34-092c3fdc6968}">
+                        <labels>
+                          <label description="Verwittigd" languagecode="1033" />
+                        </labels>
+                        <control id="hv_verwittigd" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="hv_verwittigd" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a2720854-d122-4445-8011-dfb9380ba1b6}">
+                        <labels>
+                          <label description="Goedkeuringsketen (DT-02)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_goedkeuringsketen" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_goedkeuringsketen" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{3b899471-237b-4341-9638-eb61fd7404b7}">
+                        <labels>
+                          <label description="Goedgekeurde niveaus" languagecode="1033" />
+                        </labels>
+                        <control id="hv_goedkeuringsniveau" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="hv_goedkeuringsniveau" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{f5ed9b15-30d0-4a77-8cf3-c1aeadde4900}">
+                        <labels>
+                          <label description="Beoordelen vóór" languagecode="1033" />
+                        </labels>
+                        <control id="hv_deadlinebeoordeling" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="hv_deadlinebeoordeling" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{42726e71-4ac5-4937-9065-bcfcbaccb202}">
+                        <labels>
+                          <label description="Aangifte verzekeraar vóór" languagecode="1033" />
+                        </labels>
+                        <control id="hv_deadlineverzekeraar" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="hv_deadlineverzekeraar" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c5f9b95f-970a-422a-bb35-0dba54a284b8}">
+                        <labels>
+                          <label description="Aangifte verstuurd" languagecode="1033" />
+                        </labels>
+                        <control id="hv_aangifteverstuurd" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="hv_aangifteverstuurd" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{1b0748f7-f514-4503-99bb-5fddde43a5b6}">
+                        <labels>
+                          <label description="Geëscaleerd" languagecode="1033" />
+                        </labels>
+                        <control id="hv_geescaleerd" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="hv_geescaleerd" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{5d03fbf7-9247-4abe-a064-48c1ca459048}" IsUserDefined="1">
+          <labels>
+            <label description="Gerelateerd" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{56cd5f8a-b669-41ea-bc3b-95ebea8eea5f}">
+                  <labels>
+                    <label description="Tijdlijn (audit)" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{13102b2f-1736-4dcf-9fa6-6676b3a8993c}" rowspan="6" colspan="1">
+                        <labels>
+                          <label description="Tijdlijn (audit)" languagecode="1033" />
+                        </labels>
+                        <control id="sg_hv_tijdlijn" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true" uniqueid="{be0e375b-1000-46e3-a5ef-eb2d259b96e8}">
+                          <parameters>
+                            <RecordsPerPage>10</RecordsPerPage>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableJumpBar>false</EnableJumpBar>
+                            <ChartGridMode>Grid</ChartGridMode>
+                            <VisualizationId />
+                            <IsUserView>false</IsUserView>
+                            <ViewId>{691eb74c-4e4a-4a1f-b032-3312128f4d80}</ViewId>
+                            <TargetEntityType>hv_tijdlijn</TargetEntityType>
+                            <ViewIds>{691eb74c-4e4a-4a1f-b032-3312128f4d80}</ViewIds>
+                            <RelationshipName>hv_schadeclaim_tijdlijn_schadeclaim</RelationshipName>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Schadeclaim" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

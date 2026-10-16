@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{b5e8e53e-6348-4b15-9210-ee93a2c31776}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="hv_werfnr" select="1" icon="1" preview="1">
+        <row name="result" id="hv_werfid">
+          <cell name="hv_werfnr" width="160" />
+          <cell name="hv_naam" width="130" />
+          <cell name="hv_type" width="130" />
+          <cell name="hv_actief" width="130" />
+          <cell name="hv_projectleider" width="130" />
+          <cell name="hv_afdeling" width="130" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="hv_werf">
+          <attribute name="hv_werfnr" />
+          <attribute name="hv_naam" />
+          <attribute name="hv_type" />
+          <attribute name="hv_actief" />
+          <attribute name="hv_projectleider" />
+          <attribute name="hv_afdeling" />
+          <attribute name="hv_werfid" />
+          <order attribute="createdon" descending="true" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+          </filter>
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Active Werven" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{1cbe3710-b969-4573-aaa3-601574f78ed3}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="hv_naam" select="1" icon="1" preview="1">
+        <row name="result" id="hv_aanvraaglijnid">
+          <cell name="hv_naam" width="160" />
+          <cell name="hv_aanvraag" width="130" />
+          <cell name="hv_artikel" width="130" />
+          <cell name="hv_hoeveelheid" width="130" />
+          <cell name="hv_toewijzing" width="130" />
+          <cell name="hv_tekort" width="130" />
+          <cell name="hv_waarde" width="130" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="hv_aanvraaglijn">
+          <attribute name="hv_naam" />
+          <attribute name="hv_aanvraag" />
+          <attribute name="hv_artikel" />
+          <attribute name="hv_hoeveelheid" />
+          <attribute name="hv_toewijzing" />
+          <attribute name="hv_tekort" />
+          <attribute name="hv_waarde" />
+          <attribute name="hv_aanvraaglijnid" />
+          <order attribute="createdon" descending="true" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+          </filter>
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Active Aanvraaglijnen" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

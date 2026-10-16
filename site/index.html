@@ -19,6 +19,7 @@
       <a href="#cases">Cases</a>
       <a href="#methode">Werkwijze</a>
       <a href="#architectuur">Architectuur</a>
+      <a href="#powerplatform">Power Platform</a>
       <a href="#vragen">Lastige vragen</a>
       <a href="demo/">Werfportaal-demo</a>
       <a href="https://github.com/phlppgdfry/construction-digital-transformation">GitHub</a>
@@ -156,6 +157,22 @@
     </div>
   </section>
 
+  <section class="section grey" id="powerplatform">
+    <div class="wrap">
+      <div class="section-title"><h2>Echt gebouwd in Power Platform</h2><span class="muted">ontwikkelomgeving met fictieve data</span></div>
+      <p class="measure">De drie cases draaien ook in Microsoft Power Platform: <strong>17 Dataverse-tabellen, 7 Power Automate-flows, een model-driven backoffice-app, Approvals</strong> en een werfapp, samen in één solution. Dezelfde scenario's als in de tests zijn door de echte flows gestuurd. De uitkomst is identiek aan de geteste regelmotor: <strong>30/30</strong> weegbonnen, <strong>5/5</strong> schadeclaims en <strong>4/4</strong> materiaalaanvragen. Een ERP-storing werd opgevangen met retry en precies één boeking per bericht.</p>
+      <div class="grid cards-3" style="margin-top:18px">
+        <figure class="figure"><img style="width:100%" src="assets/pp/04-flow-hv-di-01-run.jpg" alt="Power Automate-run van de weegbonflow met alle stappen geslaagd"><figcaption>Flow HV-DI-01: echte run, elf regels, alle stappen geslaagd.</figcaption></figure>
+        <figure class="figure"><img style="width:100%" src="assets/pp/07-app-weegbonnen.jpg" alt="Model-driven app met weegbonnen, status en ERP-referentie"><figcaption>Backoffice-app: 20 geboekt, 8 nazicht, 1 escalatie, 1 dubbel.</figcaption></figure>
+        <figure class="figure"><img style="width:100%" src="assets/pp/09-app-schadeclaim-gaslek.jpg" alt="Schadeclaim gaslek met triage en goedkeuringsketen"><figcaption>Gaslek: kritiek, vijf partijen verwittigd, DT-02-keten.</figcaption></figure>
+        <figure class="figure"><img style="width:100%" src="assets/pp/12-app-aanvraaglijnen-toewijzing.jpg" alt="Aanvraaglijnen met toewijzing per depot"><figcaption>Toewijzing per depot, dichtste eerst, door de flow.</figcaption></figure>
+        <figure class="figure"><img style="width:100%" src="assets/pp/13-app-outbox-tijdens-storing.jpg" alt="ERP-outbox tijdens een storing met 503 en geplande nieuwe poging"><figcaption>ERP-storing: retry met 503, daarna precies één boeking.</figcaption></figure>
+        <figure class="figure"><img style="width:100%" src="assets/pp/02-cloudflows-aan.jpg" alt="Zeven Power Automate-flows aan in de solution"><figcaption>Zeven flows aan in de solution.</figcaption></figure>
+      </div>
+      <div class="cta-row" style="margin-top:18px"><a class="btn" href="https://github.com/phlppgdfry/construction-digital-transformation/tree/main/power-platform">Solution, scripts en verificatie</a></div>
+    </div>
+  </section>
+
   <section class="section" id="vragen">
     <div class="wrap">
       <div class="section-title"><h2>Lastige vragen</h2><span class="muted">wat een stuurgroep of IT-team terecht vraagt</span></div>
@@ -176,7 +193,7 @@
       <ul class="limits measure">
         <li>Halverdijk Group, de documenten, dossiers en aanvragen zijn fictief. De cijfers zijn aannames in <code>data/assumptions.json</code> of komen uit verzonnen datasets.</li>
         <li>Workshops en gebruikersvalidatie zijn uitgeschreven als scenario. Ze hebben niet met echte medewerkers plaatsgevonden.</li>
-        <li>De Power Automate-flows, Power Apps-schermen en Dataverse-tabellen zijn ontwerp-artefacten (geldige JSON/YAML, getest op structuur). Ze zijn niet in een productieomgeving geïmporteerd.</li>
+        <li>De Power Platform-oplossing draait in een ontwikkelomgeving, niet in productie. Het ERP is daar een sandbox van Dataverse-tabellen, en document-AI is niet gekoppeld (weegbonnen komen binnen als reeds geëxtraheerde rijen).</li>
         <li>De beslisregels zijn wél uitgevoerd in de echte Power Fx-engine (<code>pac power-fx run</code>) en vergeleken met de regelmotor.</li>
         <li>De demo gebruikt dezelfde regelmotor als de tests, maar de AI-extractie en het ERP worden gesimuleerd.</li>
       </ul>

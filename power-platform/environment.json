@@ -1,0 +1,14 @@
+{
+  "_note": "Ontwikkelomgeving voor de portfolio (Developer-omgeving, fictieve Halverdijk-data). Geen productie.",
+  "name": "Halverdijk Dev",
+  "environmentId": "7a2e1ae0-c020-efc7-9cfc-9e6536c3415d",
+  "url": "https://halverdijkdev.crm17.dynamics.com",
+  "tenantId": "(lokaal in environment.local.json of HV_TENANT_ID; niet gecommit)",
+  "solution": "HalverdijkTransformatie",
+  "publisher": {
+    "uniquename": "halverdijk",
+    "friendlyname": "Halverdijk (fictief)",
+    "prefix": "hv",
+    "optionPrefix": 10000
+  }
+}

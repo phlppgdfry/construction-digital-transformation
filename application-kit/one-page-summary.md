@@ -6,7 +6,8 @@
 
 **Bewijs:**
 - 6 BPMN 2.0-modellen, geldig volgens `bpmn-moddle` in CI
-- 3 regelmotoren met 85 tests; beslistabellen in de echte Power Fx-engine 25/25 identiek
+- 3 regelmotoren met 96 tests; beslistabellen in de echte Power Fx-engine 25/25 identiek
+- **gebouwd in Power Platform** (ontwikkelomgeving): 17 Dataverse-tabellen, 7 flows, model-driven app, Approvals; echte flows 30/30, 5/5 en 4/4 identiek aan de motor
 - 7 Power Automate-flows, 3 Power Apps-schermen (`.pa.yaml`), Dataverse-modellen, 2 OpenAPI-contracten
 - businesscases met conservatief model en gevoeligheidsanalyse; elk getal in de docs komt uit het model
 - interactieve demo met rondleiding van 2 minuten

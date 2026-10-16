@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{63c24e4b-99ce-4ed0-a95b-fe3356357c22}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{949e9bd5-7c46-418b-94ef-f7b9a241e076}" IsUserDefined="1">
+          <labels>
+            <label description="Materiaalcode (acceptatielijst)" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{a1ed80d7-8769-4ac3-9b59-08fdc9ea61fd}">
+                  <labels>
+                    <label description="Gegevens" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{700cd613-0b42-42b0-ae73-ea91edc006c5}">
+                        <labels>
+                          <label description="Code" languagecode="1033" />
+                        </labels>
+                        <control id="hv_code" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_code" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{99a0e8d3-fd08-4970-94a9-c61f2527cd05}">
+                        <labels>
+                          <label description="Omschrijving" languagecode="1033" />
+                        </labels>
+                        <control id="hv_omschrijving" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_omschrijving" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{39c38ca5-47ae-421a-9b38-430ca4565ffd}">
+                        <labels>
+                          <label description="Soort" languagecode="1033" />
+                        </labels>
+                        <control id="hv_soort" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_soort" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{28ac5dd5-7461-4bf1-8f41-8df9f5f30eab}">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{5cd16bdb-cb9a-44b1-81d9-ec814cce0c89}">
+                        <labels>
+                          <label description="Prijs per ton (€)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_prijsperton" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="hv_prijsperton" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{365b2b0f-a4d5-4842-b07e-7913a20b1efb}">
+                        <labels>
+                          <label description="Traceerbaarheidsreferentie verplicht" languagecode="1033" />
+                        </labels>
+                        <control id="hv_bodemref" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="hv_bodemref" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Materiaalcode (acceptatielijst)" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

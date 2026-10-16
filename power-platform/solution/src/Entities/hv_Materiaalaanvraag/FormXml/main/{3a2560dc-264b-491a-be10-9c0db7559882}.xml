@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{3a2560dc-264b-491a-be10-9c0db7559882}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{8dc5a6b5-9481-4ca7-b7c1-0241fd8acb96}" IsUserDefined="1">
+          <labels>
+            <label description="Materiaalaanvraag" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{a7ffc5d9-e056-4b20-afe2-f6af221f09af}">
+                  <labels>
+                    <label description="Gegevens" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{f46847e1-8108-487d-b30f-79f3833579d0}">
+                        <labels>
+                          <label description="Aanvraagnummer" languagecode="1033" />
+                        </labels>
+                        <control id="hv_aanvraagnr" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_aanvraagnr" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{f1986734-de82-4418-9a3c-920bc8a927f0}">
+                        <labels>
+                          <label description="Werf" languagecode="1033" />
+                        </labels>
+                        <control id="hv_werf" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="hv_werf" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{db63beaa-44e4-4a68-be21-d544fd4238a9}">
+                        <labels>
+                          <label description="Aanvrager" languagecode="1033" />
+                        </labels>
+                        <control id="hv_aanvrager" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_aanvrager" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{330512d7-ac1b-4f3c-8661-b4f55c7af166}">
+                        <labels>
+                          <label description="Leveren op" languagecode="1033" />
+                        </labels>
+                        <control id="hv_leverenop" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="hv_leverenop" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{31d6a403-db99-4796-92e2-c9b04e42ec56}">
+                        <labels>
+                          <label description="Spoed (&lt; 48 u)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_spoed" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="hv_spoed" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{833bff6e-1f41-4944-8db0-8589d2cca5e5}">
+                        <labels>
+                          <label description="Spoedreden" languagecode="1033" />
+                        </labels>
+                        <control id="hv_spoedreden" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_spoedreden" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{1e32b792-8de2-4a7c-93df-1db6fbafd7d0}">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{a9e75a53-67d1-4f10-983a-cc9e1e15d375}">
+                        <labels>
+                          <label description="Status" languagecode="1033" />
+                        </labels>
+                        <control id="hv_status" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_status" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{cf8db149-17ed-468e-9bd4-465c7e6e6866}">
+                        <labels>
+                          <label description="Waarde (€)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_waarde" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="hv_waarde" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{65092486-6801-43c0-8dd5-b6700b6ee848}">
+                        <labels>
+                          <label description="Budget overschreden" languagecode="1033" />
+                        </labels>
+                        <control id="hv_budgetoverschreden" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="hv_budgetoverschreden" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{ff4b8081-8923-42a6-963e-706c994a5b4e}">
+                        <labels>
+                          <label description="Aankoop nodig" languagecode="1033" />
+                        </labels>
+                        <control id="hv_aankoopnodig" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="hv_aankoopnodig" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0e2e0713-0909-4d46-a624-39b0e0761e8a}">
+                        <labels>
+                          <label description="Route (DT-03)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_route" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_route" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{8c3b2837-f799-44db-89f5-df0b2b11cdfd}">
+                        <labels>
+                          <label description="Regel DT-03" languagecode="1033" />
+                        </labels>
+                        <control id="hv_regel" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_regel" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{a93e9f53-a916-47b3-94be-0f9b54f346b9}" IsUserDefined="1">
+          <labels>
+            <label description="Gerelateerd" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{becd85e6-d788-4d21-9f4f-48e6f5768476}">
+                  <labels>
+                    <label description="Aanvraaglijnen en toewijzing" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{8024c8e1-a3e8-4e2e-97f8-9df8933db05a}" rowspan="6" colspan="1">
+                        <labels>
+                          <label description="Aanvraaglijnen en toewijzing" languagecode="1033" />
+                        </labels>
+                        <control id="sg_hv_aanvraaglijn" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true" uniqueid="{c1f07ce7-515e-4791-bb8a-a487f2bdf0ba}">
+                          <parameters>
+                            <RecordsPerPage>10</RecordsPerPage>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableJumpBar>false</EnableJumpBar>
+                            <ChartGridMode>Grid</ChartGridMode>
+                            <VisualizationId />
+                            <IsUserView>false</IsUserView>
+                            <ViewId>{bdfc5de5-30e4-4eb2-96ed-a50662dee35f}</ViewId>
+                            <TargetEntityType>hv_aanvraaglijn</TargetEntityType>
+                            <ViewIds>{bdfc5de5-30e4-4eb2-96ed-a50662dee35f}</ViewIds>
+                            <RelationshipName>hv_materiaalaanvraag_aanvraaglijn_aanvraag</RelationshipName>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{ad9d2170-8f0e-4a9d-a4c1-fbfd4f809111}">
+                  <labels>
+                    <label description="ERP-berichten (outbox)" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{8b5cca51-45e4-41ce-bc8b-14c9a41c1d16}" rowspan="6" colspan="1">
+                        <labels>
+                          <label description="ERP-berichten (outbox)" languagecode="1033" />
+                        </labels>
+                        <control id="sg_hv_outbox" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true" uniqueid="{182a9b1b-24ed-4c2f-88ae-1e3b7a7c6a43}">
+                          <parameters>
+                            <RecordsPerPage>10</RecordsPerPage>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableJumpBar>false</EnableJumpBar>
+                            <ChartGridMode>Grid</ChartGridMode>
+                            <VisualizationId />
+                            <IsUserView>false</IsUserView>
+                            <ViewId>{f4431ed1-fd4b-4f1a-86d5-ae4a335e0f85}</ViewId>
+                            <TargetEntityType>hv_outbox</TargetEntityType>
+                            <ViewIds>{f4431ed1-fd4b-4f1a-86d5-ae4a335e0f85}</ViewIds>
+                            <RelationshipName>hv_materiaalaanvraag_outbox_aanvraag</RelationshipName>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Materiaalaanvraag" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

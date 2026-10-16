@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{af622161-b981-4955-a9e9-ccd757114044}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="hv_dossiernummer" select="1" icon="1" preview="1">
+        <row name="result" id="hv_schadeclaimid">
+          <cell name="hv_dossiernummer" width="160" />
+          <cell name="hv_status" width="130" />
+          <cell name="hv_ernst" width="130" />
+          <cell name="hv_categorie" width="130" />
+          <cell name="hv_werf" width="130" />
+          <cell name="hv_geschatbedrag" width="130" />
+          <cell name="hv_eigenaar" width="130" />
+          <cell name="hv_goedkeuringsketen" width="130" />
+          <cell name="hv_deadlinebeoordeling" width="130" />
+          <cell name="hv_deadlineverzekeraar" width="130" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="hv_schadeclaim">
+          <attribute name="hv_dossiernummer" />
+          <attribute name="hv_status" />
+          <attribute name="hv_ernst" />
+          <attribute name="hv_categorie" />
+          <attribute name="hv_werf" />
+          <attribute name="hv_geschatbedrag" />
+          <attribute name="hv_eigenaar" />
+          <attribute name="hv_goedkeuringsketen" />
+          <attribute name="hv_deadlinebeoordeling" />
+          <attribute name="hv_deadlineverzekeraar" />
+          <attribute name="hv_schadeclaimid" />
+          <order attribute="createdon" descending="true" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+          </filter>
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Active Schadeclaims" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

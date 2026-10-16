@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AppModuleSiteMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SiteMapUniqueName>hv_backoffice</SiteMapUniqueName>
+  <EnableCollapsibleGroups>False</EnableCollapsibleGroups>
+  <ShowHome>True</ShowHome>
+  <ShowPinned>True</ShowPinned>
+  <ShowRecents>True</ShowRecents>
+  <SiteMap IntroducedVersion="7.0.0.0">
+    <Area Id="hv_area_c1" ShowGroups="true">
+      <Titles>
+        <Title LCID="1033" Title="01 Weegbonnen" />
+      </Titles>
+      <Group Id="hv_area_c1_g0" IsProfile="false">
+        <Titles>
+          <Title LCID="1033" Title="Recyclage" />
+        </Titles>
+        <SubArea Id="hv_area_c1_hv_document" Entity="hv_document">
+          <Titles>
+            <Title LCID="1033" Title="Weegbonnen" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="hv_area_c1_hv_erpboeking" Entity="hv_erpboeking">
+          <Titles>
+            <Title LCID="1033" Title="ERP-boekingen (sandbox)" />
+          </Titles>
+        </SubArea>
+      </Group>
+      <Group Id="hv_area_c1_g1" IsProfile="false">
+        <Titles>
+          <Title LCID="1033" Title="Stamgegevens" />
+        </Titles>
+        <SubArea Id="hv_area_c1_hv_klant" Entity="hv_klant">
+          <Titles>
+            <Title LCID="1033" Title="Klanten (ERP-sandbox)" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="hv_area_c1_hv_nummerplaat" Entity="hv_nummerplaat">
+          <Titles>
+            <Title LCID="1033" Title="Nummerplaten" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="hv_area_c1_hv_materiaalcode" Entity="hv_materiaalcode">
+          <Titles>
+            <Title LCID="1033" Title="Materiaalcodes (acceptatielijst)" />
+          </Titles>
+        </SubArea>
+      </Group>
+    </Area>
+    <Area Id="hv_area_c2" ShowGroups="true">
+      <Titles>
+        <Title LCID="1033" Title="02 Schadeclaims" />
+      </Titles>
+      <Group Id="hv_area_c2_g0" IsProfile="false">
+        <Titles>
+          <Title LCID="1033" Title="Dossiers" />
+        </Titles>
+        <SubArea Id="hv_area_c2_hv_schadeclaim" Entity="hv_schadeclaim">
+          <Titles>
+            <Title LCID="1033" Title="Schadeclaims" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="hv_area_c2_hv_tijdlijn" Entity="hv_tijdlijn">
+          <Titles>
+            <Title LCID="1033" Title="Tijdlijn" />
+          </Titles>
+        </SubArea>
+      </Group>
+      <Group Id="hv_area_c2_g1" IsProfile="false">
+        <Titles>
+          <Title LCID="1033" Title="Instellingen" />
+        </Titles>
+        <SubArea Id="hv_area_c2_hv_goedkeurder" Entity="hv_goedkeurder">
+          <Titles>
+            <Title LCID="1033" Title="Goedkeurders" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="hv_area_c2_hv_werf" Entity="hv_werf">
+          <Titles>
+            <Title LCID="1033" Title="Werven" />
+          </Titles>
+        </SubArea>
+      </Group>
+    </Area>
+    <Area Id="hv_area_c3" ShowGroups="true">
+      <Titles>
+        <Title LCID="1033" Title="03 Materiaal" />
+      </Titles>
+      <Group Id="hv_area_c3_g0" IsProfile="false">
+        <Titles>
+          <Title LCID="1033" Title="Aanvragen" />
+        </Titles>
+        <SubArea Id="hv_area_c3_hv_materiaalaanvraag" Entity="hv_materiaalaanvraag">
+          <Titles>
+            <Title LCID="1033" Title="Materiaalaanvragen" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="hv_area_c3_hv_aanvraaglijn" Entity="hv_aanvraaglijn">
+          <Titles>
+            <Title LCID="1033" Title="Aanvraaglijnen" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="hv_area_c3_hv_outbox" Entity="hv_outbox">
+          <Titles>
+            <Title LCID="1033" Title="ERP-outbox" />
+          </Titles>
+        </SubArea>
+      </Group>
+      <Group Id="hv_area_c3_g1" IsProfile="false">
+        <Titles>
+          <Title LCID="1033" Title="ERP-sandbox" />
+        </Titles>
+        <SubArea Id="hv_area_c3_hv_artikel" Entity="hv_artikel">
+          <Titles>
+            <Title LCID="1033" Title="Artikels (ERP-sandbox)" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="hv_area_c3_hv_voorraad" Entity="hv_voorraad">
+          <Titles>
+            <Title LCID="1033" Title="Voorraden (ERP-sandbox)" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="hv_area_c3_hv_depot" Entity="hv_depot">
+          <Titles>
+            <Title LCID="1033" Title="Depots" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="hv_area_c3_hv_afstand" Entity="hv_afstand">
+          <Titles>
+            <Title LCID="1033" Title="Afstanden werf–depot" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="hv_area_c3_hv_werfbudget" Entity="hv_werfbudget">
+          <Titles>
+            <Title LCID="1033" Title="Werfbudgetten" />
+          </Titles>
+        </SubArea>
+      </Group>
+    </Area>
+  </SiteMap>
+  <LocalizedNames>
+    <LocalizedName description="Halverdijk Backoffice" languagecode="1033" />
+  </LocalizedNames>
+</AppModuleSiteMap>

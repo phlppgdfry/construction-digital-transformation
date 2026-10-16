@@ -14,6 +14,15 @@
 | 02 | [**Schadeclaims**](02-construction-claims/README.md) | Hoe gaat schade op de werf van melding tot afgesloten dossier, zonder verloren info of verstreken verzekeringstermijn? | te late aangiftes <!--n:c2.latePct-->54%<!--/n--> → doel <!--n:c2.lateTarget-->5%<!--/n-->; offline melden, DT-02 getest in Power Fx |
 | 03 | [**Materiaalaanvragen**](03-material-requests/README.md) | Hoe krijgt een werfleider zijn materiaal op tijd, met voorraad, budget en transport onder controle? | <!--n:c3.autoPct-->43%<!--/n--> automatisch goedgekeurd (replay), ERP-koppeling die een storing overleeft |
 
+## Draait ook echt in Microsoft Power Platform
+
+De drie cases zijn gebouwd in een eigen Power Platform-ontwikkelomgeving: **17 Dataverse-tabellen, 7 Power Automate-flows (aan), een model-driven backoffice-app, Approvals en een werfapp (code app)**, samen in één solution. Dezelfde scenario's als in de tests zijn door de echte flows gestuurd, met dit resultaat: weegbonnen **30/30**, schadeclaims **5/5** en materiaalaanvragen **4/4** identiek aan de geteste regelmotor. Een ERP-storing werd opgevangen met retry en precies één boeking per bericht. → [power-platform/](power-platform/README.md) · [verificatie](power-platform/VERIFICATION.md) · [solution-export](power-platform/solution/)
+
+| | |
+|---|---|
+| ![Flow-run met alle stappen geslaagd](power-platform/screenshots/04-flow-hv-di-01-run.jpg) | ![Model-driven app: weegbonnen met beslissing en ERP-referentie](power-platform/screenshots/07-app-weegbonnen.jpg) |
+| ![Schadeclaim met triage en DT-02-keten](power-platform/screenshots/09-app-schadeclaim-gaslek.jpg) | ![ERP-outbox tijdens een storing: retry met 503](power-platform/screenshots/13-app-outbox-tijdens-storing.jpg) |
+
 Plus [**shared-methodology/**](shared-methodology/README.md): werkwijze, stakeholdermethodiek, workshop-toolkit, architectuurprincipes, technologiekeuzes, KPI-framework, zes ADR's, templates en [de lastige vragen](shared-methodology/lastige-vragen.md).
 
 ## Eén werkwijze, drie keer toegepast
@@ -52,13 +61,13 @@ Node.js 22 of hoger. Geen accounts of sleutels nodig.
 
 ```sh
 npm ci
-npm run check   # build + 85 tests + linkcheck
+npm run check   # build + 96 tests + linkcheck
 npm run serve   # http://localhost:8000
 ```
 
 | Wat | Hoe | Wat je ziet |
 |---|---|---|
-| Regels en businesscase | `npm test` | 85 tests: regelmotoren, BPMN-validiteit, flowdefinities, OpenAPI, Power Apps-YAML, Power Fx-resultaten |
+| Regels en businesscase | `npm test` | 96 tests: regelmotoren, BPMN-validiteit, flowdefinities, OpenAPI, Power Apps-YAML, Power Fx-resultaten, Power Platform-solution |
 | Getallen in docs = model | `npm run build && git diff --exit-code` | CI faalt als een document afwijkt van [`src/metrics.mjs`](src/metrics.mjs) |
 | Power Fx met de echte engine | `node scripts/check-powerfx.mjs` (vereist [Power Platform CLI](https://learn.microsoft.com/power-platform/developer/cli/introduction)) | 25/25 gevallen identiek met de JS-motor |
 | BPMN openen | [bpmn.io](https://demo.bpmn.io) → open `*/bpmn/*.bpmn` | bewerkbare modellen met lanes |
@@ -81,7 +90,8 @@ tests/                      node:test
 ## Eerlijke grenzen
 
 - Alles is fictief en geïllustreerd met aannames. Een echte businesscase begint met een nulmeting bij de proceseigenaar.
-- Flows, apps en tabellen zijn ontwerp-artefacten (structureel getest). Ze zijn niet in een productieomgeving geïmporteerd. De beslisregels zijn wel uitgevoerd in de echte Power Fx-engine.
+- De oplossing draait in een **ontwikkelomgeving** met fictieve data, niet in productie. Het ERP is daar een sandbox van Dataverse-tabellen, en document-AI is niet gekoppeld (weegbonnen komen binnen als reeds geëxtraheerde rijen).
+- De ontwerp-artefacten in `*/artefacts/` (onder meer de ERP-facade als OpenAPI en de canvas-schermen als `.pa.yaml`) blijven ontwerp. Wat echt gebouwd is, staat in [`power-platform/`](power-platform/README.md).
 - De demo simuleert AI-extractie en ERP met dezelfde regelmotor als de tests.
 
 ## Licentie

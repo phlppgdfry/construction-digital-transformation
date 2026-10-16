@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{185bc695-ceb5-408a-ac5e-aa77e3031bcb}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{3a4ce524-72c8-4248-a9be-94b29ff0f72d}" IsUserDefined="1">
+          <labels>
+            <label description="Weegbon" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{98060af0-0da5-4928-9d0e-c81eae114e9f}">
+                  <labels>
+                    <label description="Gegevens" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{d5706f90-fdfd-4374-965b-3a507e19aa20}">
+                        <labels>
+                          <label description="Documentnummer" languagecode="1033" />
+                        </labels>
+                        <control id="hv_documentnr" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_documentnr" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{95650c1b-8ad8-4d51-83b4-6c53e1c2586c}">
+                        <labels>
+                          <label description="Kanaal" languagecode="1033" />
+                        </labels>
+                        <control id="hv_kanaal" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_kanaal" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{da98be07-c171-45d6-83cb-78a6d5b70874}">
+                        <labels>
+                          <label description="Ontvangen" languagecode="1033" />
+                        </labels>
+                        <control id="hv_ontvangen" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="hv_ontvangen" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{098d2509-85ab-4154-887d-6a3851a41bf2}">
+                        <labels>
+                          <label description="Bonnummer" languagecode="1033" />
+                        </labels>
+                        <control id="hv_bonnummer" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_bonnummer" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a80512ac-38aa-4f2a-96b3-e8d4799b9ad8}">
+                        <labels>
+                          <label description="Datum bon" languagecode="1033" />
+                        </labels>
+                        <control id="hv_datum" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="hv_datum" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{9232bf84-2fcf-4b17-b5f9-e5e7440b1d85}">
+                        <labels>
+                          <label description="Nummerplaat" languagecode="1033" />
+                        </labels>
+                        <control id="hv_plaat" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_plaat" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{6e619541-819a-4d43-a9aa-7cbfefdb8bef}">
+                        <labels>
+                          <label description="Klantnummer" languagecode="1033" />
+                        </labels>
+                        <control id="hv_klantnummer" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_klantnummer" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{f91d7b68-fb31-4ab9-a685-fa867f684b12}">
+                        <labels>
+                          <label description="Richting" languagecode="1033" />
+                        </labels>
+                        <control id="hv_richting" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_richting" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{6a32e893-1216-4ecc-9b32-e9972ee7cb9c}">
+                        <labels>
+                          <label description="Materiaal (code)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_materiaal" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_materiaal" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{3521c2de-a5d7-4407-96cd-cb32e7b4bda1}">
+                        <labels>
+                          <label description="Bruto (kg)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_bruto" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="hv_bruto" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{57514c8d-5ff3-43ff-8e5b-b262b5d3dd0c}">
+                        <labels>
+                          <label description="Tarra (kg)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_tarra" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="hv_tarra" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{1fb850d3-4359-43bc-96ab-62d58dd4516a}">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{7ac24d2b-098c-4d6d-96c6-3c5a66b8a08d}">
+                        <labels>
+                          <label description="Netto (kg)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_netto" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="hv_netto" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{bf1f30f1-3b5f-47d3-bd4a-9cf43c3053d0}">
+                        <labels>
+                          <label description="ID-formulier" languagecode="1033" />
+                        </labels>
+                        <control id="hv_idformulier" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_idformulier" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5e959124-763e-4e1f-80da-9a2d761038a6}">
+                        <labels>
+                          <label description="Traceerbaarheidsreferentie" languagecode="1033" />
+                        </labels>
+                        <control id="hv_traceerbaarheid" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_traceerbaarheid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{2f61687c-5727-4779-bd19-afeddf819589}">
+                        <labels>
+                          <label description="Confidence per veld (JSON)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_confidence" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="hv_confidence" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{27e5bc7d-4ba2-43fc-b332-045a6ef32b0d}">
+                        <labels>
+                          <label description="Laagste confidence" languagecode="1033" />
+                        </labels>
+                        <control id="hv_minconfidence" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="hv_minconfidence" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{310598bd-25a1-4e39-912b-59fd010a7cfa}">
+                        <labels>
+                          <label description="Beslissing regels" languagecode="1033" />
+                        </labels>
+                        <control id="hv_beslissing" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_beslissing" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{81b18a2e-5e58-43c2-860a-18f0b3acb1bb}">
+                        <labels>
+                          <label description="Bevindingen (regels)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_bevindingen" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="hv_bevindingen" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{2eb23939-8e1c-4638-a0e0-3a90cfac2865}">
+                        <labels>
+                          <label description="Status" languagecode="1033" />
+                        </labels>
+                        <control id="hv_status" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_status" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{62509f87-629e-48c1-aa09-4d68f50276ec}">
+                        <labels>
+                          <label description="Reviewer" languagecode="1033" />
+                        </labels>
+                        <control id="hv_reviewer" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_reviewer" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{b4e49a19-bbe5-44be-bb84-4439a24609b5}">
+                        <labels>
+                          <label description="ERP-referentie" languagecode="1033" />
+                        </labels>
+                        <control id="hv_erpreferentie" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_erpreferentie" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{61bc9d40-390d-4fc7-b90e-9d3961f353f7}">
+                        <labels>
+                          <label description="Testscenario (demo)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_scenario" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_scenario" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Weegbon" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

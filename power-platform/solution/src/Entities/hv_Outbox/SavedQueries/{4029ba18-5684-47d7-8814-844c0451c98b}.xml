@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{4029ba18-5684-47d7-8814-844c0451c98b}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="hv_idempotencykey" select="1" icon="1" preview="1">
+        <row name="result" id="hv_outboxid">
+          <cell name="hv_idempotencykey" width="160" />
+          <cell name="hv_status" width="130" />
+          <cell name="hv_endpoint" width="130" />
+          <cell name="hv_pogingen" width="130" />
+          <cell name="hv_volgendepoging" width="130" />
+          <cell name="hv_laatstefout" width="130" />
+          <cell name="hv_referentie" width="130" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="hv_outbox">
+          <attribute name="hv_idempotencykey" />
+          <attribute name="hv_status" />
+          <attribute name="hv_endpoint" />
+          <attribute name="hv_pogingen" />
+          <attribute name="hv_volgendepoging" />
+          <attribute name="hv_laatstefout" />
+          <attribute name="hv_referentie" />
+          <attribute name="hv_outboxid" />
+          <order attribute="createdon" descending="true" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+          </filter>
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Active ERP-outbox" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

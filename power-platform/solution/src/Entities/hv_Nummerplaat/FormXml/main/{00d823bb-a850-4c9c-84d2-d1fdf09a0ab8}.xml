@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{00d823bb-a850-4c9c-84d2-d1fdf09a0ab8}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{57af4306-f4f9-4bc6-92cb-3d41f0c3b989}" IsUserDefined="1">
+          <labels>
+            <label description="Nummerplaat" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{55f9f3cc-1405-4735-bd72-54afa8a108a0}">
+                  <labels>
+                    <label description="Gegevens" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{403ec427-cba1-4947-9941-3ca623572963}">
+                        <labels>
+                          <label description="Nummerplaat" languagecode="1033" />
+                        </labels>
+                        <control id="hv_plaat" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_plaat" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{54b13173-d452-4afc-a433-0930d25916e8}">
+                        <labels>
+                          <label description="Klant" languagecode="1033" />
+                        </labels>
+                        <control id="hv_klant" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="hv_klant" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{b1d20a0b-c4f8-40ef-80a4-6f40e787f5fc}">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{0c215104-86e6-46e2-bf45-ef4ddef14774}">
+                        <labels>
+                          <label description="Geregistreerde vervoerder" languagecode="1033" />
+                        </labels>
+                        <control id="hv_vervoerder" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="hv_vervoerder" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Nummerplaat" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

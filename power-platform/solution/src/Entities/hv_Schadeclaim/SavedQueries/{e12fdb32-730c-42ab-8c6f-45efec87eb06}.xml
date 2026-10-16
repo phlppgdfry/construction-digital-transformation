@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{e12fdb32-730c-42ab-8c6f-45efec87eb06}</savedqueryid>
+    <layoutxml>
+      <grid name="hv_schadeclaims" jump="hv_dossiernummer" select="1" icon="1" preview="1">
+        <row name="hv_schadeclaim" id="hv_schadeclaimid">
+          <cell name="hv_dossiernummer" width="300" />
+          <cell name="createdon" width="125" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>2</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="hv_schadeclaim">
+          <attribute name="hv_schadeclaimid" />
+          <attribute name="hv_dossiernummer" />
+          <attribute name="createdon" />
+          <order attribute="hv_dossiernummer" descending="false" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+          </filter>
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Schadeclaim Associated View" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

@@ -27,6 +27,8 @@
 
 ## Wat je hier kunt nagaan
 
+- **Gebouwd in Power Platform:** tabellen, flows en backoffice-app staan in een ontwikkelomgeving, en de echte flow geeft dezelfde uitkomst als de motor. Zie [power-platform/](../power-platform/README.md) en de [verificatie](../power-platform/VERIFICATION.md).
+
 - Validatie, triage, DT-02, statusovergangen, SLA en offline-sync: [tests/claims.test.mjs](../tests/claims.test.mjs).
 - DT-02 in **Power Fx** met de echte engine, 11 gevallen naast de JS-motor: [RESULTS.md](artefacts/power-fx/RESULTS.md).
 - BPMN: [as-is.bpmn](bpmn/as-is.bpmn), [to-be.bpmn](bpmn/to-be.bpmn).

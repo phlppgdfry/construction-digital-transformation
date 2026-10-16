@@ -23,4 +23,5 @@ Elke rij koppelt een vaardigheid van een business transformation analyst aan een
 | **Testen en UAT** | UAT-scenario's in elke `06-implement.md` | – |
 | **In productie stellen** | uitrolfases met exit-criteria, training, fallback, change-impact | – |
 | **Documentatie en procedures** | runbooks, [templates](shared-methodology/templates/README.md) | linkcheck |
+| **Gebouwd in Power Platform** | [solution HalverdijkTransformatie](power-platform/README.md): 17 tabellen, 7 flows, model-driven app, Approvals, omgevingsvariabelen; [15 screenshots](power-platform/screenshots/) | [VERIFICATION.md](power-platform/VERIFICATION.md): echte flows 30/30, 5/5, 4/4 identiek aan de motor; solution-export getest |
 | **KPI's en opvolging** | [KPI-framework](shared-methodology/kpi-framework.md), KPI-kaarten in elke `07-measure-improve.md` | – |

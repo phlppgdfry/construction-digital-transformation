@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{3a8008f4-5552-49f1-95ff-f570c462e90d}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{ef0d16ed-7393-4be0-a173-856ee6cd7be6}" IsUserDefined="1">
+          <labels>
+            <label description="ERP-boeking (sandbox)" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{6b307c8c-412a-4aeb-9cf1-0227b43c1e0f}">
+                  <labels>
+                    <label description="Gegevens" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{8229c748-0a3a-4468-a19b-146e85bc1328}">
+                        <labels>
+                          <label description="Idempotency-key" languagecode="1033" />
+                        </labels>
+                        <control id="hv_idempotencykey" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_idempotencykey" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c60863ba-cdd7-4fd1-a8bf-bb1f687af102}">
+                        <labels>
+                          <label description="Soort" languagecode="1033" />
+                        </labels>
+                        <control id="hv_soort" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_soort" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c5e8608b-6907-49b0-8e2d-d3ccb6cabc84}">
+                        <labels>
+                          <label description="Referentie" languagecode="1033" />
+                        </labels>
+                        <control id="hv_referentie" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_referentie" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{bd5e62c5-8da4-4b17-ad29-91eb598f20fd}">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{d7b7b71e-2c2e-40c1-99a6-6e75099e24c3}">
+                        <labels>
+                          <label description="Payload (JSON)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_payload" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="hv_payload" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{9032fec6-99d1-4f16-9241-56d5bd5e96a7}">
+                        <labels>
+                          <label description="Bedrag (€)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_bedrag" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="hv_bedrag" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="ERP-boeking (sandbox)" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

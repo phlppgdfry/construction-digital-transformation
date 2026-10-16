@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{abe7c466-77bd-470b-a75c-6f5dcdde6400}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{d2473f78-cfaa-4d38-bafa-ba6c7a04b00e}" IsUserDefined="1">
+          <labels>
+            <label description="ERP-outbox" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{b0727c38-072f-421c-b79b-ebe28944a062}">
+                  <labels>
+                    <label description="Gegevens" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{9fc8478a-0a50-46c2-8029-325047cd81a2}">
+                        <labels>
+                          <label description="Idempotency-key" languagecode="1033" />
+                        </labels>
+                        <control id="hv_idempotencykey" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_idempotencykey" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{1cb244cd-80df-46ff-838e-36ca734dbb1f}">
+                        <labels>
+                          <label description="Aanvraag" languagecode="1033" />
+                        </labels>
+                        <control id="hv_aanvraag" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="hv_aanvraag" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{d44bc7d9-1c66-4a57-b1f1-661c23b650a1}">
+                        <labels>
+                          <label description="Endpoint" languagecode="1033" />
+                        </labels>
+                        <control id="hv_endpoint" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_endpoint" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{990a8840-6054-49eb-959f-d39a15142a82}">
+                        <labels>
+                          <label description="Body (JSON)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_body" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="hv_body" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{59cd2956-c3ab-4547-a77a-7db91ff327f1}">
+                        <labels>
+                          <label description="Status" languagecode="1033" />
+                        </labels>
+                        <control id="hv_status" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_status" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{baf8f5b3-34ab-45eb-b170-91c7effd8f4e}">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{48cf0b11-7946-43b0-9f8f-80f95216b6ac}">
+                        <labels>
+                          <label description="Pogingen" languagecode="1033" />
+                        </labels>
+                        <control id="hv_pogingen" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="hv_pogingen" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{15384f49-aa06-452c-bf43-8836223a8e1a}">
+                        <labels>
+                          <label description="Volgende poging" languagecode="1033" />
+                        </labels>
+                        <control id="hv_volgendepoging" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="hv_volgendepoging" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{98789479-8dc3-4fc4-a2bd-70586ca626b2}">
+                        <labels>
+                          <label description="Laatste fout" languagecode="1033" />
+                        </labels>
+                        <control id="hv_laatstefout" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="hv_laatstefout" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a0c06f9d-5e0c-4cd9-9610-8d0add485bf6}">
+                        <labels>
+                          <label description="Referentie" languagecode="1033" />
+                        </labels>
+                        <control id="hv_referentie" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_referentie" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="ERP-outbox" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

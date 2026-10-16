@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{a6a6f703-1a8c-41b9-b842-b02aa176a34c}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="hv_aanvraagnr" select="1" icon="1" preview="1">
+        <row name="result" id="hv_materiaalaanvraagid">
+          <cell name="hv_aanvraagnr" width="160" />
+          <cell name="hv_status" width="130" />
+          <cell name="hv_werf" width="130" />
+          <cell name="hv_leverenop" width="130" />
+          <cell name="hv_spoed" width="130" />
+          <cell name="hv_waarde" width="130" />
+          <cell name="hv_route" width="130" />
+          <cell name="hv_regel" width="130" />
+          <cell name="hv_budgetoverschreden" width="130" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="hv_materiaalaanvraag">
+          <attribute name="hv_aanvraagnr" />
+          <attribute name="hv_status" />
+          <attribute name="hv_werf" />
+          <attribute name="hv_leverenop" />
+          <attribute name="hv_spoed" />
+          <attribute name="hv_waarde" />
+          <attribute name="hv_route" />
+          <attribute name="hv_regel" />
+          <attribute name="hv_budgetoverschreden" />
+          <attribute name="hv_materiaalaanvraagid" />
+          <order attribute="createdon" descending="true" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+          </filter>
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Active Materiaalaanvragen" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

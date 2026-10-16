@@ -1,0 +1,48 @@
+{
+  "version": "1.0",
+  "appId": null,
+  "appDisplayName": "Halverdijk Werfapp",
+  "region": "prod",
+  "environmentId": "7a2e1ae0-c020-efc7-9cfc-9e6536c3415d",
+  "description": " ",
+  "buildPath": "./dist",
+  "buildEntryPoint": "index.html",
+  "localAppUrl": "http://localhost:3000",
+  "logoPath": "Default",
+  "connectionReferences": {},
+  "databaseReferences": {
+    "default.cds": {
+      "dataSources": {
+        "schadeclaims": {
+          "entitySetName": "hv_schadeclaims",
+          "logicalName": "hv_schadeclaim"
+        },
+        "werven": {
+          "entitySetName": "hv_werfs",
+          "logicalName": "hv_werf"
+        },
+        "materiaalaanvragen": {
+          "entitySetName": "hv_materiaalaanvraags",
+          "logicalName": "hv_materiaalaanvraag"
+        },
+        "aanvraaglijnen": {
+          "entitySetName": "hv_aanvraaglijns",
+          "logicalName": "hv_aanvraaglijn"
+        },
+        "artikels_erp_sandbox_": {
+          "entitySetName": "hv_artikels",
+          "logicalName": "hv_artikel"
+        },
+        "voorraden_erp_sandbox_": {
+          "entitySetName": "hv_voorraads",
+          "logicalName": "hv_voorraad"
+        },
+        "depots": {
+          "entitySetName": "hv_depots",
+          "logicalName": "hv_depot"
+        }
+      },
+      "environmentVariableName": ""
+    }
+  }
+}

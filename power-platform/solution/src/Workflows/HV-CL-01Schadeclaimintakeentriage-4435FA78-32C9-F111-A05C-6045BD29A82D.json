@@ -1,0 +1,210 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "hv_dataverse"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_approvals": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "hv_approvals"
+        },
+        "api": {
+          "name": "shared_approvals"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "Drempel verzekeringsaangifte schade (€) (hv_InsurerThreshold)": {
+          "defaultValue": 15000,
+          "type": "Float",
+          "metadata": {
+            "schemaName": "hv_InsurerThreshold"
+          }
+        }
+      },
+      "triggers": {
+        "Schadeclaim_gemeld": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 1,
+              "subscriptionRequest/entityname": "hv_schadeclaim",
+              "subscriptionRequest/scope": 4
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Werf": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "GetItem",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "hv_werfs",
+              "recordId": "@triggerOutputs()?['body/_hv_werf_value']",
+              "$select": "hv_werfnr,hv_projectleider,hv_actief"
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "runAfter": {}
+        },
+        "Ernst": {
+          "type": "Compose",
+          "inputs": "@if(and(equals(triggerOutputs()?['body/hv_categorie'], 100000003), or(equals(triggerOutputs()?['body/hv_typeleiding'], 100000000), equals(triggerOutputs()?['body/hv_typeleiding'], 100000001), not(equals(triggerOutputs()?['body/hv_beheerderverwittigd'], true)))), 100000003, if(greaterOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), float(parameters('Drempel verzekeringsaangifte schade (€) (hv_InsurerThreshold)'))), 100000002, if(or(greaterOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), 2500), equals(triggerOutputs()?['body/hv_derdebetrokken'], true)), 100000001, 100000000)))",
+          "runAfter": {}
+        },
+        "SLA_uren": {
+          "type": "Compose",
+          "inputs": "@if(equals(outputs('Ernst'), 100000003), 2, if(equals(outputs('Ernst'), 100000002), 24, if(equals(outputs('Ernst'), 100000001), 48, 72)))",
+          "runAfter": {
+            "Ernst": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Verwittigd": {
+          "type": "Compose",
+          "inputs": "@join(union(createArray(outputs('Werf')?['body/hv_projectleider']), if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003), equals(triggerOutputs()?['body/hv_derdebetrokken'], true)), createArray('Claims & verzekeringen'), json('[]')), if(equals(triggerOutputs()?['body/hv_categorie'], 100000001), createArray('Verhuurder (extern)'), json('[]')), if(equals(triggerOutputs()?['body/hv_categorie'], 100000003), createArray('Leidingbeheerder (extern)', 'Preventieadviseur'), json('[]')), if(equals(outputs('Ernst'), 100000003), createArray('Afdelingsverantwoordelijke'), json('[]'))), ', ')",
+          "runAfter": {
+            "Werf": [
+              "Succeeded"
+            ],
+            "Ernst": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Dossier_bijwerken": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "UpdateOnlyRecord",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "hv_schadeclaims",
+              "recordId": "@triggerOutputs()?['body/hv_schadeclaimid']",
+              "item/hv_status": 100000001,
+              "item/hv_ernst": "@outputs('Ernst')",
+              "item/hv_goedkeuringsketen": "@concat(if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000000), equals(triggerOutputs()?['body/hv_categorie'], 100000001)), 'Fleetmanager>', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003)), 'Claims & verzekeringen>', '')), if(lessOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), 2500), 'Projectleider', if(lessOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), 15000), 'Projectleider>Afdelingsverantwoordelijke', 'Projectleider>Afdelingsverantwoordelijke>Directie')))",
+              "item/hv_goedkeuringsniveau": 0,
+              "item/hv_eigenaar": "@if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000000), equals(triggerOutputs()?['body/hv_categorie'], 100000001)), 'Fleetmanager', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003)), 'Claims & verzekeringen', outputs('Werf')?['body/hv_projectleider']))",
+              "item/hv_verwittigd": "@outputs('Verwittigd')",
+              "item/hv_deadlinebeoordeling": "@addHours(utcNow(), outputs('SLA_uren'))",
+              "item/hv_deadlineverzekeraar": "@if(or(greaterOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), float(parameters('Drempel verzekeringsaangifte schade (€) (hv_InsurerThreshold)'))), equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003), equals(triggerOutputs()?['body/hv_derdebetrokken'], true)), addDays(coalesce(triggerOutputs()?['body/hv_tijdstipschade'], utcNow()), 8), null)"
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "runAfter": {
+            "SLA_uren": [
+              "Succeeded"
+            ],
+            "Verwittigd": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Tijdlijn_gemeld": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "CreateRecord",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "hv_tijdlijns",
+              "item/hv_gebeurtenis": "gemeld",
+              "item/hv_door": "@{coalesce(triggerOutputs()?['body/hv_melder'], 'werfapp')}",
+              "item/hv_opmerking": "via werfapp",
+              "item/hv_Schadeclaim@odata.bind": "/hv_schadeclaims(@{triggerOutputs()?['body/hv_schadeclaimid']})"
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "runAfter": {
+            "Dossier_bijwerken": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Tijdlijn_dossier": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "CreateRecord",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "hv_tijdlijns",
+              "item/hv_gebeurtenis": "dossier aangemaakt",
+              "item/hv_door": "Power Automate",
+              "item/hv_opmerking": "@{concat(outputs('Dossier_bijwerken')?['body/hv_dossiernummer'], ' · ernst ', string(outputs('Ernst')), ' · eigenaar ', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000000), equals(triggerOutputs()?['body/hv_categorie'], 100000001)), 'Fleetmanager', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003)), 'Claims & verzekeringen', outputs('Werf')?['body/hv_projectleider'])), ' · keten ', concat(if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000000), equals(triggerOutputs()?['body/hv_categorie'], 100000001)), 'Fleetmanager>', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003)), 'Claims & verzekeringen>', '')), if(lessOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), 2500), 'Projectleider', if(lessOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), 15000), 'Projectleider>Afdelingsverantwoordelijke', 'Projectleider>Afdelingsverantwoordelijke>Directie'))))}",
+              "item/hv_Schadeclaim@odata.bind": "/hv_schadeclaims(@{triggerOutputs()?['body/hv_schadeclaimid']})"
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "runAfter": {
+            "Tijdlijn_gemeld": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Tijdlijn_verwittigd": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "CreateRecord",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "hv_tijdlijns",
+              "item/hv_gebeurtenis": "verwittigd",
+              "item/hv_door": "Power Automate",
+              "item/hv_opmerking": "@{outputs('Verwittigd')}",
+              "item/hv_Schadeclaim@odata.bind": "/hv_schadeclaims(@{triggerOutputs()?['body/hv_schadeclaimid']})"
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "runAfter": {
+            "Tijdlijn_dossier": [
+              "Succeeded"
+            ]
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

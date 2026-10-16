@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>0</isdefault>
+    <savedqueryid>{de594288-ae08-4301-bc33-97209130bb37}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="hv_idempotencykey" select="1" icon="1" preview="1">
+        <row name="result" id="hv_outboxid">
+          <cell name="hv_idempotencykey" width="300" />
+          <cell name="createdon" width="125" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="hv_outbox">
+          <attribute name="hv_outboxid" />
+          <attribute name="hv_idempotencykey" />
+          <attribute name="createdon" />
+          <order attribute="hv_idempotencykey" descending="false" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="1" />
+          </filter>
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Inactive ERP-outbox" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

@@ -27,6 +27,8 @@
 
 ## Wat je hier kunt nagaan
 
+- **Gebouwd in Power Platform:** tabellen, flows en backoffice-app staan in een ontwikkelomgeving, en de echte flow geeft dezelfde uitkomst als de motor. Zie [power-platform/](../power-platform/README.md) en de [verificatie](../power-platform/VERIFICATION.md).
+
 - `npm test` draait de regels op <!--n:c1.n-->30<!--/n--> fictieve bonnen en controleert elke uitkomst ([tests/documents.test.mjs](../tests/documents.test.mjs)).
 - De rekencontrole, de confidence-drempel en de overladingscontrole zijn ook in **Power Fx** uitgevoerd met de echte engine: [RESULTS.md](artefacts/power-fx/RESULTS.md).
 - De BPMN-bestanden openen in bpmn.io of Camunda Modeler: [as-is.bpmn](bpmn/as-is.bpmn), [to-be.bpmn](bpmn/to-be.bpmn).

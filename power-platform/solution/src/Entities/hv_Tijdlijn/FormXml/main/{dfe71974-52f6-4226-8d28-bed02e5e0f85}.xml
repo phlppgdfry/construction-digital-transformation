@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{dfe71974-52f6-4226-8d28-bed02e5e0f85}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{b195f444-e54f-4747-afd0-17dab96f41c2}" IsUserDefined="1">
+          <labels>
+            <label description="Tijdlijn" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{4c38f3c3-ebb0-4629-bd8a-1d002de23774}">
+                  <labels>
+                    <label description="Gegevens" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{e90c22c2-2746-4a1d-b54e-3785b3d9ad8b}">
+                        <labels>
+                          <label description="Gebeurtenis" languagecode="1033" />
+                        </labels>
+                        <control id="hv_gebeurtenis" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_gebeurtenis" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{23fb3fe1-5eea-480e-9dc1-a67440c8a3f0}">
+                        <labels>
+                          <label description="Schadeclaim" languagecode="1033" />
+                        </labels>
+                        <control id="hv_schadeclaim" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="hv_schadeclaim" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{d4ecc0f0-3e90-4c83-b5a0-4fc972975c75}">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{8d76a9de-ea12-412f-96a2-47e9646c5782}">
+                        <labels>
+                          <label description="Door" languagecode="1033" />
+                        </labels>
+                        <control id="hv_door" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_door" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0326ceb0-542f-4804-9243-7fbf41a452b6}">
+                        <labels>
+                          <label description="Opmerking" languagecode="1033" />
+                        </labels>
+                        <control id="hv_opmerking" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="hv_opmerking" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Tijdlijn" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>
