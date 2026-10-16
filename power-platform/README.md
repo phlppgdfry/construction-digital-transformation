@@ -4,6 +4,31 @@ De drie cases draaien niet alleen als ontwerp en browserdemo. Ze zijn ook **gebo
 
 > **Fictief en afgeschermd.** Alles draait in een eigen **ontwikkelomgeving** ("Halverdijk Dev", type Developer) met verzonnen gegevens. Het ERP bestaat niet: tabellen met "(ERP-sandbox)" staan ervoor in. De links hieronder werken alleen voor accounts met toegang tot die omgeving. Voor iedereen anders staan de screenshots, de [verificatie](VERIFICATION.md) en de [solution-export](solution/) in deze map.
 
+## Hoe het samenhangt, per case
+
+Er zijn twee apps: de **werfapp** voor de werf (case 02 en 03) en de **backoffice-app** voor kantoor (alle drie). De apps en de flows praten niet rechtstreeks met elkaar. Ze werken allebei op dezelfde **Dataverse**-tabellen: een app schrijft een rij, een flow reageert op die rij en schrijft zijn resultaat terug, en de apps tonen dat resultaat.
+
+```text
+  WERFAPP (code app)              BACKOFFICE-APP (model-driven)
+  werfleider meldt / vraagt aan    kantoor beoordeelt / volgt op
+          │  schrijft                       ▲  leest / wijzigt
+          ▼                                 │
+  ┌───────────────────── DATAVERSE (de databank) ─────────────────────┐
+  │ Weegbonnen · Schadeclaims · Materiaalaanvragen · Voorraad · Outbox │
+  └────────────────────────────────────────────────────────────────────┘
+          │  "nieuwe of gewijzigde rij"     ▲  schrijft resultaat terug
+          ▼                                 │
+  POWER AUTOMATE (7 flows) ─────────────────┘   + Approvals (Teams / Outlook)
+```
+
+| | Wie doet iets, in welke app | Wat de flows doen | Wat echt is, wat gesimuleerd |
+|---|---|---|---|
+| **01 Weegbonnen** | geen werfapp nodig, want de input zijn documenten. De administratie kijkt bonnen met status *Nazicht* na in de **backoffice-app** → "01 Weegbonnen" | **HV-DI-01** toetst elf regels op elke nieuwe bon en boekt automatisch, of zet de bon op nazicht, escalatie of dubbel. **HV-DI-02** boekt een bon die na nazicht op *Goedgekeurd* gezet wordt | regels, statussen en boeking zijn echt. Het postvak en de AI die de scan leest zijn **niet** aangesloten: de bonnen staan in Dataverse alsof de AI ze al las. Een apart nakijkscherm (origineel naast de foute velden) bestaat alleen als ontwerp ([review-app.pa.yaml](../01-document-intelligence/artefacts/power-apps/review-app.pa.yaml)) |
+| **02 Schadeclaims** | de werfleider meldt in de **werfapp** → "Schade melden" en volgt op in "Mijn status". Kantoor beoordeelt in de **backoffice-app** → "02 Schadeclaims". Goedkeurders antwoorden via **Approvals** | **HV-CL-01** bepaalt ernst, eigenaar, goedkeuringsketen (DT-02) en deadlines en vult de tijdlijn. **HV-CL-02** vraagt goedkeuring per niveau. **HV-CL-03** escaleert elk uur te late dossiers | volledig van melding tot goedkeuring. Foto's worden als aantal geregistreerd, niet als bestand |
+| **03 Materiaalaanvragen** | de werfleider vraagt aan in de **werfapp** → "Materiaal" en volgt op in "Mijn status". Kantoor volgt lijnen, toewijzing en outbox in de **backoffice-app** → "03 Materiaal". Boven €1.000 komt er een goedkeuring via **Approvals** | **HV-MA-01** wijst voorraad toe (dichtste depot eerst), controleert het budget, past DT-03 toe en zet ERP-berichten in de outbox. **HV-MA-02** verstuurt die elke 5 minuten, met retry bij storing | het **ERP** is gesimuleerd met Dataverse-tabellen (Artikels, Voorraad, ERP-boekingen). De echte ERP-facade blijft een ontwerp ([OpenAPI](../03-material-requests/artefacts/erp-material-api.openapi.yaml)) |
+
+**Zelf de keten zien:** meld schade in de werfapp. Na ongeveer 30 seconden staat er een run van HV-CL-01 in Power Automate, en het dossier met ernst, eigenaar en keten staat in de backoffice-app.
+
 ## Wat er staat en waar
 
 | Onderdeel | Wat | Link (maker-account) |

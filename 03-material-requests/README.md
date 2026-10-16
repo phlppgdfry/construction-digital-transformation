@@ -27,7 +27,7 @@
 
 ## Wat je hier kunt nagaan
 
-- **Gebouwd in Power Platform:** tabellen, flows en backoffice-app staan in een ontwikkelomgeving, en de echte flow geeft dezelfde uitkomst als de motor. Zie [power-platform/](../power-platform/README.md) en de [verificatie](../power-platform/VERIFICATION.md).
+- **Gebouwd in Power Platform:** tabellen, flows en apps staan in een ontwikkelomgeving, en de echte flow geeft dezelfde uitkomst als de motor. Welke app je gebruikt, welke flows draaien en wat gesimuleerd is: [hoe het samenhangt, per case](../power-platform/README.md#hoe-het-samenhangt-per-case). Zie ook de [verificatie](../power-platform/VERIFICATION.md).
 
 - Toewijzing per depot, DT-03, spoed, alternatieven, idempotente ERP-berichten, retry en dead-letter, replay: [tests/materials.test.mjs](../tests/materials.test.mjs).
 - DT-03 in **Power Fx** met de echte engine: [RESULTS.md](artefacts/power-fx/RESULTS.md).

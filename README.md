@@ -16,7 +16,7 @@
 
 ## Draait ook echt in Microsoft Power Platform
 
-De drie cases zijn gebouwd in een eigen Power Platform-ontwikkelomgeving: **17 Dataverse-tabellen, 7 Power Automate-flows (aan), een model-driven backoffice-app, Approvals en een werfapp (code app)**, samen in één solution. Dezelfde scenario's als in de tests zijn door de echte flows gestuurd, met dit resultaat: weegbonnen **30/30**, schadeclaims **5/5** en materiaalaanvragen **4/4** identiek aan de geteste regelmotor. Een ERP-storing werd opgevangen met retry en precies één boeking per bericht. → [power-platform/](power-platform/README.md) · [verificatie](power-platform/VERIFICATION.md) · [solution-export](power-platform/solution/)
+De drie cases zijn gebouwd in een eigen Power Platform-ontwikkelomgeving: **17 Dataverse-tabellen, 7 Power Automate-flows (aan), een model-driven backoffice-app, Approvals en een werfapp (code app)**, samen in één solution. Dezelfde scenario's als in de tests zijn door de echte flows gestuurd, met dit resultaat: weegbonnen **30/30**, schadeclaims **5/5** en materiaalaanvragen **4/4** identiek aan de geteste regelmotor. Een ERP-storing werd opgevangen met retry en precies één boeking per bericht. → [hoe het samenhangt, per case](power-platform/README.md#hoe-het-samenhangt-per-case) · [power-platform/](power-platform/README.md) · [verificatie](power-platform/VERIFICATION.md) · [solution-export](power-platform/solution/)
 
 | | |
 |---|---|
