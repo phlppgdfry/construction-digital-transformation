@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Presentatie — Halverdijk</title>
+  <meta name="description" content="Tien minuten: drie digitaliseringscases voor een fictieve bouwgroep, van probleem tot bewijs en businesscase.">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="deck.css">
+</head>
+<body>
+<main class="deck" id="deck" aria-roledescription="presentatie">
+
+  <section class="slide title" aria-label="Slide 1">
+    <span class="eyebrow">Portfolio · Digital Transformation Analyst</span>
+    <h1>Drie processen.<br>Eén werkwijze.</h1>
+    <p class="lede">Weegbonnen, schadeclaims en materiaalaanvragen bij een bouwgroep: van werfprobleem tot gemeten resultaat, en echt gebouwd in Power Platform.</p>
+    <p class="who">Philippe Godfroy</p>
+    <p class="fine">Halverdijk Group is fictief. Cijfers zijn aannames of komen uit verzonnen datasets. Workshops zijn gesimuleerd. Gemaakt met AI als bouw- en schrijfpartner.</p>
+  </section>
+
+  <section class="slide" aria-label="Slide 2">
+    <h2>Mijn aanpak: eerst het probleem, dan de tool</h2>
+    <ol class="steps">
+      <li><b>0 Mandaat</b><span>wat vraagt de sponsor, wat mag de analyse kosten</span></li>
+      <li><b>1 Discover</b><span>stakeholders, houding, workshop, vijf keer waarom</span></li>
+      <li><b>2 Analyse</b><span>AS-IS, nulmeting, requirements per BABOK-soort</span></li>
+      <li><b>3 Design</b><span>TO-BE, beslistabellen, user stories</span></li>
+      <li><b>4 Validate</b><span>optie 0 eerlijk, businesscase, baseline</span></li>
+      <li><b>5 Integrate</b><span>flows, outbox, regels als data</span></li>
+      <li><b>6 Implement</b><span>acceptatie, dan pas go/no-go</span></li>
+      <li><b>7 Measure</b><span>nulmeting, KPI's, stopcriterium</span></li>
+    </ol>
+    <p class="note">Elke requirement is traceerbaar tot test en KPI: <!--n:req.total-->83<!--/n--> requirements, en CI faalt als een link breekt.</p>
+  </section>
+
+  <section class="slide" aria-label="Slide 3">
+    <h2>Drie problemen, met een nulmeting</h2>
+    <div class="cols3">
+      <div class="card"><span class="tag">01 Weegbonnen</span><b class="big"><!--n:c1.hoursAsIs-->1.838<!--/n--> uur</b><p>per jaar overtypen; fouten, dubbels en geweigerde stoffen zie je pas bij de factuur of de inspectie</p></div>
+      <div class="card"><span class="tag">02 Schadeclaims</span><b class="big"><!--n:c2.latePct-->54%<!--/n--></b><p>van de verzekeringsaangiftes te laat; dossier pas na <!--n:c2.medianRegister-->3 dagen<!--/n-->, <!--n:c2.incomplete-->55%<!--/n--> onvolledig</p></div>
+      <div class="card"><span class="tag">03 Materiaal</span><b class="big"><!--n:c3.rushPct-->33%<!--/n--> spoed</b><p>aanvragen via telefoon, mail en WhatsApp; <!--n:c3.lateRushPct-->40%<!--/n--> van de spoed toch te laat</p></div>
+    </div>
+    <p class="note">De grondoorzaken zijn geen software: regels die in hoofden zitten, een proces zonder eigenaar en klok, en spoed die de werf niets kost.</p>
+  </section>
+
+  <section class="slide" aria-label="Slide 4">
+    <h2>Van vandaag naar straks</h2>
+    <table class="vs">
+      <thead><tr><th></th><th>Vandaag</th><th></th><th>Straks</th></tr></thead>
+      <tbody>
+        <tr><th>01 Weegbonnen</th><td><!--n:bpmn.c1_asis.tasks-->8<!--/n--> stappen, allemaal manueel</td><td>→</td><td>AI leest, elf regels beslissen; <!--n:c1.autoPct-->66,7%<!--/n--> zonder mens (testset); asbest nooit automatisch</td></tr>
+        <tr><th>02 Schadeclaims</th><td><!--n:bpmn.c2_asis.tasks-->8<!--/n--> stappen, bellen en Excel</td><td>→</td><td>melden in de app, dossier in een halve minuut met eigenaar, keten en deadline; de aangiftetermijn bewaakt</td></tr>
+        <tr><th>03 Materiaal</th><td><!--n:bpmn.c3_asis.tasks-->7<!--/n--> stappen, mediaan <!--n:c3.medianHandling-->15 uur<!--/n--></td><td>→</td><td>weekplanning eerst; app met live voorraad; <!--n:c3.autoPct-->43%<!--/n--> automatisch goedgekeurd (replay)</td></tr>
+      </tbody>
+    </table>
+    <p class="note">Interactief, met de BPMN-stappen: <a href="../#voor-na">de schuif "Vandaag en straks"</a>.</p>
+  </section>
+
+  <section class="slide" aria-label="Slide 5">
+    <h2>Oplossing en architectuur</h2>
+    <div class="arch">
+      <div class="box">Werfapp<small>melden · aanvragen · ontvangst</small></div>
+      <div class="box">Nakijkscherm<small>weegbonnen</small></div>
+      <div class="box red">Dataverse<small><!--n:pp.tables-->20<!--/n--> tabellen · regels als data</small></div>
+      <div class="box red">Power Automate<small><!--n:pp.flows-->14<!--/n--> flows · Approvals · meldingen</small></div>
+      <div class="box red">Outbox → ERP-facade<small>retry · idempotent · dead-letter</small></div>
+      <div class="box">Backoffice<small>dossiers · KPI-dashboard</small></div>
+    </div>
+    <ul class="points">
+      <li><b>Eén integratiepatroon:</b> alles naar het ERP via de outbox; een storing gedraagt zich in elke case hetzelfde.</li>
+      <li><b>Wachten op een mens via een status</b>, kleine flows, foutafhandeling in elke flow.</li>
+      <li><b>Regels als data:</b> de business leest en wijzigt een drempel in de app; flows en tests gebruiken dezelfde waarde.</li>
+    </ul>
+  </section>
+
+  <section class="slide" aria-label="Slide 6">
+    <h2>Bewijs: het draait echt</h2>
+    <div class="proof">
+      <div class="nums">
+        <div><b><!--n:pp.v.docs-->30/30<!--/n--></b><span>weegbonnen: de echte flow beslist zoals de geteste regels</span></div>
+        <div><b><!--n:pp.v.claims-->5/5<!--/n--></b><span>schadeclaims: ernst, eigenaar, keten, aangifte</span></div>
+        <div><b><!--n:pp.v.requests-->4/4<!--/n--></b><span>materiaalaanvragen: waarde, route, budget</span></div>
+        <div><b>1×</b><span>ERP-storing: retry, en precies één boeking per bericht</span></div>
+      </div>
+      <figure><img src="../assets/pp/13-app-outbox-tijdens-storing.jpg" alt="ERP-outbox tijdens een storing: nieuwe poging gepland, 503"><figcaption>De outbox tijdens de storingstest</figcaption></figure>
+    </div>
+    <p class="note">Ontwikkelomgeving met fictieve data, geen productie. Verificatie van <!--n:pp.v.date-->2026-10-16<!--/n-->.</p>
+  </section>
+
+  <section class="slide" aria-label="Slide 7">
+    <h2>Businesscase en roadmap</h2>
+    <div class="cols3">
+      <div class="card"><span class="tag">03 eerst</span><b class="big"><!--n:c3.bc.payback-->14,3 maanden<!--/n--></b><p>terugverdientijd; bouwt de integratie die 01 en 02 hergebruiken</p></div>
+      <div class="card"><span class="tag">02 tweede</span><b class="big"><!--n:c2.bc.payback-->17,7 maanden<!--/n--></b><p><b>zwakste aanname:</b> het verlies per te late aangifte; rendabel vanaf <!--n:c2.breakEvenLoss-->€153<!--/n--></p></div>
+      <div class="card"><span class="tag">01 derde</span><b class="big"><!--n:c1.bc.payback-->26,9 maanden<!--/n--></b><p>financieel marginaal; compliance en hergebruik dragen de beslissing</p></div>
+    </div>
+    <p class="note">Samen <!--n:p.netYear-->€142.704<!--/n--> netto per jaar (rekenmodel). Als simulatie over de tijd: dieptepunt <!--n:ben.lowest-->€130.058<!--/n-->, terugverdiend in <!--n:ben.breakEven-->maand 25<!--/n-->; in het voorzichtige scenario <!--n:ben.voorzichtig.breakEven-->niet binnen de horizon<!--/n-->. <a href="../baten/">Batendashboard</a>.</p>
+  </section>
+
+  <section class="slide" aria-label="Slide 8">
+    <h2>Wat ik niet weet, en wat ik eerst zou doen</h2>
+    <div class="cols2">
+      <div>
+        <h3>Wat ik niet weet</h3>
+        <ul class="points">
+          <li>Hoe deze processen bij jullie echt lopen: alles hier is fictief.</li>
+          <li>Hoe werfleiders echt reageren: houding en workshops zijn aannames.</li>
+          <li>Welk ERP, welke licenties: ordes van grootte, geen offerte.</li>
+          <li>Of de baten gehaald worden: dat zegt pas een nulmeting.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>De eerste 30 dagen</h3>
+        <ul class="points">
+          <li>Meelopen: een ochtend in een depot, een dag op een werf, een dag bij de administratie.</li>
+          <li>Per proces één blad: probleem, eigenaar, nulmeting die al bestaat.</li>
+          <li>Eén kleine winst kiezen die zonder software kan (zoals de weekplanning).</li>
+          <li>Pas dan een backlog, met de proceseigenaar.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide end" aria-label="Slide 9">
+    <h2>Vragen?</h2>
+    <ul class="links">
+      <li><a href="../">Site met de drie cases</a></li>
+      <li><a href="../demo/?tour">Rondleiding van 2 minuten</a></li>
+      <li><a href="../baten/">Batenrealisatie</a></li>
+      <li><a href="https://github.com/phlppgdfry/construction-digital-transformation">GitHub: analyses, flows, tests</a></li>
+    </ul>
+    <p class="fine">Philippe Godfroy · portfolio, fictieve organisatie</p>
+  </section>
+</main>
+
+<nav class="deck-nav" aria-label="Navigatie">
+  <button id="prev" aria-label="Vorige slide">‹</button>
+  <span id="count" aria-live="polite">1 / 9</span>
+  <button id="next" aria-label="Volgende slide">›</button>
+  <button id="print" aria-label="Afdrukken of opslaan als PDF">PDF</button>
+</nav>
+<script src="deck.js" defer></script>
+</body>
+</html>

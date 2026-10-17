@@ -269,3 +269,8 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 td.neg { color: var(--red-dark); font-weight: 600; }
 @media (max-width: 760px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .tile b { font-size: 24px; } .chart text { font-size: 15px; } }
+.hero .byline { font-size: 17px; margin: -6px 0 14px; opacity: .92; }
+.hero .byline strong { font-weight: 700; }
+#mijn-rol ol, #mijn-rol ul { padding-left: 20px; margin: 0; }
+#mijn-rol li { margin-bottom: 8px; }
+.stat span a { color: inherit; }

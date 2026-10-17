@@ -141,6 +141,8 @@ const missing = coverageRows.filter((r) => r.row.includes("**ONTBREEKT**")).map(
 if (missing.length) { console.error(`BPMN tasks without a flow or reason: ${missing.join(", ")}`); process.exit(1); }
 write("site/data/flows.json", JSON.stringify({ flows: FLOWS.map((f) => ({ id: f.id, name: f.name, case: f.case, owner: f.owner, in: f.in, out: f.out, description: f.description })), coverage: coverageRows.length, built: coverageRows.filter((r) => r.row.includes("gebouwd |")).length }, null, 2) + "\n");
 facts["pp.flows"] = String(FLOWS.length);
+facts["pp.tables"] = String(pp.tables.length);
+facts["pp.screenshots"] = String(readdirSync(join(ROOT, "power-platform/screenshots")).filter((f) => /\.(jpg|png)$/.test(f)).length);
 facts["pp.bpmnAutomated"] = String(coverageRows.length);
 facts["pp.bpmnBuilt"] = String(coverageRows.filter((r) => r.row.endsWith("| gebouwd |")).length);
 facts["rules.count"] = String(RULEBOOK.length);
@@ -216,6 +218,10 @@ for (const [cid, c] of Object.entries(REQ.cases)) {
 if (reqErrors.length) { console.error(`data/requirements.json:\n  ${reqErrors.join("\n  ")}`); process.exit(1); }
 facts["req.total"] = String(Object.values(REQ.cases).reduce((a, c) => a + c.requirements.length, 0));
 
+// flow table for the site (site/index.html, between <!--flowtable-->…<!--/flowtable-->)
+const escHtml = (x) => String(x).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/\*/g, "");
+const flowTable = FLOWS.map((f) => `            <tr><td><b>${f.id}</b> ${escHtml(f.name.slice(f.id.length + 1))}</td><td>${f.case}</td><td>${escHtml(triggerOf(f.build(sets)))}</td><td>${escHtml(f.description.replace(/^(Case \d\d|Alle cases): /, ""))}</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/${f.id}.md">spec</a></td></tr>`).join("\n");
+
 // rule catalogue (shared-methodology/regelcatalogus.md), one table per case
 const CASES = { "01": "Case 01 — weegbonnen", "02": "Case 02 — schadeclaims", "03": "Case 03 — materiaalaanvragen" };
 const OUTCOME = { review: "nazicht", block: "escalatie", reject: "weigeren (dubbel)" };
@@ -249,6 +255,7 @@ for (const p of files(ROOT)) {
   after = after.replace(/<!--bpmn-coverage-->[\s\S]*?<!--\/bpmn-coverage-->/g, `<!--bpmn-coverage-->\n${coverage}\n<!--/bpmn-coverage-->`);
   after = after.replace(/<!--requirements:(c\d)-->[\s\S]*?<!--\/requirements-->/g, (_m, c) => `<!--requirements:${c}-->\n${registers[c]}\n<!--/requirements-->`);
   after = after.replace(/<!--trace:(c\d)-->[\s\S]*?<!--\/trace-->/g, (_m, c) => `<!--trace:${c}-->\n${traces[c]}\n<!--/trace-->`);
+  after = after.replace(/<!--flowtable-->[\s\S]*?<!--\/flowtable-->/g, `<!--flowtable-->\n${flowTable}\n<!--/flowtable-->`);
   after = after.replace(/<!--rulebook-->[\s\S]*?<!--\/rulebook-->/g, `<!--rulebook-->\n${rulebook}\n<!--/rulebook-->`);
   after = after.replace(/<!--actions:(HV-[A-Z]{2}-\d{2})-->[\s\S]*?<!--\/actions-->/g, (_m, id) => {
     if (!(id in flowSteps)) { unknown.push(`${relative(ROOT, p)}: flow ${id}`); return _m; }

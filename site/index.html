@@ -17,11 +17,12 @@
     <a class="brand" href="./"><img class="brand-mark" src="assets/mark.svg" alt=""><span>Halverdijk<small>fictieve bouwgroep · portfolio</small></span></a>
     <nav aria-label="Hoofdnavigatie">
       <a href="#cases">Cases</a>
-      <a href="#voor-na">Voor &amp; na</a>
-      <a href="#methode">Werkwijze</a>
-      <a href="#architectuur">Architectuur</a>
       <a href="#powerplatform">Power Platform</a>
-      <a href="#vragen">Lastige vragen</a>
+      <a href="#voor-na">Voor &amp; na</a>
+      <a href="baten/">Baten</a>
+      <a href="#methode">Werkwijze</a>
+      <a href="#mijn-rol">Mijn rol</a>
+      <a href="deck/">Presentatie</a>
       <a href="demo/">Werfportaal-demo</a>
       <a href="https://github.com/phlppgdfry/construction-digital-transformation">GitHub</a>
     </nav>
@@ -32,22 +33,24 @@
   <section class="hero">
     <div class="wrap">
       <span class="eyebrow">Business transformation · bouw &amp; infra</span>
+      <p class="byline">Portfolio van <strong>Philippe Godfroy</strong> · voor de rol <strong>Digital Transformation Analyst</strong></p>
       <h1>Drie processen. Eén werkwijze.</h1>
       <p class="lede">Van werfprobleem tot gemeten resultaat: document-AI voor weegbonnen, schadeclaims van werf tot afsluiting, en materiaalaanvragen met voorraadcheck en ERP-koppeling. Elke case volgt dezelfde zeven stappen.</p>
       <div class="cta-row">
         <a class="btn" href="demo/?tour">Rondleiding van 2 minuten</a>
-        <a class="btn on-dark ghost" href="#cases">Bekijk de cases</a>
+        <a class="btn on-dark ghost" href="#powerplatform">Echt gebouwd in Power Platform</a>
+        <a class="btn on-dark ghost" href="deck/">Presentatie (10 min)</a>
       </div>
       <p class="notice">Onafhankelijke portfolio. Halverdijk Group is fictief; namen, cijfers en documenten zijn verzonnen. Er is geen relatie met een bestaand bedrijf en er worden geen resultaten geclaimd. Workshops zijn gesimuleerd, integraties zijn doelontwerpen, en de demo draait volledig in je browser.</p>
     </div>
   </section>
 
-  <div class="stat-row" aria-label="Kerncijfers uit het model">
-    <div class="stat"><b><!--n:c1.autoPct-->66,7%<!--/n--></b><span>weegbonnen automatisch geboekt (testset)</span></div>
+  <div class="stat-row" aria-label="Kerncijfers">
+    <div class="stat"><b><!--n:p.netYear-->€142.704<!--/n--></b><span>netto per jaar voor de drie cases samen (rekenmodel, fictief)</span></div>
+    <div class="stat"><b><!--n:ben.breakEven-->maand 25<!--/n--></b><span>programma terugverdiend (simulatie, <a href="baten/">batenrealisatie</a>)</span></div>
     <div class="stat"><b><!--n:c2.latePct-->54%<!--/n--> → <!--n:c2.lateTarget-->5%<!--/n--></b><span>te late verzekeringsaangiftes, nu → doel</span></div>
-    <div class="stat"><b><!--n:c3.autoPct-->43%<!--/n--></b><span>materiaalaanvragen zonder goedkeuring (replay)</span></div>
-    <div class="stat"><b>25/25</b><span>beslisregels identiek in Power Fx en code</span></div>
-    <div class="stat"><b><!--n:bpmn.models-->6<!--/n--></b><span>BPMN 2.0-modellen, gevalideerd in CI</span></div>
+    <div class="stat"><b><!--n:pp.flows-->14<!--/n--> flows</b><span>echt gebouwd in Power Platform; <!--n:pp.v.docs-->30/30<!--/n--> weegbonnen identiek aan de geteste regels</span></div>
+    <div class="stat"><b><!--n:req.total-->83<!--/n--></b><span>requirements, elk traceerbaar tot test en KPI (CI-gecontroleerd)</span></div>
   </div>
 
   <section class="section" id="cases">
@@ -100,6 +103,54 @@
     </div>
   </section>
 
+  <section class="section grey" id="powerplatform">
+    <div class="wrap">
+      <div class="section-title"><h2>Echt gebouwd in Power Platform</h2><span class="muted">ontwikkelomgeving met fictieve data</span></div>
+      <p class="measure">De drie cases draaien ook in Microsoft Power Platform: <strong><!--n:pp.tables-->20<!--/n--> Dataverse-tabellen, <!--n:pp.flows-->14<!--/n--> Power Automate-flows, een model-driven backoffice-app met KPI-dashboard, twee code apps en Approvals</strong>, samen in één solution. Dezelfde scenario's als in de tests zijn door de echte flows gestuurd, en de uitkomst is identiek aan de geteste regelmotor: <strong><!--n:pp.v.docs-->30/30<!--/n--></strong> weegbonnen, <strong><!--n:pp.v.claims-->5/5<!--/n--></strong> schadeclaims en <strong><!--n:pp.v.requests-->4/4<!--/n--></strong> materiaalaanvragen (<a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/VERIFICATION.md">verificatie van <!--n:pp.v.date-->2026-10-16<!--/n--></a>).</p>
+      <p class="measure">Wat een architect zou vragen, zit erin: <strong>één integratiepatroon</strong> (alles naar het ERP via een outbox met retry en idempotency-key), <strong>wachten op een mens via een status</strong>, kleine flows, <strong>foutafhandeling in elke flow</strong> met een melding aan functioneel beheer, en <strong>regels als data</strong>: de drempels staan in een tabel die de business leest en wijzigt, en die de flows en de geteste motor allebei gebruiken.</p>
+      <div class="grid cards-3" style="margin-top:18px">
+        <figure class="figure"><img style="width:100%" src="assets/pp/04-flow-hv-di-01-run.jpg" alt="Power Automate-run van de weegbonflow met alle stappen geslaagd"><figcaption>Flow HV-DI-01: echte run, elf regels, alle stappen geslaagd.</figcaption></figure>
+        <figure class="figure"><img style="width:100%" src="assets/pp/07-app-weegbonnen.jpg" alt="Model-driven app met weegbonnen, status en ERP-referentie"><figcaption>Backoffice-app: 20 geboekt, 8 nazicht, 1 escalatie, 1 dubbel.</figcaption></figure>
+        <figure class="figure"><img style="width:100%" src="assets/pp/09-app-schadeclaim-gaslek.jpg" alt="Schadeclaim gaslek met triage en goedkeuringsketen"><figcaption>Gaslek: kritiek, vijf partijen verwittigd, DT-02-keten.</figcaption></figure>
+        <figure class="figure"><img style="width:100%" src="assets/pp/21-nakijken-doc006-gecorrigeerd.jpg" alt="Nakijk-app met de scan van een weegbon naast de gecorrigeerde velden"><figcaption>Weegbon nakijken: scan naast de velden, correctie live hertoetst.</figcaption></figure>
+        <figure class="figure"><img style="width:100%" src="assets/pp/13-app-outbox-tijdens-storing.jpg" alt="ERP-outbox tijdens een storing met 503 en geplande nieuwe poging"><figcaption>ERP-storing: retry met 503, daarna precies één boeking.</figcaption></figure>
+        <figure class="figure"><img style="width:100%" src="assets/pp/18-werfapp-mijn-status.jpg" alt="Werfapp als Power Apps code app met status van claims en aanvragen"><figcaption>Werfapp (Power Apps code app): status live uit Dataverse.</figcaption></figure>
+      </div>
+      <h3 id="flows" style="margin-top:34px">De <!--n:pp.flows-->14<!--/n--> flows, elk uitgelegd</h3>
+      <p class="measure">Elke flow heeft een spec in gewone taal: doel, trigger, wat hij leest en schrijft, stappen met een diagram, beslisregels, foutafhandeling, bewijs met een echte run, en het verschil met het doelontwerp. De technische stappenlijst onderaan elke spec wordt bij elke build uit de code gegenereerd, zodat de uitleg niet kan afwijken van wat draait.</p>
+      <div class="table-wrap" style="margin-top:14px">
+        <table>
+          <thead><tr><th>Flow</th><th>Case</th><th>Start wanneer</th><th>Wat hij doet</th><th></th></tr></thead>
+          <tbody>
+<!--flowtable-->
+            <tr><td><b>HV-DI-01</b> Weegbon controleren</td><td>01</td><td>Weegbon toegevoegd</td><td>elf regels R01–R11 op elke nieuwe weegbon; een schone bon gaat naar de ERP-outbox, de rest naar nazicht, escalatie of dubbel, met een melding.</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-DI-01.md">spec</a></td></tr>
+            <tr><td><b>HV-DI-02</b> Weegbon na nazicht boeken</td><td>01</td><td>Weegbon gewijzigd → Goedgekeurd</td><td>een goedgekeurde weegbon opnieuw controleren (dubbel, geweigerd materiaal) en de gecorrigeerde waarden in de ERP-outbox zetten.</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-DI-02.md">spec</a></td></tr>
+            <tr><td><b>HV-DI-03</b> Weigering melden</td><td>01</td><td>Weegbon gewijzigd → Afgewezen</td><td>bij een geweigerde lading de klant en de vervoerder verwittigen, met de reden.</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-DI-03.md">spec</a></td></tr>
+            <tr><td><b>HV-CL-01</b> Schadeclaim intake en triage</td><td>02</td><td>Schadeclaim toegevoegd</td><td>ernst, eigenaar, DT-02-keten, deadlines, aangifte-concept, tijdlijn en meldingen bij een nieuwe schademelding.</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-CL-01.md">spec</a></td></tr>
+            <tr><td><b>HV-CL-02</b> Schadeclaim goedkeuringsketen</td><td>02</td><td>Schadeclaim gewijzigd → Ter goedkeuring</td><td>goedkeuring per niveau via Approvals; één afwijzing stopt de keten; de werfleider hoort de uitkomst.</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-CL-02.md">spec</a></td></tr>
+            <tr><td><b>HV-CL-03</b> SLA- en aangiftebewaking</td><td>02</td><td>schema, elke 1 uur</td><td>elk uur te late beoordelingen escaleren en waarschuwen als de aangifte bij de verzekeraar te laat dreigt te vertrekken.</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-CL-03.md">spec</a></td></tr>
+            <tr><td><b>HV-CL-04</b> Schadeclaim afsluiten: kosten en recuperatie</td><td>02</td><td>Schadeclaim gewijzigd → Afgesloten</td><td>bij afsluiten de kost op het project boeken (via de outbox) en de recuperatie bij een aansprakelijke derde starten.</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-CL-04.md">spec</a></td></tr>
+            <tr><td><b>HV-MA-01</b> Materiaalaanvraag verwerken en beslissen</td><td>03</td><td>Materiaalaanvraag toegevoegd of gewijzigd → Ingediend</td><td>voorraad per depot (dichtste eerst), budget per categorie, spoed en DT-03; de ERP-berichten worden gepland, nog niet verstuurd.</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-MA-01.md">spec</a></td></tr>
+            <tr><td><b>HV-MA-02</b> Materiaalaanvraag goedkeuren</td><td>03</td><td>Materiaalaanvraag gewijzigd → Ter goedkeuring</td><td>goedkeuring per niveau van de DT-03-route via Approvals, net als de schadeclaims.</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-MA-02.md">spec</a></td></tr>
+            <tr><td><b>HV-MA-03</b> Materiaalaanvraag uitvoeren</td><td>03</td><td>Materiaalaanvraag gewijzigd → Goedgekeurd</td><td>de geplande ERP-berichten in de outbox zetten en de werfplanning en de werfleider verwittigen.</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-MA-03.md">spec</a></td></tr>
+            <tr><td><b>HV-MA-04</b> Ontvangst: verbruik boeken</td><td>03</td><td>Materiaalaanvraag gewijzigd → Ontvangen</td><td>na de ontvangstbevestiging op de werf het verbruik per lijn op de werf boeken, via de outbox.</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-MA-04.md">spec</a></td></tr>
+            <tr><td><b>HV-IN-01</b> ERP-outbox verzenden</td><td>alle</td><td>schema, elke 5 min</td><td>elk ERP-bericht naar de ERP-sandbox, met retry 1-5-15-60-240 min, dead-letter met melding en idempotency-key.</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-IN-01.md">spec</a></td></tr>
+            <tr><td><b>HV-IN-02</b> ERP-bevestiging terugschrijven</td><td>alle</td><td>ERP-outbox gewijzigd → Verzonden</td><td>na een geslaagde ERP-boeking de bron bijwerken: weegbon geboekt, kost in de tijdlijn, aanvraag afgesloten.</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-IN-02.md">spec</a></td></tr>
+            <tr><td><b>HV-OP-01</b> Meldingen versturen</td><td>alle</td><td>Melding toegevoegd</td><td>elke melding naar de juiste persoon als in-app-notificatie in de backoffice; externe partijen worden gemarkeerd (kanaal niet aangesloten in de demo).</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-OP-01.md">spec</a></td></tr>
+<!--/flowtable-->
+          </tbody>
+        </table>
+      </div>
+      <div class="grid cards-3" style="margin-top:18px">
+        <figure class="figure"><img style="width:100%" src="assets/pp/24-flow-hv-di-02-run.jpg" alt="Run van HV-DI-02 met een keuze in drie gevallen: dubbel, geweigerd, boeken"><figcaption>HV-DI-02: de server controleert opnieuw, wat de app ook stuurde.</figcaption></figure>
+        <figure class="figure"><img style="width:100%" src="assets/pp/25-flow-hv-cl-01-run.jpg" alt="Run van HV-CL-01: werf en ernst parallel, dan dossier en tijdlijn"><figcaption>HV-CL-01: van melding naar dossier met tijdlijn.</figcaption></figure>
+        <figure class="figure"><img style="width:100%" src="assets/pp/29-flow-hv-in-01-run-storing.jpg" alt="Run van HV-IN-01 tijdens een ERP-storing: de tak niet bereikbaar plant een nieuwe poging"><figcaption>HV-IN-01 tijdens de storing: nieuwe poging gepland, geen boeking.</figcaption></figure>
+      </div>
+      <p class="measure" style="margin-top:14px">De drie apps hebben elk een eigen spec: de <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/apps/werfapp.md">werfapp</a>, <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/apps/weegbon-nakijken.md">Weegbon Nakijken</a> en de <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/apps/backoffice.md">backoffice-app</a>.</p>
+      <div class="cta-row" style="margin-top:18px"><a class="btn" href="https://github.com/phlppgdfry/construction-digital-transformation/tree/main/power-platform">Solution, scripts en verificatie</a><a class="btn ghost" href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/README.md">Flow-inventaris</a></div>
+    </div>
+  </section>
+
   <section class="section" id="voor-na">
     <div class="wrap">
       <div class="section-title"><h2>Vandaag en straks</h2><span class="muted">sleep de rode schuif · cijfers uit het model, stappen uit de BPMN-modellen</span></div>
@@ -119,6 +170,18 @@
       <div class="table-wrap ba-delta" id="ba-delta"></div>
       <p class="muted" style="font-size:14px;margin-top:10px">Vandaag = nulmeting op de fictieve historiek en aannames uit <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/data/assumptions.json">assumptions.json</a>. Straks = uitkomst van de regels op de testset, of een doel waar dat zo vermeld staat. Niets hiervan is een gemeten resultaat bij een echt bedrijf.</p>
       <noscript><p>Deze vergelijking heeft JavaScript nodig. De AS-IS- en TO-BE-analyses staan per case op GitHub.</p></noscript>
+    </div>
+  </section>
+
+  <section class="section navy" id="baten">
+    <div class="wrap">
+      <div class="section-title"><h2>Wat het oplevert, over de tijd</h2><span style="opacity:.75">simulatie op het rekenmodel · geen meting</span></div>
+      <div class="grid cards-3">
+        <div><h3><!--n:ben.lowest-->€130.058<!--/n--></h3><p style="opacity:.85">diepste punt van de investering, in <!--n:ben.lowestMonth-->maand 10<!--/n--> (verwacht scenario)</p></div>
+        <div><h3><!--n:ben.breakEven-->maand 25<!--/n--></h3><p style="opacity:.85">programma terugverdiend; in het voorzichtige scenario <!--n:ben.voorzichtig.breakEven-->niet binnen de horizon<!--/n--></p></div>
+        <div><h3><!--n:ben.cumNet-->€135.344<!--/n--></h3><p style="opacity:.85">netto na <!--n:ben.horizon-->36<!--/n--> maanden, met <!--n:ben.cumHours-->3.731<!--/n--> uur die vrijkomt</p></div>
+      </div>
+      <div class="cta-row" style="margin-top:18px"><a class="btn" href="baten/">Open het batendashboard</a></div>
     </div>
   </section>
 
@@ -184,41 +247,33 @@
     </div>
   </section>
 
-  <section class="section grey" id="powerplatform">
+
+  <section class="section" id="mijn-rol">
     <div class="wrap">
-      <div class="section-title"><h2>Echt gebouwd in Power Platform</h2><span class="muted">ontwikkelomgeving met fictieve data</span></div>
-      <p class="measure">De drie cases draaien ook in Microsoft Power Platform: <strong>17 Dataverse-tabellen, 7 Power Automate-flows, een model-driven backoffice-app, Approvals</strong> en een werfapp, samen in één solution. Dezelfde scenario's als in de tests zijn door de echte flows gestuurd. De uitkomst is identiek aan de geteste regelmotor: <strong>30/30</strong> weegbonnen, <strong>5/5</strong> schadeclaims en <strong>4/4</strong> materiaalaanvragen. Een ERP-storing werd opgevangen met retry en precies één boeking per bericht.</p>
-      <div class="grid cards-3" style="margin-top:18px">
-        <figure class="figure"><img style="width:100%" src="assets/pp/04-flow-hv-di-01-run.jpg" alt="Power Automate-run van de weegbonflow met alle stappen geslaagd"><figcaption>Flow HV-DI-01: echte run, elf regels, alle stappen geslaagd.</figcaption></figure>
-        <figure class="figure"><img style="width:100%" src="assets/pp/07-app-weegbonnen.jpg" alt="Model-driven app met weegbonnen, status en ERP-referentie"><figcaption>Backoffice-app: 20 geboekt, 8 nazicht, 1 escalatie, 1 dubbel.</figcaption></figure>
-        <figure class="figure"><img style="width:100%" src="assets/pp/09-app-schadeclaim-gaslek.jpg" alt="Schadeclaim gaslek met triage en goedkeuringsketen"><figcaption>Gaslek: kritiek, vijf partijen verwittigd, DT-02-keten.</figcaption></figure>
-        <figure class="figure"><img style="width:100%" src="assets/pp/21-nakijken-doc006-gecorrigeerd.jpg" alt="Nakijk-app met de scan van een weegbon naast de gecorrigeerde velden"><figcaption>Weegbon nakijken: scan naast de velden, correctie live hertoetst.</figcaption></figure>
-        <figure class="figure"><img style="width:100%" src="assets/pp/13-app-outbox-tijdens-storing.jpg" alt="ERP-outbox tijdens een storing met 503 en geplande nieuwe poging"><figcaption>ERP-storing: retry met 503, daarna precies één boeking.</figcaption></figure>
-        <figure class="figure"><img style="width:100%" src="assets/pp/18-werfapp-mijn-status.jpg" alt="Werfapp als Power Apps code app met status van claims en aanvragen"><figcaption>Werfapp (Power Apps code app): status live uit Dataverse.</figcaption></figure>
+      <div class="section-title"><h2>Mijn rol</h2><span class="muted">wat ik deed, welke keuzes ik verdedig, en wat ik niet weet</span></div>
+      <div class="grid cards-3">
+        <div>
+          <h3>Hoe dit gemaakt is</h3>
+          <p>Ik bouwde deze portfolio met AI (Claude Code) als bouw- en schrijfpartner. Ik vertrok van drie processen die bij deze rol horen, stuurde de richting en de verbeterrondes, en liet alles controleren door tests en door een echte Power Platform-omgeving. Wat hier staat, is het werk dat ik in een gesprek wil uitleggen en laten bevragen.</p>
+        </div>
+        <div>
+          <h3>Drie keuzes om over door te vragen</h3>
+          <ol>
+            <li><b>Case 03 eerst</b>, niet de case met het grootste volume: beste businesscase, en ze bouwt de integratie die de andere twee hergebruiken.</li>
+            <li><b>Spoed is een planningsprobleem.</b> Een weekplanning zonder software start vóór de app; anders beloont de app te laat aanvragen.</li>
+            <li><b>Case 01 is financieel marginaal</b> en gaat toch door, als derde: compliance en hergebruik dragen de beslissing, en dat staat er eerlijk bij.</li>
+          </ol>
+        </div>
+        <div>
+          <h3>Wat ik niet weet</h3>
+          <ul>
+            <li>Hoe deze processen bij een echte bouwgroep lopen: alles hier is fictief en gesimuleerd.</li>
+            <li>Hoe werfleiders echt reageren: houding en workshops zijn aannames.</li>
+            <li>Welk ERP, welke licenties en welke prijzen: ordes van grootte, geen offerte.</li>
+            <li>Of de baten gehaald worden: dat zegt pas een nulmeting en een benefits review.</li>
+          </ul>
+        </div>
       </div>
-      <h3 id="flows" style="margin-top:34px">De zeven flows, elk uitgelegd</h3>
-      <p class="measure">Elke flow heeft een spec in gewone taal: doel, trigger, wat hij leest en schrijft, stappen met een diagram, beslisregels, foutafhandeling, bewijs met een echte run, en het verschil met het doelontwerp. De technische stappenlijst onderaan elke spec wordt bij elke build uit de code gegenereerd, zodat de uitleg niet kan afwijken van wat draait.</p>
-      <div class="table-wrap" style="margin-top:14px">
-        <table>
-          <thead><tr><th>Flow</th><th>Case</th><th>Start wanneer</th><th>Wat hij doet</th><th></th></tr></thead>
-          <tbody>
-            <tr><td><b>HV-DI-01</b> Weegbon controleren en boeken</td><td>01</td><td>weegbon toegevoegd</td><td>elf regels; automatisch boeken of naar nazicht, escalatie of dubbel</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-DI-01.md">spec</a></td></tr>
-            <tr><td><b>HV-DI-02</b> Weegbon na nazicht boeken</td><td>01</td><td>status → Goedgekeurd</td><td>servercontrole op dubbel en geweigerd materiaal, dan de gecorrigeerde waarden boeken</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-DI-02.md">spec</a></td></tr>
-            <tr><td><b>HV-CL-01</b> Schadeclaim intake en triage</td><td>02</td><td>claim gemeld</td><td>ernst, eigenaar, DT-02-keten, deadlines, verwittigingen, tijdlijn</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-CL-01.md">spec</a></td></tr>
-            <tr><td><b>HV-CL-02</b> Schadeclaim goedkeuringsketen</td><td>02</td><td>status → Ter goedkeuring</td><td>Approvals per niveau; één afwijzing stopt de keten</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-CL-02.md">spec</a></td></tr>
-            <tr><td><b>HV-CL-03</b> SLA-bewaking</td><td>02</td><td>elk uur</td><td>te late beoordelingen escaleren</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-CL-03.md">spec</a></td></tr>
-            <tr><td><b>HV-MA-01</b> Materiaalaanvraag verwerken</td><td>03</td><td>status → Ingediend</td><td>dichtste depot eerst, budget, DT-03, goedkeuring, berichten in de outbox</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-MA-01.md">spec</a></td></tr>
-            <tr><td><b>HV-MA-02</b> ERP-outbox verzenden</td><td>03</td><td>elke 5 minuten</td><td>naar het ERP met retry 1-5-15-60-240 min en dead-letter</td><td><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/HV-MA-02.md">spec</a></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="grid cards-3" style="margin-top:18px">
-        <figure class="figure"><img style="width:100%" src="assets/pp/24-flow-hv-di-02-run.jpg" alt="Run van HV-DI-02 met een keuze in drie gevallen: dubbel, geweigerd, boeken"><figcaption>HV-DI-02: de server controleert opnieuw, wat de app ook stuurde.</figcaption></figure>
-        <figure class="figure"><img style="width:100%" src="assets/pp/25-flow-hv-cl-01-run.jpg" alt="Run van HV-CL-01: werf en ernst parallel, dan dossier en tijdlijn"><figcaption>HV-CL-01: van melding naar dossier met tijdlijn.</figcaption></figure>
-        <figure class="figure"><img style="width:100%" src="assets/pp/29-flow-hv-in-01-run-storing.jpg" alt="Run van HV-MA-02 tijdens een ERP-storing: de tak niet bereikbaar plant een nieuwe poging"><figcaption>HV-MA-02 tijdens de storing: nieuwe poging gepland, geen boeking.</figcaption></figure>
-      </div>
-      <p class="measure" style="margin-top:14px">De drie apps hebben elk een eigen spec: de <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/apps/werfapp.md">werfapp</a>, <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/apps/weegbon-nakijken.md">Weegbon Nakijken</a> en de <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/apps/backoffice.md">backoffice-app</a>.</p>
-      <div class="cta-row" style="margin-top:18px"><a class="btn" href="https://github.com/phlppgdfry/construction-digital-transformation/tree/main/power-platform">Solution, scripts en verificatie</a><a class="btn ghost" href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/flows/README.md">De zeven flows</a></div>
     </div>
   </section>
 
@@ -241,7 +296,8 @@
       <div class="section-title"><h2>Eerlijke grenzen</h2></div>
       <ul class="limits measure">
         <li>Halverdijk Group, de documenten, dossiers en aanvragen zijn fictief. De cijfers zijn aannames in <code>data/assumptions.json</code> of komen uit verzonnen datasets.</li>
-        <li>Workshops en gebruikersvalidatie zijn uitgeschreven als scenario. Ze hebben niet met echte medewerkers plaatsgevonden.</li>
+        <li>Workshops, interviews, stakeholderhoudingen, gebruikersvalidatie en de baseline-goedkeuring zijn uitgeschreven als scenario en staan als <em>gesimuleerd</em> gemarkeerd. Ze hebben niet met echte medewerkers plaatsgevonden.</li>
+        <li>De batenrealisatie is een simulatie op het rekenmodel, geen gemeten resultaat.</li>
         <li>De Power Platform-oplossing draait in een ontwikkelomgeving, niet in productie. Het ERP is daar een sandbox van Dataverse-tabellen, en document-AI is niet gekoppeld (weegbonnen komen binnen als reeds geëxtraheerde rijen).</li>
         <li>De beslisregels zijn wél uitgevoerd in de echte Power Fx-engine (<code>pac power-fx run</code>) en vergeleken met de regelmotor.</li>
         <li>De demo gebruikt dezelfde regelmotor als de tests, maar de AI-extractie en het ERP worden gesimuleerd.</li>
