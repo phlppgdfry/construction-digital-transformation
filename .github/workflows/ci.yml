@@ -23,3 +23,25 @@ jobs:
         run: npm test
       - name: Links
         run: python3 scripts/check-links.py
+
+  apps:
+    # the two Power Apps code apps: lint and type-check (they import the tested engines from src/)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [werfapp, reviewapp]
+    defaults:
+      run:
+        working-directory: power-platform/${{ matrix.app }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: power-platform/${{ matrix.app }}/package-lock.json
+      - run: npm ci
+      - name: Lint
+        run: npx eslint .
+      - name: Type-check
+        run: npx tsc -b

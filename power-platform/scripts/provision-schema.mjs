@@ -72,6 +72,20 @@ async function ensureColumns(t) {
   }
 }
 
+// New options in an existing choice column (e.g. a status "Fout" added later): InsertOptionValue.
+async function ensureOptions(t) {
+  for (const [name, type, , extra] of t.columns ?? []) {
+    if (type !== "choice" || typeof extra === "string") continue;
+    const attr = await get(`EntityDefinitions(LogicalName='${t.name}')/Attributes(LogicalName='${name}')/Microsoft.Dynamics.CRM.PicklistAttributeMetadata?$select=LogicalName&$expand=OptionSet($select=Options)`);
+    const have = new Set(attr.json.OptionSet.Options.map((o) => o.Value));
+    for (const [value, text] of Object.entries(extra)) {
+      if (have.has(Number(value))) continue;
+      await post("InsertOptionValue", { EntityLogicalName: t.name, AttributeLogicalName: name, Value: Number(value), Label: label(text), SolutionUniqueName: CONFIG.solution });
+      log(`  + option ${t.name}.${name} ${value} ${text}`);
+    }
+  }
+}
+
 async function ensureLookups(t) {
   for (const [name, target, display] of t.lookups ?? []) {
     if (await attributeExists(t.name, name)) continue;
@@ -109,7 +123,7 @@ async function ensureEnvironmentVariables() {
 const publisherId = await ensurePublisher();
 await ensureSolution(publisherId);
 for (const t of model.tables) await ensureTable(t);
-for (const t of model.tables) { await ensureColumns(t); }
+for (const t of model.tables) { await ensureColumns(t); await ensureOptions(t); }
 for (const t of model.tables) { await ensureLookups(t); }
 for (const t of model.tables) { await ensureKeys(t); }
 await ensureEnvironmentVariables();

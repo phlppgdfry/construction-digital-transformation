@@ -1,123 +1,114 @@
-# HV-MA-02 ERP-outbox verzenden
+# HV-MA-02 Materiaalaanvraag goedkeuren
 
 | | |
 |---|---|
 | Case | [03 Materiaalaanvragen](../../03-material-requests/README.md) |
-| User story | [US-05 ERP-storing merkt niemand op de werf](../../03-material-requests/03-design.md#us-05-erp-storing-merkt-niemand-op-de-werf) |
-| Eigenaar | functioneel beheer ERP |
-| Komt na | [HV-MA-01](HV-MA-01.md) zette berichten in de outbox |
-| Ontwerpkeuze | [ADR-004 Outbox en idempotentie](../../shared-methodology/adr/ADR-004-outbox-idempotency.md) |
+| User stories | [US-04 Budget bewaken](../../03-material-requests/03-design.md#us-04-budget-bewaken) |
+| BPMN (TO-BE) | *Goedkeuren in Teams of app* |
+| Eigenaar | afdelingsverantwoordelijke |
+| Komt na | [HV-MA-01](HV-MA-01.md) zette *Ter goedkeuring* · **Volgende stap** *Goedgekeurd* → [HV-MA-03](HV-MA-03.md) |
 
 ## Doel
 
-De berichten uit de outbox betrouwbaar in het ERP krijgen. Is het ERP even weg, dan probeert de flow later opnieuw, met steeds langere pauzes. Lukt het na zes pogingen nog niet, dan gaat het bericht naar *dead-letter* en is het een ticket voor functioneel beheer. Een bericht dat twee keer aankomt, wordt nooit twee keer geboekt.
+De route die HV-MA-01 bepaalde (bv. `Projectleider>Afdelingsverantwoordelijke`), niveau per niveau laten goedkeuren. Eén afwijzing stopt de keten en de werfleider hoort waarom.
 
 ## Trigger
 
-Een **schema**: elke 5 minuten.
+Een rij in *Materiaalaanvraag* wordt **gewijzigd** naar *Ter goedkeuring* (`hv_status eq 100000002`).
+
+Dit is hetzelfde patroon als [HV-CL-02](HV-CL-02.md): **een status start de vraag, de uitkomst is een status.** Vroeger wachtte HV-MA-01 zelf op de goedkeuring. Dat had twee nadelen: een run duurt maximaal 30 dagen, en een herstart halverwege deed alles opnieuw, ook de toewijzing. Nu is het wachten een eigen flow, die verdergaat bij het bewaarde niveau.
 
 ## Invoer en uitvoer
 
-| Leest | Voorwaarde |
+| Leest | Kolommen |
 |---|---|
-| ERP-outbox | status *Wachtend* en `hv_volgendepoging` ≤ nu; oudste eerst, max. 50 per run |
-| omgevingsvariabele `hv_ErpBeschikbaar` | stelt in deze omgeving het ERP voor: aan = bereikbaar, uit = storing |
+| de aanvraag | `hv_route`, `hv_goedkeuringsniveau`, `hv_aanvraagnr`, `hv_waarde`, `hv_regel`, `hv_aanvrager` |
+| Rol | rol → e-mailadres |
 
 | Schrijft | Kolommen |
 |---|---|
-| ERP-boeking (sandbox) | `hv_idempotencykey` (= de outbox-sleutel), soort, payload, referentie |
-| Voorraad (ERP-sandbox) | bij een reservatie: `hv_gereserveerd` + hoeveelheid |
-| ERP-outbox | `hv_status` (*Verzonden* / *Dead-letter*), `hv_pogingen`, `hv_volgendepoging`, `hv_laatstefout` |
+| Approvals | één aanvraag per niveau |
+| Materiaalaanvraag | `hv_goedkeuringsniveau` na elke goedkeuring; op het einde *Goedgekeurd* of *Afgewezen* |
+| Melding | afgewezen → werfleider (met de opmerking) · verlopen → afdelingsverantwoordelijke |
 
 ## Stappen
 
-1. De berichten ophalen die nu aan de beurt zijn.
-2. Per bericht, één voor één:
-   - **ERP bereikbaar**: de boeking maken; bij een reservatie de voorraad reserveren; het bericht op *Verzonden*, met "201 geboekt" of "200 al geboekt (idempotent)".
-   - **ERP niet bereikbaar** en nog geen 5 pogingen geteld: poging + 1, volgende poging na 1, 5, 15, 60 of 240 minuten, fout "503".
-   - **ERP niet bereikbaar** en al 5 pogingen geteld: *Dead-letter*.
+1. De route splitsen op `>`; beginnen bij het bewaarde niveau.
+2. Per niveau: de persoon opzoeken, de goedkeuring vragen en wachten; goedgekeurd → volgend niveau bewaren; afgewezen → stoppen (max. 14 dagen).
+3. Uitkomst: *Goedgekeurd* (dan start [HV-MA-03](HV-MA-03.md)), *Afgewezen* met een melding aan de werfleider, of verlopen met een melding aan de afdelingsverantwoordelijke.
 
 ```mermaid
 flowchart TD
-  T([Elke 5 minuten]) --> Q[Berichten Wachtend<br/>en aan de beurt]
-  Q --> F{{Per bericht}}
-  F --> E{ERP bereikbaar?}
-  E -->|ja| B[ERP-boeking<br/>sleutel = outbox-sleutel] --> R{Reservatie?}
-  R -->|ja| V[Voorraad reserveren] --> S[Verzonden]
-  R -->|nee| S
-  E -->|nee| P{Minder dan 5 pogingen?}
-  P -->|ja| N[Opnieuw plannen<br/>1 · 5 · 15 · 60 · 240 min]
-  P -->|nee| DL[Dead-letter → ticket]
+  T([Status → Ter goedkeuring]) --> I[Route splitsen,<br/>verder vanaf het bewaarde niveau]
+  I --> L{Nog een niveau<br/>en niet afgewezen?}
+  L -->|ja| A[[Approvals: vragen en wachten]] --> U{Uitkomst}
+  U -->|goedgekeurd| N[Niveau + 1, bewaren] --> L
+  U -->|afgewezen| X[Afgewezen] --> L
+  L -->|nee| E{Eindstatus}
+  E -->|goedgekeurd| G[Goedgekeurd → HV-MA-03]
+  E -->|afgewezen| R[Afgewezen + melding werfleider]
+  E -->|na 14 dagen| V[Melding afdelingsverantwoordelijke]
 ```
 
 ## Beslisregels
 
-| Wat | Regel |
-|---|---|
-| Retryschema | na poging 1, 2, 3, 4, 5: wachten 1, 5, 15, 60, 240 minuten. Samen ruim 5 uur: een korte storing lost zichzelf op, een lange wordt een ticket. |
-| Dead-letter | bij de 6e mislukte poging |
-| Volgorde | oudste bericht eerst, één voor één (geen parallelle reservaties op dezelfde voorraad) |
+- De route komt uit DT-03 (HV-MA-01). Deze flow voert ze uit, hij beslist niet wie.
+- Eén afwijzing is genoeg; er gaat dan niets naar het ERP.
 
 ## Foutafhandeling
 
-Deze flow **is** de foutafhandeling van case 03. Daarnaast:
-
 | Wat kan misgaan | Wat de flow doet |
 |---|---|
-| De boeking bestaat al (vorige run viel weg na de boeking) | de alternatieve sleutel weigert de tweede rij; `Verzonden` loopt ook na die fout en schrijft "200 al geboekt (idempotent)". |
-| Twee runs tegelijk | elke run neemt alleen berichten die nog *Wachtend* zijn; de sleutel vangt een overlap op. |
-| Dead-letter | in productie een ticket bij functioneel beheer ([runbook](../../03-material-requests/06-implement.md#runbook-dead-letter)); hier blijft het bericht zichtbaar in de backoffice-app. |
+| Niemand antwoordt binnen 14 dagen | melding aan de afdelingsverantwoordelijke; de aanvraag blijft *Ter goedkeuring*. Opnieuw op *Ter goedkeuring* zetten hervat de keten. |
+| Een rol heeft geen persoon | `Bij_fout`: de aanvraag krijgt status *Fout*, melding aan functioneel beheer. |
 
 ## Configuratie
 
-| Wat | Waarde | Waar |
-|---|---|---|
-| `hv_ErpBeschikbaar` | ja | omgevingsvariabele; op *nee* zetten simuleert een storing |
-| Retryschema, max. pogingen | vast in de flow | nieuwe versie |
-| Verbinding | `hv_dataverse` | connection reference |
+Rol → persoon in de tabel *Rol (goedkeurder en ontvanger)*. Verbindingen: `hv_dataverse`, `hv_approvals`.
 
 ## Bewijs
 
-- **Storingstest:** met `hv_ErpBeschikbaar = no` kregen twee pogingen "503 ERP niet bereikbaar", met een nieuwe poging na 1 en daarna 5 minuten. Na het herstel boekte de derde poging: **3 berichten, precies 3 ERP-boekingen** ([VERIFICATION.md](../VERIFICATION.md#erp-outbox-door-hv-ma-02-naar-de-erp-sandbox), [outbox tijdens de storing](../screenshots/13-app-outbox-tijdens-storing.jpg), [na het herstel](../screenshots/14-app-outbox-na-herstel.jpg)).
-- De run hieronder is er één uit de storing: de tak *Onwaar* (ERP niet bereikbaar) liep, de boeking is overgeslagen.
-
-![Run van HV-MA-02 tijdens de storing](../screenshots/29-flow-hv-ma-02-run-storing.jpg)
-
-## Beheer
-
-- **Volgen:** backoffice-app → *03 Materiaal* → *ERP-outbox*; filter op *Dead-letter*.
-- **Dead-letter opnieuw proberen:** status terug op *Wachtend*, pogingen op 0, volgende poging = nu. De sleutel maakt dat veilig.
-- **Storing simuleren:** `node power-platform/scripts/set-env.mjs hv_ErpBeschikbaar no`, en daarna weer `yes`.
+De aanvragen boven €1.000 staan in [VERIFICATION.md](../VERIFICATION.md#case-03--materiaalaanvragen-flows-hv-ma-01-tot-hv-ma-04) op *Ter goedkeuring*, met een open goedkeuring in Power Automate. **De keten is nog niet doorlopen**: dat gebeurt zodra iemand de goedkeuringen beantwoordt.
 
 ## Ontwerp en gebouwd
 
-| | Doelontwerp ([erp-outbox-verzenden.flow.json](../../03-material-requests/artefacts/power-automate/erp-outbox-verzenden.flow.json)) | Gebouwd |
+| | Doelontwerp | Gebouwd |
 |---|---|---|
-| Versturen | HTTP naar de ERP-facade, met `Idempotency-Key`-header | rij in *ERP-boeking (sandbox)* met dezelfde sleutel als alternatieve sleutel |
-| Fouten | onderscheid tijdelijk (5xx, 429) en definitief (4xx) | alleen "niet bereikbaar" (de schakelaar); een definitieve fout bestaat in de sandbox niet |
-| Dead-letter | ticket bij functioneel beheer | status *Dead-letter*; geen ticket |
-| Schema | elke minuut | elke 5 minuten (minder runs in de ontwikkelomgeving) |
+| Vragen | Teams-kaart voor de projectleider, tweede niveau apart | Approvals per niveau uit de route |
+| Plaats | in de verwerkingsflow | eigen flow op een status (zie Trigger) |
 
 ## Technische stappen
 
 <!--actions:HV-MA-02-->
-*Gegenereerd uit [`definitions.mjs`](definitions.mjs) door `npm run build`. Niet met de hand aanpassen.* 11 acties · verbindingen: Microsoft Dataverse · omgevingsvariabelen: `hv_ErpBeschikbaar` (standaard true).
+*Gegenereerd uit [`definitions.mjs`](definitions.mjs) door `npm run build`. Niet met de hand aanpassen.* 23 acties · verbindingen: Microsoft Dataverse, Approvals · omgevingsvariabelen: geen · regels uit *Bedrijfsregel*: geen.
 
-- **Trigger `Elke_5_minuten`**: schema, elke 5 minuten
-- `Klaar`: rijen opzoeken in *ERP-outbox*
-- `Per_bericht`: voor elk item, één voor één
-  - `ERP_bereikbaar`: voorwaarde
-    - als waar:
-      - `ERP_boeking`: rij toevoegen in *ERP-boeking (sandbox)*: `hv_idempotencykey`, `hv_soort`, `hv_payload`, `hv_referentie`
-      - `Reservatie`: voorwaarde
-        - als waar:
-          - `Voorraad`: rijen opzoeken in *Voorraad (ERP-sandbox)* (eerste treffer)
-          - `Reserveren`: rij bijwerken in *Voorraad (ERP-sandbox)*: `hv_gereserveerd`
-      - `Verzonden`: rij bijwerken in *ERP-outbox*: `hv_status`, `hv_pogingen`, `hv_laatstefout` · loopt ook als `Reservatie` faalt (bewust: idempotentie)
-    - anders:
-      - `Nog_pogingen`: voorwaarde
-        - als waar:
-          - `Opnieuw_plannen`: rij bijwerken in *ERP-outbox*: `hv_pogingen`, `hv_volgendepoging`, `hv_laatstefout`
-        - anders:
-          - `Dead_letter`: rij bijwerken in *ERP-outbox*: `hv_status`, `hv_pogingen`, `hv_laatstefout`
+- **Trigger `Ter_goedkeuring`**: Dataverse, rij gewijzigd in *Materiaalaanvraag* (`hv_materiaalaanvraag`); alleen bij wijziging van `hv_status`, voorwaarde `hv_status eq 100000002`
+- `Probeer`: blok: alle stappen hieronder; faalt er één, dan gaat de run naar `Bij_fout`
+  - `Keten`: variabele aanmaken `keten` (array)
+  - `Niveau`: variabele aanmaken `niveau` (integer)
+  - `Afgewezen`: variabele aanmaken `afgewezen` (boolean)
+  - `Per_niveau`: herhalen tot de voorwaarde klopt (max. 6 keer, time-out 14 dagen)
+    - `Goedkeurder`: rijen opzoeken in *Rol (goedkeurder en ontvanger)* (eerste treffer)
+    - `Goedkeuring`: goedkeuring vragen via Approvals en wachten op het antwoord
+    - `Uitkomst`: voorwaarde
+      - als waar:
+        - `Volgend_niveau`: variabele verhogen `niveau`
+        - `Niveau_bewaren`: rij bijwerken in *Materiaalaanvraag*: `hv_goedkeuringsniveau`
+      - anders:
+        - `Markeer_afgewezen`: variabele zetten `afgewezen`
+  - `Eindstatus`: berekening · loopt ook als `Per_niveau` faalt
+  - `Volgens_uitkomst`: keuze
+    - geval `goedgekeurd` (Goedgekeurd):
+      - `Status`: rij bijwerken in *Materiaalaanvraag*: `hv_status`
+    - geval `afgewezen` (Afgewezen):
+      - `Status`: rij bijwerken in *Materiaalaanvraag*: `hv_status`
+      - `Melding_werfleider`: rij toevoegen in *Melding*: `hv_titel`, `hv_tekst`, `hv_rol`, `hv_soort`, `hv_kanaal`, `hv_status`, `hv_bron`, `hv_referentie`, `hv_link`
+    - geval `verlopen` (Verlopen):
+      - `Melding_verlopen`: rij toevoegen in *Melding*: `hv_titel`, `hv_tekst`, `hv_rol`, `hv_soort`, `hv_kanaal`, `hv_status`, `hv_bron`, `hv_referentie`, `hv_link`
+- `Bij_fout`: foutafhandeling (alleen als het blok hierboven faalt)
+  - `Mislukte_stappen`: lijst filteren
+  - `Foutnamen`: lijst omzetten
+  - `Foutmelding`: rij toevoegen in *Melding*: `hv_titel`, `hv_tekst`, `hv_rol`, `hv_soort`, `hv_kanaal`, `hv_status`, `hv_bron`, `hv_referentie`, `hv_link`
+  - `Status_fout`: rij bijwerken in *Materiaalaanvraag*: `hv_status`
+  - `Run_mislukt`: run stoppen (status Failed) · loopt ook als `Status_fout` faalt
 <!--/actions-->

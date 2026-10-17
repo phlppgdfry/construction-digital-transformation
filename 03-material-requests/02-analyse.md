@@ -80,26 +80,64 @@ erDiagram
 
 ## Requirements
 
-| ID | Requirement | Pijn | MoSCoW |
-|---|---|---|---|
-| F-01 | Aanvraag in de app: werf, artikels uit catalogus, hoeveelheid, gewenste levering | P-01, P-05 | Must |
-| F-02 | Live beschikbaarheid per depot bij elke lijn | P-02 | Must |
-| F-03 | Toewijzing aan het dichtstbijzijnde depot met voorraad; tekort → aankoop | P-02, P-04 | Must |
-| F-04 | Spoed (< 48 u) herkennen, reden verplicht, planning verwittigen | P-03 | Must |
-| F-05 | Goedkeuring volgens DT-03; kleine aanvragen binnen budget en op voorraad automatisch | P-07 | Must |
-| F-06 | Reservatie en aankoopaanvraag in het ERP, betrouwbaar bij ERP-storing | P-04 | Must |
-| F-07 | Ontvangst bevestigen met foto van de leverbon; verbruik op project boeken | P-06 | Must |
-| F-08 | Gerecycleerd alternatief voorstellen als het op voorraad is (projectleider beslist) | P-04 | Should |
-| F-09 | Weekplanning-scherm: aanvragen voor volgende week in één keer | P-03 | Should |
-| F-10 | Ritten bundelen per zone | P-03 | Could |
-| F-11 | Voorraad tellen in de app (depot) | P-02 | Won't (eerst ERP-voorraad op orde) |
+De requirements volgen de vier soorten van BABOK: **business** (wat de organisatie wil bereiken, SMART), **stakeholder** (wat een rol nodig heeft), **solution** (wat de oplossing moet doen: functioneel en niet-functioneel) en **transition** (wat nodig is om over te stappen, en daarna niet meer). Elke requirement heeft een bron, een eigenaar, een prioriteit, een stabiliteit en een status.
 
-| ID | Niet-functioneel |
-|---|---|
-| NF-01 | Voorraadopvraging < 3 s in de app |
-| NF-02 | Geen ERP-boeking dubbel, ook niet bij herhaalde verzending |
-| NF-03 | ERP-storing tot 6 u zonder verlies; daarna ticket |
-| NF-04 | Elke boeking herleidbaar tot aanvraag, goedkeurder en leverbon |
+Dit register wordt gegenereerd uit [`data/requirements.json`](../data/requirements.json). De build faalt als een requirement verwijst naar een pijnpunt, story, BPMN-taak, flow, test of KPI die niet bestaat, of als een pijnpunt of story door geen enkele requirement gedekt is. Hoe elke requirement doorloopt tot test en KPI: [traceerbaarheid](traceerbaarheid.md). **Baseline 1.0** is gesimuleerd: in een echt project tekent de eigenaar per requirement; een wijziging daarna volgt het [wijzigingsbeheer](../shared-methodology/governance.md#wijzigingsbeheer-voor-requirements-en-regels).
+
+<!--requirements:c3-->
+#### Business
+
+| ID | Requirement | Bron | Eigenaar | Prioriteit | Stabiliteit | Status |
+|---|---|---|---|---|---|---|
+| BR-01 | Binnen 6 maanden na go-live is hoogstens 20% van de aanvragen spoed (minder dan 48 uur vooraf; nu 33%). *(doel D1: Marge per werf: kosten sneller en juist op het project)* | nulmeting | Afdelingsverantwoordelijken | Must | middel | in baseline |
+| BR-02 | Binnen 3 maanden wordt minstens 40% van de aanvragen automatisch goedgekeurd, met een doorlooptijd onder 1 uur. *(doel D2: Groeien zonder extra administratieve mensen)* | replay historiek | Werfplanning | Must | middel | in baseline |
+| BR-03 | Vanaf go-live staan materiaalkosten dezelfde dag als de levering op de werf (nu 2 tot 10 dagen). *(doel D1: Marge per werf: kosten sneller en juist op het project)* | projectleiders | Administratie aankoop | Should | hoog | in baseline |
+| BR-04 | Binnen 6 maanden geen externe aankoop meer van een artikel dat in een eigen depot op voorraad is. *(doel D4: Circulair bouwen: eigen gerecycleerd materiaal eerst)* | recyclage | Aankoop | Should | middel | in baseline |
+
+#### Stakeholder
+
+| ID | Requirement | Bron | Eigenaar | Prioriteit | Stabiliteit | Status |
+|---|---|---|---|---|---|---|
+| SR-01 | De werfleider vraagt materiaal aan met zicht op de voorraad, zonder te bellen. | ontdekkingsworkshop depot | Werfleiders | Must | hoog | in baseline |
+| SR-02 | De werfplanning krijgt één lijst met tijdige aanvragen voor de juiste artikelen. | ontdekkingsworkshop depot | Werfplanning | Must | middel | in baseline |
+| SR-03 | De projectleider weet tot welk bedrag hij zelf beslist, en het werfbudget wordt bewaakt. | interview projectleiders | Projectleiders | Must | middel | in baseline |
+| SR-04 | Aankoop koopt niet extern als een eigen depot het artikel heeft. | interview aankoop | Aankoop | Should | hoog | in baseline |
+
+#### Solution · functioneel
+
+| ID | Requirement | Bron | Eigenaar | Prioriteit | Stabiliteit | Status |
+|---|---|---|---|---|---|---|
+| F-01 | Aanvraag in de app: werf, artikels uit de catalogus, hoeveelheid, gewenste levering. | workshop | Werfleiders | Must | hoog | gebouwd |
+| F-02 | Live beschikbaarheid per depot bij elke lijn. *(uit de ERP-sandbox; het echte ERP via de facade is ontworpen)* | workshop | Werfplanning | Must | hoog | gebouwd |
+| F-03 | Toewijzing aan het dichtstbijzijnde depot met voorraad; een tekort wordt een aankoop. | workshop | Werfplanning | Must | middel | gebouwd |
+| F-04 | Spoed (minder dan 48 uur) herkennen, met een verplichte reden. | inzicht workshop (planningsprobleem) | Afdelingsverantwoordelijken | Must | middel | gebouwd |
+| F-05 | Goedkeuring volgens DT-03; kleine aanvragen binnen budget en op voorraad gaan automatisch. | afdelingsverantwoordelijken | Afdelingsverantwoordelijken | Must | middel | gebouwd |
+| F-06 | Reservatie en aankoopaanvraag in het ERP, betrouwbaar bij een ERP-storing. | IT | Functioneel beheer | Must | hoog | gebouwd |
+| F-07 | Ontvangst bevestigen op de werf; het verbruik wordt op de werf geboekt. *(knop in de werfapp; de foto van de leverbon is ontworpen, niet gebouwd)* | projectleiders | Administratie aankoop | Must | middel | gebouwd |
+| F-08 | Een gerecycleerd alternatief voorstellen als het op voorraad is; de projectleider beslist. | recyclage | Projectleiders | Should | middel | gebouwd |
+| F-09 | Weekplanning-scherm: aanvragen voor volgende week in één keer. *(release 2; de afspraak zelf (TR-03) start eerder, zonder software)* | inzicht workshop | Werfplanning | Should | middel | ontworpen |
+| F-10 | Ritten bundelen per zone. | transport | Werfplanning | Could | laag | ontworpen |
+| F-11 | Voorraad tellen in de app (depot). *(eerst de ERP-voorraad op orde (TR-01))* | depot | Werfplanning | Won't | laag | buiten scope |
+
+#### Solution · niet-functioneel
+
+| ID | Requirement | Bron | Eigenaar | Prioriteit | Stabiliteit | Status |
+|---|---|---|---|---|---|---|
+| NF-01 | Voorraadopvraging in de app duurt minder dan 3 seconden. *(te meten tegen het echte ERP)* | werfleiders | Werfleiders | Must | hoog | ontworpen |
+| NF-02 | Geen ERP-boeking dubbel, ook niet bij herhaalde verzending. | IT | Functioneel beheer | Must | hoog | gebouwd |
+| NF-03 | Een ERP-storing tot 6 uur gaat zonder verlies; daarna een melding aan functioneel beheer. | IT | Functioneel beheer | Must | hoog | gebouwd |
+| NF-04 | Elke boeking is herleidbaar tot aanvraag, goedkeurder en ontvangst. | audit | Administratie aankoop | Must | hoog | gebouwd |
+
+#### Transition
+
+| ID | Requirement | Bron | Eigenaar | Prioriteit | Stabiliteit | Status |
+|---|---|---|---|---|---|---|
+| TR-01 | De voorraad in het ERP wordt geteld en gecorrigeerd vóór go-live: de app toont wat het ERP zegt. | workshop ("200 ton in het systeem, 80 op de berg") | Werfplanning | Must | hoog | transitie |
+| TR-02 | Werfbudgetten per categorie geladen, met een bevestigde eigenaar per werf. | afdelingsverantwoordelijken | Afdelingsverantwoordelijken | Must | middel | transitie |
+| TR-03 | Een vaste weekplanning met de werfleiders start vóór de app (optie 0): aanvragen voor de week op vrijdag. | oorzaakanalyse | Afdelingsverantwoordelijken | Must | middel | transitie |
+| TR-04 | Telefoon blijft voor noodgevallen; het depot registreert een telefonische aanvraag in de app, zodat spoed eerlijk gemeten wordt. | meetplan | Werfplanning | Must | hoog | transitie |
+| TR-05 | Werfleiders en depot getraind; champion per afdeling. | change-impact | Afdelingsverantwoordelijken | Must | hoog | transitie |
+<!--/requirements-->
 
 ## Uitzonderingen
 

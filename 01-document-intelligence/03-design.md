@@ -22,17 +22,17 @@ De regels zijn het hart van de case. Ze zijn geschreven in de taal van de admini
 <!--rules:c1-->
 | Regel | Controle | Bij falen | Waarom |
 |---|---|---|---|
-| R01 | Verplichte velden aanwezig | nazicht door administratie | Zonder bonnummer, datum, nummerplaat, klant, materiaal en gewichten kan de boeking niet. |
-| R02 | Confidence van kritieke velden ≥ 0,85 | nazicht door administratie | Onzekere lezing gaat naar een mens; de drempel wordt na de pilot herijkt. |
-| R03 | Netto = bruto − tarra (± 20 kg) | nazicht door administratie | Vangt zelfverzekerde leesfouten die de confidence niet toont. |
+| R01 | Verplichte velden aanwezig | nazicht door administratie | Zonder deze velden kan de boeking niet. |
+| R02 | Zekerheid van de AI-lezing (0,85) | nazicht door administratie | Een onzekere lezing gaat naar een mens. De drempel wordt na de pilot herijkt. |
+| R03 | Gewichten kloppen (20 kg) | nazicht door administratie | Vangt zelfverzekerde leesfouten die de confidence niet toont. |
 | R04 | Klant bestaat en is actief | nazicht door administratie | Geen boeking op onbekende of geblokkeerde klanten. |
-| R05 | Nummerplaat hoort bij klant of geregistreerde vervoerder | nazicht door administratie | Fraude- en verwisselingscontrole; nieuwe plaat → stamgegevens aanvullen. |
-| R06 | Materiaal toegelaten volgens vergunning | escalatie milieucoördinator | Geweigerde afvalstoffen (bv. asbest) nooit automatisch boeken: milieucoördinator beslist. |
-| R07 | Identificatieformulier bij inkomend afval | nazicht door administratie | Afvaltransport moet traceerbaar zijn; ontbrekend nummer opvragen bij de vervoerder. |
-| R08 | Traceerbaarheidsreferentie bij uitgegraven bodem | nazicht door administratie | Grondverzet vraagt een traceerbaarheidsdocument; zonder referentie geen aanvaarding. |
-| R09 | Bonnummer nog niet verwerkt (dubbel) | weigeren als dubbel | Herscande of dubbel gemailde bonnen mogen niet twee keer gefactureerd worden. |
-| R10 | Datum niet in de toekomst en max. 30 dagen oud | nazicht door administratie | Oude bonnen horen mogelijk bij een afgesloten periode. |
-| R11 | Bruto ≤ 44.000 kg | nazicht door administratie | Mogelijke overlading of leesfout; transportcompliance laten bekijken. |
+| R05 | Nummerplaat gekend | nazicht door administratie | Controle op fraude en verwisseling. Een nieuwe plaat wordt aan de stamgegevens toegevoegd. |
+| R06 | Materiaal toegelaten | escalatie milieucoördinator | Geweigerde afvalstoffen (bv. asbest) worden nooit automatisch geboekt. De milieucoördinator beslist. |
+| R07 | Identificatieformulier | nazicht door administratie | Afvaltransport moet traceerbaar zijn. Een ontbrekend nummer wordt bij de vervoerder opgevraagd. |
+| R08 | Traceerbaarheid bodem | nazicht door administratie | Grondverzet vraagt een traceerbaarheidsdocument. Zonder referentie geen aanvaarding. |
+| R09 | Geen dubbele bon | weigeren als dubbel | Een herscande of dubbel gemailde bon mag niet twee keer gefactureerd worden. |
+| R10 | Datum aannemelijk (30 dagen) | nazicht door administratie | Een oude bon hoort mogelijk bij een afgesloten periode. |
+| R11 | Bruto binnen de wettelijke grens (44.000 kg) | nazicht door administratie | Mogelijke overlading of leesfout. De administratie laat transportcompliance kijken. |
 <!--/rules-->
 
 **Twee ontwerpkeuzes die het verschil maken:**

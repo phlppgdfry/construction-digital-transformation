@@ -3,6 +3,7 @@
 // the offline queue of the site app. Same code runs in the tests and in the browser demo.
 
 import { addHours, hoursBetween, median, mean } from "./common.mjs";
+import { param } from "./rules.mjs";
 
 export const CATEGORIES = {
   "eigen-materieel": { label: "Schade aan eigen materieel", assessor: "Fleetmanager" },
@@ -16,13 +17,14 @@ export const UTILITY_TYPES = ["gas", "elektriciteit", "water", "telecom", "riole
 
 /** Approval thresholds (decision table DT-02). Amounts in euro, estimated cost to Halverdijk. */
 export const APPROVAL_TABLE = [
-  { max: 2500, chain: ["Projectleider"] },
-  { max: 15000, chain: ["Projectleider", "Afdelingsverantwoordelijke"] },
+  { max: param("DT-02.1"), chain: ["Projectleider"] },
+  { max: param("DT-02.2"), chain: ["Projectleider", "Afdelingsverantwoordelijke"] },
   { max: Infinity, chain: ["Projectleider", "Afdelingsverantwoordelijke", "Directie"] },
 ];
-export const INSURER_THRESHOLD = 15000;
-export const INSURER_DEADLINE_DAYS = 8; // illustrative policy clause: declare within 8 calendar days
-export const SLA_HOURS = { kritiek: 2, hoog: 24, middel: 48, laag: 72 };
+export const INSURER_THRESHOLD = param("VZ-01");
+export const INSURER_DEADLINE_DAYS = param("VZ-02");
+export const MEDIUM_FROM = param("ER-02");
+export const SLA_HOURS = { kritiek: param("SLA-K"), hoog: param("SLA-H"), middel: param("SLA-M"), laag: param("SLA-L") };
 
 export const STATES = ["gemeld", "in-beoordeling", "info-gevraagd", "ter-goedkeuring", "goedgekeurd", "afgewezen", "in-afhandeling", "afgesloten"];
 export const TRANSITIONS = {
@@ -62,7 +64,7 @@ export function validateReport(r, master) {
 export function severityOf(r) {
   if (r.category === "nutsleiding" && (["gas", "elektriciteit"].includes(r.utilityType) || !r.ownerNotified)) return "kritiek";
   if (r.estimatedAmount >= INSURER_THRESHOLD) return "hoog";
-  if (r.estimatedAmount >= 2500 || r.thirdParty) return "middel";
+  if (r.estimatedAmount >= MEDIUM_FROM || r.thirdParty) return "middel";
   return "laag";
 }
 

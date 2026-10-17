@@ -9,6 +9,7 @@ import { Hv_aanvraaglijnsService } from "./generated/services/Hv_aanvraaglijnsSe
 import { Hv_artikelsService } from "./generated/services/Hv_artikelsService";
 import { Hv_voorraadsService } from "./generated/services/Hv_voorraadsService";
 import { validateReport, triage } from "../../../src/claims.mjs";
+import { param } from "../../../src/rules.mjs";
 import "./index.css";
 
 type Werf = { id: string; nr: string; naam: string; actief: boolean; pl: string };
@@ -17,9 +18,12 @@ const CAT: Record<string, number> = { "eigen-materieel": 100000000, "gehuurd-mat
 const UT: Record<string, number> = { gas: 100000000, elektriciteit: 100000001, water: 100000002, telecom: 100000003, riolering: 100000004 };
 const REASONS: [number, string][] = [[100000000, "Onvoorziene werfsituatie"], [100000001, "Planning gewijzigd door opdrachtgever"], [100000002, "Eerdere levering onvolledig"], [100000003, "Vergeten te bestellen"]];
 const QUEUE_KEY = "hv-werfapp-queue";
-const CLAIM_STATUS: Record<number, string> = { 100000000: "Gemeld", 100000001: "In beoordeling", 100000002: "Info gevraagd", 100000003: "Ter goedkeuring", 100000004: "Goedgekeurd", 100000005: "Afgewezen", 100000006: "In afhandeling", 100000007: "Afgesloten" };
+const CLAIM_STATUS: Record<number, string> = { 100000000: "Gemeld", 100000001: "In beoordeling", 100000002: "Info gevraagd", 100000003: "Ter goedkeuring", 100000004: "Goedgekeurd", 100000005: "Afgewezen", 100000006: "In afhandeling", 100000007: "Afgesloten", 100000009: "Fout (beheer kijkt)" };
 const SEVERITY: Record<number, string> = { 100000000: "laag", 100000001: "middel", 100000002: "hoog", 100000003: "kritiek" };
-const REQ_STATUS: Record<number, string> = { 100000000: "Concept", 100000001: "Ingediend", 100000002: "Ter goedkeuring", 100000003: "Goedgekeurd", 100000004: "Gepland", 100000005: "Geleverd", 100000006: "Ontvangen", 100000009: "Afgewezen" };
+const REQ_STATUS: Record<number, string> = { 100000000: "Concept", 100000001: "Ingediend", 100000002: "Ter goedkeuring", 100000003: "Goedgekeurd", 100000004: "Gepland", 100000005: "Geleverd", 100000006: "Ontvangen", 100000007: "Afgesloten", 100000009: "Afgewezen", 100000010: "Fout (beheer kijkt)" };
+// a delivery can be confirmed once the request is approved (flow HV-MA-04 then books the consumption)
+const CAN_RECEIVE = new Set([100000003, 100000004, 100000005]);
+const RUSH_HOURS = param("SP-01");
 const eur = (n?: number) => (n == null ? "—" : `€${Math.round(n).toLocaleString("nl-BE")}`);
 
 function readQueue(): Record<string, unknown>[] { try { return JSON.parse(localStorage.getItem(QUEUE_KEY) ?? "[]"); } catch { return []; } }
@@ -136,7 +140,8 @@ function Materiaal({ werven }: { werven: Werf[] }) {
       setStock(s);
     });
   }, []);
-  const rush = (new Date(when).getTime() - Date.now()) / 3600000 < 48;
+  const [now] = useState(() => Date.now());
+  const rush = (new Date(when).getTime() - now) / 3600000 < RUSH_HOURS;
   const value = lines.reduce((a, l) => a + l.qty * (artikels.find((x) => x.id === l.id)?.prijs ?? 0), 0);
   const ok = werf && lines.length && lines.every((l) => l.qty > 0) && (!rush || reason !== "");
   async function submit() {
@@ -177,8 +182,12 @@ function Status() {
   const [reqs, setReqs] = useState<Record<string, unknown>[]>([]);
   const load = () => {
     Hv_schadeclaimsService.getAll({ select: ["hv_dossiernummer", "hv_status", "hv_ernst", "hv_goedkeuringsketen", "hv_geschatbedrag", "hv_deadlinebeoordeling"], orderBy: ["createdon desc"], top: 20 }).then((r) => setClaims((r.data ?? []) as never));
-    Hv_materiaalaanvraagsService.getAll({ select: ["hv_aanvraagnr", "hv_status", "hv_waarde", "hv_route", "hv_regel", "hv_spoed"], orderBy: ["createdon desc"], top: 20 }).then((r) => setReqs((r.data ?? []) as never));
+    Hv_materiaalaanvraagsService.getAll({ select: ["hv_materiaalaanvraagid", "hv_aanvraagnr", "hv_status", "hv_waarde", "hv_route", "hv_regel", "hv_spoed"], orderBy: ["createdon desc"], top: 20 }).then((r) => setReqs((r.data ?? []) as never));
   };
+  async function receive(id: string) {
+    await Hv_materiaalaanvraagsService.update(id, { hv_status: 100000006 } as never);
+    load();
+  }
   useEffect(load, []);
   return (
     <section className="card">
@@ -186,7 +195,7 @@ function Status() {
       <h3>Schadeclaims</h3>
       <ul className="list">{claims.map((c) => <li key={String(c.hv_dossiernummer)}><b>{String(c.hv_dossiernummer)}</b> <span className="chip">{CLAIM_STATUS[Number(c.hv_status)] ?? "—"}</span> {c.hv_ernst != null && <span className="chip red">{SEVERITY[Number(c.hv_ernst)]}</span>}<small>{eur(c.hv_geschatbedrag as number)} · {String(c.hv_goedkeuringsketen ?? "triage loopt…")}</small></li>)}</ul>
       <h3>Materiaalaanvragen</h3>
-      <ul className="list">{reqs.map((r) => <li key={String(r.hv_aanvraagnr)}><b>{String(r.hv_aanvraagnr)}</b> <span className="chip">{REQ_STATUS[Number(r.hv_status)] ?? "—"}</span>{r.hv_spoed ? <span className="chip red">spoed</span> : null}<small>{eur(r.hv_waarde as number)} · {String(r.hv_regel ?? "verwerking loopt…")}</small></li>)}</ul>
+      <ul className="list">{reqs.map((r) => <li key={String(r.hv_aanvraagnr)}><b>{String(r.hv_aanvraagnr)}</b> <span className="chip">{REQ_STATUS[Number(r.hv_status)] ?? "—"}</span>{r.hv_spoed ? <span className="chip red">spoed</span> : null}<small>{eur(r.hv_waarde as number)} · {String(r.hv_regel ?? "verwerking loopt…")}</small>{CAN_RECEIVE.has(Number(r.hv_status)) && <button className="btn small" onClick={() => receive(String(r.hv_materiaalaanvraagid))}>Ontvangst bevestigen</button>}</li>)}</ul>
     </section>
   );
 }

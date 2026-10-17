@@ -13,10 +13,19 @@
 | Technologie | offline-first canvas app, Dataverse, Power Automate + Approvals, Teams, model-driven backoffice, ERP-facade |
 | Demo | [Werfportaal → Schadeclaims](https://phlppgdfry.github.io/construction-digital-transformation/demo/?case=claims) |
 
+## Eerst lezen
+
+| | |
+|---|---|
+| [Samenvatting van één pagina](samenvatting.md) | voor de directie en voor IT |
+| [Traceerbaarheid](traceerbaarheid.md) | van pijnpunt tot test en KPI, door CI gecontroleerd |
+| [Beslissingen en RAID](raid-en-beslissingen.md) | zakelijke en technische beslissingen; risico's, aannames, issues, afhankelijkheden |
+
 ## De zeven stappen
 
 | Stap | Kern | Belangrijkste artefact |
 |---|---|---|
+| [0 Mandaat](01-discover.md#mandaat-stap-0--initiate) | wat de sponsor vraagt, wat de analyse mag kosten | één blad, poort "mandaat" |
 | [1 Discover](01-discover.md) | de werfleider wil melden, niet administreren | stakeholdermatrix, workshopscenario |
 | [2 Analyse](02-analyse.md) | 3 kanalen, mediaan <!--n:c2.medianRegister-->3 dagen<!--/n--> tot registratie, <!--n:c2.incomplete-->55%<!--/n--> onvolledig | [AS-IS BPMN](bpmn/as-is.svg), nulmeting uit Excel-register |
 | [3 Design](03-design.md) | triage, beslistabel DT-02, statusmodel, offline | [TO-BE BPMN](bpmn/to-be.svg), DT-02, user stories |
@@ -28,7 +37,7 @@
 ## Wat je hier kunt nagaan
 
 - **Gebouwd in Power Platform:** tabellen, flows en apps staan in een ontwikkelomgeving, en de echte flow geeft dezelfde uitkomst als de motor. Welke app je gebruikt, welke flows draaien en wat gesimuleerd is: [hoe het samenhangt, per case](../power-platform/README.md#hoe-het-samenhangt-per-case). Zie ook de [verificatie](../power-platform/VERIFICATION.md).
-- **Flows en apps, per stuk uitgelegd:** [HV-CL-01](../power-platform/flows/HV-CL-01.md) (intake en triage), [HV-CL-02](../power-platform/flows/HV-CL-02.md) (goedkeuringsketen), [HV-CL-03](../power-platform/flows/HV-CL-03.md) (SLA-bewaking), de [werfapp](../power-platform/apps/werfapp.md) en de [backoffice-app](../power-platform/apps/backoffice.md).
+- **Flows en apps, per stuk uitgelegd:** [HV-CL-01](../power-platform/flows/HV-CL-01.md) (intake en triage), [HV-CL-02](../power-platform/flows/HV-CL-02.md) (goedkeuringsketen), [HV-CL-03](../power-platform/flows/HV-CL-03.md) (SLA- en aangiftebewaking), [HV-CL-04](../power-platform/flows/HV-CL-04.md) (afsluiten: kosten en recuperatie), de [werfapp](../power-platform/apps/werfapp.md) en de [backoffice-app](../power-platform/apps/backoffice.md).
 
 - Validatie, triage, DT-02, statusovergangen, SLA en offline-sync: [tests/claims.test.mjs](../tests/claims.test.mjs).
 - DT-02 in **Power Fx** met de echte engine, 11 gevallen naast de JS-motor: [RESULTS.md](artefacts/power-fx/RESULTS.md).

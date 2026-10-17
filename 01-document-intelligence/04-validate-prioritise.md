@@ -4,7 +4,7 @@
 
 | Optie | Wat | Kost (indicatief) | Baat | Risico | Oordeel |
 |---|---|---|---|---|---|
-| 0. Niets doen + extra halftijdse kracht | huidige werkwijze | ±€24.000/jaar | lost typwerk deels op, fouten blijven | dubbels en asbest blijven onzichtbaar | afgewezen |
+| 0. Extra halftijdse kracht + de regels als checklist bij het typen | huidige werkwijze, maar de acceptatielijst en R01–R11 op papier naast het toetsenbord | ±€24.000/jaar | typwerk opgevangen; een deel van de fouten vóór de boeking | dubbels blijven moeilijk te zien; de checklist hangt af van discipline | **eerlijk alternatief**, en het startpunt van de schaduwperiode: de regels werken ook zonder software |
 | A. Weegbrugsoftware koppelen | bonnen digitaal vanaf de bron | afhankelijk van leverancier | structureel voor eigen weegbrug | externe bonnen blijven papier, doorlooptijd onzeker | **volgende fase** |
 | B. Document-AI + regels + review (deze case) | zie stap 3 | zie businesscase | typwerk −2/3, fouten vóór boeking | modelkwaliteit, adoptie reviewers | **gekozen** |
 | C. Alleen regels, zonder AI (formulier om bon in te typen met controles) | controles bij invoer | laag | fouten vóór boeking | typwerk blijft | terugvaloptie |
@@ -31,7 +31,7 @@ Financieel is deze case **marginaal**. Op tijdwinst alleen zou ik ze niet als ee
 1. **Compliance:** geen geweigerde stoffen en geen ontbrekende traceerbaarheidsdocumenten meer in het ERP. Eén vaststelling bij een inspectie kost meer dan het project.
 2. **Herbruikbaarheid:** dezelfde extractie- en reviewketen werkt voor leveringsbonnen (case 03, ontvangstbevestiging) en inkomende facturen. Het fundament wordt één keer betaald.
 
-**Advies aan de sponsor:** doen, maar als **tweede** project na case 03, en meteen met optie A (weegbrugkoppeling) op de roadmap.
+**Advies aan de sponsor:** doen, maar als **derde** project, na case 03 en 02 (zie de [volgorde](../03-material-requests/04-validate-prioritise.md#prioriteit-tussen-de-drie-cases)), en meteen met optie A (weegbrugkoppeling) op de roadmap. Wat het over de tijd oplevert: [batenrealisatie](https://phlppgdfry.github.io/construction-digital-transformation/baten/).
 
 ## Prioriteiten (MoSCoW → MVP)
 
@@ -39,15 +39,19 @@ Financieel is deze case **marginaal**. Op tijdwinst alleen zou ik ze niet als ee
 |---|---|---|
 | F-01..F-07: postvak, extractie, R01–R11, automatische boeking, review-app, escalatie, dubbels | F-08 correcties → hertrainen; F-09 melding vervoerder | F-10 weegbrugkoppeling; leveringsbonnen en facturen |
 
-## Validatie met gebruikers
+## Validatie met gebruikers (gesimuleerd)
 
-| Wat | Met wie | Resultaat |
+> **Gesimuleerd.** Zo zou ik valideren, met deze verwachte uitkomst. Er is niet met echte gebruikers getest.
+
+| Wat | Met wie | Verwachte uitkomst |
 |---|---|---|
 | Regeltabel R01–R11 overlopen | administratie + milieucoördinator | R08 (bodem) toegevoegd op vraag van milieu; drempel netto-tolerantie 20 kg afgesproken |
 | Klikbaar prototype review-scherm | 3 reviewers | "rood veld + origineel ernaast" is genoeg; geen extra uitleg nodig |
 | Testset van 30 bonnen | administratie | 4 extractiefouten gevonden, 3 gevangen door regels, 1 stille fout (nummerplaat) aanvaard als restrisico mits steekproef |
 
 ## Risico's
+
+De volledige lijst, met eigenaar en wanneer ingrijpen, staat in het [RAID-log](raid-en-beslissingen.md#raid-log). De belangrijkste:
 
 | Risico | Kans | Impact | Maatregel |
 |---|---|---|---|

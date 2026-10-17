@@ -10,7 +10,7 @@ sequenceDiagram
   participant F1 as HV-MA-01 verwerken
   participant API as ERP-facade (APIM + Functions)
   participant ERP as ERP
-  participant F2 as HV-MA-02 outbox
+  participant F2 as HV-IN-01 outbox
   participant T as Teams
   App->>API: GET /items, GET /stock?itemNo= (live)
   App->>DV: aanvraag + lijnen (Ingediend)

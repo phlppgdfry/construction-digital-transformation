@@ -110,6 +110,21 @@ Scenario: ERP 20 minuten onbereikbaar
   En is elk bericht in poging 4 (minuut 21) precies één keer geboekt
 ```
 
+### US-06 Ontvangst bevestigen, verbruik op de werf
+**Als** werfleider **wil ik** de levering met één knop bevestigen **zodat** de kosten dezelfde dag op mijn werf staan en het depot weet dat het rond is.
+
+```gherkin
+Scenario: levering ontvangen
+  Gegeven een goedgekeurde aanvraag met 2 lijnen
+  Als de werfleider "Ontvangst bevestigen" kiest
+  Dan gaat er per lijn één verbruiksboeking naar het ERP, op de werf
+  En staat de aanvraag op "Afgesloten" zodra alle lijnen geboekt zijn
+
+Scenario: dubbel bevestigd
+  Als de ontvangst een tweede keer bevestigd wordt
+  Dan wordt het verbruik niet opnieuw geboekt
+```
+
 ## Schermen (ontwerp)
 
 Werfapp-tegel "Materiaal": werf kiezen → datum en uur → lijnen toevoegen (zoeken in de catalogus, beschikbaarheid meteen zichtbaar) → samenvatting met waarde en verwachte route → indienen. Bron: [materiaalaanvraag.pa.yaml](artefacts/power-apps/materiaalaanvraag.pa.yaml).

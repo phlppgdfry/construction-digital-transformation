@@ -60,5 +60,36 @@
     "integrationRunCostPerYear": 2400,
     "implementationDays": 60,
     "internalHours": 240
+  },
+  "roadmap": {
+    "_note": "Aanname voor de batensimulatie (src/benefits.mjs): één team, case 03 eerst (beste businesscase en duidelijkste pijn), dan 02, dan 01. Maand 0 = start van het programma. Bouw + pilot vóór de go-live; de eenmalige kost wordt over die maanden gespreid.",
+    "case03": {
+      "start": 0,
+      "goLive": 4
+    },
+    "case02": {
+      "start": 3,
+      "goLive": 7
+    },
+    "case01": {
+      "start": 6,
+      "goLive": 10
+    },
+    "horizonMonths": 36
+  },
+  "scenarios": {
+    "_note": "Drie scenario's voor de batensimulatie. benefitFactor: welk deel van de baten uit het rekenmodel echt gehaald wordt. rampMonths: na hoeveel maanden het volle gebruik bereikt is (lineair). Het verwachte scenario komt overeen met rampUpYear1 = 0,5 in het rekenmodel.",
+    "voorzichtig": {
+      "benefitFactor": 0.7,
+      "rampMonths": 18
+    },
+    "verwacht": {
+      "benefitFactor": 1,
+      "rampMonths": 12
+    },
+    "gunstig": {
+      "benefitFactor": 1.15,
+      "rampMonths": 8
+    }
   }
 }

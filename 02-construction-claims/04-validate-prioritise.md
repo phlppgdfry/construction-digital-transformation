@@ -4,7 +4,7 @@
 
 | Optie | Wat | Voor | Tegen | Oordeel |
 |---|---|---|---|---|
-| 0. Afspraak + Excel beter bijhouden | procedure, vaste mailbox | goedkoop | zelfde kanaalprobleem, geen termijnbewaking | afgewezen |
+| 0. Eén schademailbox met een eigenaar + een termijnlijst in Excel | procedure: elke schade naar één adres, claims is eigenaar, de termijn staat in een kolom | goedkoop, morgen te starten; lost "geen eigenaar" op | foto's blijven in WhatsApp, niemand bewaakt de termijn automatisch, geen offline | **eerlijk alternatief en eerste stap**: de eigenaar en de termijnkolom starten meteen, de app volgt |
 | A. Microsoft Forms + SharePoint-lijst + Power Automate | snel, geen premium | geen offline, zwakke relaties, geen audit; goedkeuringsketen met workaround | **MVP-alternatief** als licenties geblokkeerd worden |
 | **B. Offline canvas app + Dataverse + flows + model-driven backoffice** | zie stap 3 | offline, audit, één regelplaats | premium licenties | **gekozen** |
 | C. Standaard claimsoftware (SaaS) | bewezen | duur voor dit volume, integratie met ERP en werfapp apart | afgewezen voor nu |
@@ -34,15 +34,19 @@ Bijna de hele baat hangt aan één getal: wat kost een te late aangifte gemiddel
 |---|---|---|
 | F-01..F-08: werfapp offline, letsel- en leidingregels, dossier + triage, verwittigen, DT-02 in Teams, aangifteconcept + termijnbewaking | F-09 kosten op project via ERP-facade, F-10 verhaaltraject, F-11 "mijn meldingen" | F-12 koppeling portaal verzekeraar, Power BI-analyse van schadeoorzaken (preventie) |
 
-## Validatie met gebruikers
+## Validatie met gebruikers (gesimuleerd)
 
-| Wat | Met wie | Resultaat |
+> **Gesimuleerd.** Zo zou ik valideren, met deze verwachte uitkomst. Er is niet met echte gebruikers getest.
+
+| Wat | Met wie | Verwachte uitkomst |
 |---|---|---|
 | Papieren prototype met handschoenen | 2 werfleiders | velden teruggebracht van 14 naar 8 (+ per categorie); grote fotoknop bovenaan |
 | DT-02 met 6 echte gevallen van vorig jaar | afdelingsverantwoordelijken, claims | grens €2.500 bevestigd; fleetmanager eerst bij machines toegevoegd |
 | Klikbaar prototype (demo) | 3 werfleiders, 1 projectleider | offline-melding begrepen zonder uitleg; "ik wil zien dat het vertrokken is" → status in "mijn meldingen" |
 
 ## Risico's
+
+De volledige lijst, met eigenaar en wanneer ingrijpen, staat in het [RAID-log](raid-en-beslissingen.md#raid-log). De belangrijkste:
 
 | Risico | Kans | Impact | Maatregel |
 |---|---|---|---|

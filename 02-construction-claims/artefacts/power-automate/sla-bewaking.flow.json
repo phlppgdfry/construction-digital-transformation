@@ -1,6 +1,6 @@
 {
   "name": "HV-CL-03 SLA- en aangiftebewaking",
-  "status": "Ontwerp (ook aangiftetermijn en bericht bij escalatie). Gebouwd en draaiend: power-platform/flows/HV-CL-03.md.",
+  "status": "Ontwerp (ook aangiftetermijn en bericht bij escalatie). Gebouwd en draaiend, met beide termijnen en meldingen: power-platform/flows/HV-CL-03.md.",
   "description": "Elk uur tijdens werkuren: claims in beoordeling waarvan de beoordelingsdeadline verstreken is, of verzekerde claims zonder aangifte twee dagen voor de deadline, worden geëscaleerd naar de afdelingsverantwoordelijke. Referentie: slaStatus() in src/claims.mjs.",
   "properties": {
     "connectionReferences": {

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Batenrealisatie — Halverdijk</title>
+  <meta name="description" content="Wat de drie digitaliseringscases maand per maand opleveren in geld, uren en vermeden werk: een simulatie op het rekenmodel, met drie scenario's.">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../"><img class="brand-mark" src="../assets/mark.svg" alt=""><span>Halverdijk<small>fictieve bouwgroep · portfolio</small></span></a>
+    <nav aria-label="Hoofdnavigatie">
+      <a href="../#cases">Cases</a>
+      <a href="../#voor-na">Voor &amp; na</a>
+      <a href="./" aria-current="page">Baten</a>
+      <a href="../#powerplatform">Power Platform</a>
+      <a href="../deck/">Presentatie</a>
+      <a href="../demo/">Werfportaal-demo</a>
+      <a href="https://github.com/phlppgdfry/construction-digital-transformation">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero hero-short">
+    <div class="wrap">
+      <span class="eyebrow">Batenrealisatie · <!--n:ben.horizon-->36<!--/n--> maanden</span>
+      <h1>Wat het oplevert, maand per maand</h1>
+      <p class="lede">Geld, uren en vermeden werk van de drie cases over de tijd: eerst de investering, dan het gebruik dat groeit, tot elke case zichzelf terugbetaalt, of niet.</p>
+      <p class="notice"><strong>Simulatie, geen meting.</strong> De curves zijn het jaarlijkse rekenmodel van de businesscases, gespreid over een roadmap (case 03 eerst) met een groeiend gebruik. Halverdijk is fictief. Na een echte go-live vervangen metingen deze lijnen: dezelfde KPI's, met bron <em>Meting</em> in plaats van <em>Simulatie</em>.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="dash-controls">
+        <div class="tabs-row" role="tablist" aria-label="Scenario" id="sc-tabs">
+          <button class="btn small ghost" role="tab" data-sc="voorzichtig" aria-selected="false">Voorzichtig</button>
+          <button class="btn small" role="tab" data-sc="verwacht" aria-selected="true">Verwacht</button>
+          <button class="btn small ghost" role="tab" data-sc="gunstig" aria-selected="false">Gunstig</button>
+        </div>
+        <div class="tabs-row" role="tablist" aria-label="Case" id="case-tabs">
+          <button class="btn small" role="tab" data-case="alle" aria-selected="true">Alle cases</button>
+          <button class="btn small ghost" role="tab" data-case="case03" aria-selected="false">03 Materiaal</button>
+          <button class="btn small ghost" role="tab" data-case="case02" aria-selected="false">02 Schadeclaims</button>
+          <button class="btn small ghost" role="tab" data-case="case01" aria-selected="false">01 Weegbonnen</button>
+        </div>
+      </div>
+      <p class="muted small" id="sc-explain"></p>
+
+      <div class="month-row">
+        <label for="month">Stand na maand <b id="month-label">24</b></label>
+        <input type="range" id="month" min="1" max="36" value="24">
+        <button class="btn small ghost" id="play">▶ Speel af</button>
+      </div>
+
+      <div class="tiles" id="tiles" aria-live="polite"></div>
+
+      <div class="chart-card">
+        <h3>Cumulatief netto resultaat</h3>
+        <p class="muted small">Baten min lopende kosten min de investering, opgeteld. Onder nul: de investering is nog niet terugverdiend. De rode lijn is de gekozen maand.</p>
+        <div id="chart-cum" class="chart"></div>
+        <div class="legend" id="legend-cum"></div>
+      </div>
+
+      <div class="grid cards-2 dash-grid">
+        <div class="chart-card">
+          <h3>Uren per maand die vrijkomen</h3>
+          <p class="muted small">Uren van de administratie en de werfleiders die niet meer naar overtypen, nabellen of opvolgen gaan.</p>
+          <div id="chart-hours" class="chart"></div>
+        </div>
+        <div class="chart-card">
+          <h3>Baten en kosten per maand</h3>
+          <p class="muted small">Boven de as: baten die in geld tellen. Onder de as: investering (bouw en pilot) en lopende kosten (licenties, verbruik, onderhoud).</p>
+          <div id="chart-money" class="chart"></div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <h3>Vandaag en na <span id="vs-month">24</span> maanden</h3>
+        <div class="table-wrap"><table id="vs-table"></table></div>
+      </div>
+
+      <div class="chart-card">
+        <h3>Per case</h3>
+        <div class="table-wrap"><table id="case-table"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section grey">
+    <div class="wrap">
+      <div class="section-title"><h2>Hoe dit berekend is</h2></div>
+      <div class="grid cards-2">
+        <div>
+          <h3>Van jaarbedrag naar maandcurve</h3>
+          <ul class="measure">
+            <li><b>Bron:</b> de businesscase per case uit <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/src/metrics.mjs"><code>src/metrics.mjs</code></a>: baten (tijdwinst × realisatiefactor + harde besparingen), lopende kosten en eenmalige kost. Dezelfde cijfers als in de cases.</li>
+            <li><b>Roadmap:</b> case 03 is live vanaf <!--n:ben.c3.goLive-->maand 5<!--/n-->, case 02 vanaf <!--n:ben.c2.goLive-->maand 8<!--/n-->, case 01 vanaf <!--n:ben.c1.goLive-->maand 11<!--/n-->. De investering wordt gespreid over de bouw- en pilotmaanden.</li>
+            <li><b>Gebruik groeit lineair</b> tot 100%: in 12 maanden (verwacht), 18 maanden (voorzichtig) of 8 maanden (gunstig). Het verwachte scenario komt overeen met "jaar 1 haalt de helft" uit het rekenmodel.</li>
+            <li><b>Scenario's</b> verschillen ook in welk deel van de baten echt gehaald wordt: 70%, 100% of 115%.</li>
+            <li>Code: <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/src/benefits.mjs"><code>src/benefits.mjs</code></a>, aannames in <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/data/assumptions.json"><code>assumptions.json</code></a> (<code>roadmap</code>, <code>scenarios</code>).</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Wat dit zegt, en wat niet</h3>
+          <ul class="measure">
+            <li>In het verwachte scenario zakt het programma tot <!--n:ben.lowest-->€130.058<!--/n--> in het rood (<!--n:ben.lowestMonth-->maand 10<!--/n-->) en is het terugverdiend in <!--n:ben.breakEven-->maand 25<!--/n-->. Na <!--n:ben.horizon-->36<!--/n--> maanden: <!--n:ben.cumNet-->€135.344<!--/n--> netto.</li>
+            <li>In het voorzichtige scenario is het programma na 36 maanden <b>niet</b> terugverdiend (<!--n:ben.voorzichtig.cumNet-->−€5.986<!--/n-->). Dat is het eerlijke antwoord op "wat als het gebruik traag groeit".</li>
+            <li>Case 01 verdient zich in het verwachte scenario niet terug binnen de horizon (<!--n:ben.c1.cumNet-->−€7.775<!--/n-->). Dat klopt met de businesscase: financieel marginaal, compliance draagt de beslissing.</li>
+            <li>De zwakste aanname zit in case 02: het verlies per te late verzekeringsaangifte. Zie de <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/02-construction-claims/04-validate-prioritise.md">gevoeligheid</a>.</li>
+            <li>Wat dit niet is: een gemeten resultaat. Het <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/shared-methodology/meetplan.md">meetplan</a> beschrijft hoe de echte cijfers verzameld worden; in Dataverse staan ze in de tabel <em>KPI-meting</em>, en het backoffice-dashboard toont dezelfde reeks.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p><strong>Bouw digitaal</strong> — portfolio van Philippe Godfroy. Onafhankelijk en fictief, zonder relatie met of goedkeuring van een bestaand bedrijf.</p>
+    <p><a href="../">Terug naar het overzicht</a> · <a href="https://github.com/phlppgdfry/construction-digital-transformation">Broncode op GitHub</a></p>
+  </div>
+</footer>
+<script src="../assets/benefits-dashboard.js" defer></script>
+</body>
+</html>

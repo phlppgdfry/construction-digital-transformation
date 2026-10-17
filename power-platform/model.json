@@ -491,6 +491,7 @@
             "100000005": "Dubbel",
             "100000006": "Goedgekeurd",
             "100000007": "Afgewezen",
+            "100000008": "In wachtrij ERP",
             "100000009": "Fout"
           }
         ],
@@ -634,7 +635,8 @@
             "100000004": "Goedgekeurd",
             "100000005": "Afgewezen",
             "100000006": "In afhandeling",
-            "100000007": "Afgesloten"
+            "100000007": "Afgesloten",
+            "100000009": "Fout"
           }
         ],
         [
@@ -779,6 +781,27 @@
           "hv_geescaleerd",
           "bool",
           "Geëscaleerd"
+        ],
+        [
+          "hv_aangifteconcept",
+          "memo",
+          "Aangifte-concept verzekeraar",
+          4000
+        ],
+        [
+          "hv_aangiftegewaarschuwd",
+          "bool",
+          "Aangifte: waarschuwing gestuurd"
+        ],
+        [
+          "hv_werkelijkekost",
+          "decimal",
+          "Werkelijke kost (€)"
+        ],
+        [
+          "hv_recuperatie",
+          "decimal",
+          "Gerecupereerd bij derde (€)"
         ]
       ],
       "lookups": [
@@ -827,8 +850,8 @@
     },
     {
       "name": "hv_goedkeurder",
-      "display": "Goedkeurder",
-      "plural": "Goedkeurders",
+      "display": "Rol (goedkeurder en ontvanger)",
+      "plural": "Rollen (goedkeurders en ontvangers)",
       "ownership": "OrganizationOwned",
       "primary": [
         "hv_rol",
@@ -904,7 +927,9 @@
             "100000004": "Gepland",
             "100000005": "Geleverd",
             "100000006": "Ontvangen",
-            "100000009": "Afgewezen"
+            "100000007": "Afgesloten",
+            "100000009": "Afgewezen",
+            "100000010": "Fout"
           }
         ],
         [
@@ -933,6 +958,17 @@
           "text",
           "Regel DT-03",
           100
+        ],
+        [
+          "hv_berichten",
+          "memo",
+          "Geplande ERP-berichten (JSON)",
+          8000
+        ],
+        [
+          "hv_goedkeuringsniveau",
+          "int",
+          "Goedkeuringsniveau"
         ]
       ],
       "lookups": [
@@ -1065,11 +1101,206 @@
           "hv_aanvraag",
           "hv_materiaalaanvraag",
           "Aanvraag"
+        ],
+        [
+          "hv_weegbon",
+          "hv_document",
+          "Weegbon"
+        ],
+        [
+          "hv_schadeclaim",
+          "hv_schadeclaim",
+          "Schadeclaim"
         ]
       ],
       "keys": [
         [
           "hv_idempotencykey"
+        ]
+      ]
+    },
+    {
+      "name": "hv_regel",
+      "display": "Bedrijfsregel",
+      "plural": "Bedrijfsregels",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_code",
+        "Code"
+      ],
+      "columns": [
+        [
+          "hv_naam",
+          "text",
+          "Naam",
+          200
+        ],
+        [
+          "hv_regeltekst",
+          "memo",
+          "Regel (gewone taal)",
+          2000
+        ],
+        [
+          "hv_waarde",
+          "decimal",
+          "Parameter"
+        ],
+        [
+          "hv_eenheid",
+          "text",
+          "Eenheid",
+          40
+        ],
+        [
+          "hv_case",
+          "text",
+          "Case",
+          10
+        ],
+        [
+          "hv_eigenaar",
+          "text",
+          "Eigenaar (rol)",
+          100
+        ],
+        [
+          "hv_waarom",
+          "memo",
+          "Waarom",
+          1000
+        ]
+      ],
+      "keys": [
+        [
+          "hv_code"
+        ]
+      ]
+    },
+    {
+      "name": "hv_melding",
+      "display": "Melding",
+      "plural": "Meldingen",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_titel",
+        "Titel"
+      ],
+      "columns": [
+        [
+          "hv_tekst",
+          "memo",
+          "Tekst",
+          4000
+        ],
+        [
+          "hv_rol",
+          "text",
+          "Voor rol",
+          100
+        ],
+        [
+          "hv_soort",
+          "choice",
+          "Soort",
+          {
+            "100000000": "Info",
+            "100000001": "Actie",
+            "100000002": "Waarschuwing",
+            "100000003": "Fout"
+          }
+        ],
+        [
+          "hv_kanaal",
+          "choice",
+          "Kanaal",
+          {
+            "100000000": "In-app (backoffice)",
+            "100000001": "Extern (mail of portaal)"
+          }
+        ],
+        [
+          "hv_status",
+          "choice",
+          "Status",
+          {
+            "100000000": "Nieuw",
+            "100000001": "Verstuurd",
+            "100000002": "Extern: kanaal niet aangesloten (demo)",
+            "100000003": "Mislukt"
+          }
+        ],
+        [
+          "hv_bron",
+          "text",
+          "Bron (flow)",
+          20
+        ],
+        [
+          "hv_referentie",
+          "text",
+          "Referentie",
+          60
+        ],
+        [
+          "hv_link",
+          "text",
+          "Link",
+          400
+        ]
+      ]
+    },
+    {
+      "name": "hv_kpimeting",
+      "display": "KPI-meting",
+      "plural": "KPI-metingen",
+      "ownership": "OrganizationOwned",
+      "primary": [
+        "hv_naam",
+        "Naam"
+      ],
+      "columns": [
+        [
+          "hv_maand",
+          "date",
+          "Maand"
+        ],
+        [
+          "hv_case",
+          "text",
+          "Case",
+          10
+        ],
+        [
+          "hv_kpi",
+          "text",
+          "KPI",
+          100
+        ],
+        [
+          "hv_waarde",
+          "decimal",
+          "Waarde"
+        ],
+        [
+          "hv_eenheid",
+          "text",
+          "Eenheid",
+          20
+        ],
+        [
+          "hv_bron",
+          "choice",
+          "Bron",
+          {
+            "100000000": "Simulatie (model)",
+            "100000001": "Meting"
+          }
+        ]
+      ],
+      "keys": [
+        [
+          "hv_naam"
         ]
       ]
     }
@@ -1080,30 +1311,6 @@
       "display": "ERP-sandbox bereikbaar",
       "type": "boolean",
       "value": "yes"
-    },
-    {
-      "schemaName": "hv_ConfidenceThreshold",
-      "display": "Confidence-drempel weegbonnen",
-      "type": "decimal",
-      "value": "0.85"
-    },
-    {
-      "schemaName": "hv_AutoApproveMax",
-      "display": "Max bedrag automatische goedkeuring materiaal (€)",
-      "type": "decimal",
-      "value": "1000"
-    },
-    {
-      "schemaName": "hv_PlApproveMax",
-      "display": "Max bedrag projectleider materiaal (€)",
-      "type": "decimal",
-      "value": "10000"
-    },
-    {
-      "schemaName": "hv_InsurerThreshold",
-      "display": "Drempel verzekeringsaangifte schade (€)",
-      "type": "decimal",
-      "value": "15000"
     }
   ]
 }

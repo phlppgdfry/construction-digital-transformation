@@ -1,0 +1,132 @@
+{
+  "flows": [
+    {
+      "id": "HV-DI-01",
+      "name": "HV-DI-01 Weegbon controleren",
+      "case": "01",
+      "owner": "Administratie recyclage",
+      "in": "Weegbon toegevoegd (status Ontvangen)",
+      "out": "In wachtrij ERP · Nazicht · Escalatie · Dubbel",
+      "description": "Case 01: elf regels R01–R11 op elke nieuwe weegbon; een schone bon gaat naar de ERP-outbox, de rest naar nazicht, escalatie of dubbel, met een melding."
+    },
+    {
+      "id": "HV-DI-02",
+      "name": "HV-DI-02 Weegbon na nazicht boeken",
+      "case": "01",
+      "owner": "Administratie recyclage",
+      "in": "Goedgekeurd (Weegbon Nakijken)",
+      "out": "In wachtrij ERP · Escalatie · Dubbel",
+      "description": "Case 01: een goedgekeurde weegbon opnieuw controleren (dubbel, geweigerd materiaal) en de gecorrigeerde waarden in de ERP-outbox zetten."
+    },
+    {
+      "id": "HV-DI-03",
+      "name": "HV-DI-03 Weigering melden",
+      "case": "01",
+      "owner": "Milieucoördinator",
+      "in": "Afgewezen",
+      "out": "Meldingen aan klant en vervoerder",
+      "description": "Case 01: bij een geweigerde lading de klant en de vervoerder verwittigen, met de reden."
+    },
+    {
+      "id": "HV-CL-01",
+      "name": "HV-CL-01 Schadeclaim intake en triage",
+      "case": "02",
+      "owner": "Claims & verzekeringen",
+      "in": "Schadeclaim gemeld",
+      "out": "In beoordeling (+ aangifte-concept)",
+      "description": "Case 02: ernst, eigenaar, DT-02-keten, deadlines, aangifte-concept, tijdlijn en meldingen bij een nieuwe schademelding."
+    },
+    {
+      "id": "HV-CL-02",
+      "name": "HV-CL-02 Schadeclaim goedkeuringsketen",
+      "case": "02",
+      "owner": "Claims & verzekeringen",
+      "in": "Ter goedkeuring",
+      "out": "Goedgekeurd · Afgewezen · terug In beoordeling (verlopen)",
+      "description": "Case 02: goedkeuring per niveau via Approvals; één afwijzing stopt de keten; de werfleider hoort de uitkomst."
+    },
+    {
+      "id": "HV-CL-03",
+      "name": "HV-CL-03 SLA- en aangiftebewaking",
+      "case": "02",
+      "owner": "Claims & verzekeringen",
+      "in": "elk uur",
+      "out": "Geëscaleerd · aangifte gewaarschuwd",
+      "description": "Case 02: elk uur te late beoordelingen escaleren en waarschuwen als de aangifte bij de verzekeraar te laat dreigt te vertrekken."
+    },
+    {
+      "id": "HV-CL-04",
+      "name": "HV-CL-04 Schadeclaim afsluiten: kosten en recuperatie",
+      "case": "02",
+      "owner": "Claims & verzekeringen",
+      "in": "Afgesloten",
+      "out": "Projectkost in de outbox · recuperatie gestart",
+      "description": "Case 02: bij afsluiten de kost op het project boeken (via de outbox) en de recuperatie bij een aansprakelijke derde starten."
+    },
+    {
+      "id": "HV-MA-01",
+      "name": "HV-MA-01 Materiaalaanvraag verwerken en beslissen",
+      "case": "03",
+      "owner": "Werfplanning",
+      "in": "Ingediend",
+      "out": "Goedgekeurd (DT-03.4) · Ter goedkeuring",
+      "description": "Case 03: voorraad per depot (dichtste eerst), budget per categorie, spoed en DT-03; de ERP-berichten worden gepland, nog niet verstuurd."
+    },
+    {
+      "id": "HV-MA-02",
+      "name": "HV-MA-02 Materiaalaanvraag goedkeuren",
+      "case": "03",
+      "owner": "Afdelingsverantwoordelijke",
+      "in": "Ter goedkeuring",
+      "out": "Goedgekeurd · Afgewezen",
+      "description": "Case 03: goedkeuring per niveau van de DT-03-route via Approvals, net als de schadeclaims."
+    },
+    {
+      "id": "HV-MA-03",
+      "name": "HV-MA-03 Materiaalaanvraag uitvoeren",
+      "case": "03",
+      "owner": "Werfplanning",
+      "in": "Goedgekeurd",
+      "out": "Reservaties en aankoopaanvragen in de outbox",
+      "description": "Case 03: de geplande ERP-berichten in de outbox zetten en de werfplanning en de werfleider verwittigen."
+    },
+    {
+      "id": "HV-MA-04",
+      "name": "HV-MA-04 Ontvangst: verbruik boeken",
+      "case": "03",
+      "owner": "Werfplanning",
+      "in": "Ontvangen (werfapp)",
+      "out": "Verbruik in de outbox → Afgesloten",
+      "description": "Case 03: na de ontvangstbevestiging op de werf het verbruik per lijn op de werf boeken, via de outbox."
+    },
+    {
+      "id": "HV-IN-01",
+      "name": "HV-IN-01 ERP-outbox verzenden",
+      "case": "alle",
+      "owner": "Functioneel beheer",
+      "in": "elke 5 minuten",
+      "out": "Verzonden · nieuwe poging · Dead-letter",
+      "description": "Alle cases: elk ERP-bericht naar de ERP-sandbox, met retry 1-5-15-60-240 min, dead-letter met melding en idempotency-key."
+    },
+    {
+      "id": "HV-IN-02",
+      "name": "HV-IN-02 ERP-bevestiging terugschrijven",
+      "case": "alle",
+      "owner": "Functioneel beheer",
+      "in": "Outbox-bericht Verzonden",
+      "out": "Weegbon Geboekt · tijdlijn kost geboekt · aanvraag Afgesloten",
+      "description": "Alle cases: na een geslaagde ERP-boeking de bron bijwerken: weegbon geboekt, kost in de tijdlijn, aanvraag afgesloten."
+    },
+    {
+      "id": "HV-OP-01",
+      "name": "HV-OP-01 Meldingen versturen",
+      "case": "alle",
+      "owner": "Functioneel beheer",
+      "in": "Melding aangemaakt",
+      "out": "Verstuurd · Extern niet aangesloten · Mislukt",
+      "description": "Alle cases: elke melding naar de juiste persoon als in-app-notificatie in de backoffice; externe partijen worden gemarkeerd (kanaal niet aangesloten in de demo)."
+    }
+  ],
+  "coverage": 15,
+  "built": 12
+}

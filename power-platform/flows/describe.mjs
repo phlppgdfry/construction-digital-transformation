@@ -20,7 +20,8 @@ const VARIABLE = {
 const UNIT = { Minute: ["elke minuut", "minuten"], Hour: ["elk uur", "uur"], Day: ["elke dag", "dagen"] };
 
 /** Logical table name (hv_klant) from the entity set name the flows use (hv_klants). */
-const tableOf = (set, tables) => tables.find((t) => `${t.name}s` === set) ?? { name: set, display: set };
+const SYSTEM = { systemusers: { name: "systemuser", display: "Gebruiker (systeem)" }, appnotifications: { name: "appnotification", display: "In-app-notificatie (systeem)" } };
+const tableOf = (set, tables) => tables.find((t) => `${t.name}s` === set || `${t.name}es` === set) ?? SYSTEM[set] ?? { name: set, display: set };
 const columns = (params) => Object.keys(params).filter((k) => k.startsWith("item/")).map((k) => `\`${k.slice(5).replace(/@odata\.bind$/, "")}\``);
 
 /** Actions of one scope in run order: an action comes after everything in its runAfter, ties keep source order. */
@@ -41,7 +42,7 @@ function triggerLine(name, t, tables) {
   if (t.type === "Recurrence") {
     const { frequency, interval } = t.recurrence;
     const [one, many] = UNIT[frequency] ?? [frequency, frequency];
-    return `**Trigger \`${name}\`**: schema, ${interval === 1 ? one : `elke ${interval} ${many}`}`;
+    return `**Trigger \`${name}\`**: schema, ${interval === 1 ? one : `elke ${interval} ${many}`}${t.runtimeConfiguration?.concurrency?.runs === 1 ? ", nooit twee runs tegelijk" : ""}`;
   }
   const p = t.inputs.parameters;
   const table = tableOf(p["subscriptionRequest/entityname"] + "s", tables);
@@ -70,6 +71,7 @@ function label(a, tables) {
     const v = a.inputs.variables?.[0] ?? a.inputs;
     return `${VARIABLE[a.type]} \`${v.name}\`${v.type ? ` (${v.type})` : ""}`;
   }
+  if (a.type === "Scope") return a.runAfter && Object.keys(a.runAfter).length ? "foutafhandeling (alleen als het blok hierboven faalt)" : "blok: alle stappen hieronder; faalt er één, dan gaat de run naar `Bij_fout`";
   if (a.type === "If") return "voorwaarde";
   if (a.type === "Switch") return "keuze";
   if (a.type === "Foreach") return `voor elk item${a.runtimeConfiguration?.concurrency?.repetitions === 1 ? ", één voor één" : ""}`;
@@ -79,8 +81,10 @@ function label(a, tables) {
 
 function runAfterNote(a) {
   const deps = Object.entries(a.runAfter ?? {});
+  if (a.type === "Scope") return "";
+  if (deps.some(([, s]) => !s.includes("Succeeded"))) return ` · alleen als ${deps.map(([d]) => `\`${d}\``).join(", ")} faalt`;
   const lenient = deps.filter(([, s]) => s.length > 1).map(([d]) => `\`${d}\``);
-  return lenient.length ? ` · loopt ook als ${lenient.join(", ")} faalt (bewust: idempotentie)` : "";
+  return lenient.length ? ` · loopt ook als ${lenient.join(", ")} faalt` : "";
 }
 
 function lines(actions, tables, depth) {
@@ -122,9 +126,10 @@ export function countActions(actions) {
 export function describeFlow(def, tables) {
   const [tname, trigger] = Object.entries(def.triggers)[0];
   const params = Object.entries(def.parameters).filter(([k]) => !k.startsWith("$")).map(([, v]) => `\`${v.metadata.schemaName}\` (standaard ${v.defaultValue})`);
+  const rules = JSON.stringify(def).includes("outputs('Parameters')") ? [...new Set([...JSON.stringify(def).matchAll(/outputs\('Parameters'\)\?\['([^']+)'\]/g)].map((m) => m[1]))] : [];
   const connections = [...new Set([...JSON.stringify(def).matchAll(/"connectionName":"([^"]+)"/g)].map((m) => m[1]))].map((c) => ({ shared_commondataserviceforapps: "Microsoft Dataverse", shared_approvals: "Approvals" })[c] ?? c);
   return [
-    `*Gegenereerd uit [\`definitions.mjs\`](definitions.mjs) door \`npm run build\`. Niet met de hand aanpassen.* ${countActions(def.actions)} acties · verbindingen: ${connections.join(", ")} · omgevingsvariabelen: ${params.length ? params.join(", ") : "geen"}.`,
+    `*Gegenereerd uit [\`definitions.mjs\`](definitions.mjs) door \`npm run build\`. Niet met de hand aanpassen.* ${countActions(def.actions)} acties · verbindingen: ${connections.join(", ")} · omgevingsvariabelen: ${params.length ? params.join(", ") : "geen"} · regels uit *Bedrijfsregel*: ${rules.length ? rules.map((r) => `\`${r}\``).join(", ") : "geen"}.`,
     "",
     `- ${triggerLine(tname, trigger, tables)}`,
     ...lines(def.actions, tables, 0),

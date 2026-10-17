@@ -3,26 +3,17 @@
 // analyst specifies: which checks run after extraction and what happens to each document.
 
 import { daysBetween } from "./common.mjs";
+import { RULEBOOK, param } from "./rules.mjs";
 
-export const CONFIDENCE_THRESHOLD = 0.85;
-export const NET_TOLERANCE_KG = 20;
-export const MAX_GROSS_KG = 44000;
-export const MAX_AGE_DAYS = 30;
+// Thresholds and rule texts come from the rulebook (src/rules.mjs), the single source for engine, flows and docs.
+export const CONFIDENCE_THRESHOLD = param("R02");
+export const NET_TOLERANCE_KG = param("R03");
+export const MAX_GROSS_KG = param("R11");
+export const MAX_AGE_DAYS = param("R10");
 export const CRITICAL_FIELDS = ["ticketNo", "date", "plate", "customerNo", "direction", "material", "gross", "tare", "net"];
 
-export const RULES = [
-  { id: "R01", title: "Verplichte velden aanwezig", severity: "review", why: "Zonder bonnummer, datum, nummerplaat, klant, materiaal en gewichten kan de boeking niet." },
-  { id: "R02", title: "Confidence van kritieke velden ≥ 0,85", severity: "review", why: "Onzekere lezing gaat naar een mens; de drempel wordt na de pilot herijkt." },
-  { id: "R03", title: "Netto = bruto − tarra (± 20 kg)", severity: "review", why: "Vangt zelfverzekerde leesfouten die de confidence niet toont." },
-  { id: "R04", title: "Klant bestaat en is actief", severity: "review", why: "Geen boeking op onbekende of geblokkeerde klanten." },
-  { id: "R05", title: "Nummerplaat hoort bij klant of geregistreerde vervoerder", severity: "review", why: "Fraude- en verwisselingscontrole; nieuwe plaat → stamgegevens aanvullen." },
-  { id: "R06", title: "Materiaal toegelaten volgens vergunning", severity: "block", why: "Geweigerde afvalstoffen (bv. asbest) nooit automatisch boeken: milieucoördinator beslist." },
-  { id: "R07", title: "Identificatieformulier bij inkomend afval", severity: "review", why: "Afvaltransport moet traceerbaar zijn; ontbrekend nummer opvragen bij de vervoerder." },
-  { id: "R08", title: "Traceerbaarheidsreferentie bij uitgegraven bodem", severity: "review", why: "Grondverzet vraagt een traceerbaarheidsdocument; zonder referentie geen aanvaarding." },
-  { id: "R09", title: "Bonnummer nog niet verwerkt (dubbel)", severity: "reject", why: "Herscande of dubbel gemailde bonnen mogen niet twee keer gefactureerd worden." },
-  { id: "R10", title: "Datum niet in de toekomst en max. 30 dagen oud", severity: "review", why: "Oude bonnen horen mogelijk bij een afgesloten periode." },
-  { id: "R11", title: "Bruto ≤ 44.000 kg", severity: "review", why: "Mogelijke overlading of leesfout; transportcompliance laten bekijken." },
-];
+const fmt = (r) => (typeof r.value === "number" ? `${r.name} (${r.value.toLocaleString("nl-BE")}${r.unit.startsWith("confidence") ? "" : ` ${r.unit}`})` : r.name);
+export const RULES = RULEBOOK.filter((r) => r.case === "01").map((r) => ({ id: r.code, title: fmt(r), severity: r.severity, why: r.why }));
 
 const SEVERITY_ORDER = { reject: 3, block: 2, review: 1 };
 

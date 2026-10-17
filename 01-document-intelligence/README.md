@@ -13,10 +13,19 @@
 | Technologie | Azure AI Document Intelligence, Power Automate, Dataverse, canvas review-app, ERP-facade |
 | Demo | [Werfportaal → Documenten](https://phlppgdfry.github.io/construction-digital-transformation/demo/?case=documenten) |
 
+## Eerst lezen
+
+| | |
+|---|---|
+| [Samenvatting van één pagina](samenvatting.md) | voor de directie en voor IT |
+| [Traceerbaarheid](traceerbaarheid.md) | van pijnpunt tot test en KPI, door CI gecontroleerd |
+| [Beslissingen en RAID](raid-en-beslissingen.md) | zakelijke en technische beslissingen; risico's, aannames, issues, afhankelijkheden |
+
 ## De zeven stappen
 
 | Stap | Kern | Belangrijkste artefact |
 |---|---|---|
+| [0 Mandaat](01-discover.md#mandaat-stap-0--initiate) | wat de sponsor vraagt, wat de analyse mag kosten | één blad, poort "mandaat" |
 | [1 Discover](01-discover.md) | administratie en weegbrug zijn allebei slachtoffer, niet de schuldige | stakeholdermatrix, workshopverslag |
 | [2 Analyse](02-analyse.md) | <!--n:c1.hoursAsIs-->1.838<!--/n--> uur overtypen per jaar, fouten pas zichtbaar bij de factuur | [AS-IS BPMN](bpmn/as-is.svg), requirements |
 | [3 Design](03-design.md) | elf regels, vier uitkomsten, de mens bij twijfel | [TO-BE BPMN](bpmn/to-be.svg), regels R01–R11 |
@@ -28,7 +37,7 @@
 ## Wat je hier kunt nagaan
 
 - **Gebouwd in Power Platform:** tabellen, flows en apps staan in een ontwikkelomgeving, en de echte flow geeft dezelfde uitkomst als de motor. Welke app je gebruikt, welke flows draaien en wat gesimuleerd is: [hoe het samenhangt, per case](../power-platform/README.md#hoe-het-samenhangt-per-case). Zie ook de [verificatie](../power-platform/VERIFICATION.md).
-- **Flows en apps, per stuk uitgelegd:** [HV-DI-01](../power-platform/flows/HV-DI-01.md) (controleren en boeken), [HV-DI-02](../power-platform/flows/HV-DI-02.md) (boeken na nazicht), app [Weegbon Nakijken](../power-platform/apps/weegbon-nakijken.md) en de [backoffice-app](../power-platform/apps/backoffice.md).
+- **Flows en apps, per stuk uitgelegd:** [HV-DI-01](../power-platform/flows/HV-DI-01.md) (controleren), [HV-DI-02](../power-platform/flows/HV-DI-02.md) (boeken na nazicht), [HV-DI-03](../power-platform/flows/HV-DI-03.md) (weigering melden), via de outbox [HV-IN-01](../power-platform/flows/HV-IN-01.md) en [HV-IN-02](../power-platform/flows/HV-IN-02.md), app [Weegbon Nakijken](../power-platform/apps/weegbon-nakijken.md) en de [backoffice-app](../power-platform/apps/backoffice.md).
 - **Nakijkscherm gebouwd:** de app *Weegbon Nakijken* (Power Apps code app) toont de scan naast de gelezen velden, kleurt foute velden rood, controleert correcties live met dezelfde regelmotor en laat de flow daarna opnieuw controleren en boeken. Zie de [screenshots](../power-platform/README.md#screenshots) en de [verificatie](../power-platform/VERIFICATION.md).
 
 - `npm test` draait de regels op <!--n:c1.n-->30<!--/n--> fictieve bonnen en controleert elke uitkomst ([tests/documents.test.mjs](../tests/documents.test.mjs)).

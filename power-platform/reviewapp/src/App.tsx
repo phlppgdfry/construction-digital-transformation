@@ -19,7 +19,12 @@ import { MicrosoftDataverseService } from "./generated/services/MicrosoftDataver
 import { documentFromRow, applyCorrections, recheck, allowedActions, approvalPatch, masterFromDataverse, STATUS, FIELD_LABEL, FIELD_COLUMN } from "../../../src/review.mjs";
 import "./index.css";
 
+// Dataverse rows come back as loosely typed JSON; the engine (src/review.mjs) validates what it reads.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Row = Record<string, any>;
+type Finding = { rule: string; severity: string; message: string; field: string | null };
+type Master = { customers: unknown[]; acceptance: { accepted: unknown[]; refused: unknown[]; products: unknown[] } };
+type Result<T> = { data?: T; error?: { message?: string } | string };
 const COLS: string[] = ["hv_bestand", "hv_documentid", "hv_documentnr", "hv_status", "hv_beslissing", "hv_bevindingen", "hv_confidence", "hv_ontvangen", "createdon", "hv_correcties", "hv_reviewer", ...(Object.values(FIELD_COLUMN) as string[])];
 const EDITABLE = ["ticketNo", "date", "plate", "customerNo", "material", "gross", "tare", "net", "idFormNo", "soilRef"];
 const hoursSince = (iso?: string) => (iso ? (Date.now() - new Date(iso).getTime()) / 3_600_000 : 0);
@@ -37,7 +42,7 @@ export default function App() {
   const [role, setRole] = useState<"administratie" | "milieucoördinator">("administratie");
   const [user, setUser] = useState("reviewer");
   const [rows, setRows] = useState<Row[]>([]);
-  const [master, setMaster] = useState<any>(null);
+  const [master, setMaster] = useState<Master | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const [error, setError] = useState("");
 
@@ -61,18 +66,21 @@ export default function App() {
       Hv_nummerplaatsService.getAll({ select: ["hv_plaat", "_hv_klant_value", "hv_vervoerder"] }),
       Hv_materiaalcodesService.getAll({ select: ["hv_code", "hv_omschrijving", "hv_soort", "hv_prijsperton", "hv_bodemref"] }),
     ]).then(([k, p, c]) => {
-      const failed = [["klanten", k], ["nummerplaten", p], ["materiaalcodes", c]].filter(([, r]: any) => r.error).map(([n, r]: any) => `${n}: ${r.error?.message ?? r.error}`);
+      const results: [string, Result<unknown>][] = [["klanten", k], ["nummerplaten", p], ["materiaalcodes", c]];
+      const failed = results.filter(([, r]) => r.error).map(([n, r]) => `${n}: ${typeof r.error === "string" ? r.error : r.error?.message}`);
       if (failed.length) setError(`Stamgegevens niet geladen — ${failed.join(" · ")}`);
       setMaster(masterFromDataverse(k.data ?? [], p.data ?? [], c.data ?? []));
     }).catch((e) => setError(`Stamgegevens: ${e?.message ?? e}`));
-    load().catch((e) => setError(String(e)));
+    Hv_documentsService.getAll({ select: COLS, filter: "hv_status eq 100000002 or hv_status eq 100000003", orderBy: ["createdon asc"] })
+      .then((r) => setRows((r.data ?? []) as Row[]))
+      .catch((e) => setError(String(e)));
   }, []);
 
-  useEffect(() => {
-    if (deepDoc && rows.length) { const r = rows.find((x) => x.hv_documentnr === deepDoc); if (r) setSelected(String(r.hv_documentid)); }
-  }, [deepDoc, rows]);
+  // a deep link selects its document until the user picks another one
+  const linked = deepDoc ? rows.find((x) => x.hv_documentnr === deepDoc) : undefined;
+  const chosen = selected ?? (linked ? String(linked.hv_documentid) : null);
   const queue = rows.filter((r) => (role === "milieucoördinator" ? r.hv_status === STATUS.escalatie : r.hv_status === STATUS.nazicht));
-  const current = rows.find((r) => String(r.hv_documentid ?? r.hv_documentnr) === selected) ?? null;
+  const current = rows.find((r) => String(r.hv_documentid ?? r.hv_documentnr) === chosen) ?? null;
 
   return (
     <div className="app">
@@ -94,10 +102,10 @@ export default function App() {
             {queue.map((r) => {
               const late = hoursSince(r.createdon) > 4;
               let rules = "";
-              try { rules = JSON.parse(r.hv_bevindingen ?? "[]").map((b: any) => b.regel).join(" "); } catch { /* */ }
+              try { rules = (JSON.parse(r.hv_bevindingen ?? "[]") as { regel: string }[]).map((b) => b.regel).join(" "); } catch { /* */ }
               return (
                 <li key={r.hv_documentid}>
-                  <button type="button" className={selected === r.hv_documentid ? "on" : ""} onClick={() => setSelected(String(r.hv_documentid ?? r.hv_documentnr))}>
+                  <button type="button" className={chosen === r.hv_documentid ? "on" : ""} onClick={() => setSelected(String(r.hv_documentid ?? r.hv_documentnr))}>
                     <span><b>{r.hv_documentnr}</b> · {r.hv_bonnummer}<small>{r.hv_klantnummer} · {r.hv_materiaal}</small></span>
                     <span className="right"><span className="rules">{rules}</span><small className={late ? "late" : ""}>{Math.round(hoursSince(r.createdon))} u</small></span>
                   </button>
@@ -113,7 +121,7 @@ export default function App() {
   );
 }
 
-function Detail({ row, master, role, user, prefill, onDone }: { row: Row; master: any; role: string; user: string; prefill: Record<string, string>; onDone: () => void }) {
+function Detail({ row, master, role, user, prefill, onDone }: { row: Row; master: Master; role: string; user: string; prefill: Record<string, string>; onDone: () => void }) {
   const doc = useMemo(() => documentFromRow(row), [row]);
   const [edits, setEdits] = useState<Record<string, string>>(prefill);
   const [ack, setAck] = useState(false);
@@ -123,24 +131,25 @@ function Detail({ row, master, role, user, prefill, onDone }: { row: Row; master
   const [msg, setMsg] = useState("");
   const result = recheck(applyCorrections(doc, edits), master);
   const before = recheck(doc, master);
-  const flagged = new Set(before.findings.map((f: any) => f.field));
-  const live = new Set(result.findings.map((f: any) => f.field));
+  const flagged = new Set((before.findings as Finding[]).map((f) => f.field));
+  const live = new Set((result.findings as Finding[]).map((f) => f.field));
   const actions = allowedActions(row.hv_status, role, result, { acknowledged: ack });
-  let server: any[] = [];
+  let server: { regel: string; bericht: string }[] = [];
   try { server = JSON.parse(row.hv_bevindingen ?? "[]"); } catch { /* */ }
 
   useEffect(() => {
     // Full-size scan via the Dataverse connector; the native source only carries a 144 px thumbnail.
     getContext()
       .then((c) => MicrosoftDataverseService.GetEntityFileImageFieldContentWithOrganization("", c.app.dataverseOrgUrl ?? "", "hv_documents", row.hv_documentid, "hv_bestand", "full"))
-      .then((r: any) => {
+      .then((res) => {
+        const r = res as Result<unknown>;
         const b64 = r?.error ? "" : toBase64(r?.data);
         if (b64) { setImg(b64); setImgNote(""); return; }
         setImg(row.hv_bestand ?? "");
-        setImgNote(`Volledige scan niet beschikbaar (${r?.error?.message ?? "lege inhoud"}); miniatuur getoond.`);
+        setImgNote(`Volledige scan niet beschikbaar (${(typeof r?.error === "string" ? r.error : r?.error?.message) ?? "lege inhoud"}); miniatuur getoond.`);
       })
-      .catch((e: any) => { setImg(row.hv_bestand ?? ""); setImgNote(`Volledige scan niet beschikbaar (${e?.message ?? e}); miniatuur getoond.`); });
-  }, [row.hv_documentid]);
+      .catch((e: unknown) => { setImg(row.hv_bestand ?? ""); setImgNote(`Volledige scan niet beschikbaar (${(e as Error)?.message ?? e}); miniatuur getoond.`); });
+  }, [row.hv_documentid, row.hv_bestand]);
 
   async function approve() {
     const at = new Date().toISOString();
@@ -183,10 +192,10 @@ function Detail({ row, master, role, user, prefill, onDone }: { row: Row; master
           <h3>Bevindingen</h3>
           <p className="small muted">Van de flow bij ontvangst: {server.map((b) => `${b.regel} ${b.bericht}`).join(" · ") || "—"}</p>
           {result.findings.length === 0 ? <p className="ok">Na correctie: geen enkele regel faalt.</p> : (
-            <ul>{result.findings.map((f: any, i: number) => <li key={i} className={f.severity}><b>{f.rule}</b> {f.message}</li>)}</ul>
+            <ul>{(result.findings as Finding[]).map((f, i) => <li key={i} className={f.severity}><b>{f.rule}</b> {f.message}</li>)}</ul>
           )}
         </div>
-        {result.findings.some((f: any) => f.severity === "review") && actions.reject && row.hv_status === STATUS.nazicht && (
+        {(result.findings as Finding[]).some((f) => f.severity === "review") && actions.reject && row.hv_status === STATUS.nazicht && (
           <label className="check"><input type="checkbox" checked={ack} onChange={(e) => setAck(e.target.checked)} /> Ik heb de bon nagekeken; de resterende bevindingen zijn verklaard</label>
         )}
         <label className="note">Opmerking<textarea rows={2} value={note} onChange={(e) => setNote(e.target.value)} /></label>

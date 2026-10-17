@@ -152,10 +152,27 @@ Scenario: machineschade van €27.500
 ```gherkin
 Scenario: termijn dreigt
   Gegeven een verzekerde claim zonder verstuurde aangifte
-  En de deadline verzekeraar is binnen 2 dagen
+  En de deadline verzekeraar valt binnen 2 dagen (regel VZ-03)
   Als de bewakingsflow draait
-  Dan krijgt de afdelingsverantwoordelijke een escalatie in Teams
-  En staat de claim gemarkeerd als geëscaleerd
+  Dan krijgt claims & verzekeringen een waarschuwing (melding)
+  En staat "aangiftetermijn dreigt" in de tijdlijn
+  En komt dezelfde waarschuwing geen tweede keer
+```
+
+### US-05 Kost op het juiste project
+**Als** projectleider **wil ik** dat de kost van een schade op mijn project staat zodra het dossier afgesloten is, en dat een aansprakelijke derde aangesproken wordt, **zodat** mijn nacalculatie klopt en we geen geld laten liggen.
+
+```gherkin
+Scenario: dossier afgesloten met een aansprakelijke derde
+  Gegeven een dossier met werkelijke kost €2.350 en een derde die aansprakelijk is
+  Als claims & verzekeringen het dossier afsluit
+  Dan gaat er één kostenboeking naar het ERP, op de werf van het dossier
+  En krijgt claims & verzekeringen een actie om de kost te recupereren
+  En staat "kosten geboekt op project (ERP)" in de tijdlijn zodra het ERP bevestigt
+
+Scenario: het dossier wordt heropend en opnieuw afgesloten
+  Als het dossier een tweede keer afgesloten wordt
+  Dan gaat er geen tweede kostenboeking naar het ERP
 ```
 
 ## Werfapp-schermen (ontwerp)

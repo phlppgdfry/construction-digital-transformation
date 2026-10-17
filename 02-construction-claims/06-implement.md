@@ -16,6 +16,19 @@
 
 Elk scenario volgt het [UAT-sjabloon](../shared-methodology/templates/uat-scenario.md). Blokkerende bevindingen moeten opgelost zijn vóór go-live; belangrijke krijgen een eigenaar en datum.
 
+## Poorten: eerst acceptatie, dan go/no-go
+
+Twee aparte beslissingen, door twee verschillende rollen. De **acceptatie** zegt: het doet wat afgesproken is. De **go/no-go** zegt: de organisatie is klaar om het te gebruiken. Een geslaagde UAT is dus nog geen go-live.
+
+| Poort | Wanneer | Criteria | Wie beslist |
+|---|---|---|---|
+| 1. Nulmeting aanvaard | vóór de pilot | dossiers 2024–2025 geteld: tijd tot registratie, volledigheid, te late aangiftes ([meetplan](../shared-methodology/meetplan.md)) | CFO |
+| 2. Acceptatie (UAT) | na de UAT-scenario's op de werf | UAT-scenario's geslaagd, ook offline en met handschoenen; letselregel getekend door de preventieadviseur; DT-02 getekend door de directie | key users claims + 2 werfleiders + preventieadviseur |
+| 3. Go/no-go | na de pilot | adoptie ≥ 70% op de pilotafdeling; 0 dubbele dossiers; open dossiers uit Excel overgezet (TR-01); makelaar bevestigde termijn en drempels (TR-04) | CFO (proceseigenaar: claims & verzekeringen adviseert) |
+| 4. Benefits review | 3 maanden na go-live | C2-K1 tot C2-K4 tegen de nulmeting; het echte verlies per te late aangifte gemeten | CFO |
+
+Verandermanagement per rol (ADKAR, training, champions, adoptie): [verandermanagement](../shared-methodology/verandermanagement.md).
+
 ## Change-impact
 
 | Groep | Wat verandert | Impact | Nodig |
@@ -44,5 +57,5 @@ Als de app of flows uitvallen: melden per telefoon aan de projectleider, die lat
 |---|---|
 | Rollenmatrix `hv_goedkeurder` nakijken met afdelingen | maandelijks |
 | Mislukte flow-runs nakijken | dagelijks |
-| Drempels (omgevingsvariabelen) wijzigen na akkoord | op aanvraag |
+| Drempels (tabel Bedrijfsregel) wijzigen na akkoord van de eigenaar | op aanvraag |
 | Nieuwe werven (sync uit ERP) controleren | wekelijks |

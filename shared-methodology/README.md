@@ -10,13 +10,14 @@ Alle drie de cases volgen dezelfde methode. Dat is geen dogma. Het is een manier
 
 | Stap | Kernvraag | Wat er uitkomt | Poort (wie zegt "ga door") |
 |---|---|---|---|
-| 1 Discover | Wie heeft welk probleem, en hoe groot is het? | stakeholdermatrix, workshopverslag, probleemstelling | sponsor erkent het probleem |
+| 0 Mandaat (initiate) | Wat vraagt de sponsor, en wat mag de analyse kosten? | één blad: herformuleerd probleem, scope, ruwe businesscase, sponsor | **sponsor geeft mandaat** voor discover en analyse |
+| 1 Discover | Wie heeft welk probleem, en hoe groot is het? | stakeholdermatrix met houding, conflicten, communicatieplan, workshopverslag, oorzaakanalyse, SMART-doelen, benefits map, BA-aanpak | sponsor erkent het probleem |
 | 2 Analyse | Hoe loopt het vandaag, en wat moet er beter? | AS-IS-BPMN, nulmeting, requirements, uitzonderingen | proceseigenaar herkent de AS-IS |
 | 3 Design | Hoe moet het lopen? | TO-BE-BPMN, regels/beslistabellen, user stories met acceptatiecriteria, datamodel | gebruikers hebben het mee-ontworpen |
-| 4 Validate & prioritise | Is dit het juiste, en wat eerst? | opties met kosten en risico's, businesscase, MoSCoW, MVP | sponsor kiest optie en scope |
+| 4 Validate & prioritise | Is dit het juiste, en wat eerst? | opties met een eerlijke optie 0, businesscase, MoSCoW, MVP, baseline van de requirements, beslissingslog en RAID | sponsor kiest optie en scope |
 | 5 Integrate & automate | Hoe werken app, flow, AI en ERP samen? | architectuur, API-contract, flows, foutafhandeling | IT/architect akkoord |
-| 6 Implement | Hoe gaat het veilig live? | testplan, UAT, training, uitrol, fallback, runbook | go/no-go door proceseigenaar |
-| 7 Measure & improve | Werkt het, en wat nu? | KPI-definities, dashboard, baten-opvolging, verbeterlijst | benefits review na 3 maanden |
+| 6 Implement | Hoe gaat het veilig live? | testplan, UAT, change-impact, training, uitrol, fallback, runbook | **twee poorten:** eerst de **acceptatie** door de key users (UAT geslaagd), dan de **go/no-go** door de proceseigenaar (organisatie klaar). Daarvoor: nulmeting aanvaard |
+| 7 Measure & improve | Werkt het, en wat nu? | KPI-definities, meetplan met stopcriterium, dashboard, baten-opvolging, verbeterlijst | benefits review na 3 maanden |
 
 ## Hoe de stappen in elke case terugkomen
 
@@ -30,11 +31,29 @@ Alle drie de cases volgen dezelfde methode. Dat is geen dogma. Het is een manier
 | 6 | [implement](../01-document-intelligence/06-implement.md) | [implement](../02-construction-claims/06-implement.md) | [implement](../03-material-requests/06-implement.md) |
 | 7 | [measure](../01-document-intelligence/07-measure-improve.md) | [measure](../02-construction-claims/07-measure-improve.md) | [measure](../03-material-requests/07-measure-improve.md) |
 
+De stappen zijn een volgorde om niets te vergeten, geen waterval: in een echt project lopen ze door elkaar. Hoe ze zich verhouden tot de zes kennisgebieden van BABOK, die geen volgorde voorschrijft: [BABOK-mapping](babok-mapping.md).
+
+## Per case, buiten de zeven stappen
+
+| | [01](../01-document-intelligence/README.md) | [02](../02-construction-claims/README.md) | [03](../03-material-requests/README.md) |
+|---|---|---|---|
+| Samenvatting van één pagina | [01](../01-document-intelligence/samenvatting.md) | [02](../02-construction-claims/samenvatting.md) | [03](../03-material-requests/samenvatting.md) |
+| Traceerbaarheid | [01](../01-document-intelligence/traceerbaarheid.md) | [02](../02-construction-claims/traceerbaarheid.md) | [03](../03-material-requests/traceerbaarheid.md) |
+| Beslissingslog en RAID | [01](../01-document-intelligence/raid-en-beslissingen.md) | [02](../02-construction-claims/raid-en-beslissingen.md) | [03](../03-material-requests/raid-en-beslissingen.md) |
+
 ## Gedeelde bouwstenen
 
 | Document | Waarvoor |
 |---|---|
 | [Organisatie](organisatie.md) | wie Halverdijk is, systemen, rollen |
+| [Strategie en portfolio](strategie-en-portfolio.md) | doelen van de groep, portfoliokaart, waarom deze drie cases |
+| [BABOK-mapping](babok-mapping.md) | de stappen naast de zes kennisgebieden en de technieken |
+| [Governance](governance.md) | beslissingsrechten, baseline, wijzigingsbeheer, stuurgroep |
+| [Regelcatalogus](regelcatalogus.md) | alle bedrijfsregels met parameter en eigenaar (gegenereerd) |
+| [Privacy en data](privacy-en-data.md) | AVG per case: grondslag, bewaartermijn, wie ziet wat, DPIA |
+| [Meetplan](meetplan.md) | nulmeting, leading en lagging indicators, stopcriterium |
+| [Verandermanagement](verandermanagement.md) | ADKAR per rol, champions, adoptie |
+| [Woordenlijst](woordenlijst.md) | bouw, recyclage en IT in gewone taal |
 | [Stakeholdermethodiek](stakeholdermethodiek.md) | stakeholders vinden, indelen en betrekken |
 | [Workshop-toolkit](workshop-toolkit.md) | draaiboek en vragenbank voor workshops op kantoor en op de werf |
 | [Architectuurprincipes](architectuurprincipes.md) | negen principes die elke oplossing moet respecteren |

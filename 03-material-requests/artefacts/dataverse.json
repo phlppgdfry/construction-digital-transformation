@@ -35,7 +35,7 @@
         { "name": "hv_laatstefout", "type": "Multiline text" },
         { "name": "hv_antwoord", "type": "Multiline text" }
       ],
-      "note": "Transactional outbox: de aanvraag en haar ERP-berichten worden in één Dataverse-transactie bewaard. Verzenden gebeurt los daarvan door HV-MA-02." }
+      "note": "Transactional outbox: de aanvraag en haar ERP-berichten worden in één Dataverse-transactie bewaard. Verzenden gebeurt los daarvan door HV-IN-01." }
   ],
   "customApis": [
     { "name": "hv_WijsVoorraadToe", "type": "Dataverse low-code plug-in (Power Fx)", "note": "Dichtste depot eerst; schrijft hv_toewijzing en hv_tekort. Spiegel van allocateLine()." },

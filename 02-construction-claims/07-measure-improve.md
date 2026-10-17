@@ -13,6 +13,19 @@
 
 **Valkuil bij C2-K4:** adoptie meten op app-meldingen alleen beloont "niet melden". Daarom telt de noemer ook de telefonisch gemelde en door de projectleider geregistreerde dossiers.
 
+## Meetplan en stopcriterium
+
+Hoe de nulmeting en de opvolging gebeuren, staat in het [meetplan](../shared-methodology/meetplan.md#case-02--schadeclaims). Kort:
+
+| Soort indicator | Wat | Waarom |
+|---|---|---|
+| Vooraf (leading) | meldingen via de app per afdeling (C2-K4), volledige eerste melding (C2-K2), aangiftes met een waarschuwing van HV-CL-03 | toont in de eerste maand of het gedrag verandert |
+| Achteraf (lagging) | C2-K3 te late aangiftes, C2-K6 gerecupereerd bedrag | het resultaat waarvoor de CFO betaalt |
+
+**Stopcriterium.** Als na 3 maanden minder dan 50% van de meldingen via de app komt, wordt de pilot niet uitgebreid. Eerst praten met de werfleiders (waarom niet?), dan bijsturen of terug naar optie 0.
+
+Wat het over de tijd oplevert, als simulatie op het rekenmodel: [batenrealisatie](https://phlppgdfry.github.io/construction-digital-transformation/baten/).
+
 ## Dashboard (Power BI)
 
 Eén pagina voor de stuurgroep (K3, K4 per afdeling, open dossiers per ernst), één voor claims (lopende termijnen, wachtende goedkeuringen per niveau), en één voor preventie (schadeoorzaken per categorie en werf). Die laatste is een **neveneffect met waarde**: voor het eerst zie je waar schade structureel ontstaat.

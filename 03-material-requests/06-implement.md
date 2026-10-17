@@ -22,6 +22,19 @@
 | UAT-07 | ERP-sandbox 6 u uit | dead-letter + ticket; runbook gevolgd |
 | UAT-08 | ontvangst met foto, gedeeltelijk geleverd | verbruik per lijn geboekt, rest open |
 
+## Poorten: eerst acceptatie, dan go/no-go
+
+Twee aparte beslissingen, door twee verschillende rollen. De **acceptatie** zegt: het doet wat afgesproken is. De **go/no-go** zegt: de organisatie is klaar om het te gebruiken. Een geslaagde UAT is dus nog geen go-live.
+
+| Poort | Wanneer | Criteria | Wie beslist |
+|---|---|---|---|
+| 1. Nulmeting aanvaard | vóór de pilot | 1 maand telling van aanvragen per kanaal, spoed en foute leveringen ([meetplan](../shared-methodology/meetplan.md)); voorraadtelling tegenover het ERP (TR-01) | sponsor |
+| 2. Acceptatie (UAT) | na de UAT-scenario's | UAT-scenario's geslaagd, ook de ERP-storing; DT-03 getekend door de afdelingsverantwoordelijke | key users depot + 2 werfleiders + planning |
+| 3. Go/no-go | na de pilot van 4 weken | ≥ 70% van de aanvragen via de app; 0 dubbele ERP-boekingen; dead-letter < 1%; weekplanning loopt op de pilotwerven (TR-03) | afdelingsverantwoordelijke (proceseigenaar) |
+| 4. Benefits review | 3 maanden na go-live | C3-K1 tot C3-K8 tegen de nulmeting; stopcriterium bekeken | sponsor |
+
+Verandermanagement per rol (ADKAR, training, champions, adoptie): [verandermanagement](../shared-methodology/verandermanagement.md).
+
 ## Change-impact
 
 | Groep | Wat verandert | Impact | Nodig |

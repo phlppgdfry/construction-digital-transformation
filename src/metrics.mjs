@@ -156,6 +156,7 @@ function facts(m, A) {
     "c2.lateTarget": nl.pct(A.case02.lateDeclarationShareToBe, 0),
     "c2.breakEvenLoss": nl.eur(c2.breakEvenLoss),
     "c2.lossAssumption": nl.eur(A.case02.avgLossPerLateDeclaration),
+    "c2.claimsYear": nl.int(A.case02.claimsPerYear),
     ...bcFacts("c2.bc", c2.businessCase),
 
     "c3.n": String(c3.baseline.n),
@@ -169,6 +170,8 @@ function facts(m, A) {
     "c3.wrongTarget": nl.pct(A.case03.wrongShareTarget, 0),
     "c3.minAsIs": nl.int(A.case03.handlingMinutesAsIs),
     "c3.reqYear": nl.int(A.case03.requestsPerYear),
+    "c3.rushCost": nl.eur(A.case03.rushExtraTransportCost),
+    "c3.wrongCost": nl.eur(A.case03.wrongDeliveryCost),
     "c3.latePct": nl.pct(c3.baseline.lateShare, 0),
     "c3.lateRushPct": nl.pct(c3.baseline.lateRushShare, 0),
     "c3.auto": String(c3.replay.auto),

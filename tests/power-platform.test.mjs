@@ -2,10 +2,12 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readdirSync } from "node:fs";
 import { json, text } from "./helpers.mjs";
-import { FLOWS, CONNECTION_REFERENCES } from "../power-platform/flows/definitions.mjs";
+import { FLOWS, CONNECTION_REFERENCES, NOT_BUILT } from "../power-platform/flows/definitions.mjs";
+import { RULEBOOK } from "../src/rules.mjs";
 
 const model = json("power-platform/model.json");
 const S = Object.fromEntries(model.tables.map((t) => [t.name, `${t.name}s`]));
+const SYSTEM_SETS = new Set(["systemusers", "appnotifications"]);
 
 test("model: every table has the hv_ prefix, a primary column and unique column names", () => {
   for (const t of model.tables) {
@@ -46,13 +48,16 @@ for (const f of FLOWS) {
 
 test("every flow has a spec with a generated step list, and every spec belongs to a flow", () => {
   const specs = readdirSync(new URL("../power-platform/flows/", import.meta.url)).filter((f) => /^HV-.*\.md$/.test(f));
-  assert.deepEqual(specs.map((f) => f.slice(0, 8)).sort(), FLOWS.map((f) => f.name.slice(0, 8)).sort());
+  assert.deepEqual(specs.map((f) => f.replace(/\.md$/, "")).sort(), FLOWS.map((f) => f.id).sort());
   for (const f of FLOWS) {
-    const id = f.name.slice(0, 8);
+    const id = f.id;
+    assert.ok(f.name.startsWith(`${id} `), `${f.name} starts with its id`);
     const md = text(`power-platform/flows/${id}.md`);
     assert.match(md, new RegExp(`^# ${f.name}$`, "m"), `${id}.md title matches the flow name`);
     assert.match(md, new RegExp(`<!--actions:${id}-->\\n\\*Gegenereerd[\\s\\S]+?<!--/actions-->`), `${id}.md has the generated step list (run npm run build)`);
-    for (const name of Object.keys(f.build(S).actions)) assert.ok(md.includes(`\`${name}\``), `${id}.md lists ${name}`);
+    const def = f.build(S);
+    const top = def.actions.Probeer ? { ...def.actions.Probeer.actions, ...def.actions } : def.actions;
+    for (const name of Object.keys(top)) assert.ok(md.includes(`\`${name}\``), `${id}.md lists ${name}`);
   }
 });
 
@@ -90,4 +95,78 @@ test("VERIFICATION.md records identical results for all three cases", () => {
   assert.match(v, /\*\*4\/4 identiek\*\*/);
   assert.match(v, /\*\*3\/3 zoals verwacht\.\*\*/);
   assert.match(v, /\*\*3\/3 zoals verwacht\.\*\*/);
+});
+
+test("every flow only touches tables of the model (or the two system tables it needs)", () => {
+  const sets = new Set([...Object.values(S), ...SYSTEM_SETS]);
+  for (const f of FLOWS) for (const m of JSON.stringify(f.build(S)).matchAll(/"entityName":"([^"]+)"/g)) assert.ok(sets.has(m[1]), `${f.id}: ${m[1]}`);
+});
+
+test("every flow except the notifier runs inside Probeer with a Bij_fout that reports and fails the run", () => {
+  for (const f of FLOWS.filter((x) => x.id !== "HV-OP-01")) {
+    const a = f.build(S).actions;
+    assert.deepEqual(Object.keys(a), ["Probeer", "Bij_fout"], f.id);
+    assert.deepEqual(a.Bij_fout.runAfter, { Probeer: ["Failed", "TimedOut"] }, f.id);
+    assert.equal(a.Bij_fout.actions.Foutmelding.inputs.parameters["item/hv_rol"], "Functioneel beheer", f.id);
+    assert.equal(a.Bij_fout.actions.Run_mislukt.inputs.runStatus, "Failed", f.id);
+  }
+});
+
+test("scheduled flows never overlap (trigger concurrency 1)", () => {
+  for (const f of FLOWS) {
+    const t = Object.values(f.build(S).triggers)[0];
+    if (t.type === "Recurrence") assert.equal(t.runtimeConfiguration?.concurrency?.runs, 1, f.id);
+  }
+});
+
+test("one integration pattern: only the outbox sender writes ERP bookings, every outbox insert is checked for a real failure", () => {
+  for (const f of FLOWS) {
+    const json = JSON.stringify(f.build(S));
+    const writesBooking = /"operationId":"CreateRecord","apiId":"[^"]+"},"parameters":\{"entityName":"hv_erpboekings"/.test(json);
+    assert.equal(writesBooking, f.id === "HV-IN-01", `${f.id} writes ERP bookings`);
+    const inserts = [...json.matchAll(/"([A-Za-z_]+)":\{"type":"OpenApiConnection","inputs":\{"host":\{"connectionName":"shared_commondataserviceforapps","operationId":"CreateRecord","apiId":"[^"]+"},"parameters":\{"entityName":"hv_outboxs"/g)].map((m) => m[1]);
+    for (const name of inserts) assert.ok(json.includes(`"${name}_controle"`), `${f.id}: ${name} has a duplicate-or-failure check`);
+  }
+});
+
+test("no business threshold is hard-coded in a flow: every rule a flow reads exists in the rulebook", () => {
+  const codes = new Set(RULEBOOK.filter((r) => typeof r.value === "number").map((r) => r.code));
+  for (const f of FLOWS) {
+    const json = JSON.stringify(f.build(S));
+    for (const m of json.matchAll(/outputs\('Parameters'\)\?\['([^']+)'\]/g)) assert.ok(codes.has(m[1]), `${f.id}: ${m[1]}`);
+    for (const n of ["44000", "2500", "15000", "10000", "0.85"]) assert.ok(!new RegExp(`(?<![\\d.])${n.replace(".", "\\.")}(?![\\d])`).test(json), `${f.id} contains the literal ${n}`);
+  }
+});
+
+test("every automated task in a TO-BE BPMN model has a flow, or a stated reason why not", () => {
+  for (const file of ["c1-to-be", "c2-to-be", "c3-to-be"]) {
+    const m = json(`models/${file}.json`);
+    for (const n of m.nodes.filter((x) => ["serviceTask", "businessRuleTask", "sendTask"].includes(x.type))) {
+      const key = `${m.id}:${n.id}`;
+      assert.ok(FLOWS.some((f) => f.bpmn.includes(key)) || NOT_BUILT[key], key);
+    }
+  }
+  for (const f of FLOWS) for (const key of f.bpmn) {
+    const [id, node] = key.split(":");
+    const m = json(`models/${id.replace("_tobe", "-to-be")}.json`);
+    assert.ok(m.nodes.some((x) => x.id === node), `${f.id} points to an unknown BPMN task ${key}`);
+  }
+});
+
+test("statuses the flows set exist in the model", () => {
+  const options = (table, col) => Object.keys(model.tables.find((t) => t.name === table).columns.find((c) => c[0] === col)[3]).map(Number);
+  for (const f of FLOWS) {
+    const def = f.build(S);
+    const walk = (actions) => {
+      for (const a of Object.values(actions)) {
+        const p = a.inputs?.parameters;
+        if (p?.entityName && typeof p["item/hv_status"] === "number") {
+          const table = model.tables.find((t) => S[t.name] === p.entityName);
+          assert.ok(options(table.name, "hv_status").includes(p["item/hv_status"]), `${f.id}: ${table.name} status ${p["item/hv_status"]}`);
+        }
+        for (const nested of [a.actions, a.else?.actions, ...Object.values(a.cases ?? {}).map((c) => c.actions), a.default?.actions]) if (nested) walk(nested);
+      }
+    };
+    walk(def.actions);
+  }
 });

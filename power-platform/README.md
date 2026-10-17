@@ -99,7 +99,7 @@ Details per rij: [VERIFICATION.md](VERIFICATION.md).
 | ![DOC-006 geboekt](screenshots/23-backoffice-doc006-geboekt.jpg) Backoffice: DOC-006 geboekt met het gecorrigeerde gewicht | ![Run HV-DI-02](screenshots/24-flow-hv-di-02-run.jpg) HV-DI-02: de servercontrole met drie gevallen (dubbel, geweigerd, boeken) |
 | ![Run HV-CL-01](screenshots/25-flow-hv-cl-01-run.jpg) HV-CL-01: triage van een melding | ![Run HV-CL-02](screenshots/26-flow-hv-cl-02-run-wacht.jpg) HV-CL-02: wacht op de goedkeuring van niveau 1 |
 | ![Run HV-CL-03](screenshots/27-flow-hv-cl-03-run.jpg) HV-CL-03: uurlijkse controle, geen te late claims | ![Run HV-MA-01](screenshots/28-flow-hv-ma-01-run.jpg) HV-MA-01: vier opzoekingen parallel, daarna per lijn |
-| ![Run HV-MA-02](screenshots/29-flow-hv-ma-02-run-storing.jpg) HV-MA-02 tijdens de storing: tak "ERP niet bereikbaar" | ![KPI-dashboard](screenshots/30-backoffice-kpi-dashboard.jpg) Backoffice: het KPI-dashboard, live op Dataverse |
+| ![Run HV-MA-02](screenshots/29-flow-hv-in-01-run-storing.jpg) HV-MA-02 tijdens de storing: tak "ERP niet bereikbaar" | ![KPI-dashboard](screenshots/30-backoffice-kpi-dashboard.jpg) Backoffice: het KPI-dashboard, live op Dataverse |
 | ![Werfapp schade melden](screenshots/16-werfapp-schade-melden.jpg) Werfapp: schade melden, validatie uit dezelfde regelmotor als de tests | ![Werfapp materiaal](screenshots/17-werfapp-materiaal.jpg) Werfapp: materiaal aanvragen met beschikbaarheid en verwachte route |
 
 ## Opnieuw opbouwen (in een eigen ontwikkelomgeving)

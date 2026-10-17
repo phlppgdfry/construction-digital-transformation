@@ -1,15 +1,18 @@
-# HV-MA-01 Materiaalaanvraag verwerken
+# HV-MA-01 Materiaalaanvraag verwerken en beslissen
 
 | | |
 |---|---|
 | Case | [03 Materiaalaanvragen](../../03-material-requests/README.md) |
-| User stories | [US-01 Aanvragen met zicht op voorraad](../../03-material-requests/03-design.md#us-01-aanvragen-met-zicht-op-voorraad), [US-02 Kleine aanvraag automatisch goedgekeurd](../../03-material-requests/03-design.md#us-02-kleine-aanvraag-automatisch-goedgekeurd), [US-04 Budget bewaken](../../03-material-requests/03-design.md#us-04-budget-bewaken) |
-| Eigenaar | aankoop & logistiek |
-| Komt na | aanvraag in de [werfapp](../apps/werfapp.md) · **Volgende stap** [HV-MA-02](HV-MA-02.md) verstuurt de berichten naar het ERP |
+| User stories | [US-01 Aanvragen met zicht op voorraad](../../03-material-requests/03-design.md#us-01-aanvragen-met-zicht-op-voorraad), [US-02 Kleine aanvraag automatisch goedgekeurd](../../03-material-requests/03-design.md#us-02-kleine-aanvraag-automatisch-goedgekeurd), [US-03 Spoed met reden](../../03-material-requests/03-design.md#us-03-spoed-met-reden), [US-04 Budget bewaken](../../03-material-requests/03-design.md#us-04-budget-bewaken) |
+| BPMN (TO-BE) | *Voorraad per depot opvragen*, *Toewijzen, budget, spoed, route (DT-03)* |
+| Eigenaar | werfplanning; DT-03: afdelingsverantwoordelijke |
+| Komt na | aanvraag in de [werfapp](../apps/werfapp.md) · **Volgende stap** *Goedgekeurd* → [HV-MA-03](HV-MA-03.md) · *Ter goedkeuring* → [HV-MA-02](HV-MA-02.md) |
 
 ## Doel
 
-Een aanvraag van de werf in één keer verwerken: per lijn uit welk depot het materiaal komt (het dichtste eerst), wat er moet worden aangekocht, of het binnen het werfbudget blijft, en of iemand moet goedkeuren ([DT-03](../../03-material-requests/03-design.md#beslistabel-dt-03--moet-er-iemand-goedkeuren)). Een kleine aanvraag op voorraad gaat zonder mens door. De berichten voor het ERP gaan in een outbox, zodat een ERP-storing de werf niet blokkeert.
+Een aanvraag van de werf in één keer beoordelen: per lijn uit welk depot het materiaal komt (het dichtste eerst), wat er moet worden aangekocht, of het binnen het werfbudget blijft, of het spoed is, en of iemand moet goedkeuren ([DT-03](../../03-material-requests/03-design.md#beslistabel-dt-03--moet-er-iemand-goedkeuren)). Een kleine aanvraag op voorraad gaat zonder mens door.
+
+Deze flow **beslist** alleen. Hij vraagt geen goedkeuring en stuurt niets naar het ERP. De ERP-berichten die nodig zijn, plant hij op de aanvraag; [HV-MA-03](HV-MA-03.md) verstuurt ze pas als de aanvraag goedgekeurd is. Zo is elke flow klein genoeg om apart te testen en opnieuw te starten.
 
 ## Trigger
 
@@ -20,6 +23,7 @@ Een rij in *Materiaalaanvraag* wordt **toegevoegd of gewijzigd**, alleen als `hv
 | Leest | Kolommen |
 |---|---|
 | de aanvraag | werf, `hv_aanvraagnr`, `hv_leverenop` |
+| Bedrijfsregel | DT-03.2, DT-03.3, SP-01 |
 | Aanvraaglijn + Artikel | hoeveelheid; per artikel eenheidsprijs, categorie, bron (intern / extern), gerecycleerd alternatief |
 | Afstand werf–depot | depots, gesorteerd op km |
 | Voorraad (ERP-sandbox) | op voorraad en gereserveerd, per artikel en depot |
@@ -28,38 +32,31 @@ Een rij in *Materiaalaanvraag* wordt **toegevoegd of gewijzigd**, alleen als `hv
 | Schrijft | Kolommen |
 |---|---|
 | Aanvraaglijn | `hv_waarde`, `hv_toewijzing` (bv. "160 uit DEP-OOST (4 km); 80 uit REC-BRK (6 km)"), `hv_tekort`, `hv_aankoop`, `hv_alternatief` |
-| Materiaalaanvraag | `hv_waarde`, `hv_aankoopnodig`, `hv_budgetoverschreden`, `hv_route`, `hv_regel`, `hv_spoed`, `hv_status` |
-| Approvals | per goedkeurder in de route één aanvraag |
-| ERP-outbox | één rij per reservatie en per aankoopaanvraag, met een vaste sleutel, status *Wachtend* |
+| Materiaalaanvraag | `hv_waarde`, `hv_aankoopnodig`, `hv_budgetoverschreden`, `hv_route`, `hv_regel`, `hv_spoed`, `hv_berichten` (de geplande ERP-berichten, JSON), `hv_goedkeuringsniveau` = 0, `hv_status` |
 
 ## Stappen
 
-1. Tegelijk: werf, lijnen (met artikel), afstanden en budgetten ophalen.
+1. Tegelijk: regelparameters, werf, lijnen (met artikel), afstanden en budgetten ophalen.
 2. Per lijn, één voor één:
    - de waarde optellen, totaal en per categorie;
-   - **extern artikel** → aankoopaanvraag; gerecycleerd alternatief tonen, de projectleider beslist;
-   - **intern artikel** → per depot van dichtbij naar ver nemen wat vrij is (op voorraad − gereserveerd), tot de hoeveelheid er is; een reservatiebericht per depot; een rest wordt een aankoopaanvraag.
+   - **extern artikel** → aankoopaanvraag plannen; gerecycleerd alternatief tonen, de projectleider beslist;
+   - **intern artikel** → per depot van dichtbij naar ver nemen wat vrij is (op voorraad − gereserveerd), tot de hoeveelheid er is; een reservatie per depot plannen; een rest wordt een aankoopaanvraag.
 3. Budget per categorie vergelijken; DT-03 toepassen → route en regel.
-4. De aanvraag bijwerken. Route *automatisch* → *Goedgekeurd*, anders *Ter goedkeuring*.
-5. Als er een route is: goedkeuring per goedkeurder, na elkaar; één afwijzing → *Afgewezen*, stoppen, **geen** berichten naar het ERP.
-6. Alle berichten in de ERP-outbox.
+4. De aanvraag bijwerken, met de geplande berichten. Route *automatisch* → *Goedgekeurd*, anders *Ter goedkeuring*.
 
 ```mermaid
 flowchart TD
-  T([Status → Ingediend]) --> G[Werf, lijnen, afstanden, budgetten]
+  T([Status → Ingediend]) --> G[Parameters, werf, lijnen,<br/>afstanden, budgetten]
   G --> L{{Per lijn}}
   L --> X{Extern artikel?}
-  X -->|ja| PR[Aankoopaanvraag]
-  X -->|nee| D{{Per depot, dichtste eerst}} --> R[Reservatiebericht] --> T2{Nog een rest?}
+  X -->|ja| PR[Aankoopaanvraag plannen]
+  X -->|nee| D{{Per depot, dichtste eerst}} --> R[Reservatie plannen] --> T2{Nog een rest?}
   T2 -->|ja| PR
   PR --> B
   T2 -->|nee| B[Budget per categorie]
   B --> DT{DT-03}
-  DT -->|automatisch| OK[Goedgekeurd]
-  DT -->|route| AP[[Approvals per goedkeurder]]
-  AP -->|afgewezen| AF[Afgewezen, stoppen]
-  AP -->|goedgekeurd| OK
-  OK --> OB[(ERP-outbox)]
+  DT -->|DT-03.4| OK[Goedgekeurd → HV-MA-03]
+  DT -->|route| TG[Ter goedkeuring → HV-MA-02]
 ```
 
 ## Beslisregels
@@ -67,42 +64,37 @@ flowchart TD
 | Wat | Regel |
 |---|---|
 | Toewijzing | dichtste depot eerst; nemen wat vrij is; de rest uit het volgende depot; wat overblijft → aankoop ([toewijzing per depot](../../03-material-requests/03-design.md#toewijzing-per-depot)) |
-| DT-03, eerste passende rij wint | .1 budgetlijn overschreden → Projectleider → Afdelingsverantwoordelijke · .2 waarde > €10.000 → idem · .3 waarde > €1.000 of aankoop nodig → Projectleider · .4 anders → **automatisch** |
-| Spoed | levering binnen 48 uur → `hv_spoed`; verandert de goedkeuring niet |
+| DT-03, eerste passende rij wint | .1 budgetlijn overschreden → Projectleider → Afdelingsverantwoordelijke · .2 waarde > DT-03.2 → idem · .3 waarde > DT-03.3 of aankoop nodig → Projectleider · .4 anders → **automatisch** |
+| Spoed | levering binnen SP-01 uur → `hv_spoed`; verandert de goedkeuring niet |
 
-Dezelfde regels, getest: [`allocateLine()` en `approvalRoute()`](../../src/materials.mjs), en in Power Fx [dt-03-route.fx](../../03-material-requests/artefacts/power-fx/dt-03-route.fx).
+Alle drempels: [regelcatalogus](../../shared-methodology/regelcatalogus.md#case-03). Dezelfde regels, getest: [`allocateLine()` en `approvalRoute()`](../../src/materials.mjs), en in Power Fx [dt-03-route.fx](../../03-material-requests/artefacts/power-fx/dt-03-route.fx).
 
 ## Foutafhandeling
 
 | Wat kan misgaan | Wat de flow doet |
 |---|---|
-| Het ERP is niet bereikbaar | niets: deze flow praat niet met het ERP. Hij schrijft in de outbox; [HV-MA-02](HV-MA-02.md) verstuurt en probeert opnieuw. |
-| Twee aanvragen voor hetzelfde artikel kort na elkaar | de reservatie gebeurt pas bij het versturen. HV-MA-02 telt dan op wat al gereserveerd is; een tekort zie je bij de volgende aanvraag. In productie reserveert het ERP zelf. |
-| De run wordt opnieuw ingediend | de outbox-sleutel (`<aanvraag>-<artikel>-<depot>` of `-PR`) weigert dezelfde berichten een tweede keer. |
-| Afwijzing | status *Afgewezen*, run stopt, geen berichten. |
-| Geen antwoord op de goedkeuring | de run wacht (maximaal de looptijd van een flow, 30 dagen). De aanvraag staat zichtbaar op *Ter goedkeuring*. |
+| Het ERP is niet bereikbaar | niets: deze flow praat niet met het ERP. |
+| Twee aanvragen voor hetzelfde artikel kort na elkaar | de reservatie gebeurt pas bij het versturen ([HV-IN-01](HV-IN-01.md)), die telt op wat al gereserveerd is. Een tekort zie je bij de volgende aanvraag. In productie reserveert het ERP zelf. |
+| De run wordt opnieuw ingediend | de flow overschrijft dezelfde kolommen; er gaat nog niets naar het ERP. De sleutels van de geplande berichten blijven dezelfde. |
+| Een stap faalt technisch | `Bij_fout`: de aanvraag krijgt status *Fout*, functioneel beheer krijgt een melding met de run-link. Na het herstel de status terug op *Ingediend* zetten. |
 
 ## Configuratie
 
-| Wat | Waarde | Waar |
-|---|---|---|
-| `hv_AutoApproveMax` | €1.000 | omgevingsvariabele |
-| `hv_PlApproveMax` | €10.000 | omgevingsvariabele |
-| Budgetten, afstanden, voorraad, goedkeurders | tabellen | backoffice-app |
-| Verbindingen | `hv_dataverse`, `hv_approvals` | connection references |
+| Wat | Waar |
+|---|---|
+| DT-03.2, DT-03.3, SP-01 | tabel *Bedrijfsregel* |
+| Budgetten, afstanden, voorraad | tabellen in de backoffice-app |
 
 ## Bewijs
 
-- **4/4 identiek** met de geteste motor: waarde, DT-03-route en budgetcontrole ([VERIFICATION.md](../VERIFICATION.md#case-03--materiaalaanvragen-flows-hv-ma-01-en-hv-ma-02)).
+- **4/4 identiek** met de geteste motor: waarde, DT-03-route en budgetcontrole ([VERIFICATION.md](../VERIFICATION.md#case-03--materiaalaanvragen-flows-hv-ma-01-tot-hv-ma-04)).
 - 240 t menggranulaat voor W-2604 → **160 t uit Depot Oost (4 km) + 80 t uit de breekwerf (6 km)**, zoals in de tests.
-- De run hieronder: vier opzoekingen parallel, daarna de variabelen en de lus per lijn.
-- Drie aanvragen (MA-26-1000, -1001, -1003) wachten op een goedkeuring. Hun berichten staan nog niet in de outbox: dat gebeurt pas na de goedkeuring.
 
 ![Run van HV-MA-01](../screenshots/28-flow-hv-ma-01-run.jpg)
 
 ## Beheer
 
-- **Volgen:** backoffice-app → *03 Materiaal* → aanvraag → lijnen (toewijzing) en outbox.
+- **Volgen:** backoffice-app → *03 Materiaal* → aanvraag → lijnen (toewijzing) en de geplande berichten.
 - **Regel wijzigen:** [`src/materials.mjs`](../../src/materials.mjs) + test, dan [`definitions.mjs`](definitions.mjs), dan `provision-flows.mjs --only=HV-MA-01 --activate`, dan `verify.mjs`.
 
 ## Ontwerp en gebouwd
@@ -110,91 +102,82 @@ Dezelfde regels, getest: [`allocateLine()` en `approvalRoute()`](../../src/mater
 | | Doelontwerp ([materiaalaanvraag-verwerken.flow.json](../../03-material-requests/artefacts/power-automate/materiaalaanvraag-verwerken.flow.json)) | Gebouwd |
 |---|---|---|
 | Voorraad | opvragen bij de ERP-facade (OpenAPI) | tabel *Voorraad (ERP-sandbox)* |
-| Goedkeuring | projectleider, tweede niveau apart | elke goedkeurder uit de route, na elkaar |
-| Planning | transportplanning verwittigen | spoed wordt gemarkeerd; geen bericht |
+| Opbouw | één flow: beslissen, goedkeuren en versturen | drie flows: beslissen (deze), goedkeuren ([HV-MA-02](HV-MA-02.md)), uitvoeren ([HV-MA-03](HV-MA-03.md)) |
+| Planning | transportplanning verwittigen | spoed wordt gemarkeerd; de werfplanning krijgt een melding na de goedkeuring |
 
 ## Technische stappen
 
 <!--actions:HV-MA-01-->
-*Gegenereerd uit [`definitions.mjs`](definitions.mjs) door `npm run build`. Niet met de hand aanpassen.* 64 acties · verbindingen: Microsoft Dataverse, Approvals · omgevingsvariabelen: `hv_AutoApproveMax` (standaard 1000), `hv_PlApproveMax` (standaard 10000).
+*Gegenereerd uit [`definitions.mjs`](definitions.mjs) door `npm run build`. Niet met de hand aanpassen.* 60 acties · verbindingen: Microsoft Dataverse · omgevingsvariabelen: geen · regels uit *Bedrijfsregel*: `DT-03.2`, `DT-03.3`, `SP-01`.
 
 - **Trigger `Aanvraag_ingediend`**: Dataverse, rij toegevoegd of gewijzigd in *Materiaalaanvraag* (`hv_materiaalaanvraag`); alleen bij wijziging van `hv_status`, voorwaarde `hv_status eq 100000001`
-- `Werf`: één rij ophalen uit *Werf* · start parallel
-- `Lijnen`: rijen opzoeken in *Aanvraaglijn* · start parallel
-- `Afstanden`: rijen opzoeken in *Afstand werf–depot* · start parallel
-- `Budgetten`: rijen opzoeken in *Werfbudget* · start parallel
-- `Berichten`: variabele aanmaken `berichten` (array) · start parallel
-- `Waarde`: variabele aanmaken `waarde` (float)
-- `Aankoop`: variabele aanmaken `aankoop` (boolean)
-- `Rest`: variabele aanmaken `rest` (float)
-- `Toewijzing`: variabele aanmaken `toewijzing` (string)
-- `Afgewezen_init`: variabele aanmaken `afgewezen` (boolean)
-- `Cat_init_100000000`: variabele aanmaken `cat_100000000` (float)
-- `Cat_init_100000001`: variabele aanmaken `cat_100000001` (float)
-- `Cat_init_100000002`: variabele aanmaken `cat_100000002` (float)
-- `Cat_init_100000003`: variabele aanmaken `cat_100000003` (float)
-- `Cat_init_100000004`: variabele aanmaken `cat_100000004` (float)
-- `Per_lijn`: voor elk item, één voor één
-  - `Lijnwaarde`: berekening
-  - `Waarde_tellen`: variabele verhogen `waarde`
-  - `Categorie_tellen`: keuze
-    - geval `100000000` (Cat_100000000):
-      - `Tel_100000000`: variabele verhogen `cat_100000000`
-    - geval `100000001` (Cat_100000001):
-      - `Tel_100000001`: variabele verhogen `cat_100000001`
-    - geval `100000002` (Cat_100000002):
-      - `Tel_100000002`: variabele verhogen `cat_100000002`
-    - geval `100000003` (Cat_100000003):
-      - `Tel_100000003`: variabele verhogen `cat_100000003`
-    - geval `100000004` (Cat_100000004):
-      - `Tel_100000004`: variabele verhogen `cat_100000004`
-  - `Toewijzing_leeg`: variabele zetten `toewijzing`
-  - `Bron`: voorwaarde
-    - als waar:
-      - `Extern_markeren`: variabele zetten `aankoop`
-      - `Extern_bericht`: bericht toevoegen aan lijst `berichten`
-      - `Lijn_extern`: rij bijwerken in *Aanvraaglijn*: `hv_waarde`, `hv_aankoop`, `hv_tekort`, `hv_toewijzing`, `hv_alternatief`
-    - anders:
-      - `Rest_init`: variabele zetten `rest`
-      - `Per_depot`: voor elk item, één voor één
-        - `Voorraad`: rijen opzoeken in *Voorraad (ERP-sandbox)* (eerste treffer)
-        - `Beschikbaar`: berekening
-        - `Neem`: berekening
-        - `Iets_te_nemen`: voorwaarde
-          - als waar:
-            - `Toewijzing_tekst`: tekst toevoegen aan `toewijzing`
-            - `Reservatie_bericht`: bericht toevoegen aan lijst `berichten`
-            - `Rest_bijwerken`: variabele verlagen `rest`
-      - `Tekort`: voorwaarde
-        - als waar:
-          - `Tekort_markeren`: variabele zetten `aankoop`
-          - `Tekort_bericht`: bericht toevoegen aan lijst `berichten`
-      - `Lijn_intern`: rij bijwerken in *Aanvraaglijn*: `hv_waarde`, `hv_tekort`, `hv_aankoop`, `hv_toewijzing`
-- `Budget_100000000`: lijst filteren
-- `Budget_100000001`: lijst filteren
-- `Budget_100000002`: lijst filteren
-- `Budget_100000003`: lijst filteren
-- `Budget_100000004`: lijst filteren
-- `Budget_overschreden`: berekening
-- `Route`: berekening
-- `Regel`: berekening
-- `Aanvraag_evaluatie`: rij bijwerken in *Materiaalaanvraag*: `hv_waarde`, `hv_aankoopnodig`, `hv_budgetoverschreden`, `hv_route`, `hv_regel`, `hv_spoed`, `hv_status`
-- `Goedkeuring_nodig`: voorwaarde
-  - als waar:
-    - `Per_goedkeurder`: voor elk item, één voor één
-      - `Nog_niet_afgewezen`: voorwaarde
-        - als waar:
-          - `Goedkeurder`: rijen opzoeken in *Goedkeurder* (eerste treffer)
-          - `Goedkeuring`: goedkeuring vragen via Approvals en wachten op het antwoord
-          - `Afwijzing_onthouden`: voorwaarde
-            - als waar:
-              - `Markeer_afgewezen`: variabele zetten `afgewezen`
-    - `Uitkomst`: voorwaarde
+- `Probeer`: blok: alle stappen hieronder; faalt er één, dan gaat de run naar `Bij_fout`
+  - `Regels`: rijen opzoeken in *Bedrijfsregel* · start parallel
+  - `Regelparen`: lijst omzetten
+  - `Parameters`: berekening
+  - `Werf`: één rij ophalen uit *Werf* · start parallel
+  - `Lijnen`: rijen opzoeken in *Aanvraaglijn* · start parallel
+  - `Afstanden`: rijen opzoeken in *Afstand werf–depot* · start parallel
+  - `Budgetten`: rijen opzoeken in *Werfbudget* · start parallel
+  - `Berichten`: variabele aanmaken `berichten` (array) · start parallel
+  - `Waarde`: variabele aanmaken `waarde` (float)
+  - `Aankoop`: variabele aanmaken `aankoop` (boolean)
+  - `Rest`: variabele aanmaken `rest` (float)
+  - `Toewijzing`: variabele aanmaken `toewijzing` (string)
+  - `Cat_init_100000000`: variabele aanmaken `cat_100000000` (float)
+  - `Cat_init_100000001`: variabele aanmaken `cat_100000001` (float)
+  - `Cat_init_100000002`: variabele aanmaken `cat_100000002` (float)
+  - `Cat_init_100000003`: variabele aanmaken `cat_100000003` (float)
+  - `Cat_init_100000004`: variabele aanmaken `cat_100000004` (float)
+  - `Per_lijn`: voor elk item, één voor één
+    - `Lijnwaarde`: berekening
+    - `Waarde_tellen`: variabele verhogen `waarde`
+    - `Categorie_tellen`: keuze
+      - geval `100000000` (Cat_100000000):
+        - `Tel_100000000`: variabele verhogen `cat_100000000`
+      - geval `100000001` (Cat_100000001):
+        - `Tel_100000001`: variabele verhogen `cat_100000001`
+      - geval `100000002` (Cat_100000002):
+        - `Tel_100000002`: variabele verhogen `cat_100000002`
+      - geval `100000003` (Cat_100000003):
+        - `Tel_100000003`: variabele verhogen `cat_100000003`
+      - geval `100000004` (Cat_100000004):
+        - `Tel_100000004`: variabele verhogen `cat_100000004`
+    - `Toewijzing_leeg`: variabele zetten `toewijzing`
+    - `Bron`: voorwaarde
       - als waar:
-        - `Status_afgewezen`: rij bijwerken in *Materiaalaanvraag*: `hv_status`
-        - `Stoppen`: run stoppen (status Succeeded)
+        - `Extern_markeren`: variabele zetten `aankoop`
+        - `Extern_bericht`: bericht toevoegen aan lijst `berichten`
+        - `Lijn_extern`: rij bijwerken in *Aanvraaglijn*: `hv_waarde`, `hv_aankoop`, `hv_tekort`, `hv_toewijzing`, `hv_alternatief`
       - anders:
-        - `Status_goedgekeurd`: rij bijwerken in *Materiaalaanvraag*: `hv_status`
-- `Naar_outbox`: voor elk item
-  - `Outbox_rij`: rij toevoegen in *ERP-outbox*: `hv_idempotencykey`, `hv_endpoint`, `hv_body`, `hv_status`, `hv_pogingen`, `hv_volgendepoging`, `hv_referentie`, `hv_Aanvraag`
+        - `Rest_init`: variabele zetten `rest`
+        - `Per_depot`: voor elk item, één voor één
+          - `Voorraad`: rijen opzoeken in *Voorraad (ERP-sandbox)* (eerste treffer)
+          - `Beschikbaar`: berekening
+          - `Neem`: berekening
+          - `Iets_te_nemen`: voorwaarde
+            - als waar:
+              - `Toewijzing_tekst`: tekst toevoegen aan `toewijzing`
+              - `Reservatie_bericht`: bericht toevoegen aan lijst `berichten`
+              - `Rest_bijwerken`: variabele verlagen `rest`
+        - `Tekort`: voorwaarde
+          - als waar:
+            - `Tekort_markeren`: variabele zetten `aankoop`
+            - `Tekort_bericht`: bericht toevoegen aan lijst `berichten`
+        - `Lijn_intern`: rij bijwerken in *Aanvraaglijn*: `hv_waarde`, `hv_tekort`, `hv_aankoop`, `hv_toewijzing`
+  - `Budget_100000000`: lijst filteren
+  - `Budget_100000001`: lijst filteren
+  - `Budget_100000002`: lijst filteren
+  - `Budget_100000003`: lijst filteren
+  - `Budget_100000004`: lijst filteren
+  - `Budget_overschreden`: berekening
+  - `Route`: berekening
+  - `Regel`: berekening
+  - `Aanvraag_beslissen`: rij bijwerken in *Materiaalaanvraag*: `hv_waarde`, `hv_aankoopnodig`, `hv_budgetoverschreden`, `hv_route`, `hv_regel`, `hv_berichten`, `hv_goedkeuringsniveau`, `hv_spoed`, `hv_status`
+- `Bij_fout`: foutafhandeling (alleen als het blok hierboven faalt)
+  - `Mislukte_stappen`: lijst filteren
+  - `Foutnamen`: lijst omzetten
+  - `Foutmelding`: rij toevoegen in *Melding*: `hv_titel`, `hv_tekst`, `hv_rol`, `hv_soort`, `hv_kanaal`, `hv_status`, `hv_bron`, `hv_referentie`, `hv_link`
+  - `Status_fout`: rij bijwerken in *Materiaalaanvraag*: `hv_status`
+  - `Run_mislukt`: run stoppen (status Failed) · loopt ook als `Status_fout` faalt
 <!--/actions-->

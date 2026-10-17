@@ -2,7 +2,7 @@
 import { readFileSync } from "node:fs";
 import { randomUUID } from "node:crypto";
 import { get, post, patch, CONFIG } from "./dv.mjs";
-const DASHBOARD = "Halverdijk — Overzicht"; // same name as in provision-dashboard.mjs
+import { CHARTS, DASHBOARD } from "./dashboard-charts.mjs";
 
 const model = JSON.parse(readFileSync(new URL("../model.json", import.meta.url)));
 const byName = Object.fromEntries(model.tables.map((t) => [t.name, t]));
@@ -21,6 +21,10 @@ const VIEW = {
   hv_aanvraaglijn: ["hv_naam", "hv_aanvraag", "hv_artikel", "hv_hoeveelheid", "hv_toewijzing", "hv_tekort", "hv_waarde"],
   hv_voorraad: ["hv_naam", "hv_artikel", "hv_depot", "hv_opvoorraad", "hv_gereserveerd"],
   hv_artikel: ["hv_artikelnr", "hv_omschrijving", "hv_eenheid", "hv_eenheidsprijs", "hv_categorie", "hv_bron", "hv_alternatief"],
+  hv_regel: ["hv_code", "hv_naam", "hv_waarde", "hv_eenheid", "hv_case", "hv_eigenaar"],
+  hv_melding: ["hv_titel", "hv_soort", "hv_status", "hv_rol", "hv_kanaal", "hv_bron", "hv_referentie", "createdon"],
+  hv_kpimeting: ["hv_naam", "hv_maand", "hv_case", "hv_kpi", "hv_waarde", "hv_eenheid", "hv_bron"],
+  hv_goedkeurder: ["hv_rol", "hv_email", "hv_vervanger"],
 };
 // subgrids on main forms: [child table, relationship schema name, label]
 const SUBGRIDS = {
@@ -62,8 +66,9 @@ for (const t of model.tables) {
 // sitemap
 const AREAS = [
   ["hv_area_c1", "01 Weegbonnen", [["Recyclage", ["hv_document", "hv_erpboeking"]], ["Stamgegevens", ["hv_klant", "hv_nummerplaat", "hv_materiaalcode"]]]],
-  ["hv_area_c2", "02 Schadeclaims", [["Dossiers", ["hv_schadeclaim", "hv_tijdlijn"]], ["Instellingen", ["hv_goedkeurder", "hv_werf"]]]],
+  ["hv_area_c2", "02 Schadeclaims", [["Dossiers", ["hv_schadeclaim", "hv_tijdlijn"]], ["Instellingen", ["hv_werf"]]]],
   ["hv_area_c3", "03 Materiaal", [["Aanvragen", ["hv_materiaalaanvraag", "hv_aanvraaglijn", "hv_outbox"]], ["ERP-sandbox", ["hv_artikel", "hv_voorraad", "hv_depot", "hv_afstand", "hv_werfbudget"]]]],
+  ["hv_area_beheer", "Beheer", [["Opvolging", ["hv_melding", "hv_outbox", "hv_kpimeting"]], ["Regels en rollen", ["hv_regel", "hv_goedkeurder"]]]],
 ];
 const T = (s) => `<Titles><Title LCID="1033" Title="${esc(s)}" /></Titles>`;
 // KPI dashboard (provision-dashboard.mjs) as the first page, when it exists
@@ -81,11 +86,23 @@ if (!app) {
 }
 const entities = [];
 for (const t of model.tables) entities.push({ "@odata.type": "Microsoft.Dynamics.CRM.entity", entityid: (await get(`EntityDefinitions(LogicalName='${t.name}')?$select=MetadataId`)).json.MetadataId });
-const charts = (await get(`savedqueryvisualizations?$select=savedqueryvisualizationid&$filter=startswith(name,'KPI 0')`, { solution: null })).json.value.map((c) => ({ "@odata.type": "Microsoft.Dynamics.CRM.savedqueryvisualization", savedqueryvisualizationid: c.savedqueryvisualizationid }));
+const charts = [];
+for (const [name] of CHARTS) {
+  const c = (await get(`savedqueryvisualizations?$select=savedqueryvisualizationid&$filter=name eq '${name.replace(/'/g, "''")}'`, { solution: null })).json.value[0];
+  if (c) charts.push({ "@odata.type": "Microsoft.Dynamics.CRM.savedqueryvisualization", savedqueryvisualizationid: c.savedqueryvisualizationid });
+}
 await post("AddAppComponents", { AppId: app.appmoduleid, Components: [{ "@odata.type": "Microsoft.Dynamics.CRM.sitemap", sitemapid: sm.sitemapid }, ...entities, ...(dash ? [{ "@odata.type": "Microsoft.Dynamics.CRM.systemform", formid: dash.formid }] : []), ...charts] });
 const v = await get(`ValidateApp(AppModuleId=${app.appmoduleid})`, { solution: null });
 console.log("validate:", v.json.AppValidationResponse?.ValidationSuccess, (v.json.AppValidationResponse?.ValidationIssueList ?? []).map((i) => i.Message).slice(0, 5));
 await post("PublishXml", { ParameterXml: `<importexportxml><appmodules><appmodule>${app.appmoduleid}</appmodule></appmodules><sitemaps><sitemap>${sm.sitemapid}</sitemap></sitemaps><entities>${model.tables.map((t) => `<entity>${t.name}</entity>`).join("")}</entities></importexportxml>` });
+// in-app notifications (the bell) for flow HV-OP-01: an app setting of this app, not a tenant setting
+const setting = (await get("settingdefinitions?$select=settingdefinitionid&$filter=uniquename eq 'AllowNotificationsEarlyAccess'", { solution: null })).json.value[0];
+if (setting) {
+  const have = (await get(`appsettings?$select=appsettingid,value&$filter=_settingdefinitionid_value eq ${setting.settingdefinitionid} and _parentappmoduleid_value eq ${app.appmoduleid}`, { solution: null })).json.value[0];
+  if (have) await patch(`appsettings(${have.appsettingid})`, { value: "true" });
+  else await post("appsettings", { uniquename: "hv_HalverdijkBackoffice_AllowNotificationsEarlyAccess", value: "true", "SettingDefinitionId@odata.bind": `/settingdefinitions(${setting.settingdefinitionid})`, "ParentAppModuleId@odata.bind": `/appmodules(${app.appmoduleid})` });
+  console.log("in-app notifications on");
+}
 // a changed sitemap only reaches the app after a full publish
 await post("PublishAllXml", {}, { solution: null });
 console.log(`app ${app.appmoduleid} published: ${CONFIG.url}/main.aspx?appid=${app.appmoduleid}`);

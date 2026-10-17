@@ -2,10 +2,12 @@
 // budget check, approval routing (decision table DT-03), ERP messages and a retrying outbox.
 
 import { hoursBetween, stableKey, addHours, parse } from "./common.mjs";
+import { param } from "./rules.mjs";
 
-export const RUSH_HOURS = 48;
-export const AUTO_APPROVE_MAX = 1000;
-export const PL_APPROVE_MAX = 10000;
+export const RUSH_HOURS = param("SP-01");
+export const AUTO_APPROVE_MAX = param("DT-03.3");
+export const PL_APPROVE_MAX = param("DT-03.2");
+const eur = (n) => `€${n.toLocaleString("nl-BE")}`;
 export const RETRY_MINUTES = [1, 5, 15, 60, 240];
 export const RUSH_REASONS = ["onvoorziene werfsituatie", "planning gewijzigd door opdrachtgever", "eerdere levering onvolledig", "vergeten te bestellen"];
 
@@ -79,9 +81,9 @@ export function allocateLine(line, project, master, stock, deliverAt) {
 /** Decision table DT-03 (first matching row wins). Mirrored in artefacts/power-fx/dt-03-route.fx. */
 export function approvalRoute({ value, overBudget, purchase }) {
   if (overBudget) return { approvers: ["Projectleider", "Afdelingsverantwoordelijke"], rule: "DT-03.1 budget overschreden" };
-  if (value > PL_APPROVE_MAX) return { approvers: ["Projectleider", "Afdelingsverantwoordelijke"], rule: "DT-03.2 waarde > €10.000" };
-  if (value > AUTO_APPROVE_MAX || purchase) return { approvers: ["Projectleider"], rule: purchase ? "DT-03.3 aankoop nodig" : "DT-03.3 waarde > €1.000" };
-  return { approvers: [], rule: "DT-03.4 automatisch: ≤ €1.000, binnen budget, op voorraad" };
+  if (value > PL_APPROVE_MAX) return { approvers: ["Projectleider", "Afdelingsverantwoordelijke"], rule: `DT-03.2 waarde > ${eur(PL_APPROVE_MAX)}` };
+  if (value > AUTO_APPROVE_MAX || purchase) return { approvers: ["Projectleider"], rule: purchase ? "DT-03.3 aankoop nodig" : `DT-03.3 waarde > ${eur(AUTO_APPROVE_MAX)}` };
+  return { approvers: [], rule: `DT-03.4 automatisch: ≤ ${eur(AUTO_APPROVE_MAX)}, binnen budget, op voorraad` };
 }
 
 /** Full evaluation of a request: allocation, budget, rush, approval route. */

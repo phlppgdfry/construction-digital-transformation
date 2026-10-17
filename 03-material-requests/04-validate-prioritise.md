@@ -21,7 +21,7 @@ In plaats van te gissen wat DT-03 zou doen, sturen we de <!--n:c3.n-->60<!--/n--
 
 | Optie | Wat | Oordeel |
 |---|---|---|
-| 0. Centrale mailbox + Excel | kanaal bundelen | lost voorraad, budget en boeking niet op |
+| 0. Vaste weekplanning met de werfleiders + één aanvraagadres | elke vrijdag de aanvragen voor de week, één mailbox voor de rest; geen software | pakt de grondoorzaak van spoed aan ([oorzaakanalyse](01-discover.md#oorzaakanalyse-vijf-keer-waarom)); lost voorraad, budget en boeking niet op. **Start meteen, vóór de app** (TR-03): zonder deze afspraak haalt de app de grootste baat niet |
 | A. Standaard aankoopaanvraag in het ERP | ERP-scherm op tablet | niet werfvriendelijk, geen offline, geen depotlogica |
 | **B. Werfapp + flows + ERP-facade (deze case)** | zie stap 3 | **gekozen** |
 | C. Dedicated bouwlogistieksoftware | planning en ritoptimalisatie | interessant voor F-10 (ritten); te groot voor nu |
@@ -53,6 +53,27 @@ De grootste aanname is dat het aandeel spoed daalt van <!--n:c3.rushPct-->33%<!-
 | 03 Materiaalaanvragen | hoogst | middel (ERP-facade) | bouwt de ERP-facade en outbox die 01 en 02 hergebruiken | **1** |
 | 02 Schadeclaims | middel | laag | werfapp-shell uit 03; kosten via facade | **2** (deels parallel) |
 | 01 Document intelligence | laagst | middel (AI-kwaliteit) | facade uit 03 | **3** |
+
+## Validatie met gebruikers (gesimuleerd)
+
+> **Gesimuleerd.** Zo zou ik valideren, met deze verwachte uitkomst. Er is niet met echte gebruikers getest.
+
+| Wat | Met wie | Verwachte uitkomst |
+|---|---|---|
+| Replay van 60 historische aanvragen door DT-03 | afdelingsverantwoordelijke, 2 projectleiders | grenzen €1.000 en €10.000 aanvaard: 43% automatisch zonder budgetrisico |
+| Weekplanning als afspraak, 4 weken op 2 werven | werfleiders, planning | spoed daalt op de proefwerven; de spoedredenen tonen waar het nog misloopt |
+| Klikbaar prototype aanvraagscherm | 3 werfleiders, depot | voorraad per depot begrepen; "ik wil zien of het vertrokken is" → status in de app |
+
+## Risico's
+
+Case 03 heeft het grootste risico in gedrag, niet in techniek. De volledige lijst, met eigenaar en wanneer ingrijpen, staat in het [RAID-log](raid-en-beslissingen.md#raid-log).
+
+| Risico | Kans | Impact | Maatregel |
+|---|---|---|---|
+| Spoed daalt niet, omdat het gedrag niet verandert | M | H | weekplanning vóór de app; spoedreden verplicht; KPI bij de afdelingsverantwoordelijken |
+| De ERP-voorraad klopt niet | H | H | tellen en corrigeren vóór go-live; verschillen melden bij levering |
+| De ERP-facade is niet op tijd klaar | M | M | de outbox wacht; pilot op de ERP-sandbox |
+| Werfleiders vullen een verre datum in en bellen dan toch | M | M | het depot registreert telefonische aanvragen; gewijzigde leverdatums tellen mee |
 
 ## MVP
 

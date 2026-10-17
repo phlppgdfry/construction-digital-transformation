@@ -15,6 +15,19 @@
 
 **Valkuil bij C3-K2:** spoed kan "verdwijnen" doordat werfleiders een verre datum invullen en dan bellen. Daarom wordt C3-K2 samen bekeken met het aantal gewijzigde leverdatums en met telefonische aanvragen die het depot nog registreert.
 
+## Meetplan en stopcriterium
+
+Hoe de nulmeting en de opvolging gebeuren, staat in het [meetplan](../shared-methodology/meetplan.md#case-03--materiaalaanvragen). Kort:
+
+| Soort indicator | Wat | Waarom |
+|---|---|---|
+| Vooraf (leading) | aanvragen via de app (adoptie), aanvragen op vrijdag voor de week, spoedredenen per werf | toont in de eerste weken of de weekplanning landt |
+| Achteraf (lagging) | C3-K2 spoed, C3-K6 externe aankoop met eigen voorraad, C3-K7 kosten op de werf | het resultaat waarvoor de sponsor betaalt |
+
+**Stopcriterium.** Als spoed na 3 maanden niet onder 28% zakt, wordt niet uitgebreid naar alle werven. De app werkt dan misschien wel, maar de grootste baat niet; eerst de weekplanning op orde.
+
+Wat het over de tijd oplevert, als simulatie op het rekenmodel: [batenrealisatie](https://phlppgdfry.github.io/construction-digital-transformation/baten/).
+
 ## Verbeterlus
 
 1. **Wekelijks** (planning + afdelingsverantwoordelijken): spoedaanvragen van vorige week per reden en per werf.

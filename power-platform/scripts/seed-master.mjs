@@ -3,6 +3,7 @@
 import { readFileSync } from "node:fs";
 import { execSync } from "node:child_process";
 import { api, get } from "./dv.mjs";
+import { RULEBOOK } from "../../src/rules.mjs";
 
 const md = JSON.parse(readFileSync(new URL("../../data/master-data.json", import.meta.url)));
 const CAT = { granulaten: 100000000, asfalt: 100000001, riolering: 100000002, signalisatie: 100000003, kleinmateriaal: 100000004 };
@@ -54,9 +55,14 @@ for (const h of md.hauliers) for (const plate of h.plates) { await upsert("hv_nu
 for (const a of md.acceptance.accepted) { await upsert("hv_materiaalcode", "hv_code", a.code, { hv_omschrijving: a.label, hv_soort: 100000000, hv_prijsperton: a.pricePerTonne, hv_bodemref: !!a.needsSoilRef }); n++; }
 for (const a of md.acceptance.refused) { await upsert("hv_materiaalcode", "hv_code", a.code, { hv_omschrijving: a.label, hv_soort: 100000001, hv_bodemref: false }); n++; }
 for (const a of md.acceptance.products) { await upsert("hv_materiaalcode", "hv_code", a.code, { hv_omschrijving: a.label, hv_soort: 100000002, hv_prijsperton: a.pricePerTonne, hv_bodemref: false }); n++; }
-// Every approver role points to the signed-in maker in a single-user dev environment.
+// The rulebook (src/rules.mjs) as rows in Bedrijfsregel: the flows read their thresholds from here.
+for (const r of RULEBOOK) {
+  await upsert("hv_regel", "hv_code", r.code, { hv_naam: r.name, hv_regeltekst: r.rule, hv_waarde: r.value ?? null, hv_eenheid: r.unit ?? null, hv_case: r.case, hv_eigenaar: r.owner, hv_waarom: r.why }); n++;
+}
+// Every role (approver or receiver of a melding) points to the signed-in maker in a single-user dev environment.
+const ROLES = ["Projectleider", "Afdelingsverantwoordelijke", "Directie", "Fleetmanager", "Claims & verzekeringen", "Administratie recyclage", "Milieucoördinator", "Functioneel beheer", "Werfleider", "Werfplanning", "Preventieadviseur", ...new Set(md.projects.map((p) => p.manager))];
 const approver = process.env.HV_APPROVER ?? execSync("az account show --query user.name -o tsv", { encoding: "utf8" }).trim();
-for (const rol of ["Projectleider", "Afdelingsverantwoordelijke", "Directie", "Fleetmanager", "Claims & verzekeringen"]) {
+for (const rol of ROLES) {
   await upsert("hv_goedkeurder", "hv_rol", rol, { hv_email: approver, hv_vervanger: approver }); n++;
 }
 console.log(`seeded ${n} master rows`);
