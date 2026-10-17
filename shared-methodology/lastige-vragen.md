@@ -28,3 +28,27 @@ Niet op de go-live-datum. Elke case heeft KPI-kaarten met nulmeting, doel en eig
 
 ### Wat doe je als gebruikers het niet gebruiken?
 Eerst meten waar het misloopt (adoptie per afdeling, afhakers in het formulier). Dan met die gebruikers praten voor er iets gebouwd wordt. Vaak is de oorzaak een veld te veel, een training die niet op de werf gegeven werd, of een oud kanaal (telefoon) dat nog volledig blijft werken. Dat laatste is een **beslissing van de leiding**, geen IT-probleem. → [case 02, stap 6](../02-construction-claims/06-implement.md)
+
+### Waarom gaat alles naar het ERP via een outbox, ook de weegbonnen?
+
+Omdat twee patronen voor hetzelfde probleem het eerste is wat een architect aankaart. Vroeger boekte case 01 rechtstreeks en ging case 03 via de outbox: bij een ERP-storing faalde de ene flow en wachtte de andere. Nu gedraagt elke case zich hetzelfde, één flow verstuurt met retry en een vaste sleutel, en een test bewaakt dat geen andere flow rechtstreeks boekt ([ADR-004](adr/ADR-004-outbox-idempotency.md)).
+
+### Waar staan de regels? In de flow of in de code?
+
+De **drempels** staan als data in de tabel *Bedrijfsregel*, met een eigenaar per regel; de business leest en wijzigt ze in de backoffice. De **logica** staat in de geteste motor en in de flow, en die twee worden tegen dezelfde gevallen vergeleken. Een drempel wijzigen is configuratie; een regel toevoegen is een release met een test ([regelcatalogus](regelcatalogus.md)).
+
+### Wie ziet het als een flow faalt?
+
+Functioneel beheer, binnen de minuut: elke flow heeft een foutblok dat een melding stuurt met de mislukte stap en een link naar de run, en het record krijgt status *Fout*. Een ERP-bericht dat na zes pogingen niet vertrekt, geeft ook een melding ([monitoring](../power-platform/flows/README.md#monitoring-wie-ziet-een-mislukte-run-en-hoe-snel)).
+
+### Is GPS van werfleiders niet gevoelig?
+
+Ja. De app bewaart de positie alleen bij een schademelding, als deel van die melding: geen achtergrondlocatie, geen rittenhistoriek. Voor case 02 zou ik een DPIA laten toetsen door de DPO ([privacy en data](privacy-en-data.md)).
+
+### Waarom geen app voor spoed, als spoed het grootste probleem is?
+
+Omdat spoed een planningsprobleem is. Een app die spoed sneller verwerkt, beloont te laat aanvragen. Eerst een vaste weekplanning, zonder software; de app meet daarna de spoedredenen per werf ([oorzaakanalyse](../03-material-requests/01-discover.md#oorzaakanalyse-vijf-keer-waarom)).
+
+### Is dit niet allemaal met AI gemaakt?
+
+Ja, met AI als bouw- en schrijfpartner. De richting, de verbeterrondes en de controles (tests, CI en een echte Power Platform-omgeving) zijn het deel waarop je me in een gesprek kunt bevragen. Wat gesimuleerd is, staat zo gemarkeerd.
