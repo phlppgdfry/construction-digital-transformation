@@ -1,6 +1,6 @@
 # Power Platform: de oplossing echt gebouwd
 
-De drie cases draaien niet alleen als ontwerp en browserdemo. Ze zijn ook **gebouwd in Microsoft Power Platform**: Dataverse-tabellen, zeven Power Automate-flows, een model-driven backoffice-app en een werfapp. Alles zit samen in één solution, `HalverdijkTransformatie`.
+De drie cases draaien niet alleen als ontwerp en browserdemo. Ze zijn ook **gebouwd in Microsoft Power Platform**: Dataverse-tabellen, Power Automate-flows, een model-driven backoffice-app met KPI-dashboard, en twee code apps. Alles zit samen in één solution, `HalverdijkTransformatie`.
 
 > **Fictief en afgeschermd.** Alles draait in een eigen **ontwikkelomgeving** ("Halverdijk Dev", type Developer) met verzonnen gegevens. Het ERP bestaat niet: tabellen met "(ERP-sandbox)" staan ervoor in. De links hieronder werken alleen voor accounts met toegang tot die omgeving. Voor iedereen anders staan de screenshots, de [verificatie](VERIFICATION.md) en de [solution-export](solution/) in deze map.
 
@@ -18,7 +18,7 @@ Er zijn twee apps: de **werfapp** voor de werf (case 02 en 03) en de **backoffic
   └────────────────────────────────────────────────────────────────────┘
           │  "nieuwe of gewijzigde rij"     ▲  schrijft resultaat terug
           ▼                                 │
-  POWER AUTOMATE (7 flows) ─────────────────┘   + Approvals (Teams / Outlook)
+  POWER AUTOMATE (14 flows) ────────────────┘   + Approvals, in-app-meldingen, ERP-outbox
 ```
 
 | | Wie doet iets, in welke app | Wat de flows doen | Wat echt is, wat gesimuleerd |
@@ -33,29 +33,29 @@ Er zijn twee apps: de **werfapp** voor de werf (case 02 en 03) en de **backoffic
 
 | Onderdeel | Wat | Link (maker-account) |
 |---|---|---|
-| Solution | `HalverdijkTransformatie` (uitgever `hv`): tabellen, flows, app, sitemap, omgevingsvariabelen, connection references | [Power Apps → Oplossingen](https://make.powerapps.com/environments/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/solutions) |
-| Dataverse | 17 tabellen, 20 relaties, 14 alternatieve sleutels, 5 omgevingsvariabelen | [Tabellen](https://make.powerapps.com/environments/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/entities) |
+| Solution | `HalverdijkTransformatie` (uitgever `hv`): tabellen, flows, app, sitemap, dashboard, omgevingsvariabele, connection references | [Power Apps → Oplossingen](https://make.powerapps.com/environments/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/solutions) |
+| Dataverse | <!--n:pp.tables-->20<!--/n--> tabellen (waaronder *Bedrijfsregel*, *Melding* en *KPI-meting*), alternatieve sleutels, 1 omgevingsvariabele (de ERP-storingsschakelaar) | [Tabellen](https://make.powerapps.com/environments/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/entities) |
 | Model-driven app | **Halverdijk Backoffice**: opent op een KPI-dashboard (zes grafieken); weegbonnen, schadeclaims met tijdlijn, aanvragen met lijnen en outbox, ERP-sandbox | [App openen](https://halverdijkdev.crm17.dynamics.com/main.aspx?appid=fb7afac1-35c9-f111-a05c-6045bd29a82d) |
-| Power Automate | 7 cloud flows, allemaal aan | [Flows](https://make.powerautomate.com/environments/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/flows) |
+| Power Automate | <!--n:pp.flows-->14<!--/n--> cloud flows, allemaal aan | [Flows](https://make.powerautomate.com/environments/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/flows) |
 | Approvals | goedkeuringen voor schadeclaims (DT-02) en materiaalaanvragen (DT-03) | [Ontvangen goedkeuringen](https://make.powerautomate.com/environments/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/approvals/received) |
 | Weegbon Nakijken | Power Apps **code app** voor de administratie en de milieucoördinator: wachtrij, scan, correcties, live hercontrole met de regelmotor, [broncode](reviewapp/) | [App openen](https://apps.powerapps.com/play/e/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/app/68d4a079-d2e6-476e-a7fa-f904ea317801) — deep link: `?doc=DOC-006` |
 | Werfapp | Power Apps **code app** (React + gegenereerde Dataverse-services), [broncode](werfapp/) | [App openen](https://apps.powerapps.com/play/e/7a2e1ae0-c020-efc7-9cfc-9e6536c3415d/app/860ecef4-4d59-4b2d-931a-415a252f2780) |
 
-## De zeven flows
+## De flows
 
-| Flow | Trigger | Wat hij doet | Case | Spec |
-|---|---|---|---|---|
-| HV-DI-01 Weegbon controleren en boeken | rij toegevoegd in Weegbonnen | elf regels R01–R11; automatisch boeken in de ERP-sandbox (idempotency-key = bonnummer) of nazicht / escalatie / dubbel | 01 | [HV-DI-01](flows/HV-DI-01.md) |
-| HV-DI-02 Weegbon na nazicht boeken | status → Goedgekeurd | controleert opnieuw op dubbel en geweigerd materiaal (wat de app ook stuurde) en boekt de gecorrigeerde waarden idempotent | 01 | [HV-DI-02](flows/HV-DI-02.md) |
-| HV-CL-01 Schadeclaim intake en triage | rij toegevoegd in Schadeclaims | ernst, eigenaar, DT-02-keten, SLA- en verzekeringsdeadline, verwittigingen, tijdlijn | 02 | [HV-CL-01](flows/HV-CL-01.md) |
-| HV-CL-02 Schadeclaim goedkeuringsketen | status → Ter goedkeuring | Approvals per niveau; één afwijzing stopt de keten; elke beslissing in de tijdlijn | 02 | [HV-CL-02](flows/HV-CL-02.md) |
-| HV-CL-03 SLA-bewaking | elk uur | te late beoordelingen escaleren | 02 | [HV-CL-03](flows/HV-CL-03.md) |
-| HV-MA-01 Materiaalaanvraag verwerken | status → Ingediend | voorraad per depot (dichtste eerst), budget per categorie, DT-03, Approvals, ERP-berichten in de outbox | 03 | [HV-MA-01](flows/HV-MA-01.md) |
-| HV-MA-02 ERP-outbox verzenden | elke 5 minuten | naar de ERP-sandbox met retry 1-5-15-60-240 min, dead-letter, reservatie in voorraad | 03 | [HV-MA-02](flows/HV-MA-02.md) |
+<!--n:pp.flows-->14<!--/n--> flows, met per flow een spec in gewone taal en een [flow-inventaris](flows/README.md) met trigger, status van en naar, eigenaar, en welke BPMN-taak hij uitvoert. De afspraken die voor alle flows gelden:
 
-Elke flow heeft een **spec in gewone taal**: doel, trigger, wat hij leest en schrijft, stappen met een diagram, beslisregels, foutafhandeling, configuratie, bewijs met een echte run, beheer, en het verschil met het doelontwerp. Onderaan elke spec staat de technische stappenlijst; die genereert `npm run build` uit de code, en CI faalt als ze niet meer klopt. Overzicht en afspraken: [flows/README.md](flows/README.md).
+| Afspraak | Wat het betekent |
+|---|---|
+| **Eén integratiepatroon** | alles naar het ERP via de outbox: [HV-IN-01](flows/HV-IN-01.md) verstuurt met retry, [HV-IN-02](flows/HV-IN-02.md) werkt de bron bij ([ADR-004](../shared-methodology/adr/ADR-004-outbox-idempotency.md)) |
+| **Wachten op een mens via een status** | [HV-CL-02](flows/HV-CL-02.md) en [HV-MA-02](flows/HV-MA-02.md) vragen goedkeuring per niveau en hervatten waar de keten stond |
+| **Kleine flows** | case 03: beslissen ([HV-MA-01](flows/HV-MA-01.md)), goedkeuren, uitvoeren ([HV-MA-03](flows/HV-MA-03.md)), verbruik ([HV-MA-04](flows/HV-MA-04.md)) |
+| **Foutafhandeling in elke flow** | blok `Probeer`, en bij een fout `Bij_fout`: melding aan functioneel beheer met de run-link, status *Fout*, run mislukt |
+| **Verwittigen = een melding** | [HV-OP-01](flows/HV-OP-01.md) levert elke melding af als in-app-notificatie |
+| **Regels als data** | de drempels staan in de tabel *Bedrijfsregel*; elke flow leest ze bij de start ([regelcatalogus](../shared-methodology/regelcatalogus.md)) |
+| **Schema's overlappen nooit** | trigger-concurrency 1 op de geplande flows |
 
-De definities staan als code in [`flows/definitions.mjs`](flows/definitions.mjs) (reviewbaar en te diffen) en als export in [`solution/src/Workflows/`](solution/src/Workflows/). Drempels zijn **omgevingsvariabelen**: `hv_ConfidenceThreshold`, `hv_AutoApproveMax`, `hv_PlApproveMax`, `hv_InsurerThreshold` en de schakelaar `hv_ErpBeschikbaar` waarmee je een ERP-storing simuleert.
+De definities staan als code in [`flows/definitions.mjs`](flows/definitions.mjs) (reviewbaar en te diffen) en als export in [`solution/src/Workflows/`](solution/src/Workflows/). Tests in [`tests/power-platform.test.mjs`](../tests/power-platform.test.mjs) bewaken de afspraken: elke flow heeft foutafhandeling, alleen de verzender boekt in het ERP, geen drempel staat hardgecodeerd, elke geautomatiseerde BPMN-taak heeft een flow.
 
 ## De drie apps
 
@@ -108,13 +108,16 @@ Details per rij: [VERIFICATION.md](VERIFICATION.md).
 # 1. eenmalig: Azure CLI aanmelden als maker van de omgeving, en environment.json aanpassen
 az login --tenant <tenant-id>
 # 2. structuur, stamgegevens, app en flows
-node scripts/provision-schema.mjs     # publisher, solution, 17 tabellen, sleutels, omgevingsvariabelen
-node scripts/seed-master.mjs          # werven, depots, artikels, voorraad, klanten, acceptatielijst, goedkeurders
-node scripts/provision-dashboard.mjs  # zes grafieken + KPI-dashboard
+node scripts/provision-schema.mjs     # publisher, solution, tabellen, nieuwe keuzewaarden, sleutels, omgevingsvariabele
+node scripts/seed-master.mjs          # werven, depots, artikels, voorraad, klanten, acceptatielijst, rollen, bedrijfsregels
+node scripts/seed-kpi.mjs             # KPI-metingen (simulatie) voor de batengrafieken
+node scripts/provision-dashboard.mjs  # negen grafieken + KPI-dashboard
 node scripts/provision-app.mjs        # formulieren, weergaven, sitemap, model-driven app
-node scripts/provision-flows.mjs      # connection references + 7 flows (daarna --activate)
+node scripts/provision-flows.mjs      # connection references + flows (daarna --activate; --prune ruimt oude op)
 # 3. scenario's door de echte flows sturen en vergelijken
-node scripts/seed-scenarios.mjs && node scripts/verify.mjs
+node scripts/seed-scenarios.mjs && node scripts/review-scenario.mjs && node scripts/lifecycle-scenario.mjs
+# ±10 minuten later (de outbox loopt elke 5 minuten):
+node scripts/verify.mjs
 ```
 
 Of importeer [`solution/release/HalverdijkTransformatie_managed.zip`](solution/release/) met `pac solution import` en koppel bij de import twee verbindingen (Microsoft Dataverse en Approvals).
@@ -122,16 +125,16 @@ Of importeer [`solution/release/HalverdijkTransformatie_managed.zip`](solution/r
 ## Ontwerpkeuzes die hier echt zichtbaar worden
 
 - **Alternatieve sleutels als idempotentie.** Een tweede ERP-boeking met hetzelfde bonnummer of dezelfde outbox-sleutel faalt op de sleutel. De flow leest dat als "al geboekt", niet als fout ([ADR-004](../shared-methodology/adr/ADR-004-outbox-idempotency.md)).
-- **Regels in de flow, drempels in omgevingsvariabelen.** Een drempel aanpassen is configuratie, geen nieuwe release ([ADR-006](../shared-methodology/adr/ADR-006-beslistabellen.md)).
-- **Rol → persoon in een tabel** (`Goedkeurders`). In deze ontwikkelomgeving staat elke rol op hetzelfde account, zodat één persoon de hele keten kan doorlopen.
+- **Regels als data.** Een drempel aanpassen is configuratie in de tabel *Bedrijfsregel*, geen nieuwe release; `verify.mjs` meldt elk verschil met de repo ([ADR-006](../shared-methodology/adr/ADR-006-beslistabellen.md)).
+- **Rol → persoon in een tabel** (*Rol (goedkeurder en ontvanger)*), voor goedkeuringen en meldingen. In deze ontwikkelomgeving staat elke rol op hetzelfde account, zodat één persoon de hele keten kan doorlopen.
 - **Reservatie gebeurt bij levering aan het "ERP"**, niet bij het aanvragen. De storingstest toont dat: na de eerste reservatie had Depot Oost nog maar 2 borden vrij, en de flow nam de rest uit Depot West.
 
 ## Status
 
 | Onderdeel | Status |
 |---|---|
-| Dataverse, model-driven app, 7 flows, Approvals | gebouwd, aan, geverifieerd |
-| KPI-dashboard in de backoffice-app | gebouwd: zes grafieken op Dataverse, startpagina van de app ([spec](apps/backoffice.md#kpi-dashboard)) |
+| Dataverse, model-driven app, <!--n:pp.flows-->14<!--/n--> flows, Approvals, in-app-meldingen | gebouwd, aan, geverifieerd ([VERIFICATION.md](VERIFICATION.md)) |
+| KPI-dashboard in de backoffice-app | gebouwd: negen grafieken op Dataverse, waaronder de baten per maand (simulatie), startpagina van de app ([spec](apps/backoffice.md#kpi-dashboard)) |
 | Weegbon Nakijken (code app) | gepubliceerd en werkend, met dezelfde licentie (Developer Plan). Klikken via geautomatiseerde browserbesturing kwamen niet in het app-kader; de screenshots zijn daarom gemaakt via deep links (`?doc=…&fix=…&role=…`), en de goedkeuring van DOC-006 via de Web API met exact de wijziging die de app stuurt |
 | Werfapp (code app) | gepubliceerd en werkend: leest werven, artikels, voorraad, claims en aanvragen live uit Dataverse. Vereist een Power Apps-licentie per gebruiker; hier het gratis **Power Apps Developer Plan**. Code apps zitten (nog) niet in de Dataverse-solution-export: de broncode staat in [`werfapp/`](werfapp/) en wordt uitgerold met `pac code push` |
 

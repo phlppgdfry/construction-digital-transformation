@@ -19,9 +19,11 @@ Kantoor ziet alles wat de flows deden, per case, in lijsten en formulieren die P
 | **01 Weegbonnen** | Recyclage | Weegbon, ERP-boeking (sandbox) |
 | | Stamgegevens | Klant, Nummerplaat, Materiaalcode (acceptatielijst) |
 | **02 Schadeclaims** | Dossiers | Schadeclaim, Tijdlijn |
-| | Instellingen | Goedkeurder, Werf |
+| | Instellingen | Werf |
 | **03 Materiaal** | Aanvragen | Materiaalaanvraag, Aanvraaglijn, ERP-outbox |
 | | ERP-sandbox | Artikel, Voorraad, Depot, Afstand werf–depot, Werfbudget |
+| **Beheer** | Opvolging | Melding, ERP-outbox, KPI-meting |
+| | Regels en rollen | Bedrijfsregel, Rol (goedkeurder en ontvanger) |
 
 ## Wat je in de lijsten ziet
 
@@ -31,6 +33,9 @@ Kantoor ziet alles wat de flows deden, per case, in lijsten en formulieren die P
 | Schadeclaim | dossiernummer, status, ernst, categorie, werf, raming, eigenaar, goedkeuringsketen, deadline beoordeling, deadline verzekeraar |
 | Materiaalaanvraag | aanvraagnr, status, werf, leveren op, spoed, waarde, route, regel, budget overschreden |
 | ERP-outbox | sleutel, status, endpoint, pogingen, volgende poging, laatste resultaat, referentie |
+| Bedrijfsregel | code, naam, parameter, eenheid, case, eigenaar |
+| Melding | titel, soort, status, voor rol, kanaal, bron (flow), referentie |
+| KPI-meting | naam, maand, case, KPI, waarde, eenheid, bron (simulatie of meting) |
 
 Op de formulieren staan de gerelateerde rijen als subraster: de **tijdlijn** bij een schadeclaim, de **lijnen met toewijzing** en de **ERP-berichten** bij een aanvraag, de **budgetlijnen** en **afstanden** bij een werf.
 
@@ -41,7 +46,7 @@ Op de formulieren staan de gerelateerde rijen als subraster: de **tijdlijn** bij
 
 ## KPI-dashboard
 
-De app opent op het dashboard *Halverdijk — Overzicht*: zes grafieken, rechtstreeks op de Dataverse-tabellen, dus altijd de stand van nu. Elke grafiek beantwoordt één vraag uit fase 7 (Measure & improve).
+De app opent op het dashboard *Halverdijk — Overzicht*: negen grafieken, rechtstreeks op de Dataverse-tabellen, dus altijd de stand van nu. Elke grafiek beantwoordt één vraag uit fase 7 (Measure & improve).
 
 | Grafiek | De vraag erachter | Hoort bij |
 |---|---|---|
@@ -51,8 +56,21 @@ De app opent op het dashboard *Halverdijk — Overzicht*: zes grafieken, rechtst
 | Geraamde schade per categorie (€) | Waar zit de schade in euro? | case 02 |
 | Materiaalaanvragen per goedkeuringsroute | Welk deel gaat automatisch door (DT-03.4)? | [case 03 · KPI's](../../03-material-requests/07-measure-improve.md) |
 | ERP-outbox per status | Staat er iets in dead-letter? | runbook functioneel beheer |
+| Uren vrij per maand (simulatie) | Hoeveel uren komen elke maand vrij, alle cases samen? | [batenrealisatie](https://phlppgdfry.github.io/construction-digital-transformation/baten/) |
+| Netto resultaat cumulatief (simulatie) | Wanneer is het programma terugverdiend? | batenrealisatie |
+| Meldingen per soort | Hoeveel acties, waarschuwingen en fouten staan er? | [monitoring](../flows/README.md#monitoring-wie-ziet-een-mislukte-run-en-hoe-snel) |
 
-Klik op een stuk van een grafiek en je ziet de rijen erachter. Opgebouwd door [`provision-dashboard.mjs`](../scripts/provision-dashboard.mjs) (systeemgrafieken + systeemdashboard, in de solution).
+De twee batengrafieken lezen de tabel *KPI-meting*. Daar staat nu de simulatie (bron *Simulatie*, scenario verwacht, geladen door [`seed-kpi.mjs`](../scripts/seed-kpi.mjs)). Na een echte go-live komen er metingen bij (bron *Meting*), en tonen dezelfde grafieken de werkelijkheid. Elke grafiek leest een eigen weergave die op één KPI filtert.
+
+Klik op een stuk van een grafiek en je ziet de rijen erachter. Opgebouwd door [`provision-dashboard.mjs`](../scripts/provision-dashboard.mjs) (systeemgrafieken + systeemdashboard, in de solution); de lijst van grafieken staat in [`dashboard-charts.mjs`](../scripts/dashboard-charts.mjs).
+
+## Meldingen (het belletje)
+
+De flows verwittigen niemand rechtstreeks: ze schrijven een rij in *Melding*, en [HV-OP-01](../flows/HV-OP-01.md) levert die af als **in-app-notificatie** in deze app (het belletje rechtsboven), met een knop *Openen* naar het dossier, de bon of de aanvraag. Daarvoor staat de app-instelling *in-app notifications* aan; dat is een instelling van deze app, geen tenantinstelling. Externe partijen (verzekeraar, klant, vervoerder) krijgen een melding met kanaal *Extern*: dat kanaal is in de ontwikkelomgeving niet aangesloten.
+
+## Regels wijzigen
+
+*Beheer* → *Bedrijfsregels* toont elke regel in gewone taal, met de parameter en de eigenaar. Een parameter wijzigen is een configuratiewijziging: de volgende run van elke flow gebruikt de nieuwe waarde. Wie mag wijzigen en hoe de repo daarna volgt, staat in het [wijzigingsbeheer](../../shared-methodology/governance.md#wijzigingsbeheer-voor-requirements-en-regels).
 
 | | |
 |---|---|
@@ -66,7 +84,9 @@ Klik op een stuk van een grafiek en je ziet de rijen erachter. Opgebouwd door [`
 | Milieucoördinator | de acceptatielijst (Materiaalcode) bijhouden | – |
 | Claims & verzekeringen, fleetmanager | dossier beoordelen; status op *Ter goedkeuring* zetten | ja: [HV-CL-02](../flows/HV-CL-02.md) |
 | Aankoop & logistiek | aanvragen, toewijzing en outbox opvolgen; budgetten en voorraad (sandbox) | – |
-| Functioneel beheer | dead-letters in de outbox opvolgen ([runbook](../../03-material-requests/06-implement.md#runbook-dead-letter)); goedkeurders per rol bijhouden | – |
+| Functioneel beheer | fout-meldingen en dead-letters opvolgen ([runbook](../../03-material-requests/06-implement.md#runbook-dead-letter)); rollen en bedrijfsregels bijhouden | – |
+| Claims & verzekeringen | dossier afsluiten met de werkelijke kost; *Aangifte verstuurd* aanvinken | ja: [HV-CL-04](../flows/HV-CL-04.md) bij *Afgesloten* |
+| Milieucoördinator, administratie | een bon weigeren of afwijzen in Weegbon Nakijken | ja: [HV-DI-03](../flows/HV-DI-03.md) |
 
 ## Grenzen
 
@@ -77,8 +97,9 @@ Klik op een stuk van een grafiek en je ziet de rijen erachter. Opgebouwd door [`
 ## Opnieuw opbouwen
 
 ```sh
-node power-platform/scripts/provision-dashboard.mjs   # zes grafieken + het KPI-dashboard
-node power-platform/scripts/provision-app.mjs         # formulieren, weergaven, sitemap (dashboard eerst), app module
+node power-platform/scripts/seed-kpi.mjs              # KPI-metingen (simulatie) voor de batengrafieken
+node power-platform/scripts/provision-dashboard.mjs   # negen grafieken + het KPI-dashboard
+node power-platform/scripts/provision-app.mjs         # formulieren, weergaven, sitemap (dashboard eerst), in-app-meldingen aan
 ```
 
 De app zit in de solution-export ([`solution/`](../solution/)) en komt mee bij `pac solution import`.

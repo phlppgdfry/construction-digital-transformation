@@ -28,20 +28,23 @@ De werf meldt schade en vraagt materiaal aan op één plek, in één minuut, en 
 | Werf | nummer, naam, actief, projectleider | – |
 | Schadeclaim | voor *Mijn status* | nieuwe rij met status *Gemeld* en een **client-id** |
 | Artikel (ERP-sandbox), Voorraad (ERP-sandbox) | artikels, prijzen, beschikbaarheid | – |
-| Materiaalaanvraag, Aanvraaglijn | voor *Mijn status* | aanvraag (status *Concept*), dan de lijnen, dan status *Ingediend* |
+| Materiaalaanvraag, Aanvraaglijn | voor *Mijn status* | aanvraag (status *Concept*), dan de lijnen, dan status *Ingediend*; bij *Ontvangst bevestigen* status *Ontvangen* |
 
 ## Validaties en regels
 
 - **Schade:** dezelfde functie als in de tests, [`validateReport()`](../../src/claims.mjs): werf gekozen en actief, categorie, minstens 20 tekens uitleg, minstens één foto, een raming (0 mag), naam van de derde, de verplichte velden per categorie. Personenletsel blokkeert het formulier.
 - **Verwachte triage:** [`triage()`](../../src/claims.mjs) toont vóór het verzenden wat de flow zal beslissen. De flow beslist; de app voorspelt alleen.
-- **Materiaal:** werf, minstens één lijn met een hoeveelheid, en een spoedreden als de levering binnen 48 uur is.
+- **Materiaal:** werf, minstens één lijn met een hoeveelheid, en een spoedreden als de levering binnen de spoedgrens valt. Die grens komt uit het regelboek ([`src/rules.mjs`](../../src/rules.mjs), regel SP-01), dezelfde waarde als in de flow.
+- **Ontvangst:** in *Mijn status* krijgt een goedgekeurde, geplande of geleverde aanvraag de knop **Ontvangst bevestigen**.
 
 ## Wat er daarna gebeurt
 
 | Actie | Flow |
 |---|---|
 | Schade verzonden | [HV-CL-01](../flows/HV-CL-01.md) triageert binnen een halve minuut; daarna bewaakt [HV-CL-03](../flows/HV-CL-03.md) de termijn |
-| Aanvraag ingediend | [HV-MA-01](../flows/HV-MA-01.md) wijst depots toe en past DT-03 toe; [HV-MA-02](../flows/HV-MA-02.md) stuurt de berichten naar het ERP |
+| Aanvraag ingediend | [HV-MA-01](../flows/HV-MA-01.md) wijst depots toe en past DT-03 toe; boven de grens vraagt [HV-MA-02](../flows/HV-MA-02.md) de goedkeuring; [HV-MA-03](../flows/HV-MA-03.md) zet de berichten in de outbox en [HV-IN-01](../flows/HV-IN-01.md) stuurt ze naar het ERP |
+| Ontvangst bevestigd | [HV-MA-04](../flows/HV-MA-04.md) boekt het verbruik per lijn op de werf (via de outbox); als alles geboekt is, zet [HV-IN-02](../flows/HV-IN-02.md) de aanvraag op *Afgesloten* |
+| Een flow faalt | de status wordt *Fout (beheer kijkt)*; functioneel beheer krijgt een melding |
 
 ## Zonder bereik
 
@@ -49,7 +52,8 @@ Een melding die niet verzonden raakt, blijft op het toestel (browseropslag) met 
 
 ## Grenzen
 
-- Geen Dataverse-offline-profiel: code apps ondersteunen dat (nog) niet. De wachtrij in de browser is een tussenoplossing.
+- Geen Dataverse-offline-profiel: code apps ondersteunen dat (nog) niet. De wachtrij in de browser is een tussenoplossing; de afwijking van het doelontwerp staat in [ADR-005](../../shared-methodology/adr/ADR-005-offline-canvas.md#afwijking-in-de-demo-omgeving).
+- Ontvangst per lijn (gedeeltelijke levering) en de foto van de leverbon zijn ontworpen, niet gebouwd.
 - Foto's worden als aantal bewaard, niet als bestand.
 - Elke gebruiker heeft een Power Apps-licentie nodig. Hier: het gratis Power Apps Developer Plan.
 
