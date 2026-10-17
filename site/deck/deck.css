@@ -77,3 +77,5 @@ html, body { margin: 0; height: 100%; background: #1b1f29; color: var(--text); f
   .slide { display: flex !important; flex-direction: column; justify-content: center; width: 297mm; height: 167mm; aspect-ratio: auto; font-size: 14pt; page-break-after: always; break-after: page; }
   .deck-nav { display: none; }
 }
+.eyebrow, .who, .fine { align-self: flex-start; }
+.cols3 .big { font-size: 2em; white-space: nowrap; }
