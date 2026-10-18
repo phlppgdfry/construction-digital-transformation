@@ -104,7 +104,6 @@ tests/                      node:test
 
 - Alles is fictief en geïllustreerd met aannames. Een echte businesscase begint met een nulmeting bij de proceseigenaar.
 - Workshops, interviews, stakeholderhoudingen, gebruikersvalidatie en de baseline-goedkeuring zijn **gesimuleerd** en staan zo gemarkeerd. De batenrealisatie is een **simulatie** op het rekenmodel.
-- Gemaakt met AI (Claude Code) als bouw- en schrijfpartner.
 - De oplossing draait in een **ontwikkelomgeving** met fictieve data, niet in productie. Het ERP is daar een sandbox van Dataverse-tabellen, en document-AI is niet gekoppeld (weegbonnen komen binnen als reeds geëxtraheerde rijen).
 - De ontwerp-artefacten in `*/artefacts/` (onder meer de ERP-facade als OpenAPI en de canvas-schermen als `.pa.yaml`) blijven ontwerp. Wat echt gebouwd is, staat in [`power-platform/`](power-platform/README.md).
 - De demo simuleert AI-extractie en ERP met dezelfde regelmotor als de tests.
