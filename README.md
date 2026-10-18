@@ -20,6 +20,8 @@ Portfolio van **Philippe Godfroy** voor de rol Digital Transformation Analyst.
 
 De drie cases zijn gebouwd in een eigen Power Platform-ontwikkelomgeving: **<!--n:pp.tables-->20<!--/n--> Dataverse-tabellen, <!--n:pp.flows-->14<!--/n--> Power Automate-flows, een model-driven backoffice-app met KPI-dashboard, twee code apps (werfapp en nakijkscherm), Approvals en in-app-meldingen**, samen in één solution. Dezelfde scenario's als in de tests zijn door de echte flows gestuurd: weegbonnen **<!--n:pp.v.docs-->30/30<!--/n-->**, schadeclaims **<!--n:pp.v.claims-->5/5<!--/n-->** en materiaalaanvragen **<!--n:pp.v.requests-->4/4<!--/n-->** identiek aan de geteste regelmotor. Wat een architect zou vragen, zit erin: één integratiepatroon (alles naar het ERP via een outbox met retry en idempotency-key), wachten op een mens via een status, kleine flows, foutafhandeling met een melding in elke flow, en regels als data die de business zelf leest. → [hoe het samenhangt](power-platform/README.md#hoe-het-samenhangt-per-case) · [flow-inventaris](power-platform/flows/README.md) · [verificatie](power-platform/VERIFICATION.md) · [solution-export](power-platform/solution/)
 
+![Van schademelding tot dashboard in 50 seconden](power-platform/media/keten-melding-tot-dashboard.gif)
+
 | | |
 |---|---|
 | ![Flow-run met alle stappen geslaagd](power-platform/screenshots/04-flow-hv-di-01-run.jpg) | ![Model-driven app: weegbonnen met beslissing en ERP-referentie](power-platform/screenshots/07-app-weegbonnen.jpg) |

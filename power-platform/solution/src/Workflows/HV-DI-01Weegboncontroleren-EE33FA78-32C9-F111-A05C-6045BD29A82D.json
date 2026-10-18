@@ -1,0 +1,554 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "hv_dataverse"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_approvals": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "hv_approvals"
+        },
+        "api": {
+          "name": "shared_approvals"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "Weegbon_toegevoegd": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 1,
+              "subscriptionRequest/entityname": "hv_document",
+              "subscriptionRequest/scope": 4
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Probeer": {
+          "type": "Scope",
+          "actions": {
+            "Regels": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_regels",
+                  "$select": "hv_code,hv_waarde",
+                  "$filter": "hv_waarde ne null"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "Regelparen": {
+              "type": "Select",
+              "inputs": {
+                "from": "@outputs('Regels')?['body/value']",
+                "select": "@concat('\"', item()?['hv_code'], '\":', string(item()?['hv_waarde']))"
+              },
+              "runAfter": {
+                "Regels": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Parameters": {
+              "type": "Compose",
+              "inputs": "@json(concat('{', join(body('Regelparen'), ','), '}'))",
+              "runAfter": {
+                "Regelparen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Klant_zoeken": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_klants",
+                  "$filter": "hv_klantnr eq '@{triggerOutputs()?['body/hv_klantnummer']}'",
+                  "$top": 1
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "Nummerplaat_zoeken": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_nummerplaats",
+                  "$filter": "hv_plaat eq '@{triggerOutputs()?['body/hv_plaat']}'",
+                  "$top": 1
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "Materiaalcode_zoeken": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_materiaalcodes",
+                  "$filter": "hv_code eq '@{triggerOutputs()?['body/hv_materiaal']}'",
+                  "$top": 1
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "Eerder_ontvangen": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_documents",
+                  "$filter": "hv_bonnummer eq '@{triggerOutputs()?['body/hv_bonnummer']}' and hv_documentid ne @{triggerOutputs()?['body/hv_documentid']} and createdon lt @{triggerOutputs()?['body/createdon']} and hv_status ne 100000005",
+                  "$top": 1
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "Onzekere_velden": {
+              "type": "Query",
+              "inputs": {
+                "from": "@json(coalesce(triggerOutputs()?['body/hv_confidence'], '[]'))",
+                "where": "@less(float(item()?['confidence']), float(outputs('Parameters')?['R02']))"
+              },
+              "runAfter": {
+                "Parameters": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Veldnamen": {
+              "type": "Select",
+              "inputs": {
+                "from": "@body('Onzekere_velden')",
+                "select": "@item()?['veld']"
+              },
+              "runAfter": {
+                "Onzekere_velden": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Ouderdom_dagen": {
+              "type": "Compose",
+              "inputs": "@div(sub(ticks(triggerOutputs()?['body/hv_ontvangen']), ticks(triggerOutputs()?['body/hv_datum'])), 864000000000)",
+              "runAfter": {}
+            },
+            "Bevindingen": {
+              "type": "Compose",
+              "inputs": "@union(if(or(empty(string(coalesce(triggerOutputs()?['body/hv_bonnummer'], ''))), empty(string(coalesce(triggerOutputs()?['body/hv_datum'], ''))), empty(string(coalesce(triggerOutputs()?['body/hv_plaat'], ''))), empty(string(coalesce(triggerOutputs()?['body/hv_klantnummer'], ''))), empty(string(coalesce(triggerOutputs()?['body/hv_materiaal'], ''))), empty(string(coalesce(triggerOutputs()?['body/hv_bruto'], ''))), empty(string(coalesce(triggerOutputs()?['body/hv_tarra'], ''))), empty(string(coalesce(triggerOutputs()?['body/hv_netto'], '')))), createArray(addProperty(addProperty(addProperty(json('{}'), 'regel', 'R01'), 'ernst', 'review'), 'bericht', 'Verplicht veld ontbreekt')), json('[]')), if(greater(length(body('Onzekere_velden')), 0), createArray(addProperty(addProperty(addProperty(json('{}'), 'regel', 'R02'), 'ernst', 'review'), 'bericht', concat('Onder drempel: ', join(body('Veldnamen'), ', ')))), json('[]')), if(greater(max(sub(sub(triggerOutputs()?['body/hv_bruto'], triggerOutputs()?['body/hv_tarra']), triggerOutputs()?['body/hv_netto']), sub(triggerOutputs()?['body/hv_netto'], sub(triggerOutputs()?['body/hv_bruto'], triggerOutputs()?['body/hv_tarra']))), float(outputs('Parameters')?['R03'])), createArray(addProperty(addProperty(addProperty(json('{}'), 'regel', 'R03'), 'ernst', 'review'), 'bericht', concat('Netto ', string(triggerOutputs()?['body/hv_netto']), ' kg <> bruto - tarra = ', string(sub(triggerOutputs()?['body/hv_bruto'], triggerOutputs()?['body/hv_tarra'])), ' kg'))), json('[]')), if(or(equals(length(outputs('Klant_zoeken')?['body/value']), 0), equals(first(outputs('Klant_zoeken')?['body/value'])?['hv_actief'], false)), createArray(addProperty(addProperty(addProperty(json('{}'), 'regel', 'R04'), 'ernst', 'review'), 'bericht', concat('Klant ', triggerOutputs()?['body/hv_klantnummer'], ' onbekend of geblokkeerd'))), json('[]')), if(and(greater(length(outputs('Klant_zoeken')?['body/value']), 0), or(equals(length(outputs('Nummerplaat_zoeken')?['body/value']), 0), and(not(equals(first(outputs('Nummerplaat_zoeken')?['body/value'])?['_hv_klant_value'], first(outputs('Klant_zoeken')?['body/value'])?['hv_klantid'])), not(equals(first(outputs('Nummerplaat_zoeken')?['body/value'])?['hv_vervoerder'], true))))), createArray(addProperty(addProperty(addProperty(json('{}'), 'regel', 'R05'), 'ernst', 'review'), 'bericht', concat('Nummerplaat ', triggerOutputs()?['body/hv_plaat'], ' niet gekend bij klant of vervoerder'))), json('[]')), if(if(equals(triggerOutputs()?['body/hv_richting'], 100000000), or(equals(length(outputs('Materiaalcode_zoeken')?['body/value']), 0), not(equals(first(outputs('Materiaalcode_zoeken')?['body/value'])?['hv_soort'], 100000000))), or(equals(length(outputs('Materiaalcode_zoeken')?['body/value']), 0), not(equals(first(outputs('Materiaalcode_zoeken')?['body/value'])?['hv_soort'], 100000002)))), createArray(addProperty(addProperty(addProperty(json('{}'), 'regel', 'R06'), 'ernst', 'block'), 'bericht', concat('Materiaal ', triggerOutputs()?['body/hv_materiaal'], ' niet toegelaten volgens de vergunning'))), json('[]')), if(and(equals(triggerOutputs()?['body/hv_richting'], 100000000), empty(string(coalesce(triggerOutputs()?['body/hv_idformulier'], ''))), not(equals(first(outputs('Materiaalcode_zoeken')?['body/value'])?['hv_soort'], 100000001))), createArray(addProperty(addProperty(addProperty(json('{}'), 'regel', 'R07'), 'ernst', 'review'), 'bericht', 'Geen nummer identificatieformulier')), json('[]')), if(and(equals(triggerOutputs()?['body/hv_richting'], 100000000), equals(first(outputs('Materiaalcode_zoeken')?['body/value'])?['hv_bodemref'], true), empty(string(coalesce(triggerOutputs()?['body/hv_traceerbaarheid'], '')))), createArray(addProperty(addProperty(addProperty(json('{}'), 'regel', 'R08'), 'ernst', 'review'), 'bericht', 'Bodem zonder traceerbaarheidsreferentie')), json('[]')), if(greater(length(outputs('Eerder_ontvangen')?['body/value']), 0), createArray(addProperty(addProperty(addProperty(json('{}'), 'regel', 'R09'), 'ernst', 'reject'), 'bericht', concat('Bon ', triggerOutputs()?['body/hv_bonnummer'], ' is al ontvangen'))), json('[]')), if(or(less(outputs('Ouderdom_dagen'), 0), greater(outputs('Ouderdom_dagen'), float(outputs('Parameters')?['R10']))), createArray(addProperty(addProperty(addProperty(json('{}'), 'regel', 'R10'), 'ernst', 'review'), 'bericht', concat('Bon is ', string(outputs('Ouderdom_dagen')), ' dagen oud'))), json('[]')), if(greater(triggerOutputs()?['body/hv_bruto'], float(outputs('Parameters')?['R11'])), createArray(addProperty(addProperty(addProperty(json('{}'), 'regel', 'R11'), 'ernst', 'review'), 'bericht', concat('Bruto ', string(triggerOutputs()?['body/hv_bruto']), ' kg boven de grens'))), json('[]')))",
+              "runAfter": {
+                "Klant_zoeken": [
+                  "Succeeded"
+                ],
+                "Nummerplaat_zoeken": [
+                  "Succeeded"
+                ],
+                "Materiaalcode_zoeken": [
+                  "Succeeded"
+                ],
+                "Eerder_ontvangen": [
+                  "Succeeded"
+                ],
+                "Veldnamen": [
+                  "Succeeded"
+                ],
+                "Ouderdom_dagen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Afgegane_regels": {
+              "type": "Select",
+              "inputs": {
+                "from": "@outputs('Bevindingen')",
+                "select": "@item()?['regel']"
+              },
+              "runAfter": {
+                "Bevindingen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Beslissing": {
+              "type": "Compose",
+              "inputs": "@if(contains(string(outputs('Bevindingen')), '\"ernst\":\"reject\"'), 'dubbel', if(contains(string(outputs('Bevindingen')), '\"ernst\":\"block\"'), 'escalatie', if(greater(length(outputs('Bevindingen')), 0), 'nazicht', 'automatisch')))",
+              "runAfter": {
+                "Bevindingen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Weegbon_bijwerken": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateOnlyRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_documents",
+                  "recordId": "@triggerOutputs()?['body/hv_documentid']",
+                  "item/hv_beslissing": "@if(equals(outputs('Beslissing'), 'automatisch'), 100000000, if(equals(outputs('Beslissing'), 'nazicht'), 100000001, if(equals(outputs('Beslissing'), 'escalatie'), 100000002, 100000003)))",
+                  "item/hv_status": "@if(equals(outputs('Beslissing'), 'automatisch'), 100000000, if(equals(outputs('Beslissing'), 'nazicht'), 100000002, if(equals(outputs('Beslissing'), 'escalatie'), 100000003, 100000005)))",
+                  "item/hv_bevindingen": "@{string(outputs('Bevindingen'))}"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Beslissing": [
+                  "Succeeded"
+                ],
+                "Afgegane_regels": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Volgens_beslissing": {
+              "type": "Switch",
+              "runAfter": {
+                "Weegbon_bijwerken": [
+                  "Succeeded"
+                ]
+              },
+              "expression": "@outputs('Beslissing')",
+              "cases": {
+                "Automatisch": {
+                  "case": "automatisch",
+                  "actions": {
+                    "ERP_bericht": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_outboxes",
+                          "item/hv_idempotencykey": "wb-@{triggerOutputs()?['body/hv_bonnummer']}",
+                          "item/hv_endpoint": 100000000,
+                          "item/hv_body": "@{string(json(concat('{\"weighingTicket\":\"', triggerOutputs()?['body/hv_bonnummer'], '\",\"customerNo\":\"', triggerOutputs()?['body/hv_klantnummer'], '\",\"itemCode\":\"', triggerOutputs()?['body/hv_materiaal'], '\",\"netKg\":', string(triggerOutputs()?['body/hv_netto']), ',\"bedrag\":', string(mul(div(float(triggerOutputs()?['body/hv_netto']), 1000), float(coalesce(first(outputs('Materiaalcode_zoeken')?['body/value'])?['hv_prijsperton'], 0)))), ',\"approvedBy\":\"', 'auto', '\"}')))}",
+                          "item/hv_status": 100000000,
+                          "item/hv_pogingen": 0,
+                          "item/hv_volgendepoging": "@utcNow()",
+                          "item/hv_referentie": "@triggerOutputs()?['body/hv_documentnr']",
+                          "item/hv_Weegbon@odata.bind": "/hv_documents(@{triggerOutputs()?['body/hv_documentid']})"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    },
+                    "ERP_bericht_controle": {
+                      "type": "If",
+                      "runAfter": {
+                        "ERP_bericht": [
+                          "Succeeded",
+                          "Failed",
+                          "Skipped",
+                          "TimedOut"
+                        ]
+                      },
+                      "expression": {
+                        "equals": [
+                          "@and(equals(actions('ERP_bericht')?['status'], 'Failed'), not(or(contains(string(outputs('ERP_bericht')), 'already exists'), contains(string(outputs('ERP_bericht')), '0x80060892'))))",
+                          true
+                        ]
+                      },
+                      "actions": {
+                        "ERP_bericht_mislukt": {
+                          "type": "Terminate",
+                          "inputs": {
+                            "runStatus": "Failed",
+                            "runError": {
+                              "code": "HV-OUTBOX",
+                              "message": "ERP_bericht: bericht kon niet in de outbox"
+                            }
+                          },
+                          "runAfter": {}
+                        }
+                      },
+                      "else": {
+                        "actions": {}
+                      }
+                    },
+                    "In_wachtrij": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "UpdateOnlyRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_documents",
+                          "recordId": "@triggerOutputs()?['body/hv_documentid']",
+                          "item/hv_status": 100000008,
+                          "item/hv_erpreferentie": "@{if(equals(actions('ERP_bericht')?['status'], 'Succeeded'), concat('wb-', triggerOutputs()?['body/hv_bonnummer'], ' (in outbox)'), concat('wb-', triggerOutputs()?['body/hv_bonnummer'], ' (al in outbox, idempotent)'))}"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {
+                        "ERP_bericht_controle": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "Nazicht": {
+                  "case": "nazicht",
+                  "actions": {
+                    "Melding_administratie": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_meldings",
+                          "item/hv_titel": "@{concat('Weegbon ', triggerOutputs()?['body/hv_documentnr'], ' nakijken')}",
+                          "item/hv_tekst": "@{concat('Regels: ', join(body('Afgegane_regels'), ', '), '. Open de bon in Weegbon Nakijken.')}",
+                          "item/hv_rol": "Administratie recyclage",
+                          "item/hv_soort": 100000001,
+                          "item/hv_kanaal": 100000000,
+                          "item/hv_status": 100000000,
+                          "item/hv_bron": "HV-DI-01",
+                          "item/hv_referentie": "@triggerOutputs()?['body/hv_documentnr']",
+                          "item/hv_link": "@{concat('/main.aspx?pagetype=entityrecord&etn=hv_document&id=', triggerOutputs()?['body/hv_documentid'])}"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    }
+                  }
+                },
+                "Escalatie": {
+                  "case": "escalatie",
+                  "actions": {
+                    "Melding_milieu": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_meldings",
+                          "item/hv_titel": "@{concat('Escalatie weegbon ', triggerOutputs()?['body/hv_documentnr'], ': materiaal ', triggerOutputs()?['body/hv_materiaal'])}",
+                          "item/hv_tekst": "@{concat('Regels: ', join(body('Afgegane_regels'), ', '), '. Alleen de milieucoördinator beslist (weigeren).')}",
+                          "item/hv_rol": "Milieucoördinator",
+                          "item/hv_soort": 100000001,
+                          "item/hv_kanaal": 100000000,
+                          "item/hv_status": 100000000,
+                          "item/hv_bron": "HV-DI-01",
+                          "item/hv_referentie": "@triggerOutputs()?['body/hv_documentnr']",
+                          "item/hv_link": "@{concat('/main.aspx?pagetype=entityrecord&etn=hv_document&id=', triggerOutputs()?['body/hv_documentid'])}"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    }
+                  }
+                },
+                "Dubbel": {
+                  "case": "dubbel",
+                  "actions": {
+                    "Melding_dubbel": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_meldings",
+                          "item/hv_titel": "@{concat('Dubbele bon ', triggerOutputs()?['body/hv_bonnummer'], ' tegengehouden')}",
+                          "item/hv_tekst": "@{concat(triggerOutputs()?['body/hv_documentnr'], ' is niet geboekt: het bonnummer was al ontvangen.')}",
+                          "item/hv_rol": "Administratie recyclage",
+                          "item/hv_soort": 100000000,
+                          "item/hv_kanaal": 100000000,
+                          "item/hv_status": 100000000,
+                          "item/hv_bron": "HV-DI-01",
+                          "item/hv_referentie": "@triggerOutputs()?['body/hv_documentnr']",
+                          "item/hv_link": "@{concat('/main.aspx?pagetype=entityrecord&etn=hv_document&id=', triggerOutputs()?['body/hv_documentid'])}"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    }
+                  }
+                }
+              },
+              "default": {
+                "actions": {}
+              }
+            }
+          },
+          "runAfter": {}
+        },
+        "Bij_fout": {
+          "type": "Scope",
+          "runAfter": {
+            "Probeer": [
+              "Failed",
+              "TimedOut"
+            ]
+          },
+          "actions": {
+            "Mislukte_stappen": {
+              "type": "Query",
+              "inputs": {
+                "from": "@result('Probeer')",
+                "where": "@equals(item()?['status'], 'Failed')"
+              },
+              "runAfter": {}
+            },
+            "Foutnamen": {
+              "type": "Select",
+              "inputs": {
+                "from": "@body('Mislukte_stappen')",
+                "select": "@item()?['name']"
+              },
+              "runAfter": {
+                "Mislukte_stappen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Foutmelding": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_meldings",
+                  "item/hv_titel": "@{concat('HV-DI-01 mislukt', if(empty(string(triggerOutputs()?['body/hv_documentnr'])), '', concat(' · ', string(triggerOutputs()?['body/hv_documentnr']))))}",
+                  "item/hv_tekst": "@{concat('Mislukte stap: ', join(body('Foutnamen'), ', '), '. ', coalesce(first(body('Mislukte_stappen'))?['error']?['message'], ''))}",
+                  "item/hv_rol": "Functioneel beheer",
+                  "item/hv_soort": 100000003,
+                  "item/hv_kanaal": 100000000,
+                  "item/hv_status": 100000000,
+                  "item/hv_bron": "HV-DI-01",
+                  "item/hv_referentie": "@{string(triggerOutputs()?['body/hv_documentnr'])}",
+                  "item/hv_link": "@{concat('https://make.powerautomate.com/environments/', workflow()?['tags']?['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']?['name'])}"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Foutnamen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Status_fout": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateOnlyRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_documents",
+                  "recordId": "@triggerOutputs()?['body/hv_documentid']",
+                  "item/hv_status": 100000009
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Foutmelding": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Run_mislukt": {
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed",
+                "runError": {
+                  "code": "HV-FOUT",
+                  "message": "Zie de Fout-melding in de backoffice (Beheer › Meldingen)."
+                }
+              },
+              "runAfter": {
+                "Status_fout": [
+                  "Succeeded",
+                  "Failed",
+                  "Skipped",
+                  "TimedOut"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

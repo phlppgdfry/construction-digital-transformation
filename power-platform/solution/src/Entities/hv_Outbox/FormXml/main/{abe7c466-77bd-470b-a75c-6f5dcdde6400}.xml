@@ -7,20 +7,20 @@
     <FormActivationState>1</FormActivationState>
     <form>
       <tabs>
-        <tab verticallayout="true" id="{b3f1969f-fcec-47b9-8d0e-eea5419bcf11}" IsUserDefined="1">
+        <tab verticallayout="true" id="{48ed37c7-53f3-492e-91e4-a399ac5895b8}" IsUserDefined="1">
           <labels>
             <label description="ERP-outbox" languagecode="1033" />
           </labels>
           <columns>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{812c5426-ed12-41ab-ae48-52b83140e883}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{a7495adb-2360-4f5e-8c87-684b8efadea4}">
                   <labels>
                     <label description="Gegevens" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{399e40e6-b222-44a6-84ed-c3ccd0ba437d}">
+                      <cell id="{d4f7b609-c186-4b07-84f0-32b72808ab21}">
                         <labels>
                           <label description="Idempotency-key" languagecode="1033" />
                         </labels>
@@ -28,7 +28,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{6bb7b869-2a37-4657-a333-c3870c8d5deb}">
+                      <cell id="{c6d17491-1d62-4fe3-a8e3-1e87f86726b7}">
                         <labels>
                           <label description="Aanvraag" languagecode="1033" />
                         </labels>
@@ -36,7 +36,23 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{7b98e180-701c-4ba2-9483-33f4a9f65921}">
+                      <cell id="{d6c5bd7f-9bf3-427e-80a5-6f57b0696b9d}">
+                        <labels>
+                          <label description="Weegbon" languagecode="1033" />
+                        </labels>
+                        <control id="hv_weegbon" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="hv_weegbon" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{79f603b8-db7d-47e3-ae3d-662a0fe8a363}">
+                        <labels>
+                          <label description="Schadeclaim" languagecode="1033" />
+                        </labels>
+                        <control id="hv_schadeclaim" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="hv_schadeclaim" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{de80b1f0-69d7-4806-80ef-e053a045a7ac}">
                         <labels>
                           <label description="Endpoint" languagecode="1033" />
                         </labels>
@@ -44,19 +60,11 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{d2761c2d-bbcb-4a25-aa01-043ed710c30f}">
+                      <cell id="{59976986-47c0-4155-8a24-41b5ec12e90f}">
                         <labels>
                           <label description="Body (JSON)" languagecode="1033" />
                         </labels>
                         <control id="hv_body" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="hv_body" />
-                      </cell>
-                    </row>
-                    <row>
-                      <cell id="{e92d1892-ee8f-4352-849d-7bf9e99dfbee}">
-                        <labels>
-                          <label description="Status" languagecode="1033" />
-                        </labels>
-                        <control id="hv_status" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_status" />
                       </cell>
                     </row>
                   </rows>
@@ -65,13 +73,21 @@
             </column>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{c6f0e232-f450-443e-b49d-42b1cc5f1f7e}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{bcc51576-2f5c-4d87-8270-5dc8ad2c585b}">
                   <labels>
                     <label description="Details" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{8fb84ce2-fae7-44b9-9aa0-97267fbaa20a}">
+                      <cell id="{1ba39fc0-f15a-4c92-beb6-2eb7512d72f3}">
+                        <labels>
+                          <label description="Status" languagecode="1033" />
+                        </labels>
+                        <control id="hv_status" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_status" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5eeac7ec-d7b6-4dac-9609-eb75b249cefc}">
                         <labels>
                           <label description="Pogingen" languagecode="1033" />
                         </labels>
@@ -79,7 +95,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{a7fbefd8-f7b4-48a5-83ae-2990c5daf6e4}">
+                      <cell id="{1d7d159e-187b-4e9b-897c-32be056fbc25}">
                         <labels>
                           <label description="Volgende poging" languagecode="1033" />
                         </labels>
@@ -87,7 +103,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{eeb5c0b3-3103-48a7-8fbc-89230d715ac5}">
+                      <cell id="{0bd54782-b0ab-4aa0-a36e-3c35bc31e1c8}">
                         <labels>
                           <label description="Laatste fout" languagecode="1033" />
                         </labels>
@@ -95,7 +111,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{dc6d419b-c25a-4e03-9737-25e7f6a4a6aa}">
+                      <cell id="{9d89e291-9ef7-400c-b230-b2ea3c8343b1}">
                         <labels>
                           <label description="Referentie" languagecode="1033" />
                         </labels>

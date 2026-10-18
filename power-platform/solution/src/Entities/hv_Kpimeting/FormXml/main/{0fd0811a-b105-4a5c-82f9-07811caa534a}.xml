@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{0fd0811a-b105-4a5c-82f9-07811caa534a}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{2429229e-acbb-4ec1-a0da-0bacaa00c428}" IsUserDefined="1">
+          <labels>
+            <label description="KPI-meting" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{a0cc7c70-d59d-470d-90d1-6718360ce8a1}">
+                  <labels>
+                    <label description="Gegevens" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{605b05d4-2c7a-4a7c-8da7-565df1b3cba9}">
+                        <labels>
+                          <label description="Naam" languagecode="1033" />
+                        </labels>
+                        <control id="hv_naam" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_naam" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{cb69c815-186f-41de-b406-43649d1ac1f1}">
+                        <labels>
+                          <label description="Maand" languagecode="1033" />
+                        </labels>
+                        <control id="hv_maand" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="hv_maand" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{68b26393-819e-4ca6-909a-6dbb1e7394ff}">
+                        <labels>
+                          <label description="Case" languagecode="1033" />
+                        </labels>
+                        <control id="hv_case" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_case" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c0919e5d-d510-4800-a0a1-f551204691ba}">
+                        <labels>
+                          <label description="KPI" languagecode="1033" />
+                        </labels>
+                        <control id="hv_kpi" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_kpi" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{6dfda56a-530e-47b3-a6fd-8d0b422b08c4}">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{74d7c89a-f1f3-44f0-9e5f-665592eb080b}">
+                        <labels>
+                          <label description="Waarde" languagecode="1033" />
+                        </labels>
+                        <control id="hv_waarde" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="hv_waarde" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{3501a4cc-1387-4055-a8c5-8d7cd9e42da6}">
+                        <labels>
+                          <label description="Eenheid" languagecode="1033" />
+                        </labels>
+                        <control id="hv_eenheid" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_eenheid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5c9828bc-7967-4efa-a394-3958240f2313}">
+                        <labels>
+                          <label description="Bron" languagecode="1033" />
+                        </labels>
+                        <control id="hv_bron" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_bron" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="KPI-meting" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

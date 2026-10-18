@@ -7,20 +7,20 @@
     <FormActivationState>1</FormActivationState>
     <form>
       <tabs>
-        <tab verticallayout="true" id="{78bafdc3-30b0-455c-9572-95f9e399adbb}" IsUserDefined="1">
+        <tab verticallayout="true" id="{a64adf0f-4df0-44a5-a5ec-0aacb28dfe53}" IsUserDefined="1">
           <labels>
             <label description="Afstand werf–depot" languagecode="1033" />
           </labels>
           <columns>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{f8f81ec3-9e86-4ca1-ab8b-c72a8ee634af}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{018ac011-b9cc-4119-9b0b-46cd823f6733}">
                   <labels>
                     <label description="Gegevens" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{77490c34-30ef-44ed-b435-ecce88559064}">
+                      <cell id="{18f1b7a9-b3bc-4558-8567-d6c5483d335e}">
                         <labels>
                           <label description="Naam" languagecode="1033" />
                         </labels>
@@ -28,7 +28,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{88a71f34-87b2-4601-a26b-52a3002f2d11}">
+                      <cell id="{cc2f4926-6e81-48a2-bb86-a99a567acba6}">
                         <labels>
                           <label description="Werf" languagecode="1033" />
                         </labels>
@@ -41,13 +41,13 @@
             </column>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{cb2a09d1-7ecf-4881-9327-cf399ec9a206}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{29343011-2db4-4606-b2cd-2ca837dd8f8b}">
                   <labels>
                     <label description="Details" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{70ad6259-af2c-4351-95c0-df23300c1304}">
+                      <cell id="{3a5de4ea-eea6-4095-9a43-1a91b37bc84c}">
                         <labels>
                           <label description="Depot" languagecode="1033" />
                         </labels>
@@ -55,7 +55,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{f2290c0e-4896-46b7-96fe-9c6a23743da7}">
+                      <cell id="{577c8988-f31f-4227-a21a-a153541d6273}">
                         <labels>
                           <label description="Kilometer" languagecode="1033" />
                         </labels>

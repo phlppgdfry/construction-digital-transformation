@@ -1155,6 +1155,11 @@
                   <label description="Fout" languagecode="1033" />
                 </labels>
               </option>
+              <option value="100000008" IsHidden="0">
+                <labels>
+                  <label description="In wachtrij ERP" languagecode="1033" />
+                </labels>
+              </option>
             </options>
           </optionset>
           <displaynames>

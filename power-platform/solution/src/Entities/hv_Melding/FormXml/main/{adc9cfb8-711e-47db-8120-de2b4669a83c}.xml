@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{adc9cfb8-711e-47db-8120-de2b4669a83c}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{a11a48b2-57a7-4013-a6fa-a5ebb30ae2ed}" IsUserDefined="1">
+          <labels>
+            <label description="Melding" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{57b9cd11-d2bb-4c14-87fb-a92ae6926608}">
+                  <labels>
+                    <label description="Gegevens" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{5df0010d-da4c-4a9a-915b-66e67c9383d2}">
+                        <labels>
+                          <label description="Titel" languagecode="1033" />
+                        </labels>
+                        <control id="hv_titel" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_titel" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0fb838a6-4905-4f97-9f35-28dcb4880a0f}">
+                        <labels>
+                          <label description="Tekst" languagecode="1033" />
+                        </labels>
+                        <control id="hv_tekst" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="hv_tekst" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5710f5a2-bd36-4cd3-923d-e6b8e974dba4}">
+                        <labels>
+                          <label description="Voor rol" languagecode="1033" />
+                        </labels>
+                        <control id="hv_rol" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_rol" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{8070b440-3a2e-4712-928d-afec586192d7}">
+                        <labels>
+                          <label description="Soort" languagecode="1033" />
+                        </labels>
+                        <control id="hv_soort" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_soort" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{9513fa49-d9aa-4611-8908-3bfc3828c43d}">
+                        <labels>
+                          <label description="Kanaal" languagecode="1033" />
+                        </labels>
+                        <control id="hv_kanaal" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_kanaal" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{f0698f46-8a3a-4e80-9799-e354f0685a3c}">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{ee17134f-483a-41de-9739-915fb03afb12}">
+                        <labels>
+                          <label description="Status" languagecode="1033" />
+                        </labels>
+                        <control id="hv_status" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="hv_status" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{47a20157-974a-40bf-8a4f-17c8c1207d8b}">
+                        <labels>
+                          <label description="Bron (flow)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_bron" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_bron" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c2fb277e-0c45-427f-a1ec-cd489a92eba3}">
+                        <labels>
+                          <label description="Referentie" languagecode="1033" />
+                        </labels>
+                        <control id="hv_referentie" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_referentie" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{66741ebf-96f0-40e7-96af-6b1ddde59bb8}">
+                        <labels>
+                          <label description="Link" languagecode="1033" />
+                        </labels>
+                        <control id="hv_link" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_link" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Melding" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

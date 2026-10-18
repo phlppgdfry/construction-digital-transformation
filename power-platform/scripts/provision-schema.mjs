@@ -93,7 +93,7 @@ async function ensureLookups(t) {
       "@odata.type": "Microsoft.Dynamics.CRM.OneToManyRelationshipMetadata",
       SchemaName: `hv_${target.replace(/^hv_/, "")}_${t.name.replace(/^hv_/, "")}_${name.replace(/^hv_/, "")}`,
       ReferencedEntity: target, ReferencingEntity: t.name,
-      CascadeConfiguration: { Assign: "NoCascade", Delete: target === "hv_schadeclaim" || target === "hv_materiaalaanvraag" ? "Cascade" : "RemoveLink", Merge: "NoCascade", Reparent: "NoCascade", Share: "NoCascade", Unshare: "NoCascade" },
+      CascadeConfiguration: { Assign: "NoCascade", Delete: (target === "hv_schadeclaim" || target === "hv_materiaalaanvraag") && !(t.name === "hv_outbox" && target === "hv_schadeclaim") ? "Cascade" : "RemoveLink", Merge: "NoCascade", Reparent: "NoCascade", Share: "NoCascade", Unshare: "NoCascade" },
       Lookup: { "@odata.type": "Microsoft.Dynamics.CRM.LookupAttributeMetadata", AttributeType: "Lookup", AttributeTypeName: { Value: "LookupType" }, SchemaName: schemaName(name), DisplayName: label(display), RequiredLevel: { Value: "None" } },
     });
     log(`  ↳ lookup ${t.name}.${name} → ${target}`);

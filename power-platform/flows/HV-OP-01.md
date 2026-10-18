@@ -68,6 +68,10 @@ Deze flow meldt zijn eigen fouten **niet** als melding: dat zou een lus kunnen g
 
 Meldingen per bron, soort en status: [VERIFICATION.md](../VERIFICATION.md#meldingen).
 
+![In-app-notificaties in de backoffice](../screenshots/33-in-app-notificaties.jpg)
+
+![Meldingen in de backoffice](../screenshots/32-backoffice-meldingen.jpg)
+
 ## Ontwerp en gebouwd
 
 | | Doelontwerp | Gebouwd |

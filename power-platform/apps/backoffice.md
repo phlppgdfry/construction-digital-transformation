@@ -64,11 +64,15 @@ De twee batengrafieken lezen de tabel *KPI-meting*. Daar staat nu de simulatie (
 
 Klik op een stuk van een grafiek en je ziet de rijen erachter. Opgebouwd door [`provision-dashboard.mjs`](../scripts/provision-dashboard.mjs) (systeemgrafieken + systeemdashboard, in de solution); de lijst van grafieken staat in [`dashboard-charts.mjs`](../scripts/dashboard-charts.mjs).
 
+![Baten en meldingen op het dashboard](../screenshots/35-backoffice-baten-en-meldingen.jpg)
+
 ## Meldingen (het belletje)
 
 De flows verwittigen niemand rechtstreeks: ze schrijven een rij in *Melding*, en [HV-OP-01](../flows/HV-OP-01.md) levert die af als **in-app-notificatie** in deze app (het belletje rechtsboven), met een knop *Openen* naar het dossier, de bon of de aanvraag. Daarvoor staat de app-instelling *in-app notifications* aan; dat is een instelling van deze app, geen tenantinstelling. Externe partijen (verzekeraar, klant, vervoerder) krijgen een melding met kanaal *Extern*: dat kanaal is in de ontwikkelomgeving niet aangesloten.
 
 ## Regels wijzigen
+
+![Bedrijfsregels in de backoffice](../screenshots/34-backoffice-bedrijfsregels.jpg)
 
 *Beheer* → *Bedrijfsregels* toont elke regel in gewone taal, met de parameter en de eigenaar. Een parameter wijzigen is een configuratiewijziging: de volgende run van elke flow gebruikt de nieuwe waarde. Wie mag wijzigen en hoe de repo daarna volgt, staat in het [wijzigingsbeheer](../../shared-methodology/governance.md#wijzigingsbeheer-voor-requirements-en-regels).
 

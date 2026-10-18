@@ -91,6 +91,10 @@ Deze flow **is** de foutafhandeling van de integratie. Daarnaast:
 
 ![Run tijdens de storing](../screenshots/29-flow-hv-in-01-run-storing.jpg)
 
+*De storingstest liep op de vorige versie van deze flow (toen HV-MA-02, alleen case 03). Hieronder een run van de huidige versie, die de berichten van alle cases verwerkt:*
+
+![Run van HV-IN-01](../screenshots/38-flow-hv-in-01-run.jpg)
+
 ## Beheer
 
 - **Volgen:** backoffice-app → *03 Materiaal* → *ERP-outbox*; filter op *Dead-letter*. Het dashboard toont de outbox per status.

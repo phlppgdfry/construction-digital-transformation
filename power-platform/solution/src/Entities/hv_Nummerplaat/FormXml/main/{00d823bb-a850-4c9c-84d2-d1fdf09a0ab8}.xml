@@ -7,20 +7,20 @@
     <FormActivationState>1</FormActivationState>
     <form>
       <tabs>
-        <tab verticallayout="true" id="{5b0425dd-e71d-453e-bb72-902576299e6c}" IsUserDefined="1">
+        <tab verticallayout="true" id="{7aa1dff7-893b-492d-82ee-71706b708615}" IsUserDefined="1">
           <labels>
             <label description="Nummerplaat" languagecode="1033" />
           </labels>
           <columns>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{6f6e0681-718f-40c1-8f6f-9406385e0f7a}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{aa9f7195-b2e7-4fb3-b574-9e27d6c77ed5}">
                   <labels>
                     <label description="Gegevens" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{fab804e6-9ee6-498f-bfa0-365caf8e7756}">
+                      <cell id="{bc674624-e211-4b29-bb19-e00317e134e3}">
                         <labels>
                           <label description="Nummerplaat" languagecode="1033" />
                         </labels>
@@ -28,7 +28,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{0a7ff85a-0c4a-408c-948c-7595bf126a75}">
+                      <cell id="{78100524-2e1f-413b-a04e-a4789a9048b2}">
                         <labels>
                           <label description="Klant" languagecode="1033" />
                         </labels>
@@ -41,13 +41,13 @@
             </column>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{7ec7a75f-0d64-478b-aea1-beb69d23568e}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{2e67de49-0ca6-4530-9f8f-82f24d6b19fc}">
                   <labels>
                     <label description="Details" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{1e93fcff-14df-49fb-ae76-bad4a01ef187}">
+                      <cell id="{88f42eb1-ce79-42c4-b37c-466b146c8657}">
                         <labels>
                           <label description="Geregistreerde vervoerder" languagecode="1033" />
                         </labels>

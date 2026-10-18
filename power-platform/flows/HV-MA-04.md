@@ -74,10 +74,10 @@ Zie [VERIFICATION.md](../VERIFICATION.md#case-03--materiaalaanvragen-flows-hv-ma
 *Gegenereerd uit [`definitions.mjs`](definitions.mjs) door `npm run build`. Niet met de hand aanpassen.* 16 acties · verbindingen: Microsoft Dataverse · omgevingsvariabelen: geen · regels uit *Bedrijfsregel*: geen.
 
 - **Trigger `Ontvangen`**: Dataverse, rij gewijzigd in *Materiaalaanvraag* (`hv_materiaalaanvraag`); alleen bij wijziging van `hv_status`, voorwaarde `hv_status eq 100000006`
-- `Probeer`: blok: alle stappen hieronder; faalt er één, dan gaat de run naar `Bij_fout`
+- `Outboxfouten`: variabele aanmaken `outboxfouten` (integer)
+- `Probeer`: foutafhandeling (alleen als het blok hierboven faalt)
   - `Werf`: één rij ophalen uit *Werf* · start parallel
   - `Lijnen`: rijen opzoeken in *Aanvraaglijn* · start parallel
-  - `Outboxfouten`: variabele aanmaken `outboxfouten` (integer) · start parallel
   - `Per_lijn`: voor elk item
     - `Verbruik_naar_outbox`: rij toevoegen in *ERP-outbox*: `hv_idempotencykey`, `hv_endpoint`, `hv_body`, `hv_status`, `hv_pogingen`, `hv_volgendepoging`, `hv_referentie`, `hv_Aanvraag`
     - `Verbruik_naar_outbox_controle`: voorwaarde · loopt ook als `Verbruik_naar_outbox` faalt

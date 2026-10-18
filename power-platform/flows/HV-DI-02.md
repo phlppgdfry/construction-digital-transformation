@@ -79,6 +79,8 @@ Geen eigen parameters. Verbinding: `hv_dataverse`. Wie mag goedkeuren, bepaalt d
 
 ![Run van HV-DI-02](../screenshots/24-flow-hv-di-02-run.jpg)
 
+*Run van de vorige versie, die nog rechtstreeks boekte; nu gaat de boeking via de outbox.*
+
 ## Beheer
 
 - **Volgen:** backoffice-app → *01 Weegbonnen*; `hv_reviewopmerking` toont waarom de server een goedkeuring tegenhield.

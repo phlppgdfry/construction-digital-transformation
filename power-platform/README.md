@@ -82,11 +82,23 @@ Elke app-spec beschrijft de schermen, welke tabellen de app leest en schrijft, d
 
 Details per rij: [VERIFICATION.md](VERIFICATION.md).
 
+## De keten in 50 seconden
+
+Een werfleider meldt schade in de werfapp → HV-CL-01 triageert binnen een halve minuut → het dossier staat in de backoffice met tijdlijn → de betrokkenen krijgen een melding → het KPI-dashboard. Echte opname in de ontwikkelomgeving (het e-mailadres van het account is gemaskeerd).
+
+![Van melding tot dashboard](media/keten-melding-tot-dashboard.gif)
+
 ## Screenshots
+
+De screenshots 03 tot 31 tonen de flows vóór de uitbreiding van 18 oktober 2026 (zonder foutblok, zonder outbox voor alle cases). De beslissingen zijn dezelfde gebleven, zoals de [verificatie](VERIFICATION.md) van na de uitbreiding toont. Screenshots 01, 02 en 32 tot 38 tonen de huidige versie.
 
 | | |
 |---|---|
-| ![Solution met 33 objecten](screenshots/01-solution-objecten.jpg) Solution `HalverdijkTransformatie`: 17 tabellen, 7 cloudflows, app, sitemap, 5 omgevingsvariabelen, 2 connection references | ![Zeven flows aan](screenshots/02-cloudflows-aan.jpg) De zeven flows, allemaal **Aan** |
+| ![Solution met 40 objecten](screenshots/01-solution-objecten.jpg) Solution `HalverdijkTransformatie`: 20 tabellen, 14 cloudflows, app, sitemap, dashboard, 1 omgevingsvariabele, 2 connection references | ![Veertien flows aan](screenshots/02-cloudflows-aan.jpg) De veertien flows, allemaal **Aan** |
+| ![Meldingen in de backoffice](screenshots/32-backoffice-meldingen.jpg) *Beheer* → *Meldingen*: elke verwittiging, per bron, soort, kanaal en status | ![In-app-notificaties](screenshots/33-in-app-notificaties.jpg) Het belletje: een *Fout*-melding met de mislukte stap, een actie, een waarschuwing |
+| ![Bedrijfsregels](screenshots/34-backoffice-bedrijfsregels.jpg) *Beheer* → *Bedrijfsregels*: de drempels als data, met eigenaar | ![Baten en meldingen op het dashboard](screenshots/35-backoffice-baten-en-meldingen.jpg) Dashboard: uren vrij en netto resultaat per maand (simulatie), meldingen per soort |
+| ![Foutafhandeling](screenshots/36-flow-foutafhandeling-run.jpg) Een bewust mislukte run: `Probeer` faalt, `Bij_fout` meldt het en zet de status op *Fout* | ![HV-CL-04](screenshots/37-flow-hv-cl-04-run.jpg) HV-CL-04: kosten naar de outbox en recuperatie, `Bij_fout` overgeslagen |
+| ![HV-IN-01](screenshots/38-flow-hv-in-01-run.jpg) HV-IN-01: de outbox voor alle cases, per bericht | |
 | ![Flow-details](screenshots/03-flow-hv-di-01-details.jpg) HV-DI-01: uitvoeringsgeschiedenis, alle runs voltooid | ![Flow-run](screenshots/04-flow-hv-di-01-run.jpg) Eén echte run: opzoekingen parallel, regels, beslissing, boeking |
 | ![Dataverse-tabellen](screenshots/05-dataverse-tabellen.jpg) De Dataverse-tabellen in de solution | ![Weegbon-data](screenshots/06-dataverse-weegbon-data.jpg) Tabel Weegbon met de bevindingen per regel, door de flow geschreven |
 | ![App weegbonnen](screenshots/07-app-weegbonnen.jpg) Backoffice-app: weegbonnen met status, beslissing en ERP-referentie | ![App schadeclaims](screenshots/08-app-schadeclaims.jpg) Schadeclaims met ernst, eigenaar, keten en deadlines |
@@ -97,9 +109,9 @@ Details per rij: [VERIFICATION.md](VERIFICATION.md).
 | ![Nakijken wachtrij](screenshots/19-nakijken-wachtrij.jpg) Weegbon Nakijken: de wachtrij, met de regel per bon en rood na 4 uur | ![DOC-006 met scan](screenshots/20-nakijken-doc006-scan-r03.jpg) DOC-006: de scan toont 18350 kg, de AI las 13350; regel R03 en netto in het rood |
 | ![DOC-006 gecorrigeerd](screenshots/21-nakijken-doc006-gecorrigeerd.jpg) Na de correctie: groen, geen regel faalt meer, goedkeuren mogelijk | ![Asbest bij milieucoördinator](screenshots/22-nakijken-doc013-asbest-milieu.jpg) Asbest: alleen de milieucoördinator ziet de bon, en kan enkel weigeren |
 | ![DOC-006 geboekt](screenshots/23-backoffice-doc006-geboekt.jpg) Backoffice: DOC-006 geboekt met het gecorrigeerde gewicht | ![Run HV-DI-02](screenshots/24-flow-hv-di-02-run.jpg) HV-DI-02: de servercontrole met drie gevallen (dubbel, geweigerd, boeken) |
-| ![Run HV-CL-01](screenshots/25-flow-hv-cl-01-run.jpg) HV-CL-01: triage van een melding | ![Run HV-CL-02](screenshots/26-flow-hv-cl-02-run-wacht.jpg) HV-CL-02: wacht op de goedkeuring van niveau 1 |
-| ![Run HV-CL-03](screenshots/27-flow-hv-cl-03-run.jpg) HV-CL-03: uurlijkse controle, geen te late claims | ![Run HV-MA-01](screenshots/28-flow-hv-ma-01-run.jpg) HV-MA-01: vier opzoekingen parallel, daarna per lijn |
-| ![Run HV-MA-02](screenshots/29-flow-hv-in-01-run-storing.jpg) HV-MA-02 tijdens de storing: tak "ERP niet bereikbaar" | ![KPI-dashboard](screenshots/30-backoffice-kpi-dashboard.jpg) Backoffice: het KPI-dashboard, live op Dataverse |
+| ![Run HV-CL-01](screenshots/25-flow-hv-cl-01-run.jpg) HV-CL-01: triage van een melding | ![Run HV-CL-02](screenshots/26-flow-hv-cl-02-run-wacht.jpg) HV-CL-02 (vorige versie): wacht op de goedkeuring van niveau 1 |
+| ![Run HV-CL-03](screenshots/27-flow-hv-cl-03-run.jpg) HV-CL-03: uurlijkse controle, geen te late claims | ![Run HV-MA-01](screenshots/28-flow-hv-ma-01-run.jpg) HV-MA-01 (vorige versie, nog met goedkeuring en outbox): vier opzoekingen parallel, daarna per lijn |
+| ![Run tijdens de storing](screenshots/29-flow-hv-in-01-run-storing.jpg) De outbox-flow tijdens de storingstest (vorige versie, toen nog HV-MA-02 en alleen case 03): tak "ERP niet bereikbaar" | ![KPI-dashboard](screenshots/30-backoffice-kpi-dashboard.jpg) Backoffice: het KPI-dashboard, live op Dataverse |
 | ![Werfapp schade melden](screenshots/16-werfapp-schade-melden.jpg) Werfapp: schade melden, validatie uit dezelfde regelmotor als de tests | ![Werfapp materiaal](screenshots/17-werfapp-materiaal.jpg) Werfapp: materiaal aanvragen met beschikbaarheid en verwachte route |
 
 ## Opnieuw opbouwen (in een eigen ontwikkelomgeving)

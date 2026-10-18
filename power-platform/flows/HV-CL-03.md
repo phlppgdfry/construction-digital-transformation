@@ -69,6 +69,8 @@ flowchart LR
 
 ![Run van HV-CL-03](../screenshots/27-flow-hv-cl-03-run.jpg)
 
+*Run van de vorige versie, die alleen de beoordelingstermijn bewaakte.*
+
 ## Beheer
 
 - **Volgen:** backoffice-app → *02 Schadeclaims* → dossier → tijdlijn. Dossiers met een dreigende aangifte: weergave op *Aangifte: waarschuwing gestuurd*.

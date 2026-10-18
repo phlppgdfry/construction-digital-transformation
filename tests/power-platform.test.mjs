@@ -4,6 +4,7 @@ import { existsSync, readdirSync } from "node:fs";
 import { json, text } from "./helpers.mjs";
 import { FLOWS, CONNECTION_REFERENCES, NOT_BUILT } from "../power-platform/flows/definitions.mjs";
 import { RULEBOOK } from "../src/rules.mjs";
+import { CHARTS } from "../power-platform/scripts/dashboard-charts.mjs";
 
 const model = json("power-platform/model.json");
 const S = Object.fromEntries(model.tables.map((t) => [t.name, `${t.name}s`]));
@@ -80,11 +81,11 @@ test("the exported solution is in the repo, unpacked and as managed/unmanaged zi
   assert.match(text("power-platform/solution/src/Other/Solution.xml"), /<UniqueName>HalverdijkTransformatie<\/UniqueName>/);
 });
 
-test("the KPI dashboard and its six charts are in the solution export", () => {
+test("the KPI dashboard and all its charts are in the solution export", () => {
   const src = new URL("../power-platform/solution/src/", import.meta.url);
   assert.equal(readdirSync(new URL("Dashboards/", src)).filter((f) => f.endsWith(".xml")).length, 1);
   const charts = readdirSync(new URL("Entities/", src)).flatMap((e) => { try { return readdirSync(new URL(`Entities/${e}/Visualizations/`, src)); } catch { return []; } });
-  assert.equal(charts.length, 6);
+  assert.equal(charts.length, CHARTS.length);
   assert.match(text("power-platform/solution/src/AppModuleSiteMaps/hv_backoffice/AppModuleSiteMap.xml"), /pagetype=dashboard/);
 });
 
@@ -94,7 +95,10 @@ test("VERIFICATION.md records identical results for all three cases", () => {
   assert.match(v, /\*\*5\/5 identiek\*\*/);
   assert.match(v, /\*\*4\/4 identiek\*\*/);
   assert.match(v, /\*\*3\/3 zoals verwacht\.\*\*/);
-  assert.match(v, /\*\*3\/3 zoals verwacht\.\*\*/);
+  assert.match(v, /\*\*5\/5 zoals verwacht\.\*\*/);
+  assert.match(v, /\*\*17\/17 parameters gelijk\.\*\*/);
+  assert.match(v, /\*\*1\/1 zoals verwacht:\*\*/);
+  assert.match(v, /0 mislukt, 0 nog niet verwerkt/);
 });
 
 test("every flow only touches tables of the model (or the two system tables it needs)", () => {
@@ -105,7 +109,8 @@ test("every flow only touches tables of the model (or the two system tables it n
 test("every flow except the notifier runs inside Probeer with a Bij_fout that reports and fails the run", () => {
   for (const f of FLOWS.filter((x) => x.id !== "HV-OP-01")) {
     const a = f.build(S).actions;
-    assert.deepEqual(Object.keys(a), ["Probeer", "Bij_fout"], f.id);
+    assert.deepEqual(Object.keys(a).filter((n) => a[n].type !== "InitializeVariable"), ["Probeer", "Bij_fout"], f.id);
+    for (const n of Object.keys(a.Probeer.actions)) assert.notEqual(a.Probeer.actions[n].type, "InitializeVariable", `${f.id}: ${n} initialises a variable inside a scope`);
     assert.deepEqual(a.Bij_fout.runAfter, { Probeer: ["Failed", "TimedOut"] }, f.id);
     assert.equal(a.Bij_fout.actions.Foutmelding.inputs.parameters["item/hv_rol"], "Functioneel beheer", f.id);
     assert.equal(a.Bij_fout.actions.Run_mislukt.inputs.runStatus, "Failed", f.id);
@@ -168,5 +173,30 @@ test("statuses the flows set exist in the model", () => {
       }
     };
     walk(def.actions);
+  }
+});
+
+test("action names are unique within each flow (Power Automate rejects duplicates anywhere in a definition)", () => {
+  for (const f of FLOWS) {
+    const seen = new Map();
+    const walk = (actions) => {
+      for (const [name, a] of Object.entries(actions)) {
+        seen.set(name, (seen.get(name) ?? 0) + 1);
+        for (const nested of [a.actions, a.else?.actions, ...Object.values(a.cases ?? {}).map((c) => c.actions), a.default?.actions]) if (nested) walk(nested);
+      }
+    };
+    walk(f.build(S).actions);
+    const dup = [...seen].filter(([, n]) => n > 1).map(([k]) => k);
+    assert.deepEqual(dup, [], `${f.id}: ${dup.join(", ")}`);
+  }
+});
+
+test("no expression nests @{…} inside another expression", () => {
+  for (const f of FLOWS) {
+    for (const m of JSON.stringify(f.build(S)).matchAll(/"(@[^"]*)"/g)) {
+      const v = m[1];
+      if (v.startsWith("@{")) continue;
+      assert.ok(!v.slice(1).includes("@{"), `${f.id}: ${v.slice(0, 80)}`);
+    }
   }
 });

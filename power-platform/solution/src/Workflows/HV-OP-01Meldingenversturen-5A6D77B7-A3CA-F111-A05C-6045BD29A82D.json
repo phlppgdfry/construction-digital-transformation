@@ -1,0 +1,235 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "hv_dataverse"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_approvals": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "hv_approvals"
+        },
+        "api": {
+          "name": "shared_approvals"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "Melding_aangemaakt": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 1,
+              "subscriptionRequest/entityname": "hv_melding",
+              "subscriptionRequest/scope": 4
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Kanaal": {
+          "type": "If",
+          "runAfter": {},
+          "expression": {
+            "equals": [
+              "@triggerOutputs()?['body/hv_kanaal']",
+              100000000
+            ]
+          },
+          "actions": {
+            "Rol": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_goedkeurders",
+                  "$filter": "hv_rol eq '@{triggerOutputs()?['body/hv_rol']}'",
+                  "$top": 1
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "Gebruiker": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "systemusers",
+                  "$select": "systemuserid",
+                  "$filter": "internalemailaddress eq '@{first(outputs('Rol')?['body/value'])?['hv_email']}' and isdisabled eq false",
+                  "$top": 1
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Rol": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Gevonden": {
+              "type": "If",
+              "runAfter": {
+                "Gebruiker": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "greater": [
+                  "@length(outputs('Gebruiker')?['body/value'])",
+                  0
+                ]
+              },
+              "actions": {
+                "Notificatie": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "CreateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "appnotifications",
+                      "item/title": "@{triggerOutputs()?['body/hv_titel']}",
+                      "item/body": "@{coalesce(triggerOutputs()?['body/hv_tekst'], '')}",
+                      "item/ownerid@odata.bind": "/systemusers(@{first(outputs('Gebruiker')?['body/value'])?['systemuserid']})",
+                      "item/icontype": "@if(equals(triggerOutputs()?['body/hv_soort'], 100000003), 100000002, if(equals(triggerOutputs()?['body/hv_soort'], 100000002), 100000003, if(equals(triggerOutputs()?['body/hv_soort'], 100000001), 100000004, 100000000)))",
+                      "item/toasttype": 200000000,
+                      "item/ttlinseconds": 1209600,
+                      "item/data": "@if(empty(coalesce(triggerOutputs()?['body/hv_link'], '')), null, string(json(concat('{\"actions\":[{\"title\":\"Openen\",\"data\":{\"url\":\"', triggerOutputs()?['body/hv_link'], '\",\"navigationTarget\":\"newWindow\"}}]}'))))"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {}
+                },
+                "Verstuurd": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "UpdateOnlyRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "hv_meldings",
+                      "recordId": "@triggerOutputs()?['body/hv_meldingid']",
+                      "item/hv_status": 100000001
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {
+                    "Notificatie": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              },
+              "else": {
+                "actions": {
+                  "Geen_gebruiker": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "host": {
+                        "connectionName": "shared_commondataserviceforapps",
+                        "operationId": "UpdateOnlyRecord",
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                      },
+                      "parameters": {
+                        "entityName": "hv_meldings",
+                        "recordId": "@triggerOutputs()?['body/hv_meldingid']",
+                        "item/hv_status": 100000003,
+                        "item/hv_tekst": "@{concat(coalesce(triggerOutputs()?['body/hv_tekst'], ''), ' [Niet verstuurd: geen actieve gebruiker voor rol ', triggerOutputs()?['body/hv_rol'], ' in Goedkeurders.]')}"
+                      },
+                      "authentication": "@parameters('$authentication')"
+                    },
+                    "runAfter": {}
+                  }
+                }
+              }
+            }
+          },
+          "else": {
+            "actions": {
+              "Extern": {
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "host": {
+                    "connectionName": "shared_commondataserviceforapps",
+                    "operationId": "UpdateOnlyRecord",
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                  },
+                  "parameters": {
+                    "entityName": "hv_meldings",
+                    "recordId": "@triggerOutputs()?['body/hv_meldingid']",
+                    "item/hv_status": 100000002
+                  },
+                  "authentication": "@parameters('$authentication')"
+                },
+                "runAfter": {}
+              }
+            }
+          }
+        },
+        "Bij_fout": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "UpdateOnlyRecord",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "hv_meldings",
+              "recordId": "@triggerOutputs()?['body/hv_meldingid']",
+              "item/hv_status": 100000003
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "runAfter": {
+            "Kanaal": [
+              "Failed",
+              "TimedOut"
+            ]
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

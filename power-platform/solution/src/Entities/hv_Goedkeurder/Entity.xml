@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Entity xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Name LocalizedName="Goedkeurder" OriginalName="Goedkeurder">hv_Goedkeurder</Name>
+  <Name LocalizedName="Rol (goedkeurder en ontvanger)" OriginalName="Goedkeurder">hv_Goedkeurder</Name>
   <EntityInfo>
     <entity Name="hv_Goedkeurder">
       <LocalizedNames>
-        <LocalizedName description="Goedkeurder" languagecode="1033" />
+        <LocalizedName description="Rol (goedkeurder en ontvanger)" languagecode="1033" />
       </LocalizedNames>
       <LocalizedCollectionNames>
-        <LocalizedCollectionName description="Goedkeurders" languagecode="1033" />
+        <LocalizedCollectionName description="Rollen (goedkeurders en ontvangers)" languagecode="1033" />
       </LocalizedCollectionNames>
       <Descriptions>
         <Description description="Goedkeurder — Halverdijk portfolio (fictief)" languagecode="1033" />

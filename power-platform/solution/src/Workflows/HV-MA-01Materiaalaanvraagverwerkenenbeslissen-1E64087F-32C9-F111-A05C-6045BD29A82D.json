@@ -1,0 +1,974 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "hv_dataverse"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_approvals": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "hv_approvals"
+        },
+        "api": {
+          "name": "shared_approvals"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "Aanvraag_ingediend": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 4,
+              "subscriptionRequest/entityname": "hv_materiaalaanvraag",
+              "subscriptionRequest/scope": 4,
+              "subscriptionRequest/filteringattributes": "hv_status",
+              "subscriptionRequest/filterexpression": "hv_status eq 100000001"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Berichten": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "berichten",
+                "type": "array",
+                "value": []
+              }
+            ]
+          },
+          "runAfter": {}
+        },
+        "Waarde": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "waarde",
+                "type": "float",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Berichten": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Aankoop": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "aankoop",
+                "type": "boolean",
+                "value": false
+              }
+            ]
+          },
+          "runAfter": {
+            "Waarde": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Rest": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "rest",
+                "type": "float",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Aankoop": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Toewijzing": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "toewijzing",
+                "type": "string",
+                "value": ""
+              }
+            ]
+          },
+          "runAfter": {
+            "Rest": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Cat_init_100000000": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "cat_100000000",
+                "type": "float",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Toewijzing": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Cat_init_100000001": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "cat_100000001",
+                "type": "float",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Cat_init_100000000": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Cat_init_100000002": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "cat_100000002",
+                "type": "float",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Cat_init_100000001": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Cat_init_100000003": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "cat_100000003",
+                "type": "float",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Cat_init_100000002": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Cat_init_100000004": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "cat_100000004",
+                "type": "float",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Cat_init_100000003": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Probeer": {
+          "type": "Scope",
+          "actions": {
+            "Regels": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_regels",
+                  "$select": "hv_code,hv_waarde",
+                  "$filter": "hv_waarde ne null"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "Regelparen": {
+              "type": "Select",
+              "inputs": {
+                "from": "@outputs('Regels')?['body/value']",
+                "select": "@concat('\"', item()?['hv_code'], '\":', string(item()?['hv_waarde']))"
+              },
+              "runAfter": {
+                "Regels": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Parameters": {
+              "type": "Compose",
+              "inputs": "@json(concat('{', join(body('Regelparen'), ','), '}'))",
+              "runAfter": {
+                "Regelparen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Werf": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "GetItem",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_werfs",
+                  "recordId": "@triggerOutputs()?['body/_hv_werf_value']",
+                  "$select": "hv_werfnr,hv_naam,hv_actief"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "Lijnen": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_aanvraaglijns",
+                  "$filter": "_hv_aanvraag_value eq @{triggerOutputs()?['body/hv_materiaalaanvraagid']}",
+                  "$expand": "hv_Artikel($select=hv_artikelid,hv_artikelnr,hv_eenheid,hv_eenheidsprijs,hv_categorie,hv_bron,hv_alternatief,hv_opbestelling)"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "Afstanden": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_afstands",
+                  "$filter": "_hv_werf_value eq @{triggerOutputs()?['body/_hv_werf_value']}",
+                  "$orderby": "hv_km asc"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "Budgetten": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_werfbudgets",
+                  "$filter": "_hv_werf_value eq @{triggerOutputs()?['body/_hv_werf_value']}"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "Per_lijn": {
+              "type": "Foreach",
+              "foreach": "@outputs('Lijnen')?['body/value']",
+              "runAfter": {
+                "Werf": [
+                  "Succeeded"
+                ],
+                "Lijnen": [
+                  "Succeeded"
+                ],
+                "Afstanden": [
+                  "Succeeded"
+                ],
+                "Budgetten": [
+                  "Succeeded"
+                ],
+                "Parameters": [
+                  "Succeeded"
+                ]
+              },
+              "runtimeConfiguration": {
+                "concurrency": {
+                  "repetitions": 1
+                }
+              },
+              "actions": {
+                "Lijnwaarde": {
+                  "type": "Compose",
+                  "inputs": "@mul(float(items('Per_lijn')?['hv_hoeveelheid']), float(items('Per_lijn')?['hv_Artikel']?['hv_eenheidsprijs']))",
+                  "runAfter": {}
+                },
+                "Waarde_tellen": {
+                  "type": "IncrementVariable",
+                  "inputs": {
+                    "name": "waarde",
+                    "value": "@outputs('Lijnwaarde')"
+                  },
+                  "runAfter": {
+                    "Lijnwaarde": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Categorie_tellen": {
+                  "type": "Switch",
+                  "runAfter": {
+                    "Lijnwaarde": [
+                      "Succeeded"
+                    ]
+                  },
+                  "expression": "@string(items('Per_lijn')?['hv_Artikel']?['hv_categorie'])",
+                  "cases": {
+                    "Cat_100000000": {
+                      "case": "100000000",
+                      "actions": {
+                        "Tel_100000000": {
+                          "type": "IncrementVariable",
+                          "inputs": {
+                            "name": "cat_100000000",
+                            "value": "@outputs('Lijnwaarde')"
+                          },
+                          "runAfter": {}
+                        }
+                      }
+                    },
+                    "Cat_100000001": {
+                      "case": "100000001",
+                      "actions": {
+                        "Tel_100000001": {
+                          "type": "IncrementVariable",
+                          "inputs": {
+                            "name": "cat_100000001",
+                            "value": "@outputs('Lijnwaarde')"
+                          },
+                          "runAfter": {}
+                        }
+                      }
+                    },
+                    "Cat_100000002": {
+                      "case": "100000002",
+                      "actions": {
+                        "Tel_100000002": {
+                          "type": "IncrementVariable",
+                          "inputs": {
+                            "name": "cat_100000002",
+                            "value": "@outputs('Lijnwaarde')"
+                          },
+                          "runAfter": {}
+                        }
+                      }
+                    },
+                    "Cat_100000003": {
+                      "case": "100000003",
+                      "actions": {
+                        "Tel_100000003": {
+                          "type": "IncrementVariable",
+                          "inputs": {
+                            "name": "cat_100000003",
+                            "value": "@outputs('Lijnwaarde')"
+                          },
+                          "runAfter": {}
+                        }
+                      }
+                    },
+                    "Cat_100000004": {
+                      "case": "100000004",
+                      "actions": {
+                        "Tel_100000004": {
+                          "type": "IncrementVariable",
+                          "inputs": {
+                            "name": "cat_100000004",
+                            "value": "@outputs('Lijnwaarde')"
+                          },
+                          "runAfter": {}
+                        }
+                      }
+                    }
+                  },
+                  "default": {
+                    "actions": {}
+                  }
+                },
+                "Toewijzing_leeg": {
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "toewijzing",
+                    "value": ""
+                  },
+                  "runAfter": {
+                    "Waarde_tellen": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Bron": {
+                  "type": "If",
+                  "runAfter": {
+                    "Toewijzing_leeg": [
+                      "Succeeded"
+                    ],
+                    "Categorie_tellen": [
+                      "Succeeded"
+                    ]
+                  },
+                  "expression": {
+                    "equals": [
+                      "@items('Per_lijn')?['hv_Artikel']?['hv_bron']",
+                      100000001
+                    ]
+                  },
+                  "actions": {
+                    "Extern_markeren": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "aankoop",
+                        "value": true
+                      },
+                      "runAfter": {}
+                    },
+                    "Extern_bericht": {
+                      "type": "AppendToArrayVariable",
+                      "inputs": {
+                        "name": "berichten",
+                        "value": {
+                          "key": "@{concat(triggerOutputs()?['body/hv_aanvraagnr'], '-', items('Per_lijn')?['hv_Artikel']?['hv_artikelnr'], '-PR')}",
+                          "endpoint": "purchase-requisitions",
+                          "body": {
+                            "artikel": "@{items('Per_lijn')?['hv_Artikel']?['hv_artikelnr']}",
+                            "hoeveelheid": "@items('Per_lijn')?['hv_hoeveelheid']",
+                            "werf": "@{outputs('Werf')?['body/hv_werfnr']}",
+                            "bedrag": "@outputs('Lijnwaarde')"
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Extern_markeren": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Lijn_extern": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "UpdateOnlyRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_aanvraaglijns",
+                          "recordId": "@items('Per_lijn')?['hv_aanvraaglijnid']",
+                          "item/hv_waarde": "@outputs('Lijnwaarde')",
+                          "item/hv_aankoop": "@items('Per_lijn')?['hv_hoeveelheid']",
+                          "item/hv_tekort": 0,
+                          "item/hv_toewijzing": "Extern artikel: aankoopaanvraag",
+                          "item/hv_alternatief": "@{if(empty(coalesce(items('Per_lijn')?['hv_Artikel']?['hv_alternatief'], '')), '', concat('Gerecycleerd alternatief ', items('Per_lijn')?['hv_Artikel']?['hv_alternatief'], ' — projectleider beslist'))}"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {
+                        "Extern_bericht": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  },
+                  "else": {
+                    "actions": {
+                      "Rest_init": {
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "rest",
+                          "value": "@float(items('Per_lijn')?['hv_hoeveelheid'])"
+                        },
+                        "runAfter": {}
+                      },
+                      "Per_depot": {
+                        "type": "Foreach",
+                        "foreach": "@outputs('Afstanden')?['body/value']",
+                        "runAfter": {
+                          "Rest_init": [
+                            "Succeeded"
+                          ]
+                        },
+                        "runtimeConfiguration": {
+                          "concurrency": {
+                            "repetitions": 1
+                          }
+                        },
+                        "actions": {
+                          "Voorraad": {
+                            "type": "OpenApiConnection",
+                            "inputs": {
+                              "host": {
+                                "connectionName": "shared_commondataserviceforapps",
+                                "operationId": "ListRecords",
+                                "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                              },
+                              "parameters": {
+                                "entityName": "hv_voorraads",
+                                "$filter": "_hv_artikel_value eq @{items('Per_lijn')?['hv_Artikel']?['hv_artikelid']} and _hv_depot_value eq @{items('Per_depot')?['_hv_depot_value']}",
+                                "$top": 1
+                              },
+                              "authentication": "@parameters('$authentication')"
+                            },
+                            "runAfter": {}
+                          },
+                          "Beschikbaar": {
+                            "type": "Compose",
+                            "inputs": "@sub(float(coalesce(first(outputs('Voorraad')?['body/value'])?['hv_opvoorraad'], 0)), float(coalesce(first(outputs('Voorraad')?['body/value'])?['hv_gereserveerd'], 0)))",
+                            "runAfter": {
+                              "Voorraad": [
+                                "Succeeded"
+                              ]
+                            }
+                          },
+                          "Neem": {
+                            "type": "Compose",
+                            "inputs": "@min(variables('rest'), max(outputs('Beschikbaar'), 0))",
+                            "runAfter": {
+                              "Beschikbaar": [
+                                "Succeeded"
+                              ]
+                            }
+                          },
+                          "Iets_te_nemen": {
+                            "type": "If",
+                            "runAfter": {
+                              "Neem": [
+                                "Succeeded"
+                              ]
+                            },
+                            "expression": {
+                              "greater": [
+                                "@outputs('Neem')",
+                                0
+                              ]
+                            },
+                            "actions": {
+                              "Toewijzing_tekst": {
+                                "type": "AppendToStringVariable",
+                                "inputs": {
+                                  "name": "toewijzing",
+                                  "value": "@{outputs('Neem')} uit @{last(split(items('Per_depot')?['hv_naam'], '→'))} (@{items('Per_depot')?['hv_km']} km); "
+                                },
+                                "runAfter": {}
+                              },
+                              "Reservatie_bericht": {
+                                "type": "AppendToArrayVariable",
+                                "inputs": {
+                                  "name": "berichten",
+                                  "value": {
+                                    "key": "@{concat(triggerOutputs()?['body/hv_aanvraagnr'], '-', items('Per_lijn')?['hv_Artikel']?['hv_artikelnr'], '-', last(split(items('Per_depot')?['hv_naam'], '→')))}",
+                                    "endpoint": "reservations",
+                                    "body": {
+                                      "voorraad": "@{concat(items('Per_lijn')?['hv_Artikel']?['hv_artikelnr'], '@', last(split(items('Per_depot')?['hv_naam'], '→')))}",
+                                      "artikel": "@{items('Per_lijn')?['hv_Artikel']?['hv_artikelnr']}",
+                                      "hoeveelheid": "@outputs('Neem')",
+                                      "werf": "@{outputs('Werf')?['body/hv_werfnr']}",
+                                      "bedrag": "@mul(outputs('Neem'), float(items('Per_lijn')?['hv_Artikel']?['hv_eenheidsprijs']))"
+                                    }
+                                  }
+                                },
+                                "runAfter": {
+                                  "Toewijzing_tekst": [
+                                    "Succeeded"
+                                  ]
+                                }
+                              },
+                              "Rest_bijwerken": {
+                                "type": "DecrementVariable",
+                                "inputs": {
+                                  "name": "rest",
+                                  "value": "@outputs('Neem')"
+                                },
+                                "runAfter": {
+                                  "Reservatie_bericht": [
+                                    "Succeeded"
+                                  ]
+                                }
+                              }
+                            },
+                            "else": {
+                              "actions": {}
+                            }
+                          }
+                        }
+                      },
+                      "Tekort": {
+                        "type": "If",
+                        "runAfter": {
+                          "Per_depot": [
+                            "Succeeded"
+                          ]
+                        },
+                        "expression": {
+                          "greater": [
+                            "@variables('rest')",
+                            0
+                          ]
+                        },
+                        "actions": {
+                          "Tekort_markeren": {
+                            "type": "SetVariable",
+                            "inputs": {
+                              "name": "aankoop",
+                              "value": true
+                            },
+                            "runAfter": {}
+                          },
+                          "Tekort_bericht": {
+                            "type": "AppendToArrayVariable",
+                            "inputs": {
+                              "name": "berichten",
+                              "value": {
+                                "key": "@{concat(triggerOutputs()?['body/hv_aanvraagnr'], '-', items('Per_lijn')?['hv_Artikel']?['hv_artikelnr'], '-PR')}",
+                                "endpoint": "purchase-requisitions",
+                                "body": {
+                                  "artikel": "@{items('Per_lijn')?['hv_Artikel']?['hv_artikelnr']}",
+                                  "hoeveelheid": "@variables('rest')",
+                                  "werf": "@{outputs('Werf')?['body/hv_werfnr']}",
+                                  "bedrag": "@mul(variables('rest'), float(items('Per_lijn')?['hv_Artikel']?['hv_eenheidsprijs']))"
+                                }
+                              }
+                            },
+                            "runAfter": {
+                              "Tekort_markeren": [
+                                "Succeeded"
+                              ]
+                            }
+                          }
+                        },
+                        "else": {
+                          "actions": {}
+                        }
+                      },
+                      "Lijn_intern": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "host": {
+                            "connectionName": "shared_commondataserviceforapps",
+                            "operationId": "UpdateOnlyRecord",
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                          },
+                          "parameters": {
+                            "entityName": "hv_aanvraaglijns",
+                            "recordId": "@items('Per_lijn')?['hv_aanvraaglijnid']",
+                            "item/hv_waarde": "@outputs('Lijnwaarde')",
+                            "item/hv_tekort": "@variables('rest')",
+                            "item/hv_aankoop": "@variables('rest')",
+                            "item/hv_toewijzing": "@{if(empty(variables('toewijzing')), 'Geen voorraad: aankoop', variables('toewijzing'))}"
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        },
+                        "runAfter": {
+                          "Tekort": [
+                            "Succeeded"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "Budget_100000000": {
+              "type": "Query",
+              "inputs": {
+                "from": "@outputs('Budgetten')?['body/value']",
+                "where": "@equals(item()?['hv_categorie'], 100000000)"
+              },
+              "runAfter": {
+                "Per_lijn": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Budget_100000001": {
+              "type": "Query",
+              "inputs": {
+                "from": "@outputs('Budgetten')?['body/value']",
+                "where": "@equals(item()?['hv_categorie'], 100000001)"
+              },
+              "runAfter": {
+                "Per_lijn": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Budget_100000002": {
+              "type": "Query",
+              "inputs": {
+                "from": "@outputs('Budgetten')?['body/value']",
+                "where": "@equals(item()?['hv_categorie'], 100000002)"
+              },
+              "runAfter": {
+                "Per_lijn": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Budget_100000003": {
+              "type": "Query",
+              "inputs": {
+                "from": "@outputs('Budgetten')?['body/value']",
+                "where": "@equals(item()?['hv_categorie'], 100000003)"
+              },
+              "runAfter": {
+                "Per_lijn": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Budget_100000004": {
+              "type": "Query",
+              "inputs": {
+                "from": "@outputs('Budgetten')?['body/value']",
+                "where": "@equals(item()?['hv_categorie'], 100000004)"
+              },
+              "runAfter": {
+                "Per_lijn": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Budget_overschreden": {
+              "type": "Compose",
+              "inputs": "@or(greater(variables('cat_100000000'), float(coalesce(first(body('Budget_100000000'))?['hv_budget'], 0))), greater(variables('cat_100000001'), float(coalesce(first(body('Budget_100000001'))?['hv_budget'], 0))), greater(variables('cat_100000002'), float(coalesce(first(body('Budget_100000002'))?['hv_budget'], 0))), greater(variables('cat_100000003'), float(coalesce(first(body('Budget_100000003'))?['hv_budget'], 0))), greater(variables('cat_100000004'), float(coalesce(first(body('Budget_100000004'))?['hv_budget'], 0))))",
+              "runAfter": {
+                "Budget_100000000": [
+                  "Succeeded"
+                ],
+                "Budget_100000001": [
+                  "Succeeded"
+                ],
+                "Budget_100000002": [
+                  "Succeeded"
+                ],
+                "Budget_100000003": [
+                  "Succeeded"
+                ],
+                "Budget_100000004": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Route": {
+              "type": "Compose",
+              "inputs": "@if(outputs('Budget_overschreden'), 'Projectleider>Afdelingsverantwoordelijke', if(greater(variables('waarde'), float(outputs('Parameters')?['DT-03.2'])), 'Projectleider>Afdelingsverantwoordelijke', if(or(greater(variables('waarde'), float(outputs('Parameters')?['DT-03.3'])), variables('aankoop')), 'Projectleider', 'automatisch')))",
+              "runAfter": {
+                "Budget_overschreden": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Regel": {
+              "type": "Compose",
+              "inputs": "@if(outputs('Budget_overschreden'), 'DT-03.1 budget overschreden', if(greater(variables('waarde'), float(outputs('Parameters')?['DT-03.2'])), concat('DT-03.2 waarde > €', formatNumber(float(outputs('Parameters')?['DT-03.2']), '#,0', 'nl-BE')), if(variables('aankoop'), 'DT-03.3 aankoop nodig', if(greater(variables('waarde'), float(outputs('Parameters')?['DT-03.3'])), concat('DT-03.3 waarde > €', formatNumber(float(outputs('Parameters')?['DT-03.3']), '#,0', 'nl-BE')), concat('DT-03.4 automatisch: ≤ €', formatNumber(float(outputs('Parameters')?['DT-03.3']), '#,0', 'nl-BE'), ', binnen budget, op voorraad')))))",
+              "runAfter": {
+                "Route": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Aanvraag_beslissen": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateOnlyRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_materiaalaanvraags",
+                  "recordId": "@triggerOutputs()?['body/hv_materiaalaanvraagid']",
+                  "item/hv_waarde": "@variables('waarde')",
+                  "item/hv_aankoopnodig": "@variables('aankoop')",
+                  "item/hv_budgetoverschreden": "@outputs('Budget_overschreden')",
+                  "item/hv_route": "@outputs('Route')",
+                  "item/hv_regel": "@outputs('Regel')",
+                  "item/hv_berichten": "@{string(variables('berichten'))}",
+                  "item/hv_goedkeuringsniveau": 0,
+                  "item/hv_spoed": "@less(div(sub(ticks(coalesce(triggerOutputs()?['body/hv_leverenop'], utcNow())), ticks(utcNow())), 36000000000), float(outputs('Parameters')?['SP-01']))",
+                  "item/hv_status": "@if(equals(outputs('Route'), 'automatisch'), 100000003, 100000002)"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Regel": [
+                  "Succeeded"
+                ]
+              }
+            }
+          },
+          "runAfter": {
+            "Cat_init_100000004": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Bij_fout": {
+          "type": "Scope",
+          "runAfter": {
+            "Probeer": [
+              "Failed",
+              "TimedOut"
+            ]
+          },
+          "actions": {
+            "Mislukte_stappen": {
+              "type": "Query",
+              "inputs": {
+                "from": "@result('Probeer')",
+                "where": "@equals(item()?['status'], 'Failed')"
+              },
+              "runAfter": {}
+            },
+            "Foutnamen": {
+              "type": "Select",
+              "inputs": {
+                "from": "@body('Mislukte_stappen')",
+                "select": "@item()?['name']"
+              },
+              "runAfter": {
+                "Mislukte_stappen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Foutmelding": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_meldings",
+                  "item/hv_titel": "@{concat('HV-MA-01 mislukt', if(empty(string(triggerOutputs()?['body/hv_aanvraagnr'])), '', concat(' · ', string(triggerOutputs()?['body/hv_aanvraagnr']))))}",
+                  "item/hv_tekst": "@{concat('Mislukte stap: ', join(body('Foutnamen'), ', '), '. ', coalesce(first(body('Mislukte_stappen'))?['error']?['message'], ''))}",
+                  "item/hv_rol": "Functioneel beheer",
+                  "item/hv_soort": 100000003,
+                  "item/hv_kanaal": 100000000,
+                  "item/hv_status": 100000000,
+                  "item/hv_bron": "HV-MA-01",
+                  "item/hv_referentie": "@{string(triggerOutputs()?['body/hv_aanvraagnr'])}",
+                  "item/hv_link": "@{concat('https://make.powerautomate.com/environments/', workflow()?['tags']?['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']?['name'])}"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Foutnamen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Status_fout": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateOnlyRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_materiaalaanvraags",
+                  "recordId": "@triggerOutputs()?['body/hv_materiaalaanvraagid']",
+                  "item/hv_status": 100000010
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Foutmelding": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Run_mislukt": {
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed",
+                "runError": {
+                  "code": "HV-FOUT",
+                  "message": "Zie de Fout-melding in de backoffice (Beheer › Meldingen)."
+                }
+              },
+              "runAfter": {
+                "Status_fout": [
+                  "Succeeded",
+                  "Failed",
+                  "Skipped",
+                  "TimedOut"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

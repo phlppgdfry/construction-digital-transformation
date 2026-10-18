@@ -7,20 +7,20 @@
     <FormActivationState>1</FormActivationState>
     <form>
       <tabs>
-        <tab verticallayout="true" id="{aa047887-cb11-4251-a9f5-a48ad6c4ee2c}" IsUserDefined="1">
+        <tab verticallayout="true" id="{1f82dda7-b013-486a-adcb-9a48c4cc628d}" IsUserDefined="1">
           <labels>
-            <label description="Goedkeurder" languagecode="1033" />
+            <label description="Rol (goedkeurder en ontvanger)" languagecode="1033" />
           </labels>
           <columns>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{ea524e61-56c4-4d9d-958b-ca08a290cce3}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{a5ea2e58-0ad1-4d99-bd5b-34ef08024404}">
                   <labels>
                     <label description="Gegevens" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{334aff3b-4246-41af-9fdb-3bf075056523}">
+                      <cell id="{7b82bded-9b77-4811-ad68-0708c39a9f52}">
                         <labels>
                           <label description="Rol" languagecode="1033" />
                         </labels>
@@ -28,7 +28,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{47e956f7-8587-44f9-bc2d-fe8bfb44aafd}">
+                      <cell id="{85d7c6ee-e74f-4976-8c2f-ee9d5e19717c}">
                         <labels>
                           <label description="E-mail" languagecode="1033" />
                         </labels>
@@ -41,13 +41,13 @@
             </column>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{81262fae-956f-4164-ac2b-e554c8c82039}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{a9223615-f061-43f4-b5cd-4f815a455b3c}">
                   <labels>
                     <label description="Details" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{eacdddb7-d0d8-4bbe-8315-47f99794d59f}">
+                      <cell id="{e4dd3b54-e19c-4217-9849-a92ea7a54ada}">
                         <labels>
                           <label description="Vervanger" languagecode="1033" />
                         </labels>
@@ -65,7 +65,7 @@
     <IsCustomizable>1</IsCustomizable>
     <CanBeDeleted>1</CanBeDeleted>
     <LocalizedNames>
-      <LocalizedName description="Goedkeurder" languagecode="1033" />
+      <LocalizedName description="Rol (goedkeurder en ontvanger)" languagecode="1033" />
     </LocalizedNames>
     <Descriptions>
       <Description description="A form for this entity." languagecode="1033" />

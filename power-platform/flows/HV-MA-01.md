@@ -92,6 +92,8 @@ Alle drempels: [regelcatalogus](../../shared-methodology/regelcatalogus.md#case-
 
 ![Run van HV-MA-01](../screenshots/28-flow-hv-ma-01-run.jpg)
 
+*Run van de vorige versie, die nog zelf de goedkeuring vroeg en de outbox vulde; die stappen zitten nu in HV-MA-02 en HV-MA-03.*
+
 ## Beheer
 
 - **Volgen:** backoffice-app → *03 Materiaal* → aanvraag → lijnen (toewijzing) en de geplande berichten.
@@ -111,7 +113,17 @@ Alle drempels: [regelcatalogus](../../shared-methodology/regelcatalogus.md#case-
 *Gegenereerd uit [`definitions.mjs`](definitions.mjs) door `npm run build`. Niet met de hand aanpassen.* 60 acties · verbindingen: Microsoft Dataverse · omgevingsvariabelen: geen · regels uit *Bedrijfsregel*: `DT-03.2`, `DT-03.3`, `SP-01`.
 
 - **Trigger `Aanvraag_ingediend`**: Dataverse, rij toegevoegd of gewijzigd in *Materiaalaanvraag* (`hv_materiaalaanvraag`); alleen bij wijziging van `hv_status`, voorwaarde `hv_status eq 100000001`
-- `Probeer`: blok: alle stappen hieronder; faalt er één, dan gaat de run naar `Bij_fout`
+- `Berichten`: variabele aanmaken `berichten` (array)
+- `Waarde`: variabele aanmaken `waarde` (float)
+- `Aankoop`: variabele aanmaken `aankoop` (boolean)
+- `Rest`: variabele aanmaken `rest` (float)
+- `Toewijzing`: variabele aanmaken `toewijzing` (string)
+- `Cat_init_100000000`: variabele aanmaken `cat_100000000` (float)
+- `Cat_init_100000001`: variabele aanmaken `cat_100000001` (float)
+- `Cat_init_100000002`: variabele aanmaken `cat_100000002` (float)
+- `Cat_init_100000003`: variabele aanmaken `cat_100000003` (float)
+- `Cat_init_100000004`: variabele aanmaken `cat_100000004` (float)
+- `Probeer`: foutafhandeling (alleen als het blok hierboven faalt)
   - `Regels`: rijen opzoeken in *Bedrijfsregel* · start parallel
   - `Regelparen`: lijst omzetten
   - `Parameters`: berekening
@@ -119,16 +131,6 @@ Alle drempels: [regelcatalogus](../../shared-methodology/regelcatalogus.md#case-
   - `Lijnen`: rijen opzoeken in *Aanvraaglijn* · start parallel
   - `Afstanden`: rijen opzoeken in *Afstand werf–depot* · start parallel
   - `Budgetten`: rijen opzoeken in *Werfbudget* · start parallel
-  - `Berichten`: variabele aanmaken `berichten` (array) · start parallel
-  - `Waarde`: variabele aanmaken `waarde` (float)
-  - `Aankoop`: variabele aanmaken `aankoop` (boolean)
-  - `Rest`: variabele aanmaken `rest` (float)
-  - `Toewijzing`: variabele aanmaken `toewijzing` (string)
-  - `Cat_init_100000000`: variabele aanmaken `cat_100000000` (float)
-  - `Cat_init_100000001`: variabele aanmaken `cat_100000001` (float)
-  - `Cat_init_100000002`: variabele aanmaken `cat_100000002` (float)
-  - `Cat_init_100000003`: variabele aanmaken `cat_100000003` (float)
-  - `Cat_init_100000004`: variabele aanmaken `cat_100000004` (float)
   - `Per_lijn`: voor elk item, één voor één
     - `Lijnwaarde`: berekening
     - `Waarde_tellen`: variabele verhogen `waarde`

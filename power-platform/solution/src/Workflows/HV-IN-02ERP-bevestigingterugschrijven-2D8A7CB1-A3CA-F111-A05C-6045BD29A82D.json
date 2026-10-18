@@ -1,0 +1,257 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "hv_dataverse"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_approvals": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "hv_approvals"
+        },
+        "api": {
+          "name": "shared_approvals"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "Bericht_verzonden": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 3,
+              "subscriptionRequest/entityname": "hv_outbox",
+              "subscriptionRequest/scope": 4,
+              "subscriptionRequest/filteringattributes": "hv_status",
+              "subscriptionRequest/filterexpression": "hv_status eq 100000001"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Probeer": {
+          "type": "Scope",
+          "actions": {
+            "Volgens_endpoint": {
+              "type": "Switch",
+              "runAfter": {},
+              "expression": "@triggerOutputs()?['body/hv_endpoint']",
+              "cases": {
+                "Weegticket": {
+                  "case": 100000000,
+                  "actions": {
+                    "Weegbon_geboekt": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "UpdateOnlyRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_documents",
+                          "recordId": "@triggerOutputs()?['body/_hv_weegbon_value']",
+                          "item/hv_status": 100000004,
+                          "item/hv_erpreferentie": "@{if(contains(coalesce(triggerOutputs()?['body/hv_laatstefout'], ''), 'al geboekt'), concat(triggerOutputs()?['body/hv_idempotencykey'], ' (al geboekt, idempotent)'), triggerOutputs()?['body/hv_idempotencykey'])}"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    }
+                  }
+                },
+                "Projectkost": {
+                  "case": 100000004,
+                  "actions": {
+                    "Tijdlijn_geboekt": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_tijdlijns",
+                          "item/hv_gebeurtenis": "kosten geboekt op project (ERP)",
+                          "item/hv_door": "Power Automate (HV-IN-02)",
+                          "item/hv_opmerking": "@{concat(triggerOutputs()?['body/hv_idempotencykey'], ' · ', coalesce(triggerOutputs()?['body/hv_laatstefout'], ''))}",
+                          "item/hv_Schadeclaim@odata.bind": "/hv_schadeclaims(@{triggerOutputs()?['body/_hv_schadeclaim_value']})"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    }
+                  }
+                },
+                "Verbruik": {
+                  "case": 100000003,
+                  "actions": {
+                    "Nog_open": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "ListRecords",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_outboxes",
+                          "$filter": "_hv_aanvraag_value eq @{triggerOutputs()?['body/_hv_aanvraag_value']} and hv_endpoint eq 100000003 and hv_status ne 100000001",
+                          "$top": 1
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    },
+                    "Alles_geboekt": {
+                      "type": "If",
+                      "runAfter": {
+                        "Nog_open": [
+                          "Succeeded"
+                        ]
+                      },
+                      "expression": {
+                        "equals": [
+                          "@length(outputs('Nog_open')?['body/value'])",
+                          0
+                        ]
+                      },
+                      "actions": {
+                        "Aanvraag_afgesloten": {
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps",
+                              "operationId": "UpdateOnlyRecord",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "hv_materiaalaanvraags",
+                              "recordId": "@triggerOutputs()?['body/_hv_aanvraag_value']",
+                              "item/hv_status": 100000007
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          },
+                          "runAfter": {}
+                        }
+                      },
+                      "else": {
+                        "actions": {}
+                      }
+                    }
+                  }
+                }
+              },
+              "default": {
+                "actions": {}
+              }
+            }
+          },
+          "runAfter": {}
+        },
+        "Bij_fout": {
+          "type": "Scope",
+          "runAfter": {
+            "Probeer": [
+              "Failed",
+              "TimedOut"
+            ]
+          },
+          "actions": {
+            "Mislukte_stappen": {
+              "type": "Query",
+              "inputs": {
+                "from": "@result('Probeer')",
+                "where": "@equals(item()?['status'], 'Failed')"
+              },
+              "runAfter": {}
+            },
+            "Foutnamen": {
+              "type": "Select",
+              "inputs": {
+                "from": "@body('Mislukte_stappen')",
+                "select": "@item()?['name']"
+              },
+              "runAfter": {
+                "Mislukte_stappen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Foutmelding": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_meldings",
+                  "item/hv_titel": "@{concat('HV-IN-02 mislukt', if(empty(string(triggerOutputs()?['body/hv_idempotencykey'])), '', concat(' · ', string(triggerOutputs()?['body/hv_idempotencykey']))))}",
+                  "item/hv_tekst": "@{concat('Mislukte stap: ', join(body('Foutnamen'), ', '), '. ', coalesce(first(body('Mislukte_stappen'))?['error']?['message'], ''))}",
+                  "item/hv_rol": "Functioneel beheer",
+                  "item/hv_soort": 100000003,
+                  "item/hv_kanaal": 100000000,
+                  "item/hv_status": 100000000,
+                  "item/hv_bron": "HV-IN-02",
+                  "item/hv_referentie": "@{string(triggerOutputs()?['body/hv_idempotencykey'])}",
+                  "item/hv_link": "@{concat('https://make.powerautomate.com/environments/', workflow()?['tags']?['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']?['name'])}"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Foutnamen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Run_mislukt": {
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed",
+                "runError": {
+                  "code": "HV-FOUT",
+                  "message": "Zie de Fout-melding in de backoffice (Beheer › Meldingen)."
+                }
+              },
+              "runAfter": {
+                "Foutmelding": [
+                  "Succeeded"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

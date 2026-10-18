@@ -89,6 +89,8 @@ De elf regels staan met hun eigenaar en reden in de [regelcatalogus](../../share
 
 ![Run van HV-DI-01](../screenshots/04-flow-hv-di-01-run.jpg)
 
+*Run van de vorige versie, vóór het foutblok en de outbox; de huidige opbouw staat in de stappenlijst hieronder.*
+
 ## Beheer
 
 - **Volgen:** backoffice-app → *01 Weegbonnen*, weergave per status. Fouten: *Beheer* → *Meldingen*, soort *Fout*. Runs: `node power-platform/scripts/runs.mjs HV-DI-01`.

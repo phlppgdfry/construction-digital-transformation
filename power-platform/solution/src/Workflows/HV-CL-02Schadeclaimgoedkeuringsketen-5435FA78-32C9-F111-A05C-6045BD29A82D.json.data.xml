@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Workflow WorkflowId="{5435fa78-32c9-f111-a05c-6045bd29a82d}" Name="HV-CL-02 Schadeclaim goedkeuringsketen" Description="Case 02: goedkeuring per niveau via Approvals; één afwijzing stopt de keten." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Workflow WorkflowId="{5435fa78-32c9-f111-a05c-6045bd29a82d}" Name="HV-CL-02 Schadeclaim goedkeuringsketen" Description="Case 02: goedkeuring per niveau via Approvals; één afwijzing stopt de keten; de werfleider hoort de uitkomst." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <JsonFileName>/Workflows/HV-CL-02Schadeclaimgoedkeuringsketen-5435FA78-32C9-F111-A05C-6045BD29A82D.json</JsonFileName>
   <Type>1</Type>
   <Subprocess>0</Subprocess>
@@ -25,6 +25,6 @@
     <LocalizedName languagecode="1033" description="HV-CL-02 Schadeclaim goedkeuringsketen" />
   </LocalizedNames>
   <Descriptions>
-    <Description languagecode="1033" description="Case 02: goedkeuring per niveau via Approvals; één afwijzing stopt de keten." />
+    <Description languagecode="1033" description="Case 02: goedkeuring per niveau via Approvals; één afwijzing stopt de keten; de werfleider hoort de uitkomst." />
   </Descriptions>
 </Workflow>

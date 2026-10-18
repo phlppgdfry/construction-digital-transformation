@@ -82,7 +82,7 @@ flowchart TD
 ## Bewijs
 
 - De goedkeuringsaanvragen staan echt in Power Automate ([screenshot](../screenshots/15-approvals-ontvangen.jpg)).
-- De run hieronder wacht op het antwoord van niveau 1. **De volledige keten is nog niet doorlopen**: dat gebeurt zodra de goedkeuring beantwoord is. Daarna komt hier de afgewerkte run.
+- De huidige versie wacht voor dossier SCH-26-1011 op het antwoord van niveau 1 (Fleetmanager). **De volledige keten is nog niet doorlopen**: dat gebeurt zodra iemand de goedkeuring beantwoordt. Daarna komt hier de afgewerkte run. De screenshot hieronder is van de vorige versie, die op dezelfde manier wachtte.
 
 ![Run van HV-CL-02, wacht op goedkeuring](../screenshots/26-flow-hv-cl-02-run-wacht.jpg)
 
@@ -105,10 +105,10 @@ flowchart TD
 *Gegenereerd uit [`definitions.mjs`](definitions.mjs) door `npm run build`. Niet met de hand aanpassen.* 25 acties · verbindingen: Microsoft Dataverse, Approvals · omgevingsvariabelen: geen · regels uit *Bedrijfsregel*: geen.
 
 - **Trigger `Ter_goedkeuring`**: Dataverse, rij gewijzigd in *Schadeclaim* (`hv_schadeclaim`); alleen bij wijziging van `hv_status`, voorwaarde `hv_status eq 100000003`
-- `Probeer`: blok: alle stappen hieronder; faalt er één, dan gaat de run naar `Bij_fout`
-  - `Keten`: variabele aanmaken `keten` (array)
-  - `Niveau`: variabele aanmaken `niveau` (integer)
-  - `Afgewezen`: variabele aanmaken `afgewezen` (boolean)
+- `Keten`: variabele aanmaken `keten` (array)
+- `Niveau`: variabele aanmaken `niveau` (integer)
+- `Afgewezen`: variabele aanmaken `afgewezen` (boolean)
+- `Probeer`: foutafhandeling (alleen als het blok hierboven faalt)
   - `Per_niveau`: herhalen tot de voorwaarde klopt (max. 6 keer, time-out 14 dagen)
     - `Goedkeurder`: rijen opzoeken in *Rol (goedkeurder en ontvanger)* (eerste treffer)
     - `Goedkeuring`: goedkeuring vragen via Approvals en wachten op het antwoord
@@ -122,14 +122,14 @@ flowchart TD
   - `Eindstatus`: berekening · loopt ook als `Per_niveau` faalt
   - `Volgens_uitkomst`: keuze
     - geval `goedgekeurd` (Goedgekeurd):
-      - `Status`: rij bijwerken in *Schadeclaim*: `hv_status`
-      - `Melding_werfleider`: rij toevoegen in *Melding*: `hv_titel`, `hv_tekst`, `hv_rol`, `hv_soort`, `hv_kanaal`, `hv_status`, `hv_bron`, `hv_referentie`, `hv_link`
+      - `Status_goedgekeurd`: rij bijwerken in *Schadeclaim*: `hv_status`
+      - `Melding_goedgekeurd`: rij toevoegen in *Melding*: `hv_titel`, `hv_tekst`, `hv_rol`, `hv_soort`, `hv_kanaal`, `hv_status`, `hv_bron`, `hv_referentie`, `hv_link`
     - geval `afgewezen` (Afgewezen):
-      - `Status`: rij bijwerken in *Schadeclaim*: `hv_status`
-      - `Melding_werfleider`: rij toevoegen in *Melding*: `hv_titel`, `hv_tekst`, `hv_rol`, `hv_soort`, `hv_kanaal`, `hv_status`, `hv_bron`, `hv_referentie`, `hv_link`
+      - `Status_afgewezen`: rij bijwerken in *Schadeclaim*: `hv_status`
+      - `Melding_afgewezen`: rij toevoegen in *Melding*: `hv_titel`, `hv_tekst`, `hv_rol`, `hv_soort`, `hv_kanaal`, `hv_status`, `hv_bron`, `hv_referentie`, `hv_link`
     - geval `verlopen` (Verlopen):
-      - `Status`: rij bijwerken in *Schadeclaim*: `hv_status`
-      - `Melding_eigenaar`: rij toevoegen in *Melding*: `hv_titel`, `hv_tekst`, `hv_rol`, `hv_soort`, `hv_kanaal`, `hv_status`, `hv_bron`, `hv_referentie`, `hv_link`
+      - `Status_terug`: rij bijwerken in *Schadeclaim*: `hv_status`
+      - `Melding_verlopen`: rij toevoegen in *Melding*: `hv_titel`, `hv_tekst`, `hv_rol`, `hv_soort`, `hv_kanaal`, `hv_status`, `hv_bron`, `hv_referentie`, `hv_link`
 - `Bij_fout`: foutafhandeling (alleen als het blok hierboven faalt)
   - `Mislukte_stappen`: lijst filteren
   - `Foutnamen`: lijst omzetten

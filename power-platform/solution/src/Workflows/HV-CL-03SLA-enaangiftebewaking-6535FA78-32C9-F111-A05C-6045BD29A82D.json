@@ -1,0 +1,368 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "hv_dataverse"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_approvals": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "hv_approvals"
+        },
+        "api": {
+          "name": "shared_approvals"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "Elk_uur": {
+          "type": "Recurrence",
+          "recurrence": {
+            "frequency": "Hour",
+            "interval": 1
+          },
+          "runtimeConfiguration": {
+            "concurrency": {
+              "runs": 1
+            }
+          }
+        }
+      },
+      "actions": {
+        "Probeer": {
+          "type": "Scope",
+          "actions": {
+            "Regels": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_regels",
+                  "$select": "hv_code,hv_waarde",
+                  "$filter": "hv_waarde ne null"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "Regelparen": {
+              "type": "Select",
+              "inputs": {
+                "from": "@outputs('Regels')?['body/value']",
+                "select": "@concat('\"', item()?['hv_code'], '\":', string(item()?['hv_waarde']))"
+              },
+              "runAfter": {
+                "Regels": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Parameters": {
+              "type": "Compose",
+              "inputs": "@json(concat('{', join(body('Regelparen'), ','), '}'))",
+              "runAfter": {
+                "Regelparen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Te_laat": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_schadeclaims",
+                  "$filter": "(hv_status eq 100000001 or hv_status eq 100000002) and hv_deadlinebeoordeling lt @{utcNow()} and hv_geescaleerd ne true"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "Per_claim": {
+              "type": "Foreach",
+              "foreach": "@outputs('Te_laat')?['body/value']",
+              "runAfter": {
+                "Te_laat": [
+                  "Succeeded"
+                ]
+              },
+              "actions": {
+                "Markeer": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "UpdateOnlyRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "hv_schadeclaims",
+                      "recordId": "@items('Per_claim')?['hv_schadeclaimid']",
+                      "item/hv_geescaleerd": true
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {}
+                },
+                "Tijdlijn": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "CreateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "hv_tijdlijns",
+                      "item/hv_gebeurtenis": "SLA overschreden — geëscaleerd",
+                      "item/hv_door": "Power Automate (HV-CL-03)",
+                      "item/hv_opmerking": "Beoordeling niet vóór de deadline; afdelingsverantwoordelijke verwittigd.",
+                      "item/hv_Schadeclaim@odata.bind": "/hv_schadeclaims(@{items('Per_claim')?['hv_schadeclaimid']})"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {
+                    "Markeer": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Melding_escalatie": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "CreateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "hv_meldings",
+                      "item/hv_titel": "@{concat('SLA overschreden: ', items('Per_claim')?['hv_dossiernummer'])}",
+                      "item/hv_tekst": "@{concat('Eigenaar ', items('Per_claim')?['hv_eigenaar'], ' beoordeelde niet vóór ', items('Per_claim')?['hv_deadlinebeoordeling'], '.')}",
+                      "item/hv_rol": "Afdelingsverantwoordelijke",
+                      "item/hv_soort": 100000002,
+                      "item/hv_kanaal": 100000000,
+                      "item/hv_status": 100000000,
+                      "item/hv_bron": "HV-CL-03",
+                      "item/hv_referentie": "@items('Per_claim')?['hv_dossiernummer']",
+                      "item/hv_link": "@{concat('/main.aspx?pagetype=entityrecord&etn=hv_schadeclaim&id=', items('Per_claim')?['hv_schadeclaimid'])}"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {
+                    "Markeer": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              }
+            },
+            "Aangifte_dreigt": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_schadeclaims",
+                  "$filter": "hv_deadlineverzekeraar ne null and hv_aangifteverstuurd ne true and hv_aangiftegewaarschuwd ne true and hv_deadlineverzekeraar lt @{addDays(utcNow(), int(float(outputs('Parameters')?['VZ-03'])))}"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Parameters": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Per_aangifte": {
+              "type": "Foreach",
+              "foreach": "@outputs('Aangifte_dreigt')?['body/value']",
+              "runAfter": {
+                "Aangifte_dreigt": [
+                  "Succeeded"
+                ]
+              },
+              "actions": {
+                "Markeer_gewaarschuwd": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "UpdateOnlyRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "hv_schadeclaims",
+                      "recordId": "@items('Per_aangifte')?['hv_schadeclaimid']",
+                      "item/hv_aangiftegewaarschuwd": true
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {}
+                },
+                "Tijdlijn_aangifte": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "CreateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "hv_tijdlijns",
+                      "item/hv_gebeurtenis": "aangiftetermijn dreigt",
+                      "item/hv_door": "Power Automate (HV-CL-03)",
+                      "item/hv_opmerking": "@{concat('Aangifte nog niet verstuurd; deadline ', items('Per_aangifte')?['hv_deadlineverzekeraar'])}",
+                      "item/hv_Schadeclaim@odata.bind": "/hv_schadeclaims(@{items('Per_aangifte')?['hv_schadeclaimid']})"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {
+                    "Markeer_gewaarschuwd": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Melding_aangifte": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "CreateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "hv_meldings",
+                      "item/hv_titel": "@{concat('Aangifte verzekeraar dreigt te laat: ', items('Per_aangifte')?['hv_dossiernummer'])}",
+                      "item/hv_tekst": "@{concat('Deadline ', items('Per_aangifte')?['hv_deadlineverzekeraar'], '. Te laat aangeven kan de dekking kosten.')}",
+                      "item/hv_rol": "Claims & verzekeringen",
+                      "item/hv_soort": 100000002,
+                      "item/hv_kanaal": 100000000,
+                      "item/hv_status": 100000000,
+                      "item/hv_bron": "HV-CL-03",
+                      "item/hv_referentie": "@items('Per_aangifte')?['hv_dossiernummer']",
+                      "item/hv_link": "@{concat('/main.aspx?pagetype=entityrecord&etn=hv_schadeclaim&id=', items('Per_aangifte')?['hv_schadeclaimid'])}"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {
+                    "Markeer_gewaarschuwd": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "runAfter": {}
+        },
+        "Bij_fout": {
+          "type": "Scope",
+          "runAfter": {
+            "Probeer": [
+              "Failed",
+              "TimedOut"
+            ]
+          },
+          "actions": {
+            "Mislukte_stappen": {
+              "type": "Query",
+              "inputs": {
+                "from": "@result('Probeer')",
+                "where": "@equals(item()?['status'], 'Failed')"
+              },
+              "runAfter": {}
+            },
+            "Foutnamen": {
+              "type": "Select",
+              "inputs": {
+                "from": "@body('Mislukte_stappen')",
+                "select": "@item()?['name']"
+              },
+              "runAfter": {
+                "Mislukte_stappen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Foutmelding": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_meldings",
+                  "item/hv_titel": "@{concat('HV-CL-03 mislukt', if(empty(string('')), '', concat(' · ', string(''))))}",
+                  "item/hv_tekst": "@{concat('Mislukte stap: ', join(body('Foutnamen'), ', '), '. ', coalesce(first(body('Mislukte_stappen'))?['error']?['message'], ''))}",
+                  "item/hv_rol": "Functioneel beheer",
+                  "item/hv_soort": 100000003,
+                  "item/hv_kanaal": 100000000,
+                  "item/hv_status": 100000000,
+                  "item/hv_bron": "HV-CL-03",
+                  "item/hv_referentie": "@{string('')}",
+                  "item/hv_link": "@{concat('https://make.powerautomate.com/environments/', workflow()?['tags']?['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']?['name'])}"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Foutnamen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Run_mislukt": {
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed",
+                "runError": {
+                  "code": "HV-FOUT",
+                  "message": "Zie de Fout-melding in de backoffice (Beheer › Meldingen)."
+                }
+              },
+              "runAfter": {
+                "Foutmelding": [
+                  "Succeeded"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

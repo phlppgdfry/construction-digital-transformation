@@ -123,4 +123,8 @@ De flowbestanden in de case-mappen (`0x-…/artefacts/power-automate/*.json`) zi
 | Een termijn dreigt | [HV-CL-03](HV-CL-03.md), elk uur | binnen het uur |
 | Een melding raakte niet af | status *Mislukt* in *Meldingen* (bv. een rol zonder persoon) | binnen de minuut |
 
+Een bewust mislukte run (een melding zonder werf): `Probeer` faalt, `Bij_fout` stuurt de melding en zet de status op *Fout*.
+
+![Foutafhandeling in een echte run](../screenshots/36-flow-foutafhandeling-run.jpg)
+
 In productie komt daar nog bij: een wekelijkse blik op de flow-analytics in het Power Platform-beheercentrum, en een alert als een flow uitgeschakeld wordt.

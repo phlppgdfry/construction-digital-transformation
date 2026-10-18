@@ -94,6 +94,8 @@ Dezelfde regels, getest: [`triage()` en `approvalChain()`](../../src/claims.mjs)
 
 ![Run van HV-CL-01](../screenshots/25-flow-hv-cl-01-run.jpg)
 
+*Run van de vorige versie. Hoe de huidige versie een fout afhandelt: [screenshot](../screenshots/36-flow-foutafhandeling-run.jpg).*
+
 ## Beheer
 
 - **Volgen:** backoffice-app → *02 Schadeclaims*; de tijdlijn per dossier is het auditspoor.

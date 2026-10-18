@@ -7,20 +7,20 @@
     <FormActivationState>1</FormActivationState>
     <form>
       <tabs>
-        <tab verticallayout="true" id="{cd267428-92ca-4289-870a-c84dd4a63aad}" IsUserDefined="1">
+        <tab verticallayout="true" id="{299d792f-0149-4c4b-bdea-fec539ff9926}" IsUserDefined="1">
           <labels>
             <label description="Tijdlijn" languagecode="1033" />
           </labels>
           <columns>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{216784d6-1a3b-4686-8f7a-db5a65deaed2}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{642ae497-ce9e-4a3e-8063-a81e13696e27}">
                   <labels>
                     <label description="Gegevens" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{e3e4d646-4dcc-44f2-b38d-043cc9824419}">
+                      <cell id="{e6fbbf0c-00f7-4eb9-bbfa-eb5b02f6cdc4}">
                         <labels>
                           <label description="Gebeurtenis" languagecode="1033" />
                         </labels>
@@ -28,7 +28,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{5268de62-c493-41bc-b62c-24f4445d60cc}">
+                      <cell id="{5fb9ba7d-4de3-46b5-89b1-6821fc844479}">
                         <labels>
                           <label description="Schadeclaim" languagecode="1033" />
                         </labels>
@@ -41,13 +41,13 @@
             </column>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{399bd99d-445d-402b-9d2d-cbc691bea7f3}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{5e9d33bd-0377-4a09-8fd6-ac90d58fb49c}">
                   <labels>
                     <label description="Details" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{66b092e2-7138-4aa9-80fc-a50e4763c673}">
+                      <cell id="{ee67c1ed-ba3b-4160-9150-cfea97a67476}">
                         <labels>
                           <label description="Door" languagecode="1033" />
                         </labels>
@@ -55,7 +55,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{3d4e4c47-bac0-4422-bea8-9e4ea2ea723a}">
+                      <cell id="{6e128a85-e3dc-469d-a95b-046c585e6eea}">
                         <labels>
                           <label description="Opmerking" languagecode="1033" />
                         </labels>

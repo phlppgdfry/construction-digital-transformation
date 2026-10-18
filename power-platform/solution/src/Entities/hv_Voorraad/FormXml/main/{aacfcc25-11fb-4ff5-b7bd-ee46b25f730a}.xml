@@ -7,20 +7,20 @@
     <FormActivationState>1</FormActivationState>
     <form>
       <tabs>
-        <tab verticallayout="true" id="{d3b5e657-2f6e-4bf6-b3dd-0beeec693bdf}" IsUserDefined="1">
+        <tab verticallayout="true" id="{424749b7-464a-4bac-8ad6-839a0ee6b68b}" IsUserDefined="1">
           <labels>
             <label description="Voorraad (ERP-sandbox)" languagecode="1033" />
           </labels>
           <columns>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{31029e91-81bb-4267-869f-5610a1951838}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{8cae5c37-d77e-4585-85a9-0d5bbacf83b5}">
                   <labels>
                     <label description="Gegevens" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{4572f670-2841-4e95-a0ea-73a892b141c3}">
+                      <cell id="{db012d02-83b9-4914-bf28-be36d5a738e3}">
                         <labels>
                           <label description="Artikel@depot" languagecode="1033" />
                         </labels>
@@ -28,7 +28,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{45abbfce-d7d3-482e-b1d5-95df93978120}">
+                      <cell id="{369b51a9-13af-4e23-9c5a-738dd6ee4d50}">
                         <labels>
                           <label description="Artikel" languagecode="1033" />
                         </labels>
@@ -36,7 +36,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{df8334a7-c887-47dc-92e7-8e195e0f06d6}">
+                      <cell id="{da1b8226-22fa-46c1-853d-64665762b08d}">
                         <labels>
                           <label description="Depot" languagecode="1033" />
                         </labels>
@@ -49,13 +49,13 @@
             </column>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{8ffd07ce-a74c-459a-bccd-fe465e7f20f3}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{73c3cd19-b14e-44e3-81bb-21a4730a49fe}">
                   <labels>
                     <label description="Details" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{bf462ff2-338e-4787-8d4f-6a5e3d8ddb5f}">
+                      <cell id="{34dcf97c-f05f-4854-9d51-f9d42b6f6dce}">
                         <labels>
                           <label description="Op voorraad" languagecode="1033" />
                         </labels>
@@ -63,7 +63,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{fae71f35-52ac-4bdd-a08e-91b45ab9cae8}">
+                      <cell id="{e8346a52-9a18-4cc8-8002-e6ee078f4d44}">
                         <labels>
                           <label description="Gereserveerd" languagecode="1033" />
                         </labels>

@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>0</isdefault>
+    <savedqueryid>{1166d6c6-a3ca-f111-a05c-6045bd29a82d}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="hv_naam" select="1" icon="1" preview="1">
+        <row name="result" id="hv_kpimetingid">
+          <cell name="hv_naam" width="200" />
+          <cell name="hv_maand" width="110" />
+          <cell name="hv_case" width="80" />
+          <cell name="hv_waarde" width="110" />
+          <cell name="hv_bron" width="130" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="hv_kpimeting">
+          <attribute name="hv_naam" />
+          <attribute name="hv_maand" />
+          <attribute name="hv_case" />
+          <attribute name="hv_waarde" />
+          <attribute name="hv_bron" />
+          <attribute name="hv_kpimetingid" />
+          <order attribute="hv_maand" descending="false" />
+          <filter type="and">
+            <condition attribute="hv_kpi" operator="eq" value="Uren vrijgekomen" />
+          </filter>
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="KPI-metingen: Uren vrijgekomen" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Alleen de KPI &quot;Uren vrijgekomen&quot; (voor de grafiek op het dashboard)." languagecode="1033" />
+    </Descriptions>
+  </savedquery>
+</savedqueries>

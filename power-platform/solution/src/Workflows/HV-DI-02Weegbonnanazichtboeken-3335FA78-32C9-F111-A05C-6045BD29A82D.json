@@ -54,160 +54,301 @@
         }
       },
       "actions": {
-        "Materiaalcode": {
-          "type": "OpenApiConnection",
-          "inputs": {
-            "host": {
-              "connectionName": "shared_commondataserviceforapps",
-              "operationId": "ListRecords",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-            },
-            "parameters": {
-              "entityName": "hv_materiaalcodes",
-              "$filter": "hv_code eq '@{triggerOutputs()?['body/hv_materiaal']}'",
-              "$top": 1
-            },
-            "authentication": "@parameters('$authentication')"
-          },
-          "runAfter": {}
-        },
-        "Al_geboekt": {
-          "type": "OpenApiConnection",
-          "inputs": {
-            "host": {
-              "connectionName": "shared_commondataserviceforapps",
-              "operationId": "ListRecords",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-            },
-            "parameters": {
-              "entityName": "hv_documents",
-              "$filter": "hv_bonnummer eq '@{triggerOutputs()?['body/hv_bonnummer']}' and hv_documentid ne @{triggerOutputs()?['body/hv_documentid']} and hv_status eq 100000004",
-              "$top": 1
-            },
-            "authentication": "@parameters('$authentication')"
-          },
-          "runAfter": {}
-        },
-        "Controle": {
-          "type": "Compose",
-          "inputs": "@if(greater(length(outputs('Al_geboekt')?['body/value']), 0), 'dubbel', if(or(equals(length(outputs('Materiaalcode')?['body/value']), 0), and(equals(triggerOutputs()?['body/hv_richting'], 100000000), not(equals(first(outputs('Materiaalcode')?['body/value'])?['hv_soort'], 100000000))), and(not(equals(triggerOutputs()?['body/hv_richting'], 100000000)), not(equals(first(outputs('Materiaalcode')?['body/value'])?['hv_soort'], 100000002)))), 'geweigerd', 'ok'))",
-          "runAfter": {
-            "Materiaalcode": [
-              "Succeeded"
-            ],
-            "Al_geboekt": [
-              "Succeeded"
-            ]
-          }
-        },
-        "Volgens_controle": {
-          "type": "Switch",
-          "runAfter": {
-            "Controle": [
-              "Succeeded"
-            ]
-          },
-          "expression": "@outputs('Controle')",
-          "cases": {
-            "Dubbel": {
-              "case": "dubbel",
-              "actions": {
-                "Status_dubbel": {
-                  "type": "OpenApiConnection",
-                  "inputs": {
-                    "host": {
-                      "connectionName": "shared_commondataserviceforapps",
-                      "operationId": "UpdateOnlyRecord",
-                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-                    },
-                    "parameters": {
-                      "entityName": "hv_documents",
-                      "recordId": "@triggerOutputs()?['body/hv_documentid']",
-                      "item/hv_status": 100000005,
-                      "item/hv_reviewopmerking": "@{concat(coalesce(triggerOutputs()?['body/hv_reviewopmerking'], ''), ' | Server: bonnummer al geboekt, niet opnieuw geboekt.')}"
-                    },
-                    "authentication": "@parameters('$authentication')"
-                  },
-                  "runAfter": {}
-                }
-              }
-            },
-            "Geweigerd": {
-              "case": "geweigerd",
-              "actions": {
-                "Status_escalatie": {
-                  "type": "OpenApiConnection",
-                  "inputs": {
-                    "host": {
-                      "connectionName": "shared_commondataserviceforapps",
-                      "operationId": "UpdateOnlyRecord",
-                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-                    },
-                    "parameters": {
-                      "entityName": "hv_documents",
-                      "recordId": "@triggerOutputs()?['body/hv_documentid']",
-                      "item/hv_status": 100000003,
-                      "item/hv_reviewopmerking": "@{concat(coalesce(triggerOutputs()?['body/hv_reviewopmerking'], ''), ' | Server: materiaal niet toegelaten, terug naar escalatie.')}"
-                    },
-                    "authentication": "@parameters('$authentication')"
-                  },
-                  "runAfter": {}
-                }
-              }
-            },
-            "Boeken": {
-              "case": "ok",
-              "actions": {
-                "ERP_boeking": {
-                  "type": "OpenApiConnection",
-                  "inputs": {
-                    "host": {
-                      "connectionName": "shared_commondataserviceforapps",
-                      "operationId": "CreateRecord",
-                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-                    },
-                    "parameters": {
-                      "entityName": "hv_erpboekings",
-                      "item/hv_idempotencykey": "wb-@{triggerOutputs()?['body/hv_bonnummer']}",
-                      "item/hv_soort": 100000000,
-                      "item/hv_referentie": "@triggerOutputs()?['body/hv_documentnr']",
-                      "item/hv_bedrag": "@mul(div(float(triggerOutputs()?['body/hv_netto']), 1000), float(coalesce(first(outputs('Materiaalcode')?['body/value'])?['hv_prijsperton'], 0)))",
-                      "item/hv_payload": "@{concat('{\"weighingTicket\":\"', triggerOutputs()?['body/hv_bonnummer'], '\",\"netKg\":', string(triggerOutputs()?['body/hv_netto']), ',\"approvedBy\":\"', coalesce(triggerOutputs()?['body/hv_reviewer'], 'reviewer'), '\"}')}"
-                    },
-                    "authentication": "@parameters('$authentication')"
-                  },
-                  "runAfter": {}
+        "Probeer": {
+          "type": "Scope",
+          "actions": {
+            "Materiaalcode": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
                 },
-                "Status_geboekt": {
-                  "type": "OpenApiConnection",
-                  "inputs": {
-                    "host": {
-                      "connectionName": "shared_commondataserviceforapps",
-                      "operationId": "UpdateOnlyRecord",
-                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                "parameters": {
+                  "entityName": "hv_materiaalcodes",
+                  "$filter": "hv_code eq '@{triggerOutputs()?['body/hv_materiaal']}'",
+                  "$top": 1
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "Al_in_outbox": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_outboxes",
+                  "$filter": "hv_idempotencykey eq 'wb-@{triggerOutputs()?['body/hv_bonnummer']}' and (_hv_weegbon_value eq null or _hv_weegbon_value ne @{triggerOutputs()?['body/hv_documentid']})",
+                  "$top": 1
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "Controle": {
+              "type": "Compose",
+              "inputs": "@if(greater(length(outputs('Al_in_outbox')?['body/value']), 0), 'dubbel', if(or(equals(length(outputs('Materiaalcode')?['body/value']), 0), and(equals(triggerOutputs()?['body/hv_richting'], 100000000), not(equals(first(outputs('Materiaalcode')?['body/value'])?['hv_soort'], 100000000))), and(not(equals(triggerOutputs()?['body/hv_richting'], 100000000)), not(equals(first(outputs('Materiaalcode')?['body/value'])?['hv_soort'], 100000002)))), 'geweigerd', 'ok'))",
+              "runAfter": {
+                "Materiaalcode": [
+                  "Succeeded"
+                ],
+                "Al_in_outbox": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Volgens_controle": {
+              "type": "Switch",
+              "runAfter": {
+                "Controle": [
+                  "Succeeded"
+                ]
+              },
+              "expression": "@outputs('Controle')",
+              "cases": {
+                "Dubbel": {
+                  "case": "dubbel",
+                  "actions": {
+                    "Status_dubbel": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "UpdateOnlyRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_documents",
+                          "recordId": "@triggerOutputs()?['body/hv_documentid']",
+                          "item/hv_status": 100000005,
+                          "item/hv_reviewopmerking": "@{concat(coalesce(triggerOutputs()?['body/hv_reviewopmerking'], ''), ' | Server: bonnummer al geboekt of in de outbox, niet opnieuw geboekt.')}"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    }
+                  }
+                },
+                "Geweigerd": {
+                  "case": "geweigerd",
+                  "actions": {
+                    "Status_escalatie": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "UpdateOnlyRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_documents",
+                          "recordId": "@triggerOutputs()?['body/hv_documentid']",
+                          "item/hv_status": 100000003,
+                          "item/hv_reviewopmerking": "@{concat(coalesce(triggerOutputs()?['body/hv_reviewopmerking'], ''), ' | Server: materiaal niet toegelaten, terug naar escalatie.')}"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
                     },
-                    "parameters": {
-                      "entityName": "hv_documents",
-                      "recordId": "@triggerOutputs()?['body/hv_documentid']",
-                      "item/hv_status": 100000004,
-                      "item/hv_erpreferentie": "@{if(equals(actions('ERP_boeking')?['status'], 'Succeeded'), concat('wb-', triggerOutputs()?['body/hv_bonnummer']), concat('wb-', triggerOutputs()?['body/hv_bonnummer'], ' (al geboekt, idempotent)'))}"
+                    "Melding_milieu": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_meldings",
+                          "item/hv_titel": "@{concat('Weegbon ', triggerOutputs()?['body/hv_documentnr'], ' terug naar escalatie')}",
+                          "item/hv_tekst": "@{concat('Goedgekeurd met materiaal ', triggerOutputs()?['body/hv_materiaal'], ', dat niet toegelaten is. De server boekte niet.')}",
+                          "item/hv_rol": "Milieucoördinator",
+                          "item/hv_soort": 100000002,
+                          "item/hv_kanaal": 100000000,
+                          "item/hv_status": 100000000,
+                          "item/hv_bron": "HV-DI-02",
+                          "item/hv_referentie": "@triggerOutputs()?['body/hv_documentnr']",
+                          "item/hv_link": "@{concat('/main.aspx?pagetype=entityrecord&etn=hv_document&id=', triggerOutputs()?['body/hv_documentid'])}"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {
+                        "Status_escalatie": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "Boeken": {
+                  "case": "ok",
+                  "actions": {
+                    "ERP_bericht": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_outboxes",
+                          "item/hv_idempotencykey": "wb-@{triggerOutputs()?['body/hv_bonnummer']}",
+                          "item/hv_endpoint": 100000000,
+                          "item/hv_body": "@{string(json(concat('{\"weighingTicket\":\"', triggerOutputs()?['body/hv_bonnummer'], '\",\"customerNo\":\"', triggerOutputs()?['body/hv_klantnummer'], '\",\"itemCode\":\"', triggerOutputs()?['body/hv_materiaal'], '\",\"netKg\":', string(triggerOutputs()?['body/hv_netto']), ',\"bedrag\":', string(mul(div(float(triggerOutputs()?['body/hv_netto']), 1000), float(coalesce(first(outputs('Materiaalcode')?['body/value'])?['hv_prijsperton'], 0)))), ',\"approvedBy\":\"', coalesce(triggerOutputs()?['body/hv_reviewer'], 'reviewer'), '\"}')))}",
+                          "item/hv_status": 100000000,
+                          "item/hv_pogingen": 0,
+                          "item/hv_volgendepoging": "@utcNow()",
+                          "item/hv_referentie": "@triggerOutputs()?['body/hv_documentnr']",
+                          "item/hv_Weegbon@odata.bind": "/hv_documents(@{triggerOutputs()?['body/hv_documentid']})"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
                     },
-                    "authentication": "@parameters('$authentication')"
-                  },
-                  "runAfter": {
-                    "ERP_boeking": [
-                      "Succeeded",
-                      "Failed",
-                      "Skipped",
-                      "TimedOut"
-                    ]
+                    "ERP_bericht_controle": {
+                      "type": "If",
+                      "runAfter": {
+                        "ERP_bericht": [
+                          "Succeeded",
+                          "Failed",
+                          "Skipped",
+                          "TimedOut"
+                        ]
+                      },
+                      "expression": {
+                        "equals": [
+                          "@and(equals(actions('ERP_bericht')?['status'], 'Failed'), not(or(contains(string(outputs('ERP_bericht')), 'already exists'), contains(string(outputs('ERP_bericht')), '0x80060892'))))",
+                          true
+                        ]
+                      },
+                      "actions": {
+                        "ERP_bericht_mislukt": {
+                          "type": "Terminate",
+                          "inputs": {
+                            "runStatus": "Failed",
+                            "runError": {
+                              "code": "HV-OUTBOX",
+                              "message": "ERP_bericht: bericht kon niet in de outbox"
+                            }
+                          },
+                          "runAfter": {}
+                        }
+                      },
+                      "else": {
+                        "actions": {}
+                      }
+                    },
+                    "In_wachtrij": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "UpdateOnlyRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_documents",
+                          "recordId": "@triggerOutputs()?['body/hv_documentid']",
+                          "item/hv_status": 100000008,
+                          "item/hv_erpreferentie": "@{concat('wb-', triggerOutputs()?['body/hv_bonnummer'], ' (in outbox)')}"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {
+                        "ERP_bericht_controle": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
                   }
                 }
+              },
+              "default": {
+                "actions": {}
               }
             }
           },
-          "default": {
-            "actions": {}
+          "runAfter": {}
+        },
+        "Bij_fout": {
+          "type": "Scope",
+          "runAfter": {
+            "Probeer": [
+              "Failed",
+              "TimedOut"
+            ]
+          },
+          "actions": {
+            "Mislukte_stappen": {
+              "type": "Query",
+              "inputs": {
+                "from": "@result('Probeer')",
+                "where": "@equals(item()?['status'], 'Failed')"
+              },
+              "runAfter": {}
+            },
+            "Foutnamen": {
+              "type": "Select",
+              "inputs": {
+                "from": "@body('Mislukte_stappen')",
+                "select": "@item()?['name']"
+              },
+              "runAfter": {
+                "Mislukte_stappen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Foutmelding": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_meldings",
+                  "item/hv_titel": "@{concat('HV-DI-02 mislukt', if(empty(string(triggerOutputs()?['body/hv_documentnr'])), '', concat(' · ', string(triggerOutputs()?['body/hv_documentnr']))))}",
+                  "item/hv_tekst": "@{concat('Mislukte stap: ', join(body('Foutnamen'), ', '), '. ', coalesce(first(body('Mislukte_stappen'))?['error']?['message'], ''))}",
+                  "item/hv_rol": "Functioneel beheer",
+                  "item/hv_soort": 100000003,
+                  "item/hv_kanaal": 100000000,
+                  "item/hv_status": 100000000,
+                  "item/hv_bron": "HV-DI-02",
+                  "item/hv_referentie": "@{string(triggerOutputs()?['body/hv_documentnr'])}",
+                  "item/hv_link": "@{concat('https://make.powerautomate.com/environments/', workflow()?['tags']?['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']?['name'])}"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Foutnamen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Run_mislukt": {
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed",
+                "runError": {
+                  "code": "HV-FOUT",
+                  "message": "Zie de Fout-melding in de backoffice (Beheer › Meldingen)."
+                }
+              },
+              "runAfter": {
+                "Foutmelding": [
+                  "Succeeded"
+                ]
+              }
+            }
           }
         }
       }

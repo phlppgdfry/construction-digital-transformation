@@ -7,20 +7,20 @@
     <FormActivationState>1</FormActivationState>
     <form>
       <tabs>
-        <tab verticallayout="true" id="{cf9254f0-e2a1-4306-8247-b6a20e96919f}" IsUserDefined="1">
+        <tab verticallayout="true" id="{d9cd8007-293b-4d14-9335-997e2f1e3796}" IsUserDefined="1">
           <labels>
             <label description="Klant (ERP-sandbox)" languagecode="1033" />
           </labels>
           <columns>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{958f76c7-37c5-4f94-a98a-ce3cc86b3d19}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{54ca114c-97a6-42a1-aa8a-70ad64713b95}">
                   <labels>
                     <label description="Gegevens" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{f4f8fd50-fe63-4c24-9e95-3fecbb333916}">
+                      <cell id="{886547d4-522a-44f3-ac8d-4351686f2b92}">
                         <labels>
                           <label description="Klantnummer" languagecode="1033" />
                         </labels>
@@ -28,7 +28,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{aad1d152-6ed5-4db4-885c-2dd34cd73cb5}">
+                      <cell id="{d33249d8-2d95-4326-a1a9-edc07c89f350}">
                         <labels>
                           <label description="Naam" languagecode="1033" />
                         </labels>
@@ -41,13 +41,13 @@
             </column>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{dc15b652-32ea-4f83-9534-06deb8eebbc8}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{0accf085-dc8d-4be7-a01c-203731a23647}">
                   <labels>
                     <label description="Details" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{e6fad8ba-3b4d-465c-9e34-5a8bea47caff}">
+                      <cell id="{aa40eece-cf2f-4f89-bf37-c4bd8b93cbe3}">
                         <labels>
                           <label description="Actief" languagecode="1033" />
                         </labels>

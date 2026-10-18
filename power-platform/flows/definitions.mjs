@@ -68,8 +68,13 @@ function melding(S, flow, { titel, tekst, rol, soort = ST.soort.info, kanaal, re
 /** Wrap a flow in Probeer / Bij_fout. `onFail` are extra actions (e.g. status Fout) that run before the run is failed. */
 function guarded(S, flow, actions, { ref = "''", onFail = {} } = {}) {
   const failNames = Object.keys(onFail);
+  // Power Automate only allows variables at the top level: initialise them before the scope, in order.
+  const inits = Object.keys(actions).filter((n) => actions[n].type === "InitializeVariable");
+  const top = Object.fromEntries(inits.map((n, i) => [n, { ...actions[n], runAfter: i ? ok(inits[i - 1]) : {} }]));
+  const inner = Object.fromEntries(Object.entries(actions).filter(([n]) => !inits.includes(n)).map(([n, a]) => [n, { ...a, runAfter: Object.fromEntries(Object.entries(a.runAfter ?? {}).filter(([d]) => !inits.includes(d))) }]));
   return {
-    Probeer: { type: "Scope", actions, runAfter: {} },
+    ...top,
+    Probeer: { type: "Scope", actions: inner, runAfter: inits.length ? ok(inits.at(-1)) : {} },
     Bij_fout: {
       type: "Scope", runAfter: { Probeer: ["Failed", "TimedOut"] },
       actions: {
@@ -233,14 +238,14 @@ export function weigeringMelden(S) {
   const reden = `coalesce(${t("hv_reviewopmerking")}, 'geen reden opgegeven')`;
   const extern = (rol, wie) => melding(S, F, {
     titel: `@{concat('Lading geweigerd: bon ', ${t("hv_bonnummer")})}`,
-    tekst: `@{concat('${wie}: de lading van ', ${t("hv_datum")}, ' (', ${t("hv_plaat")}, ', materiaal ', ${t("hv_materiaal")}, ') is geweigerd. Reden: ', ${reden})}`,
+    tekst: `@{concat(${wie}, ': de lading van ', ${t("hv_datum")}, ' (', ${t("hv_plaat")}, ', materiaal ', ${t("hv_materiaal")}, ') is geweigerd. Reden: ', ${reden})}`,
     rol, kanaal: ST.kanaal.extern, ref: `@${docRef}`,
   });
   return definition(
     { Weegbon_afgewezen: onStatus("hv_document", ST.doc.afgewezen) },
     guarded(S, F, {
-      Klant_verwittigen: extern("Klant (extern)", `@{concat('Klant ', ${t("hv_klantnummer")})}`),
-      Vervoerder_verwittigen: extern("Vervoerder (extern)", `@{concat('Vervoerder ', ${t("hv_plaat")})}`),
+      Klant_verwittigen: extern("Klant (extern)", `concat('Klant ', ${t("hv_klantnummer")})`),
+      Vervoerder_verwittigen: extern("Vervoerder (extern)", `concat('Vervoerder ', ${t("hv_plaat")})`),
     }, { ref: docRef }),
   );
 }
@@ -350,15 +355,15 @@ function approvalChain(S, { set, idCol, chainCol, levelCol, title, details, appr
 export function schadeclaimGoedkeuring(S) {
   const F = "HV-CL-02";
   const upd = (status) => dv("UpdateOnlyRecord", { entityName: S.hv_schadeclaim, recordId: `@${t("hv_schadeclaimid")}`, "item/hv_status": status });
-  const werfleider = (titel, soort = ST.soort.info) => melding(S, F, { titel, tekst: `@{concat('Raming EUR ', string(${t("hv_geschatbedrag")}), ' · keten ', ${t("hv_goedkeuringsketen")})}`, rol: "Werfleider", soort, ref: `@${claimRef}`, link: claimLink }, ok("Status"));
+  const werfleider = (titel, after, soort = ST.soort.info) => melding(S, F, { titel, tekst: `@{concat('Raming EUR ', string(${t("hv_geschatbedrag")}), ' · keten ', ${t("hv_goedkeuringsketen")})}`, rol: "Werfleider", soort, ref: `@${claimRef}`, link: claimLink }, ok(after));
   const actions = approvalChain(S, {
     set: S.hv_schadeclaim, idCol: "hv_schadeclaimid", chainCol: "hv_goedkeuringsketen", levelCol: "hv_goedkeuringsniveau",
     title: `Schadeclaim @{${claimRef}}`,
     details: `Raming €@{${t("hv_geschatbedrag")}} · @{${t("hv_omschrijving")}} · keten @{${t("hv_goedkeuringsketen")}}`,
     after: (role) => ({ Tijdlijn: timeline(S, `@{if(equals(body('Goedkeuring')?['outcome'], 'Approve'), 'goedgekeurd', 'afgewezen')} (@{${role}})`, "@{first(body('Goedkeuring')?['responses'])?['responder/email']}", "@{first(body('Goedkeuring')?['responses'])?['comments']}", ok("Goedkeuring")) }),
-    approved: { Status: upd(ST.claim.goedgekeurd), Melding_werfleider: werfleider(`@{concat('Schade ', ${claimRef}, ' goedgekeurd')}`) },
-    rejected: { Status: upd(ST.claim.afgewezen), Melding_werfleider: werfleider(`@{concat('Schade ', ${claimRef}, ' afgewezen')}`) },
-    timedOut: { Status: upd(ST.claim.beoordeling), Melding_eigenaar: melding(S, F, { titel: `@{concat('Goedkeuring ', ${claimRef}, ' verlopen na 14 dagen')}`, tekst: "Niemand antwoordde op tijd. Het dossier staat terug op In beoordeling; zet het opnieuw op Ter goedkeuring om de keten te hervatten.", rol: "Afdelingsverantwoordelijke", soort: ST.soort.waarschuwing, ref: `@${claimRef}`, link: claimLink }, ok("Status")) },
+    approved: { Status_goedgekeurd: upd(ST.claim.goedgekeurd), Melding_goedgekeurd: werfleider(`@{concat('Schade ', ${claimRef}, ' goedgekeurd')}`, "Status_goedgekeurd") },
+    rejected: { Status_afgewezen: upd(ST.claim.afgewezen), Melding_afgewezen: werfleider(`@{concat('Schade ', ${claimRef}, ' afgewezen')}`, "Status_afgewezen") },
+    timedOut: { Status_terug: upd(ST.claim.beoordeling), Melding_verlopen: melding(S, F, { titel: `@{concat('Goedkeuring ', ${claimRef}, ' verlopen na 14 dagen')}`, tekst: "Niemand antwoordde op tijd. Het dossier staat terug op In beoordeling; zet het opnieuw op Ter goedkeuring om de keten te hervatten.", rol: "Afdelingsverantwoordelijke", soort: ST.soort.waarschuwing, ref: `@${claimRef}`, link: claimLink }, ok("Status_terug")) },
   });
   return definition({ Ter_goedkeuring: onStatus("hv_schadeclaim", ST.claim.terGoedkeuring) }, guarded(S, F, actions, { ref: claimRef }));
 }
@@ -508,8 +513,8 @@ export function aanvraagGoedkeuren(S) {
     title: `Materiaalaanvraag @{${reqRef}} — €@{formatNumber(float(${t("hv_waarde")}), 'N0', 'nl-BE')}`,
     details: `@{${t("hv_regel")}} · aanvrager @{${t("hv_aanvrager")}}`,
     after: () => ({}),
-    approved: { Status: upd(ST.req.goedgekeurd) },
-    rejected: { Status: upd(ST.req.afgewezen), Melding_werfleider: melding(S, F, { titel: `@{concat('Aanvraag ', ${reqRef}, ' afgewezen')}`, tekst: `@{concat(${t("hv_regel")}, '. Opmerking: ', coalesce(first(body('Goedkeuring')?['responses'])?['comments'], 'geen'))}`, rol: "Werfleider", soort: ST.soort.waarschuwing, ref: `@${reqRef}`, link: reqLink }, ok("Status")) },
+    approved: { Status_goedgekeurd: upd(ST.req.goedgekeurd) },
+    rejected: { Status_afgewezen: upd(ST.req.afgewezen), Melding_afgewezen: melding(S, F, { titel: `@{concat('Aanvraag ', ${reqRef}, ' afgewezen')}`, tekst: `@{concat(${t("hv_regel")}, '. Opmerking: ', coalesce(first(body('Goedkeuring')?['responses'])?['comments'], 'geen'))}`, rol: "Werfleider", soort: ST.soort.waarschuwing, ref: `@${reqRef}`, link: reqLink }, ok("Status_afgewezen")) },
     timedOut: { Melding_verlopen: melding(S, F, { titel: `@{concat('Goedkeuring aanvraag ', ${reqRef}, ' verlopen')}`, tekst: "Niemand antwoordde binnen 14 dagen. Zet de aanvraag opnieuw op Ter goedkeuring om te hervatten, of wijs ze af.", rol: "Afdelingsverantwoordelijke", soort: ST.soort.waarschuwing, ref: `@${reqRef}`, link: reqLink }) },
   });
   return definition({ Ter_goedkeuring: onStatus("hv_materiaalaanvraag", ST.req.terGoedkeuring) }, guarded(S, F, actions, { ref: reqRef, onFail: reqFail(S) }));

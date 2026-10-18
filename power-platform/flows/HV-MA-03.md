@@ -71,8 +71,8 @@ In het doelontwerp zat dit in de verwerkingsflow. Apart is het kleiner en te her
 *Gegenereerd uit [`definitions.mjs`](definitions.mjs) door `npm run build`. Niet met de hand aanpassen.* 15 acties · verbindingen: Microsoft Dataverse · omgevingsvariabelen: geen · regels uit *Bedrijfsregel*: geen.
 
 - **Trigger `Goedgekeurd`**: Dataverse, rij gewijzigd in *Materiaalaanvraag* (`hv_materiaalaanvraag`); alleen bij wijziging van `hv_status`, voorwaarde `hv_status eq 100000003`
-- `Probeer`: blok: alle stappen hieronder; faalt er één, dan gaat de run naar `Bij_fout`
-  - `Outboxfouten`: variabele aanmaken `outboxfouten` (integer)
+- `Outboxfouten`: variabele aanmaken `outboxfouten` (integer)
+- `Probeer`: foutafhandeling (alleen als het blok hierboven faalt)
   - `Naar_outbox`: voor elk item
     - `Outbox_rij`: rij toevoegen in *ERP-outbox*: `hv_idempotencykey`, `hv_endpoint`, `hv_body`, `hv_status`, `hv_pogingen`, `hv_volgendepoging`, `hv_referentie`, `hv_Aanvraag`
     - `Outbox_rij_controle`: voorwaarde · loopt ook als `Outbox_rij` faalt

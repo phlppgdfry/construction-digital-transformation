@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{a23ab911-1edb-4351-aa47-1668e9f7cd62}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{de291d7d-fc1d-4706-9ed0-c1b1dbf81109}" IsUserDefined="1">
+          <labels>
+            <label description="Bedrijfsregel" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{92938e3e-97b0-463f-bfad-a13ab6d1791d}">
+                  <labels>
+                    <label description="Gegevens" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{25cbb7e4-d7b7-4f56-8c33-45db1fca646c}">
+                        <labels>
+                          <label description="Code" languagecode="1033" />
+                        </labels>
+                        <control id="hv_code" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_code" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{26b8890c-934d-4c00-a8c5-bcd7cb456d01}">
+                        <labels>
+                          <label description="Naam" languagecode="1033" />
+                        </labels>
+                        <control id="hv_naam" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_naam" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{d1882cf5-34f4-4524-9c2f-d27a26e2183f}">
+                        <labels>
+                          <label description="Regel (gewone taal)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_regeltekst" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="hv_regeltekst" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{60d3f860-9c90-4891-926f-4cb9d020a4f8}">
+                        <labels>
+                          <label description="Parameter" languagecode="1033" />
+                        </labels>
+                        <control id="hv_waarde" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="hv_waarde" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{1801ac71-0575-4054-b3df-087875505a25}">
+                  <labels>
+                    <label description="Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{1547882d-049a-4d96-a03d-1289f6f50362}">
+                        <labels>
+                          <label description="Eenheid" languagecode="1033" />
+                        </labels>
+                        <control id="hv_eenheid" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_eenheid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{ce961c84-6162-494c-b7a1-cebe44d70f55}">
+                        <labels>
+                          <label description="Case" languagecode="1033" />
+                        </labels>
+                        <control id="hv_case" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_case" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5a54153c-80c2-4060-bf24-fa26d0c9f605}">
+                        <labels>
+                          <label description="Eigenaar (rol)" languagecode="1033" />
+                        </labels>
+                        <control id="hv_eigenaar" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="hv_eigenaar" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{cc9f0f22-e274-4497-9672-b4e62d1ea761}">
+                        <labels>
+                          <label description="Waarom" languagecode="1033" />
+                        </labels>
+                        <control id="hv_waarom" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="hv_waarom" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Bedrijfsregel" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

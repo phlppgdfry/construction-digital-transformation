@@ -260,6 +260,42 @@
             <displayname description="Aanvrager" languagecode="1033" />
           </displaynames>
         </attribute>
+        <attribute PhysicalName="hv_Berichten">
+          <Type>ntext</Type>
+          <Name>hv_berichten</Name>
+          <LogicalName>hv_berichten</LogicalName>
+          <RequiredLevel>none</RequiredLevel>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <ImeMode>auto</ImeMode>
+          <ValidForUpdateApi>1</ValidForUpdateApi>
+          <ValidForReadApi>1</ValidForReadApi>
+          <ValidForCreateApi>1</ValidForCreateApi>
+          <IsCustomField>1</IsCustomField>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <IsSecured>0</IsSecured>
+          <IntroducedVersion>1.0.0.0</IntroducedVersion>
+          <IsCustomizable>1</IsCustomizable>
+          <IsRenameable>1</IsRenameable>
+          <CanModifySearchSettings>1</CanModifySearchSettings>
+          <CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+          <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings>
+          <SourceType>0</SourceType>
+          <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled>
+          <IsSortableEnabled>0</IsSortableEnabled>
+          <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings>
+          <CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+          <IsDataSourceSecret>0</IsDataSourceSecret>
+          <AutoNumberFormat></AutoNumberFormat>
+          <IsSearchable>0</IsSearchable>
+          <IsFilterable>0</IsFilterable>
+          <IsRetrievable>0</IsRetrievable>
+          <IsLocalizable>0</IsLocalizable>
+          <Format>textarea</Format>
+          <MaxLength>8000</MaxLength>
+          <displaynames>
+            <displayname description="Geplande ERP-berichten (JSON)" languagecode="1033" />
+          </displaynames>
+        </attribute>
         <attribute PhysicalName="hv_Budgetoverschreden">
           <Type>bit</Type>
           <Name>hv_budgetoverschreden</Name>
@@ -313,6 +349,43 @@
           </optionset>
           <displaynames>
             <displayname description="Budget overschreden" languagecode="1033" />
+          </displaynames>
+        </attribute>
+        <attribute PhysicalName="hv_Goedkeuringsniveau">
+          <Type>int</Type>
+          <Name>hv_goedkeuringsniveau</Name>
+          <LogicalName>hv_goedkeuringsniveau</LogicalName>
+          <RequiredLevel>none</RequiredLevel>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <ImeMode>disabled</ImeMode>
+          <ValidForUpdateApi>1</ValidForUpdateApi>
+          <ValidForReadApi>1</ValidForReadApi>
+          <ValidForCreateApi>1</ValidForCreateApi>
+          <IsCustomField>1</IsCustomField>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <IsSecured>0</IsSecured>
+          <IntroducedVersion>1.0.0.0</IntroducedVersion>
+          <IsCustomizable>1</IsCustomizable>
+          <IsRenameable>1</IsRenameable>
+          <CanModifySearchSettings>1</CanModifySearchSettings>
+          <CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+          <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings>
+          <SourceType>0</SourceType>
+          <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled>
+          <IsSortableEnabled>0</IsSortableEnabled>
+          <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings>
+          <CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+          <IsDataSourceSecret>0</IsDataSourceSecret>
+          <AutoNumberFormat></AutoNumberFormat>
+          <IsSearchable>0</IsSearchable>
+          <IsFilterable>0</IsFilterable>
+          <IsRetrievable>0</IsRetrievable>
+          <IsLocalizable>0</IsLocalizable>
+          <Format>none</Format>
+          <MinValue>-2147483648</MinValue>
+          <MaxValue>2147483647</MaxValue>
+          <displaynames>
+            <displayname description="Goedkeuringsniveau" languagecode="1033" />
           </displaynames>
         </attribute>
         <attribute PhysicalName="hv_Leverenop">
@@ -658,6 +731,16 @@
               <option value="100000009" ExternalValue="" IsHidden="0">
                 <labels>
                   <label description="Afgewezen" languagecode="1033" />
+                </labels>
+              </option>
+              <option value="100000007" IsHidden="0">
+                <labels>
+                  <label description="Afgesloten" languagecode="1033" />
+                </labels>
+              </option>
+              <option value="100000010" IsHidden="0">
+                <labels>
+                  <label description="Fout" languagecode="1033" />
                 </labels>
               </option>
             </options>

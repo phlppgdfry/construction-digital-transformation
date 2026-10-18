@@ -33,6 +33,9 @@
     <AppModuleComponent type="59" id="{020c7093-6ec9-f111-a05c-6045bd29a82d}" />
     <AppModuleComponent type="59" id="{050c7093-6ec9-f111-a05c-6045bd29a82d}" />
     <AppModuleComponent type="59" id="{080c7093-6ec9-f111-a05c-6045bd29a82d}" />
+    <AppModuleComponent type="59" id="{0c66d6c6-a3ca-f111-a05c-6045bd29a82d}" />
+    <AppModuleComponent type="59" id="{1466d6c6-a3ca-f111-a05c-6045bd29a82d}" />
+    <AppModuleComponent type="59" id="{be9f3ccd-a3ca-f111-a05c-6045bd29a82d}" />
     <AppModuleComponent type="60" id="{35b6719f-6ec9-f111-a05c-6045bd29a82d}" />
     <AppModuleComponent type="62" schemaName="hv_backoffice" />
   </AppModuleComponents>
@@ -47,6 +50,10 @@
     <Description description="Backoffice voor de drie cases (fictief): weegbonnen nakijken, schadeclaims beoordelen, materiaalaanvragen en ERP-outbox opvolgen." languagecode="1033" />
   </Descriptions>
   <appsettings>
+    <appsetting settingdefinitionid.uniquename="AllowNotificationsEarlyAccess">
+      <iscustomizable>1</iscustomizable>
+      <value>true</value>
+    </appsetting>
     <appsetting settingdefinitionid.uniquename="AppChannel">
       <iscustomizable>1</iscustomizable>
       <value>1</value>

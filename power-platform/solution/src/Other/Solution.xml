@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ImportExportXml version="9.2.26094.146" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26094.146" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.26101.00152">
+<ImportExportXml version="9.2.26101.157" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26101.157" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.26101.00157">
   <SolutionManifest>
     <UniqueName>HalverdijkTransformatie</UniqueName>
     <LocalizedNames>
@@ -90,21 +90,31 @@
       <RootComponent type="1" schemaName="hv_erpboeking" behavior="0" />
       <RootComponent type="1" schemaName="hv_goedkeurder" behavior="0" />
       <RootComponent type="1" schemaName="hv_klant" behavior="0" />
+      <RootComponent type="1" schemaName="hv_kpimeting" behavior="0" />
       <RootComponent type="1" schemaName="hv_materiaalaanvraag" behavior="0" />
       <RootComponent type="1" schemaName="hv_materiaalcode" behavior="0" />
+      <RootComponent type="1" schemaName="hv_melding" behavior="0" />
       <RootComponent type="1" schemaName="hv_nummerplaat" behavior="0" />
       <RootComponent type="1" schemaName="hv_outbox" behavior="0" />
+      <RootComponent type="1" schemaName="hv_regel" behavior="0" />
       <RootComponent type="1" schemaName="hv_schadeclaim" behavior="0" />
       <RootComponent type="1" schemaName="hv_tijdlijn" behavior="0" />
       <RootComponent type="1" schemaName="hv_voorraad" behavior="0" />
       <RootComponent type="1" schemaName="hv_werf" behavior="0" />
       <RootComponent type="1" schemaName="hv_werfbudget" behavior="0" />
+      <RootComponent type="29" id="{008a7cb1-a3ca-f111-a05c-6045bd29a82d}" behavior="0" />
+      <RootComponent type="29" id="{08d407ab-a3ca-f111-a05c-6045bd29a82d}" behavior="0" />
+      <RootComponent type="29" id="{188a7cb1-a3ca-f111-a05c-6045bd29a82d}" behavior="0" />
       <RootComponent type="29" id="{1e64087f-32c9-f111-a05c-6045bd29a82d}" behavior="0" />
+      <RootComponent type="29" id="{2d8a7cb1-a3ca-f111-a05c-6045bd29a82d}" behavior="0" />
       <RootComponent type="29" id="{3164087f-32c9-f111-a05c-6045bd29a82d}" behavior="0" />
       <RootComponent type="29" id="{3335fa78-32c9-f111-a05c-6045bd29a82d}" behavior="0" />
       <RootComponent type="29" id="{4435fa78-32c9-f111-a05c-6045bd29a82d}" behavior="0" />
       <RootComponent type="29" id="{5435fa78-32c9-f111-a05c-6045bd29a82d}" behavior="0" />
+      <RootComponent type="29" id="{5a6d77b7-a3ca-f111-a05c-6045bd29a82d}" behavior="0" />
       <RootComponent type="29" id="{6535fa78-32c9-f111-a05c-6045bd29a82d}" behavior="0" />
+      <RootComponent type="29" id="{ae07f3c0-a2ca-f111-a05c-6045bd29a82d}" behavior="0" />
+      <RootComponent type="29" id="{bab3e476-a3ca-f111-a05c-6045bd29a82d}" behavior="0" />
       <RootComponent type="29" id="{ee33fa78-32c9-f111-a05c-6045bd29a82d}" behavior="0" />
       <RootComponent type="431" schemaName="hv_document hv_bestand" behavior="0" />
       <RootComponent type="432" schemaName="hv_document" behavior="0" />
@@ -114,10 +124,22 @@
     </RootComponents>
     <MissingDependencies>
       <MissingDependency>
+        <Required type="1" schemaName="appnotification" displayName="Notification" solution="AppNotifications (10.0.0.17)">
+          <package appName="PowerAppsUnifiedClientExtensionApp Package" version="1.0.0.103">PowerAppsUnifiedClientExtensionApp_Anchor (1.0.0.103)</package>
+        </Required>
+        <Dependent type="29" displayName="HV-OP-01 Meldingen versturen" id="{5a6d77b7-a3ca-f111-a05c-6045bd29a82d}" />
+      </MissingDependency>
+      <MissingDependency>
         <Required type="61" schemaName="msdyn_/Images/AppModule_Default_Icon.png" displayName="msdyn_/Images/AppModule_Default_Icon.png" solution="AppModuleWebResources (2.5)">
           <package appName="AppModule Web Resources Package" version="2.5">AppModuleWebResources (2.5)</package>
         </Required>
         <Dependent type="80" schemaName="hv_HalverdijkBackoffice" displayName="Halverdijk Backoffice" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="SettingDefinition" displayName="AllowNotificationsEarlyAccess" solution="AppNotifications (10.0.0.17)" id.uniquename="AllowNotificationsEarlyAccess">
+          <package appName="PowerAppsUnifiedClientExtensionApp Package" version="1.0.0.103">PowerAppsUnifiedClientExtensionApp_Anchor (1.0.0.103)</package>
+        </Required>
+        <Dependent type="AppSetting" displayName="parentappmoduleid.uniquename=hv_HalverdijkBackoffice,settingdefinitionid.uniquename=AllowNotificationsEarlyAccess" id.parentappmoduleid.uniquename="hv_HalverdijkBackoffice" id.settingdefinitionid.uniquename="AllowNotificationsEarlyAccess" />
       </MissingDependency>
       <MissingDependency>
         <Required type="SettingDefinition" displayName="AppChannel" solution="msdyn_AppFrameworkInfraExtensions (1.0.0.27)" id.uniquename="AppChannel">

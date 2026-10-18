@@ -7,20 +7,20 @@
     <FormActivationState>1</FormActivationState>
     <form>
       <tabs>
-        <tab verticallayout="true" id="{4831d512-482a-418c-aa78-3fc07be47094}" IsUserDefined="1">
+        <tab verticallayout="true" id="{e1ccc735-d88a-4001-bea2-26a47c688699}" IsUserDefined="1">
           <labels>
             <label description="Werf" languagecode="1033" />
           </labels>
           <columns>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{5fdeb03d-6860-476f-a5e7-7b4ad8429fc8}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{bf33ce7c-f446-4780-aa18-9f8c9ac2bc8a}">
                   <labels>
                     <label description="Gegevens" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{074ddd1d-4e2a-466c-8071-6258d55ff5be}">
+                      <cell id="{193453ea-fba6-40cf-9587-95119a8ae5f3}">
                         <labels>
                           <label description="Werfnummer" languagecode="1033" />
                         </labels>
@@ -28,7 +28,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{371e12ee-eae7-42de-b34a-96e66608ab5b}">
+                      <cell id="{f22dc40d-b5de-4668-bccd-c12a7ca5a3d4}">
                         <labels>
                           <label description="Naam" languagecode="1033" />
                         </labels>
@@ -36,7 +36,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{eb2ee4bd-319b-46c6-8e68-9c1c86718836}">
+                      <cell id="{476513d2-0f49-4ef1-a2c2-5bc9b5a87bc2}">
                         <labels>
                           <label description="Type werk" languagecode="1033" />
                         </labels>
@@ -49,13 +49,13 @@
             </column>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{d98e2404-8a40-4036-b9af-086809fca037}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{84237771-e47d-469b-a0f3-8a7d1d293739}">
                   <labels>
                     <label description="Details" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{845e0e12-7d8f-4188-ba05-99ef3877b374}">
+                      <cell id="{be3208b6-12eb-4e32-a4f4-1092bdb5e4f2}">
                         <labels>
                           <label description="Actief" languagecode="1033" />
                         </labels>
@@ -63,7 +63,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{45b894f1-3f0d-46f5-97c7-015dd786dc44}">
+                      <cell id="{4fc771eb-2aa9-4456-8d0c-5f9bf90efb61}">
                         <labels>
                           <label description="Projectleider (rol)" languagecode="1033" />
                         </labels>
@@ -71,7 +71,7 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{86f291c7-2990-49ca-a125-01fa07d7ef23}">
+                      <cell id="{f2580558-ebc0-4d30-a316-2679f012c063}">
                         <labels>
                           <label description="Afdeling" languagecode="1033" />
                         </labels>
@@ -84,24 +84,24 @@
             </column>
           </columns>
         </tab>
-        <tab verticallayout="true" id="{cc911fed-3991-40b4-8d12-616d712bdb98}" IsUserDefined="1">
+        <tab verticallayout="true" id="{b15419d8-56a8-4dbf-945d-5b11634a0151}" IsUserDefined="1">
           <labels>
             <label description="Gerelateerd" languagecode="1033" />
           </labels>
           <columns>
             <column width="100%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{25ce659a-34b1-47f7-b690-f55225c3eff4}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{e552f21c-3b9b-4c92-b9ca-11dd66b0aa94}">
                   <labels>
                     <label description="Budgetlijnen" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{ce72d0b2-2ff3-4564-8e86-b7a0d17a1868}" rowspan="6" colspan="1">
+                      <cell id="{24952981-a9cf-4a8e-85fe-06ddab028094}" rowspan="6" colspan="1">
                         <labels>
                           <label description="Budgetlijnen" languagecode="1033" />
                         </labels>
-                        <control id="sg_hv_werfbudget" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true" uniqueid="{88174e28-3ebf-4daf-883b-03af46c13424}">
+                        <control id="sg_hv_werfbudget" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true" uniqueid="{024b0880-b207-48be-9d0f-182bb2538afb}">
                           <parameters>
                             <RecordsPerPage>10</RecordsPerPage>
                             <AutoExpand>Fixed</AutoExpand>
@@ -126,17 +126,17 @@
                     <row />
                   </rows>
                 </section>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{e288fb38-ff15-49cd-8dec-e27f0f6a2cf4}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{57e391e4-6750-4579-95b2-332ae4fc7ab1}">
                   <labels>
                     <label description="Afstand tot depots" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{fd70a977-b65a-46a6-9e3f-e8d08853543a}" rowspan="6" colspan="1">
+                      <cell id="{a0ca258b-b810-41f4-8f53-310510c8823b}" rowspan="6" colspan="1">
                         <labels>
                           <label description="Afstand tot depots" languagecode="1033" />
                         </labels>
-                        <control id="sg_hv_afstand" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true" uniqueid="{2d3f9dc6-7746-48fa-9a2a-3030fceb9587}">
+                        <control id="sg_hv_afstand" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true" uniqueid="{3fd16d0b-27e3-4bde-934d-ab3967b2aa34}">
                           <parameters>
                             <RecordsPerPage>10</RecordsPerPage>
                             <AutoExpand>Fixed</AutoExpand>

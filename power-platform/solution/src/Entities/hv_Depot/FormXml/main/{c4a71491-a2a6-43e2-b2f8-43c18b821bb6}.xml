@@ -7,20 +7,20 @@
     <FormActivationState>1</FormActivationState>
     <form>
       <tabs>
-        <tab verticallayout="true" id="{ee7b636f-19dc-4d60-97a7-82485976eef3}" IsUserDefined="1">
+        <tab verticallayout="true" id="{56bbec20-462d-4889-8734-00e2bef393c1}" IsUserDefined="1">
           <labels>
             <label description="Depot" languagecode="1033" />
           </labels>
           <columns>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{0c506dea-d9f6-4d1c-9b22-55ec4221c4a1}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{b68e080b-a429-4a17-ab56-1fe59b62a912}">
                   <labels>
                     <label description="Gegevens" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{029d414d-be15-4eef-b337-43dbc9bde905}">
+                      <cell id="{67393949-bd4d-4c46-92fe-460ddda6b402}">
                         <labels>
                           <label description="Depotnummer" languagecode="1033" />
                         </labels>
@@ -33,13 +33,13 @@
             </column>
             <column width="50%">
               <sections>
-                <section showlabel="true" showbar="false" IsUserDefined="0" id="{0aae1ec3-f5b0-474e-9130-c8c796c70315}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{4efd534a-8fb6-425f-89e7-f969c2401930}">
                   <labels>
                     <label description="Details" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{86bb55ee-2a04-41bf-afc7-a082c940a356}">
+                      <cell id="{a5ce2f17-f295-4f9c-bbde-8c62b79c8a05}">
                         <labels>
                           <label description="Naam" languagecode="1033" />
                         </labels>

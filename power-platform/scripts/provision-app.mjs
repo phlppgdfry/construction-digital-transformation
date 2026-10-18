@@ -100,7 +100,7 @@ const setting = (await get("settingdefinitions?$select=settingdefinitionid&$filt
 if (setting) {
   const have = (await get(`appsettings?$select=appsettingid,value&$filter=_settingdefinitionid_value eq ${setting.settingdefinitionid} and _parentappmoduleid_value eq ${app.appmoduleid}`, { solution: null })).json.value[0];
   if (have) await patch(`appsettings(${have.appsettingid})`, { value: "true" });
-  else await post("appsettings", { uniquename: "hv_HalverdijkBackoffice_AllowNotificationsEarlyAccess", value: "true", "SettingDefinitionId@odata.bind": `/settingdefinitions(${setting.settingdefinitionid})`, "ParentAppModuleId@odata.bind": `/appmodules(${app.appmoduleid})` });
+  else await post("appsettings", { uniquename: "hv_HalverdijkBackoffice_AllowNotificationsEarlyAccess", value: "true", "settingdefinitionid@odata.bind": `/settingdefinitions(${setting.settingdefinitionid})`, "parentappmoduleid@odata.bind": `/appmodules(${app.appmoduleid})` });
   console.log("in-app notifications on");
 }
 // a changed sitemap only reaches the app after a full publish

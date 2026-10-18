@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>0</isdefault>
+    <savedqueryid>{41a4286c-45be-4b52-9ae8-e5ff5ae608f6}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="hv_titel" select="1" icon="1" preview="1">
+        <row name="result" id="hv_meldingid">
+          <cell name="hv_titel" width="300" />
+          <cell name="createdon" width="125" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="hv_melding">
+          <attribute name="hv_meldingid" />
+          <attribute name="hv_titel" />
+          <attribute name="createdon" />
+          <order attribute="hv_titel" descending="false" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="1" />
+          </filter>
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Inactive Meldingen" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

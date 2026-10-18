@@ -83,10 +83,10 @@ De aanvragen boven €1.000 staan in [VERIFICATION.md](../VERIFICATION.md#case-0
 *Gegenereerd uit [`definitions.mjs`](definitions.mjs) door `npm run build`. Niet met de hand aanpassen.* 23 acties · verbindingen: Microsoft Dataverse, Approvals · omgevingsvariabelen: geen · regels uit *Bedrijfsregel*: geen.
 
 - **Trigger `Ter_goedkeuring`**: Dataverse, rij gewijzigd in *Materiaalaanvraag* (`hv_materiaalaanvraag`); alleen bij wijziging van `hv_status`, voorwaarde `hv_status eq 100000002`
-- `Probeer`: blok: alle stappen hieronder; faalt er één, dan gaat de run naar `Bij_fout`
-  - `Keten`: variabele aanmaken `keten` (array)
-  - `Niveau`: variabele aanmaken `niveau` (integer)
-  - `Afgewezen`: variabele aanmaken `afgewezen` (boolean)
+- `Keten`: variabele aanmaken `keten` (array)
+- `Niveau`: variabele aanmaken `niveau` (integer)
+- `Afgewezen`: variabele aanmaken `afgewezen` (boolean)
+- `Probeer`: foutafhandeling (alleen als het blok hierboven faalt)
   - `Per_niveau`: herhalen tot de voorwaarde klopt (max. 6 keer, time-out 14 dagen)
     - `Goedkeurder`: rijen opzoeken in *Rol (goedkeurder en ontvanger)* (eerste treffer)
     - `Goedkeuring`: goedkeuring vragen via Approvals en wachten op het antwoord
@@ -99,10 +99,10 @@ De aanvragen boven €1.000 staan in [VERIFICATION.md](../VERIFICATION.md#case-0
   - `Eindstatus`: berekening · loopt ook als `Per_niveau` faalt
   - `Volgens_uitkomst`: keuze
     - geval `goedgekeurd` (Goedgekeurd):
-      - `Status`: rij bijwerken in *Materiaalaanvraag*: `hv_status`
+      - `Status_goedgekeurd`: rij bijwerken in *Materiaalaanvraag*: `hv_status`
     - geval `afgewezen` (Afgewezen):
-      - `Status`: rij bijwerken in *Materiaalaanvraag*: `hv_status`
-      - `Melding_werfleider`: rij toevoegen in *Melding*: `hv_titel`, `hv_tekst`, `hv_rol`, `hv_soort`, `hv_kanaal`, `hv_status`, `hv_bron`, `hv_referentie`, `hv_link`
+      - `Status_afgewezen`: rij bijwerken in *Materiaalaanvraag*: `hv_status`
+      - `Melding_afgewezen`: rij toevoegen in *Melding*: `hv_titel`, `hv_tekst`, `hv_rol`, `hv_soort`, `hv_kanaal`, `hv_status`, `hv_bron`, `hv_referentie`, `hv_link`
     - geval `verlopen` (Verlopen):
       - `Melding_verlopen`: rij toevoegen in *Melding*: `hv_titel`, `hv_tekst`, `hv_rol`, `hv_soort`, `hv_kanaal`, `hv_status`, `hv_bron`, `hv_referentie`, `hv_link`
 - `Bij_fout`: foutafhandeling (alleen als het blok hierboven faalt)

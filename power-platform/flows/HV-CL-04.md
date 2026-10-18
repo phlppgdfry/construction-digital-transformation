@@ -65,6 +65,8 @@ Geen eigen parameters. Verbinding: `hv_dataverse`.
 
 Zie [VERIFICATION.md](../VERIFICATION.md#één-integratiepatroon-alles-via-de-outbox): het afgesloten testdossier heeft precies één projectkost in de ERP-sandbox en de regel *kosten geboekt op project (ERP)* in de tijdlijn.
 
+![Run van HV-CL-04](../screenshots/37-flow-hv-cl-04-run.jpg)
+
 ## Ontwerp en gebouwd
 
 | | Doelontwerp ([to-be BPMN](../../02-construction-claims/bpmn/to-be.svg)) | Gebouwd |

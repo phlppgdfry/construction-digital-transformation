@@ -4,7 +4,7 @@
     <LocalizedName description="Halverdijk — Overzicht" languagecode="1033" />
   </LocalizedNames>
   <Descriptions>
-    <Description description="KPI's van de drie cases (fictief): weegbonnen per beslissing en status, schadeclaims per ernst en geraamde schade, materiaalaanvragen per route, ERP-outbox per status." languagecode="1033" />
+    <Description description="KPI's van de drie cases (fictief): weegbonnen per beslissing en status, schadeclaims per ernst en geraamde schade, materiaalaanvragen per route, ERP-outbox per status, baten per maand (simulatie) en meldingen per soort." languagecode="1033" />
   </Descriptions>
   <FormId>{35b6719f-6ec9-f111-a05c-6045bd29a82d}</FormId>
   <IsCustomizable>1</IsCustomizable>
@@ -13,20 +13,20 @@
     <forms type="dashboard">
       <form>
         <tabs>
-          <tab name="overzicht" verticallayout="true" id="{378e8749-8840-4ddf-a55f-981532c9936a}">
+          <tab name="overzicht" verticallayout="true" id="{f066d71b-a357-4bce-8fd3-49605e594d96}">
             <labels>
               <label description="Overzicht" languagecode="1033" />
             </labels>
             <columns>
               <column width="100%">
                 <sections>
-                  <section name="kpi" showlabel="false" showbar="false" columns="111" id="{78756cb3-3dff-423d-adcc-1edafa7653b1}">
+                  <section name="kpi" showlabel="false" showbar="false" columns="111" id="{c20e2393-2b48-4c40-af7b-010412391c48}">
                     <labels>
                       <label description="KPI's" languagecode="1033" />
                     </labels>
                     <rows>
                       <row>
-                        <cell id="{465553e1-c96e-4d37-93fe-d0ab59142b75}" showlabel="false" rowspan="12" colspan="1" auto="false">
+                        <cell id="{353c5b66-0334-41b4-88cd-4e42d47e53d1}" showlabel="false" rowspan="12" colspan="1" auto="false">
                           <labels>
                             <label description="KPI 01 · Weegbonnen per beslissing" languagecode="1033" />
                           </labels>
@@ -48,7 +48,7 @@
                             </parameters>
                           </control>
                         </cell>
-                        <cell id="{236c8ed1-ef29-4da9-9909-a860a8281340}" showlabel="false" rowspan="12" colspan="1" auto="false">
+                        <cell id="{13c70159-1199-4896-bac9-d45b4575df51}" showlabel="false" rowspan="12" colspan="1" auto="false">
                           <labels>
                             <label description="KPI 01 · Weegbonnen per status" languagecode="1033" />
                           </labels>
@@ -70,7 +70,7 @@
                             </parameters>
                           </control>
                         </cell>
-                        <cell id="{57140ad5-7225-44f1-afb7-4ad7a92d0205}" showlabel="false" rowspan="12" colspan="1" auto="false">
+                        <cell id="{a713626a-15f1-4a7a-8f23-7193dde85f24}" showlabel="false" rowspan="12" colspan="1" auto="false">
                           <labels>
                             <label description="KPI 02 · Schadeclaims per ernst" languagecode="1033" />
                           </labels>
@@ -105,7 +105,7 @@
                       <row />
                       <row />
                       <row>
-                        <cell id="{94584dfa-bf8e-4fb1-9043-2854e974c468}" showlabel="false" rowspan="12" colspan="1" auto="false">
+                        <cell id="{ae97a884-38ff-4ed3-adba-6351bdfee897}" showlabel="false" rowspan="12" colspan="1" auto="false">
                           <labels>
                             <label description="KPI 02 · Geraamde schade per categorie (€)" languagecode="1033" />
                           </labels>
@@ -127,7 +127,7 @@
                             </parameters>
                           </control>
                         </cell>
-                        <cell id="{997c479c-358c-4c1c-b329-b4944d4d26d6}" showlabel="false" rowspan="12" colspan="1" auto="false">
+                        <cell id="{fef74646-88be-4376-ae98-3780cc27bc25}" showlabel="false" rowspan="12" colspan="1" auto="false">
                           <labels>
                             <label description="KPI 03 · Materiaalaanvragen per goedkeuringsroute" languagecode="1033" />
                           </labels>
@@ -149,7 +149,7 @@
                             </parameters>
                           </control>
                         </cell>
-                        <cell id="{4db1889a-0058-40be-9dc3-2f509e59261d}" showlabel="false" rowspan="12" colspan="1" auto="false">
+                        <cell id="{74fa5b91-cd84-46d2-8616-8e746efab69a}" showlabel="false" rowspan="12" colspan="1" auto="false">
                           <labels>
                             <label description="KPI 03 · ERP-outbox per status" languagecode="1033" />
                           </labels>
@@ -165,6 +165,85 @@
                               <EnableJumpBar>false</EnableJumpBar>
                               <ChartGridMode>Chart</ChartGridMode>
                               <VisualizationId>{080c7093-6ec9-f111-a05c-6045bd29a82d}</VisualizationId>
+                              <IsUserChart>false</IsUserChart>
+                              <EnableChartPicker>false</EnableChartPicker>
+                              <RecordsPerPage>10</RecordsPerPage>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row>
+                        <cell id="{bf111b2f-a4a8-48ce-8fbc-21bb6dea2591}" showlabel="false" rowspan="12" colspan="1" auto="false">
+                          <labels>
+                            <label description="KPI · Uren vrij per maand (simulatie)" languagecode="1033" />
+                          </labels>
+                          <control id="chart_0c66d6c6" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}">
+                            <parameters>
+                              <ViewId>{1166d6c6-a3ca-f111-a05c-6045bd29a82d}</ViewId>
+                              <IsUserView>false</IsUserView>
+                              <RelationshipName />
+                              <TargetEntityType>hv_kpimeting</TargetEntityType>
+                              <AutoExpand>Fixed</AutoExpand>
+                              <EnableQuickFind>false</EnableQuickFind>
+                              <EnableViewPicker>false</EnableViewPicker>
+                              <EnableJumpBar>false</EnableJumpBar>
+                              <ChartGridMode>Chart</ChartGridMode>
+                              <VisualizationId>{0c66d6c6-a3ca-f111-a05c-6045bd29a82d}</VisualizationId>
+                              <IsUserChart>false</IsUserChart>
+                              <EnableChartPicker>false</EnableChartPicker>
+                              <RecordsPerPage>10</RecordsPerPage>
+                            </parameters>
+                          </control>
+                        </cell>
+                        <cell id="{d778d36d-7d1f-493e-9e05-d1e38fdb13aa}" showlabel="false" rowspan="12" colspan="1" auto="false">
+                          <labels>
+                            <label description="KPI · Netto resultaat cumulatief (simulatie)" languagecode="1033" />
+                          </labels>
+                          <control id="chart_1466d6c6" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}">
+                            <parameters>
+                              <ViewId>{1766d6c6-a3ca-f111-a05c-6045bd29a82d}</ViewId>
+                              <IsUserView>false</IsUserView>
+                              <RelationshipName />
+                              <TargetEntityType>hv_kpimeting</TargetEntityType>
+                              <AutoExpand>Fixed</AutoExpand>
+                              <EnableQuickFind>false</EnableQuickFind>
+                              <EnableViewPicker>false</EnableViewPicker>
+                              <EnableJumpBar>false</EnableJumpBar>
+                              <ChartGridMode>Chart</ChartGridMode>
+                              <VisualizationId>{1466d6c6-a3ca-f111-a05c-6045bd29a82d}</VisualizationId>
+                              <IsUserChart>false</IsUserChart>
+                              <EnableChartPicker>false</EnableChartPicker>
+                              <RecordsPerPage>10</RecordsPerPage>
+                            </parameters>
+                          </control>
+                        </cell>
+                        <cell id="{fb996459-1281-451f-ac0d-3118923bacfa}" showlabel="false" rowspan="12" colspan="1" auto="false">
+                          <labels>
+                            <label description="Beheer · Meldingen per soort" languagecode="1033" />
+                          </labels>
+                          <control id="chart_be9f3ccd" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}">
+                            <parameters>
+                              <ViewId>{d78aebb6-0e0d-423d-b228-5f180fc61245}</ViewId>
+                              <IsUserView>false</IsUserView>
+                              <RelationshipName />
+                              <TargetEntityType>hv_melding</TargetEntityType>
+                              <AutoExpand>Fixed</AutoExpand>
+                              <EnableQuickFind>false</EnableQuickFind>
+                              <EnableViewPicker>false</EnableViewPicker>
+                              <EnableJumpBar>false</EnableJumpBar>
+                              <ChartGridMode>Chart</ChartGridMode>
+                              <VisualizationId>{be9f3ccd-a3ca-f111-a05c-6045bd29a82d}</VisualizationId>
                               <IsUserChart>false</IsUserChart>
                               <EnableChartPicker>false</EnableChartPicker>
                               <RecordsPerPage>10</RecordsPerPage>

@@ -31,13 +31,6 @@
         "$authentication": {
           "defaultValue": {},
           "type": "SecureObject"
-        },
-        "Drempel verzekeringsaangifte schade (€) (hv_InsurerThreshold)": {
-          "defaultValue": 15000,
-          "type": "Float",
-          "metadata": {
-            "schemaName": "hv_InsurerThreshold"
-          }
         }
       },
       "triggers": {
@@ -59,147 +52,419 @@
         }
       },
       "actions": {
-        "Werf": {
-          "type": "OpenApiConnection",
-          "inputs": {
-            "host": {
-              "connectionName": "shared_commondataserviceforapps",
-              "operationId": "GetItem",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+        "Probeer": {
+          "type": "Scope",
+          "actions": {
+            "Regels": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_regels",
+                  "$select": "hv_code,hv_waarde",
+                  "$filter": "hv_waarde ne null"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
             },
-            "parameters": {
-              "entityName": "hv_werfs",
-              "recordId": "@triggerOutputs()?['body/_hv_werf_value']",
-              "$select": "hv_werfnr,hv_projectleider,hv_actief"
+            "Regelparen": {
+              "type": "Select",
+              "inputs": {
+                "from": "@outputs('Regels')?['body/value']",
+                "select": "@concat('\"', item()?['hv_code'], '\":', string(item()?['hv_waarde']))"
+              },
+              "runAfter": {
+                "Regels": [
+                  "Succeeded"
+                ]
+              }
             },
-            "authentication": "@parameters('$authentication')"
+            "Parameters": {
+              "type": "Compose",
+              "inputs": "@json(concat('{', join(body('Regelparen'), ','), '}'))",
+              "runAfter": {
+                "Regelparen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Werf": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "GetItem",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_werfs",
+                  "recordId": "@triggerOutputs()?['body/_hv_werf_value']",
+                  "$select": "hv_werfnr,hv_projectleider,hv_actief"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "Ernst": {
+              "type": "Compose",
+              "inputs": "@if(and(equals(triggerOutputs()?['body/hv_categorie'], 100000003), or(equals(triggerOutputs()?['body/hv_typeleiding'], 100000000), equals(triggerOutputs()?['body/hv_typeleiding'], 100000001), not(equals(triggerOutputs()?['body/hv_beheerderverwittigd'], true)))), 100000003, if(greaterOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), float(outputs('Parameters')?['VZ-01'])), 100000002, if(or(greaterOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), float(outputs('Parameters')?['ER-02'])), equals(triggerOutputs()?['body/hv_derdebetrokken'], true)), 100000001, 100000000)))",
+              "runAfter": {
+                "Parameters": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Ernst_tekst": {
+              "type": "Compose",
+              "inputs": "@if(equals(outputs('Ernst'), 100000003), 'kritiek', if(equals(outputs('Ernst'), 100000002), 'hoog', if(equals(outputs('Ernst'), 100000001), 'middel', 'laag')))",
+              "runAfter": {
+                "Ernst": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "SLA_uren": {
+              "type": "Compose",
+              "inputs": "@if(equals(outputs('Ernst'), 100000003), float(outputs('Parameters')?['SLA-K']), if(equals(outputs('Ernst'), 100000002), float(outputs('Parameters')?['SLA-H']), if(equals(outputs('Ernst'), 100000001), float(outputs('Parameters')?['SLA-M']), float(outputs('Parameters')?['SLA-L']))))",
+              "runAfter": {
+                "Ernst": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Aangifte_nodig": {
+              "type": "Compose",
+              "inputs": "@or(greaterOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), float(outputs('Parameters')?['VZ-01'])), equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003), equals(triggerOutputs()?['body/hv_derdebetrokken'], true))",
+              "runAfter": {
+                "Parameters": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Te_verwittigen": {
+              "type": "Compose",
+              "inputs": "@union(createArray(outputs('Werf')?['body/hv_projectleider']), if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003), equals(triggerOutputs()?['body/hv_derdebetrokken'], true)), createArray('Claims & verzekeringen'), json('[]')), if(equals(triggerOutputs()?['body/hv_categorie'], 100000001), createArray('Verhuurder (extern)'), json('[]')), if(equals(triggerOutputs()?['body/hv_categorie'], 100000003), createArray('Leidingbeheerder (extern)', 'Preventieadviseur'), json('[]')), if(equals(outputs('Ernst'), 100000003), createArray('Afdelingsverantwoordelijke'), json('[]')))",
+              "runAfter": {
+                "Werf": [
+                  "Succeeded"
+                ],
+                "Ernst": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Dossier_bijwerken": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateOnlyRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_schadeclaims",
+                  "recordId": "@triggerOutputs()?['body/hv_schadeclaimid']",
+                  "item/hv_status": 100000001,
+                  "item/hv_ernst": "@outputs('Ernst')",
+                  "item/hv_goedkeuringsketen": "@concat(if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000000), equals(triggerOutputs()?['body/hv_categorie'], 100000001)), 'Fleetmanager>', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003)), 'Claims & verzekeringen>', '')), if(lessOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), float(outputs('Parameters')?['DT-02.1'])), 'Projectleider', if(lessOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), float(outputs('Parameters')?['DT-02.2'])), 'Projectleider>Afdelingsverantwoordelijke', 'Projectleider>Afdelingsverantwoordelijke>Directie')))",
+                  "item/hv_goedkeuringsniveau": 0,
+                  "item/hv_eigenaar": "@if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000000), equals(triggerOutputs()?['body/hv_categorie'], 100000001)), 'Fleetmanager', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003)), 'Claims & verzekeringen', outputs('Werf')?['body/hv_projectleider']))",
+                  "item/hv_verwittigd": "@{join(outputs('Te_verwittigen'), ', ')}",
+                  "item/hv_deadlinebeoordeling": "@addHours(utcNow(), int(outputs('SLA_uren')))",
+                  "item/hv_deadlineverzekeraar": "@if(outputs('Aangifte_nodig'), addDays(coalesce(triggerOutputs()?['body/hv_tijdstipschade'], utcNow()), int(float(outputs('Parameters')?['VZ-02']))), null)",
+                  "item/hv_aangifteconcept": "@if(outputs('Aangifte_nodig'), concat('Aangifte schadegeval ', triggerOutputs()?['body/hv_dossiernummer'], ' (concept). Tijdstip: ', coalesce(triggerOutputs()?['body/hv_tijdstipschade'], ''), '. Plaats: ', coalesce(triggerOutputs()?['body/hv_locatie'], ''), '. Wat gebeurde: ', coalesce(triggerOutputs()?['body/hv_omschrijving'], ''), '. Raming: EUR ', string(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0))), '. Derde: ', coalesce(triggerOutputs()?['body/hv_naamderde'], 'geen'), '. KLIP: ', coalesce(triggerOutputs()?['body/hv_klipreferentie'], 'n.v.t.'), '. Foto''s: ', string(coalesce(triggerOutputs()?['body/hv_aantalfotos'], 0)), '.'), null)"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "SLA_uren": [
+                  "Succeeded"
+                ],
+                "Te_verwittigen": [
+                  "Succeeded"
+                ],
+                "Aangifte_nodig": [
+                  "Succeeded"
+                ],
+                "Ernst_tekst": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Tijdlijn_gemeld": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_tijdlijns",
+                  "item/hv_gebeurtenis": "gemeld",
+                  "item/hv_door": "@{coalesce(triggerOutputs()?['body/hv_melder'], 'werfapp')}",
+                  "item/hv_opmerking": "via werfapp",
+                  "item/hv_Schadeclaim@odata.bind": "/hv_schadeclaims(@{triggerOutputs()?['body/hv_schadeclaimid']})"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Dossier_bijwerken": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Tijdlijn_dossier": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_tijdlijns",
+                  "item/hv_gebeurtenis": "dossier aangemaakt",
+                  "item/hv_door": "Power Automate",
+                  "item/hv_opmerking": "@{concat(triggerOutputs()?['body/hv_dossiernummer'], ' · ernst ', outputs('Ernst_tekst'), ' · eigenaar ', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000000), equals(triggerOutputs()?['body/hv_categorie'], 100000001)), 'Fleetmanager', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003)), 'Claims & verzekeringen', outputs('Werf')?['body/hv_projectleider'])), ' · keten ', concat(if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000000), equals(triggerOutputs()?['body/hv_categorie'], 100000001)), 'Fleetmanager>', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003)), 'Claims & verzekeringen>', '')), if(lessOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), float(outputs('Parameters')?['DT-02.1'])), 'Projectleider', if(lessOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), float(outputs('Parameters')?['DT-02.2'])), 'Projectleider>Afdelingsverantwoordelijke', 'Projectleider>Afdelingsverantwoordelijke>Directie'))))}",
+                  "item/hv_Schadeclaim@odata.bind": "/hv_schadeclaims(@{triggerOutputs()?['body/hv_schadeclaimid']})"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Tijdlijn_gemeld": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Verwittigen": {
+              "type": "Foreach",
+              "foreach": "@outputs('Te_verwittigen')",
+              "runAfter": {
+                "Tijdlijn_dossier": [
+                  "Succeeded"
+                ]
+              },
+              "actions": {
+                "Melding_betrokkene": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "CreateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "hv_meldings",
+                      "item/hv_titel": "@{concat('Schade ', triggerOutputs()?['body/hv_dossiernummer'], ' · ', outputs('Ernst_tekst'), ' · werf ', outputs('Werf')?['body/hv_werfnr'])}",
+                      "item/hv_tekst": "@{concat(coalesce(triggerOutputs()?['body/hv_omschrijving'], ''), ' Eigenaar: ', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000000), equals(triggerOutputs()?['body/hv_categorie'], 100000001)), 'Fleetmanager', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003)), 'Claims & verzekeringen', outputs('Werf')?['body/hv_projectleider'])), '. Keten: ', concat(if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000000), equals(triggerOutputs()?['body/hv_categorie'], 100000001)), 'Fleetmanager>', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003)), 'Claims & verzekeringen>', '')), if(lessOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), float(outputs('Parameters')?['DT-02.1'])), 'Projectleider', if(lessOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), float(outputs('Parameters')?['DT-02.2'])), 'Projectleider>Afdelingsverantwoordelijke', 'Projectleider>Afdelingsverantwoordelijke>Directie'))), '.')}",
+                      "item/hv_rol": "@{items('Verwittigen')}",
+                      "item/hv_soort": "@if(equals(outputs('Ernst'), 100000003), 100000001, 100000000)",
+                      "item/hv_kanaal": "@if(contains(items('Verwittigen'), '(extern)'), 100000001, 100000000)",
+                      "item/hv_status": 100000000,
+                      "item/hv_bron": "HV-CL-01",
+                      "item/hv_referentie": "@triggerOutputs()?['body/hv_dossiernummer']",
+                      "item/hv_link": "@{concat('/main.aspx?pagetype=entityrecord&etn=hv_schadeclaim&id=', triggerOutputs()?['body/hv_schadeclaimid'])}"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {}
+                }
+              }
+            },
+            "Tijdlijn_verwittigd": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_tijdlijns",
+                  "item/hv_gebeurtenis": "verwittigd",
+                  "item/hv_door": "Power Automate",
+                  "item/hv_opmerking": "@{join(outputs('Te_verwittigen'), ', ')}",
+                  "item/hv_Schadeclaim@odata.bind": "/hv_schadeclaims(@{triggerOutputs()?['body/hv_schadeclaimid']})"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Verwittigen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Aangifte": {
+              "type": "If",
+              "runAfter": {
+                "Tijdlijn_dossier": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "equals": [
+                  "@outputs('Aangifte_nodig')",
+                  true
+                ]
+              },
+              "actions": {
+                "Melding_aangifte": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "CreateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "hv_meldings",
+                      "item/hv_titel": "@{concat('Aangifte verzekeraar klaarzetten: ', triggerOutputs()?['body/hv_dossiernummer'])}",
+                      "item/hv_tekst": "@{concat('Het concept staat in het dossier. Versturen vóór ', formatDateTime(addDays(coalesce(triggerOutputs()?['body/hv_tijdstipschade'], utcNow()), int(float(outputs('Parameters')?['VZ-02']))), 'dd/MM/yyyy'), ' en daarna Aangifte verstuurd aanvinken.')}",
+                      "item/hv_rol": "Claims & verzekeringen",
+                      "item/hv_soort": 100000001,
+                      "item/hv_kanaal": 100000000,
+                      "item/hv_status": 100000000,
+                      "item/hv_bron": "HV-CL-01",
+                      "item/hv_referentie": "@triggerOutputs()?['body/hv_dossiernummer']",
+                      "item/hv_link": "@{concat('/main.aspx?pagetype=entityrecord&etn=hv_schadeclaim&id=', triggerOutputs()?['body/hv_schadeclaimid'])}"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {}
+                },
+                "Tijdlijn_aangifte": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "CreateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "hv_tijdlijns",
+                      "item/hv_gebeurtenis": "aangifte-concept klaargezet",
+                      "item/hv_door": "Power Automate",
+                      "item/hv_opmerking": "@{concat('deadline verzekeraar ', formatDateTime(addDays(coalesce(triggerOutputs()?['body/hv_tijdstipschade'], utcNow()), int(float(outputs('Parameters')?['VZ-02']))), 'dd/MM/yyyy'))}",
+                      "item/hv_Schadeclaim@odata.bind": "/hv_schadeclaims(@{triggerOutputs()?['body/hv_schadeclaimid']})"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {
+                    "Melding_aangifte": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              },
+              "else": {
+                "actions": {}
+              }
+            }
           },
           "runAfter": {}
         },
-        "Ernst": {
-          "type": "Compose",
-          "inputs": "@if(and(equals(triggerOutputs()?['body/hv_categorie'], 100000003), or(equals(triggerOutputs()?['body/hv_typeleiding'], 100000000), equals(triggerOutputs()?['body/hv_typeleiding'], 100000001), not(equals(triggerOutputs()?['body/hv_beheerderverwittigd'], true)))), 100000003, if(greaterOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), float(parameters('Drempel verzekeringsaangifte schade (€) (hv_InsurerThreshold)'))), 100000002, if(or(greaterOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), 2500), equals(triggerOutputs()?['body/hv_derdebetrokken'], true)), 100000001, 100000000)))",
-          "runAfter": {}
-        },
-        "SLA_uren": {
-          "type": "Compose",
-          "inputs": "@if(equals(outputs('Ernst'), 100000003), 2, if(equals(outputs('Ernst'), 100000002), 24, if(equals(outputs('Ernst'), 100000001), 48, 72)))",
+        "Bij_fout": {
+          "type": "Scope",
           "runAfter": {
-            "Ernst": [
-              "Succeeded"
+            "Probeer": [
+              "Failed",
+              "TimedOut"
             ]
-          }
-        },
-        "Verwittigd": {
-          "type": "Compose",
-          "inputs": "@join(union(createArray(outputs('Werf')?['body/hv_projectleider']), if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003), equals(triggerOutputs()?['body/hv_derdebetrokken'], true)), createArray('Claims & verzekeringen'), json('[]')), if(equals(triggerOutputs()?['body/hv_categorie'], 100000001), createArray('Verhuurder (extern)'), json('[]')), if(equals(triggerOutputs()?['body/hv_categorie'], 100000003), createArray('Leidingbeheerder (extern)', 'Preventieadviseur'), json('[]')), if(equals(outputs('Ernst'), 100000003), createArray('Afdelingsverantwoordelijke'), json('[]'))), ', ')",
-          "runAfter": {
-            "Werf": [
-              "Succeeded"
-            ],
-            "Ernst": [
-              "Succeeded"
-            ]
-          }
-        },
-        "Dossier_bijwerken": {
-          "type": "OpenApiConnection",
-          "inputs": {
-            "host": {
-              "connectionName": "shared_commondataserviceforapps",
-              "operationId": "UpdateOnlyRecord",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-            },
-            "parameters": {
-              "entityName": "hv_schadeclaims",
-              "recordId": "@triggerOutputs()?['body/hv_schadeclaimid']",
-              "item/hv_status": 100000001,
-              "item/hv_ernst": "@outputs('Ernst')",
-              "item/hv_goedkeuringsketen": "@concat(if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000000), equals(triggerOutputs()?['body/hv_categorie'], 100000001)), 'Fleetmanager>', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003)), 'Claims & verzekeringen>', '')), if(lessOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), 2500), 'Projectleider', if(lessOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), 15000), 'Projectleider>Afdelingsverantwoordelijke', 'Projectleider>Afdelingsverantwoordelijke>Directie')))",
-              "item/hv_goedkeuringsniveau": 0,
-              "item/hv_eigenaar": "@if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000000), equals(triggerOutputs()?['body/hv_categorie'], 100000001)), 'Fleetmanager', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003)), 'Claims & verzekeringen', outputs('Werf')?['body/hv_projectleider']))",
-              "item/hv_verwittigd": "@outputs('Verwittigd')",
-              "item/hv_deadlinebeoordeling": "@addHours(utcNow(), outputs('SLA_uren'))",
-              "item/hv_deadlineverzekeraar": "@if(or(greaterOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), float(parameters('Drempel verzekeringsaangifte schade (€) (hv_InsurerThreshold)'))), equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003), equals(triggerOutputs()?['body/hv_derdebetrokken'], true)), addDays(coalesce(triggerOutputs()?['body/hv_tijdstipschade'], utcNow()), 8), null)"
-            },
-            "authentication": "@parameters('$authentication')"
           },
-          "runAfter": {
-            "SLA_uren": [
-              "Succeeded"
-            ],
-            "Verwittigd": [
-              "Succeeded"
-            ]
-          }
-        },
-        "Tijdlijn_gemeld": {
-          "type": "OpenApiConnection",
-          "inputs": {
-            "host": {
-              "connectionName": "shared_commondataserviceforapps",
-              "operationId": "CreateRecord",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+          "actions": {
+            "Mislukte_stappen": {
+              "type": "Query",
+              "inputs": {
+                "from": "@result('Probeer')",
+                "where": "@equals(item()?['status'], 'Failed')"
+              },
+              "runAfter": {}
             },
-            "parameters": {
-              "entityName": "hv_tijdlijns",
-              "item/hv_gebeurtenis": "gemeld",
-              "item/hv_door": "@{coalesce(triggerOutputs()?['body/hv_melder'], 'werfapp')}",
-              "item/hv_opmerking": "via werfapp",
-              "item/hv_Schadeclaim@odata.bind": "/hv_schadeclaims(@{triggerOutputs()?['body/hv_schadeclaimid']})"
+            "Foutnamen": {
+              "type": "Select",
+              "inputs": {
+                "from": "@body('Mislukte_stappen')",
+                "select": "@item()?['name']"
+              },
+              "runAfter": {
+                "Mislukte_stappen": [
+                  "Succeeded"
+                ]
+              }
             },
-            "authentication": "@parameters('$authentication')"
-          },
-          "runAfter": {
-            "Dossier_bijwerken": [
-              "Succeeded"
-            ]
-          }
-        },
-        "Tijdlijn_dossier": {
-          "type": "OpenApiConnection",
-          "inputs": {
-            "host": {
-              "connectionName": "shared_commondataserviceforapps",
-              "operationId": "CreateRecord",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            "Foutmelding": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_meldings",
+                  "item/hv_titel": "@{concat('HV-CL-01 mislukt', if(empty(string(triggerOutputs()?['body/hv_dossiernummer'])), '', concat(' · ', string(triggerOutputs()?['body/hv_dossiernummer']))))}",
+                  "item/hv_tekst": "@{concat('Mislukte stap: ', join(body('Foutnamen'), ', '), '. ', coalesce(first(body('Mislukte_stappen'))?['error']?['message'], ''))}",
+                  "item/hv_rol": "Functioneel beheer",
+                  "item/hv_soort": 100000003,
+                  "item/hv_kanaal": 100000000,
+                  "item/hv_status": 100000000,
+                  "item/hv_bron": "HV-CL-01",
+                  "item/hv_referentie": "@{string(triggerOutputs()?['body/hv_dossiernummer'])}",
+                  "item/hv_link": "@{concat('https://make.powerautomate.com/environments/', workflow()?['tags']?['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']?['name'])}"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Foutnamen": [
+                  "Succeeded"
+                ]
+              }
             },
-            "parameters": {
-              "entityName": "hv_tijdlijns",
-              "item/hv_gebeurtenis": "dossier aangemaakt",
-              "item/hv_door": "Power Automate",
-              "item/hv_opmerking": "@{concat(outputs('Dossier_bijwerken')?['body/hv_dossiernummer'], ' · ernst ', string(outputs('Ernst')), ' · eigenaar ', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000000), equals(triggerOutputs()?['body/hv_categorie'], 100000001)), 'Fleetmanager', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003)), 'Claims & verzekeringen', outputs('Werf')?['body/hv_projectleider'])), ' · keten ', concat(if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000000), equals(triggerOutputs()?['body/hv_categorie'], 100000001)), 'Fleetmanager>', if(or(equals(triggerOutputs()?['body/hv_categorie'], 100000002), equals(triggerOutputs()?['body/hv_categorie'], 100000003)), 'Claims & verzekeringen>', '')), if(lessOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), 2500), 'Projectleider', if(lessOrEquals(float(coalesce(triggerOutputs()?['body/hv_geschatbedrag'], 0)), 15000), 'Projectleider>Afdelingsverantwoordelijke', 'Projectleider>Afdelingsverantwoordelijke>Directie'))))}",
-              "item/hv_Schadeclaim@odata.bind": "/hv_schadeclaims(@{triggerOutputs()?['body/hv_schadeclaimid']})"
+            "Status_fout": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateOnlyRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_schadeclaims",
+                  "recordId": "@triggerOutputs()?['body/hv_schadeclaimid']",
+                  "item/hv_status": 100000009
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Foutmelding": [
+                  "Succeeded"
+                ]
+              }
             },
-            "authentication": "@parameters('$authentication')"
-          },
-          "runAfter": {
-            "Tijdlijn_gemeld": [
-              "Succeeded"
-            ]
-          }
-        },
-        "Tijdlijn_verwittigd": {
-          "type": "OpenApiConnection",
-          "inputs": {
-            "host": {
-              "connectionName": "shared_commondataserviceforapps",
-              "operationId": "CreateRecord",
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
-            },
-            "parameters": {
-              "entityName": "hv_tijdlijns",
-              "item/hv_gebeurtenis": "verwittigd",
-              "item/hv_door": "Power Automate",
-              "item/hv_opmerking": "@{outputs('Verwittigd')}",
-              "item/hv_Schadeclaim@odata.bind": "/hv_schadeclaims(@{triggerOutputs()?['body/hv_schadeclaimid']})"
-            },
-            "authentication": "@parameters('$authentication')"
-          },
-          "runAfter": {
-            "Tijdlijn_dossier": [
-              "Succeeded"
-            ]
+            "Run_mislukt": {
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed",
+                "runError": {
+                  "code": "HV-FOUT",
+                  "message": "Zie de Fout-melding in de backoffice (Beheer › Meldingen)."
+                }
+              },
+              "runAfter": {
+                "Status_fout": [
+                  "Succeeded",
+                  "Failed",
+                  "Skipped",
+                  "TimedOut"
+                ]
+              }
+            }
           }
         }
       }

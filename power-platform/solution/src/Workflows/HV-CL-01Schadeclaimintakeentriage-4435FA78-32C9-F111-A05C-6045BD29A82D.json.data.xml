@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Workflow WorkflowId="{4435fa78-32c9-f111-a05c-6045bd29a82d}" Name="HV-CL-01 Schadeclaim intake en triage" Description="Case 02: ernst, eigenaar, DT-02-goedkeuringsketen, deadlines en tijdlijn bij een nieuwe schademelding." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Workflow WorkflowId="{4435fa78-32c9-f111-a05c-6045bd29a82d}" Name="HV-CL-01 Schadeclaim intake en triage" Description="Case 02: ernst, eigenaar, DT-02-keten, deadlines, aangifte-concept, tijdlijn en meldingen bij een nieuwe schademelding." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <JsonFileName>/Workflows/HV-CL-01Schadeclaimintakeentriage-4435FA78-32C9-F111-A05C-6045BD29A82D.json</JsonFileName>
   <Type>1</Type>
   <Subprocess>0</Subprocess>
@@ -25,6 +25,6 @@
     <LocalizedName languagecode="1033" description="HV-CL-01 Schadeclaim intake en triage" />
   </LocalizedNames>
   <Descriptions>
-    <Description languagecode="1033" description="Case 02: ernst, eigenaar, DT-02-goedkeuringsketen, deadlines en tijdlijn bij een nieuwe schademelding." />
+    <Description languagecode="1033" description="Case 02: ernst, eigenaar, DT-02-keten, deadlines, aangifte-concept, tijdlijn en meldingen bij een nieuwe schademelding." />
   </Descriptions>
 </Workflow>

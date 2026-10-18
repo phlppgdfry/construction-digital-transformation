@@ -1,0 +1,453 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "hv_dataverse"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_approvals": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "hv_approvals"
+        },
+        "api": {
+          "name": "shared_approvals"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "Ter_goedkeuring": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 3,
+              "subscriptionRequest/entityname": "hv_materiaalaanvraag",
+              "subscriptionRequest/scope": 4,
+              "subscriptionRequest/filteringattributes": "hv_status",
+              "subscriptionRequest/filterexpression": "hv_status eq 100000002"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Keten": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "keten",
+                "type": "array",
+                "value": "@split(triggerOutputs()?['body/hv_route'], '>')"
+              }
+            ]
+          },
+          "runAfter": {}
+        },
+        "Niveau": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "niveau",
+                "type": "integer",
+                "value": "@coalesce(triggerOutputs()?['body/hv_goedkeuringsniveau'], 0)"
+              }
+            ]
+          },
+          "runAfter": {
+            "Keten": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Afgewezen": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "afgewezen",
+                "type": "boolean",
+                "value": false
+              }
+            ]
+          },
+          "runAfter": {
+            "Niveau": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Probeer": {
+          "type": "Scope",
+          "actions": {
+            "Per_niveau": {
+              "type": "Until",
+              "runAfter": {},
+              "expression": "@or(variables('afgewezen'), greaterOrEquals(variables('niveau'), length(variables('keten'))))",
+              "limit": {
+                "count": 6,
+                "timeout": "P14D"
+              },
+              "actions": {
+                "Goedkeurder": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "ListRecords",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "hv_goedkeurders",
+                      "$filter": "hv_rol eq '@{variables('keten')[variables('niveau')]}'",
+                      "$top": 1
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {}
+                },
+                "Goedkeuring": {
+                  "type": "OpenApiConnectionWebhook",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_approvals",
+                      "operationId": "StartAndWaitForAnApproval",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_approvals"
+                    },
+                    "parameters": {
+                      "approvalType": "Basic",
+                      "WebhookApprovalCreationInput/title": "Materiaalaanvraag @{triggerOutputs()?['body/hv_aanvraagnr']} — €@{formatNumber(float(triggerOutputs()?['body/hv_waarde']), 'N0', 'nl-BE')} — niveau @{add(variables('niveau'), 1)}/@{length(variables('keten'))}: @{variables('keten')[variables('niveau')]}",
+                      "WebhookApprovalCreationInput/assignedTo": "@{first(outputs('Goedkeurder')?['body/value'])?['hv_email']}",
+                      "WebhookApprovalCreationInput/details": "@{triggerOutputs()?['body/hv_regel']} · aanvrager @{triggerOutputs()?['body/hv_aanvrager']}",
+                      "WebhookApprovalCreationInput/enableNotifications": true,
+                      "WebhookApprovalCreationInput/enableReassignment": true
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {
+                    "Goedkeurder": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Uitkomst": {
+                  "type": "If",
+                  "runAfter": {
+                    "Goedkeuring": [
+                      "Succeeded"
+                    ]
+                  },
+                  "expression": {
+                    "equals": [
+                      "@body('Goedkeuring')?['outcome']",
+                      "Approve"
+                    ]
+                  },
+                  "actions": {
+                    "Volgend_niveau": {
+                      "type": "IncrementVariable",
+                      "inputs": {
+                        "name": "niveau",
+                        "value": 1
+                      },
+                      "runAfter": {}
+                    },
+                    "Niveau_bewaren": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "UpdateOnlyRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_materiaalaanvraags",
+                          "recordId": "@triggerOutputs()?['body/hv_materiaalaanvraagid']",
+                          "item/hv_goedkeuringsniveau": "@variables('niveau')"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {
+                        "Volgend_niveau": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  },
+                  "else": {
+                    "actions": {
+                      "Markeer_afgewezen": {
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "afgewezen",
+                          "value": true
+                        },
+                        "runAfter": {}
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "Eindstatus": {
+              "type": "Compose",
+              "inputs": "@if(variables('afgewezen'), 'afgewezen', if(greaterOrEquals(variables('niveau'), length(variables('keten'))), 'goedgekeurd', 'verlopen'))",
+              "runAfter": {
+                "Per_niveau": [
+                  "Succeeded",
+                  "Failed",
+                  "Skipped",
+                  "TimedOut"
+                ]
+              }
+            },
+            "Volgens_uitkomst": {
+              "type": "Switch",
+              "runAfter": {
+                "Eindstatus": [
+                  "Succeeded"
+                ]
+              },
+              "expression": "@outputs('Eindstatus')",
+              "cases": {
+                "Goedgekeurd": {
+                  "case": "goedgekeurd",
+                  "actions": {
+                    "Status_goedgekeurd": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "UpdateOnlyRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_materiaalaanvraags",
+                          "recordId": "@triggerOutputs()?['body/hv_materiaalaanvraagid']",
+                          "item/hv_status": 100000003
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    }
+                  }
+                },
+                "Afgewezen": {
+                  "case": "afgewezen",
+                  "actions": {
+                    "Status_afgewezen": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "UpdateOnlyRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_materiaalaanvraags",
+                          "recordId": "@triggerOutputs()?['body/hv_materiaalaanvraagid']",
+                          "item/hv_status": 100000009
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    },
+                    "Melding_afgewezen": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_meldings",
+                          "item/hv_titel": "@{concat('Aanvraag ', triggerOutputs()?['body/hv_aanvraagnr'], ' afgewezen')}",
+                          "item/hv_tekst": "@{concat(triggerOutputs()?['body/hv_regel'], '. Opmerking: ', coalesce(first(body('Goedkeuring')?['responses'])?['comments'], 'geen'))}",
+                          "item/hv_rol": "Werfleider",
+                          "item/hv_soort": 100000002,
+                          "item/hv_kanaal": 100000000,
+                          "item/hv_status": 100000000,
+                          "item/hv_bron": "HV-MA-02",
+                          "item/hv_referentie": "@triggerOutputs()?['body/hv_aanvraagnr']",
+                          "item/hv_link": "@{concat('/main.aspx?pagetype=entityrecord&etn=hv_materiaalaanvraag&id=', triggerOutputs()?['body/hv_materiaalaanvraagid'])}"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {
+                        "Status_afgewezen": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "Verlopen": {
+                  "case": "verlopen",
+                  "actions": {
+                    "Melding_verlopen": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "hv_meldings",
+                          "item/hv_titel": "@{concat('Goedkeuring aanvraag ', triggerOutputs()?['body/hv_aanvraagnr'], ' verlopen')}",
+                          "item/hv_tekst": "Niemand antwoordde binnen 14 dagen. Zet de aanvraag opnieuw op Ter goedkeuring om te hervatten, of wijs ze af.",
+                          "item/hv_rol": "Afdelingsverantwoordelijke",
+                          "item/hv_soort": 100000002,
+                          "item/hv_kanaal": 100000000,
+                          "item/hv_status": 100000000,
+                          "item/hv_bron": "HV-MA-02",
+                          "item/hv_referentie": "@triggerOutputs()?['body/hv_aanvraagnr']",
+                          "item/hv_link": "@{concat('/main.aspx?pagetype=entityrecord&etn=hv_materiaalaanvraag&id=', triggerOutputs()?['body/hv_materiaalaanvraagid'])}"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    }
+                  }
+                }
+              },
+              "default": {
+                "actions": {}
+              }
+            }
+          },
+          "runAfter": {
+            "Afgewezen": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Bij_fout": {
+          "type": "Scope",
+          "runAfter": {
+            "Probeer": [
+              "Failed",
+              "TimedOut"
+            ]
+          },
+          "actions": {
+            "Mislukte_stappen": {
+              "type": "Query",
+              "inputs": {
+                "from": "@result('Probeer')",
+                "where": "@equals(item()?['status'], 'Failed')"
+              },
+              "runAfter": {}
+            },
+            "Foutnamen": {
+              "type": "Select",
+              "inputs": {
+                "from": "@body('Mislukte_stappen')",
+                "select": "@item()?['name']"
+              },
+              "runAfter": {
+                "Mislukte_stappen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Foutmelding": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_meldings",
+                  "item/hv_titel": "@{concat('HV-MA-02 mislukt', if(empty(string(triggerOutputs()?['body/hv_aanvraagnr'])), '', concat(' · ', string(triggerOutputs()?['body/hv_aanvraagnr']))))}",
+                  "item/hv_tekst": "@{concat('Mislukte stap: ', join(body('Foutnamen'), ', '), '. ', coalesce(first(body('Mislukte_stappen'))?['error']?['message'], ''))}",
+                  "item/hv_rol": "Functioneel beheer",
+                  "item/hv_soort": 100000003,
+                  "item/hv_kanaal": 100000000,
+                  "item/hv_status": 100000000,
+                  "item/hv_bron": "HV-MA-02",
+                  "item/hv_referentie": "@{string(triggerOutputs()?['body/hv_aanvraagnr'])}",
+                  "item/hv_link": "@{concat('https://make.powerautomate.com/environments/', workflow()?['tags']?['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']?['name'])}"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Foutnamen": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Status_fout": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateOnlyRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "hv_materiaalaanvraags",
+                  "recordId": "@triggerOutputs()?['body/hv_materiaalaanvraagid']",
+                  "item/hv_status": 100000010
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Foutmelding": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Run_mislukt": {
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed",
+                "runError": {
+                  "code": "HV-FOUT",
+                  "message": "Zie de Fout-melding in de backoffice (Beheer › Meldingen)."
+                }
+              },
+              "runAfter": {
+                "Status_fout": [
+                  "Succeeded",
+                  "Failed",
+                  "Skipped",
+                  "TimedOut"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

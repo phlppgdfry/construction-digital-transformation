@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{d9ab3b53-1baa-4907-9fc6-f3156254e903}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="hv_naam" select="1" icon="1" preview="1">
+        <row name="result" id="hv_kpimetingid">
+          <cell name="hv_naam" width="160" />
+          <cell name="hv_maand" width="130" />
+          <cell name="hv_case" width="130" />
+          <cell name="hv_kpi" width="130" />
+          <cell name="hv_waarde" width="130" />
+          <cell name="hv_eenheid" width="130" />
+          <cell name="hv_bron" width="130" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="hv_kpimeting">
+          <attribute name="hv_naam" />
+          <attribute name="hv_maand" />
+          <attribute name="hv_case" />
+          <attribute name="hv_kpi" />
+          <attribute name="hv_waarde" />
+          <attribute name="hv_eenheid" />
+          <attribute name="hv_bron" />
+          <attribute name="hv_kpimetingid" />
+          <order attribute="createdon" descending="true" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+          </filter>
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Active KPI-metingen" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

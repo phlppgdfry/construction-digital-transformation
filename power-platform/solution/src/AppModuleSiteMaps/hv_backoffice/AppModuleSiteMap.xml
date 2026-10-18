@@ -84,11 +84,6 @@
         <Titles>
           <Title LCID="1033" Title="Instellingen" />
         </Titles>
-        <SubArea Id="hv_area_c2_hv_goedkeurder" Entity="hv_goedkeurder">
-          <Titles>
-            <Title LCID="1033" Title="Goedkeurders" />
-          </Titles>
-        </SubArea>
         <SubArea Id="hv_area_c2_hv_werf" Entity="hv_werf">
           <Titles>
             <Title LCID="1033" Title="Werven" />
@@ -147,6 +142,46 @@
         <SubArea Id="hv_area_c3_hv_werfbudget" Entity="hv_werfbudget">
           <Titles>
             <Title LCID="1033" Title="Werfbudgetten" />
+          </Titles>
+        </SubArea>
+      </Group>
+    </Area>
+    <Area Id="hv_area_beheer" ShowGroups="true">
+      <Titles>
+        <Title LCID="1033" Title="Beheer" />
+      </Titles>
+      <Group Id="hv_area_beheer_g0" IsProfile="false">
+        <Titles>
+          <Title LCID="1033" Title="Opvolging" />
+        </Titles>
+        <SubArea Id="hv_area_beheer_hv_melding" Entity="hv_melding">
+          <Titles>
+            <Title LCID="1033" Title="Meldingen" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="hv_area_beheer_hv_outbox" Entity="hv_outbox">
+          <Titles>
+            <Title LCID="1033" Title="ERP-outbox" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="hv_area_beheer_hv_kpimeting" Entity="hv_kpimeting">
+          <Titles>
+            <Title LCID="1033" Title="KPI-metingen" />
+          </Titles>
+        </SubArea>
+      </Group>
+      <Group Id="hv_area_beheer_g1" IsProfile="false">
+        <Titles>
+          <Title LCID="1033" Title="Regels en rollen" />
+        </Titles>
+        <SubArea Id="hv_area_beheer_hv_regel" Entity="hv_regel">
+          <Titles>
+            <Title LCID="1033" Title="Bedrijfsregels" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="hv_area_beheer_hv_goedkeurder" Entity="hv_goedkeurder">
+          <Titles>
+            <Title LCID="1033" Title="Rollen (goedkeurders en ontvangers)" />
           </Titles>
         </SubArea>
       </Group>
