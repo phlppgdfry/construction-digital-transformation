@@ -4,7 +4,7 @@
 |---|---|---|
 | Automatische regels en referentieketen | Reproduceerbaar: [trace](../evidence/materiaalketen.md) en tests | Bij wijziging opnieuw uitvoeren |
 | Browserinteracties | Door de agent gecontroleerd; uitvoering in [technische review](technische-review.md) | Na relevante wijziging opnieuw toetsen |
-| Onafhankelijke gebruikstest | **Niet uitgevoerd** | Geef [deelnemerblad](deelnemer.md) aan een echte proefgebruiker; begeleider gebruikt [observatieblad](observatie.md) |
+| Onafhankelijke gebruikstest | **Niet uitgevoerd; nog geen proefgebruiker beschikbaar** | Geef [deelnemerblad](deelnemer.md) aan een echte proefgebruiker; begeleider gebruikt [observatieblad](observatie.md) |
 | Formele business-UAT | **Niet uitgevoerd** | Key users toetsen het bestaande implementatieplan en nemen een acceptatiebesluit |
 | Eigen beheersing | **Niet getoetst** | Kandidaat voert [beheersingsproef](beheersingsproef.md) zonder AI uit; reviewer beoordeelt met [rubric](beoordeling.md) |
 | Productiegeschiktheid | **Niet aangetoond** | Werkelijke ERP-transacties, Dataverse-rollen, offline foto-opslag, prestatietests en organisatorische poorten toetsen |

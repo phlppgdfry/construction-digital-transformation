@@ -2,8 +2,8 @@
 
 **Uitvoering: nog niet uitgevoerd.** Laat onderstaande velden leeg tot een echte sessie plaatsvindt. Deelnemer ontvangt alleen het deelnemerblad; dit blad bevat beoordelingsinformatie.
 
-Datum / versie of commit / browser / schermformaat: […]  
-Deelnemercode (geen naam nodig), relevante ervaring en toestemming voor notities: […]  
+Datum / versie of commit / browser / schermformaat: […]
+Deelnemercode (geen naam nodig), relevante ervaring en toestemming voor notities: […]
 Begeleider: […]
 
 | Taak | Verwachte begrip/uitkomst | Start/einde | Zelfstandig / hint / niet gelukt | Waargenomen gedrag en letterlijke uitspraak | Bevinding-ID |

@@ -5,6 +5,7 @@
     {
       "action": "Aanvraag: 10 werfhekken; budgetroute vereist beide rollen",
       "requestNo": "REFERENCE-01",
+      "projectNo": "W-2601",
       "reserved": false,
       "approvals": [],
       "required": [
@@ -26,6 +27,7 @@
     {
       "action": "Reservatie zonder akkoord en verkeerde volgorde geweigerd",
       "requestNo": "REFERENCE-01",
+      "projectNo": "W-2601",
       "reserved": false,
       "approvals": [],
       "required": [
@@ -47,6 +49,7 @@
     {
       "action": "Beide rollen hebben in volgorde akkoord gegeven",
       "requestNo": "REFERENCE-01",
+      "projectNo": "W-2601",
       "reserved": false,
       "approvals": [
         "Projectleider",
@@ -82,6 +85,7 @@
     {
       "action": "ERP uit: nog geen bevestigde reservatie",
       "requestNo": "REFERENCE-01",
+      "projectNo": "W-2601",
       "reserved": false,
       "approvals": [
         "Projectleider",
@@ -117,6 +121,7 @@
     {
       "action": "ERP hersteld: reservatie één keer, ook na herhaling",
       "requestNo": "REFERENCE-01",
+      "projectNo": "W-2601",
       "reserved": true,
       "approvals": [
         "Projectleider",
@@ -152,6 +157,7 @@
     {
       "action": "Eerste levering: 4 ontvangen en geboekt; 6 open",
       "requestNo": "REFERENCE-01",
+      "projectNo": "W-2601",
       "reserved": true,
       "approvals": [
         "Projectleider",
@@ -193,6 +199,7 @@
     {
       "action": "Tweede levering fysiek binnen; boeking in dead-letter",
       "requestNo": "REFERENCE-01",
+      "projectNo": "W-2601",
       "reserved": true,
       "approvals": [
         "Projectleider",
@@ -240,6 +247,7 @@
     {
       "action": "Herstel: 10 geboekt, afgesloten; herhalen boekt niet dubbel",
       "requestNo": "REFERENCE-01",
+      "projectNo": "W-2601",
       "reserved": true,
       "approvals": [
         "Projectleider",
@@ -287,6 +295,7 @@
     {
       "action": "Bevoegde correctie: -2 tegenboeking met reden; 2 opnieuw open",
       "requestNo": "REFERENCE-01",
+      "projectNo": "W-2601",
       "reserved": true,
       "approvals": [
         "Projectleider",
@@ -391,6 +400,7 @@
   "competing": {
     "first": {
       "requestNo": "COMPETE-A",
+      "projectNo": "W-2601",
       "reserved": true,
       "approvals": [],
       "required": [],
@@ -408,6 +418,7 @@
     },
     "second": {
       "requestNo": "COMPETE-B",
+      "projectNo": "W-2604",
       "reserved": false,
       "approvals": [],
       "required": [],

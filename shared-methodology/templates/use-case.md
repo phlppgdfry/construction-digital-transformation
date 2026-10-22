@@ -1,7 +1,7 @@
 # Use case — sjabloon
 
-**ID / versie:** UC-[case]-[nummer] / [versie]  
-**Status:** concept / afgestemd / goedgekeurd; nooit goedgekeurd zonder bewijs  
+**ID / versie:** UC-[case]-[nummer] / [versie]
+**Status:** concept / afgestemd / goedgekeurd; nooit goedgekeurd zonder bewijs
 **Eigenaar en reviewers:** [rollen, datum, besluitlink]
 
 | Veld | Inhoud |

@@ -25,7 +25,7 @@ test('two stale proposals cannot reserve the same last stock; loser leaves no pa
   const source = structuredClone(master);
   source.stock = source.stock.filter(s => s.itemNo === 'HK-350').slice(0, 1).map(s => ({ ...s, onHand: 10, reserved: 0 }));
   const m = materialLifecycle(source, NOW);
-  m.submit(req('A'), site); m.submit(req('B'), site);
+  m.submit(req('A'), site); m.submit({ ...req('B'), projectNo: 'W-2604' }, { ...site, id: 'site-2', projects: ['W-2604'] });
   assert.ok(m.reserve('A').confirmed);
   const before = m.stock();
   assert.throws(() => m.reserve('B'), /Voorraadconflict/);

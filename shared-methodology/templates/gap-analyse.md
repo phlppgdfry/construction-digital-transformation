@@ -1,6 +1,6 @@
 # Gap-analyse — sjabloon
 
-**Case / versie / datum:** […]  
+**Case / versie / datum:** […]
 **Status en validatie:** fictief / concept / bevestigd met [rollen, bewijslink]
 
 | ID | AS-IS met bron/nulmeting | Gewenste uitkomst met requirement | Oorzaak/ontbrekende capaciteit | Maatregel | Eigenaar | Prioriteit, afhankelijkheid en release | Acceptatie en KPI | Resterend risico |

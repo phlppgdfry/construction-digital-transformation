@@ -32,7 +32,7 @@ export function materialProof(master) {
   const competing = structuredClone(master);
   competing.stock = competing.stock.filter(s => s.itemNo === 'HK-350').slice(0, 1).map(s => ({ ...s, onHand: 10, reserved: 0 }));
   const n = materialLifecycle(competing, now);
-  n.submit({ ...req, requestNo: 'COMPETE-A' }, site); n.submit({ ...req, requestNo: 'COMPETE-B' }, site);
+  n.submit({ ...req, requestNo: 'COMPETE-A' }, site); n.submit({ ...req, requestNo: 'COMPETE-B', projectNo: 'W-2604' }, { ...site, id: 'reference-site-user-2', projects: ['W-2604'] });
   n.reserve('COMPETE-A'); assert.throws(() => n.reserve('COMPETE-B'), /Voorraadconflict/);
   return { environment: 'Lokale referentiesimulatie; geen gedeployde ERP- of Power Platform-keten', fixtureTime: now, steps, bookings: m.bookings(), competing: { first: n.snapshot('COMPETE-A'), second: n.snapshot('COMPETE-B'), result: 'Tweede reservatie geweigerd; dezelfde laatste voorraad niet dubbel toegezegd' } };
 }

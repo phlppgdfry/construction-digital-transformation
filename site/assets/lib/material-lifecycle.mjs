@@ -107,7 +107,7 @@ export function materialLifecycle(master, now) {
   function snapshot(id) {
     const o = order(id);
     const closed = o.reserved && o.received.every((q, i) => q === o.req.lines[i].qty) && o.booked.every((q, i) => q === o.received[i]) && [...o.events.values()].every(e => e.sent);
-    return structuredClone({ requestNo: id, reserved: o.reserved, approvals: o.approvals, required: o.evaluation.approval.approvers, received: o.received, booked: o.booked, outstanding: o.req.lines.map((l, i) => l.qty - o.received[i]), state: closed ? 'afgesloten' : o.reserved ? 'open ontvangst/boeking' : 'wacht op akkoord/reservatie', audit: o.audit });
+    return structuredClone({ requestNo: id, projectNo: o.req.projectNo, reserved: o.reserved, approvals: o.approvals, required: o.evaluation.approval.approvers, received: o.received, booked: o.booked, outstanding: o.req.lines.map((l, i) => l.qty - o.received[i]), state: closed ? 'afgesloten' : o.reserved ? 'open ontvangst/boeking' : 'wacht op akkoord/reservatie', audit: o.audit });
   }
   return { submit, approve, reserve, receipt, book, snapshot, bookings: () => structuredClone([...ledger]), stock: () => structuredClone(stock) };
 }
