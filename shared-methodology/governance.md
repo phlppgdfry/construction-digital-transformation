@@ -53,3 +53,9 @@ Elke case heeft een [beslissingslog](../01-document-intelligence/raid-en-besliss
 | Hoe vaak | elke 4 weken; extra bij een poort (mandaat, keuze na stap 4, go/no-go, benefits review) |
 | Input | één blad per case ([samenvatting](../01-document-intelligence/samenvatting.md)), beslissingen die nodig zijn, KPI's na go-live |
 | Output | beslissingen in het log, met eigenaar en datum |
+
+## Backlog en sprintafspraken
+
+De [product backlog](product-backlog.md) is een lokale planning van dezelfde requirements; de PO ordent het werk binnen het mandaat van de sponsor. [Agile/Scrum-afspraken](agile-scrum.md) beschrijven de voorgestelde verantwoordelijkheden en de bescherming van het sprintdoel. De [sprintplanning](sprintplanning.md) volgt de bestaande MVP-horizons.
+
+Een wijziging vraagt ook controle van de handmatige [use cases](../02-construction-claims/use-cases.md), [gap-tabellen](../02-construction-claims/gap-analyse.md), backlog, planning en UAT, naast de gegenereerde traceerbaarheid. Leg vast welke versies en besluiten zijn bijgewerkt. Done in een sprint, acceptatie door key users en go/no-go zijn afzonderlijke beoordelingen.

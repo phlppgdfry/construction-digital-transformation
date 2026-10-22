@@ -1,0 +1,18 @@
+.proof-controls { display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin:24px 0 16px; }
+.proof-controls button:disabled { opacity:.45; cursor:default; }
+.proof-step { margin-bottom:24px; }
+.proof-state { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
+.proof-state dt { color:var(--muted, #53636d); font-size:.85rem; }
+.proof-state dd { margin:6px 0 0; font-weight:600; overflow-wrap:anywhere; }
+.proof-table { overflow-x:auto; margin:20px 0; }
+.proof-table table { width:100%; border-collapse:collapse; min-width:620px; }
+.proof-table th,.proof-table td { text-align:left; vertical-align:top; padding:12px; border-bottom:1px solid #cbd2d5; }
+.proof-table th { font-size:.85rem; }
+#proof-competing { border-left:4px solid #c35f25; padding-left:16px; margin-top:24px; }
+#proof-error:empty { display:none; }
+#proof-error { color:#9a261d; }
+@media(max-width:700px) { .proof-state { grid-template-columns:1fr 1fr; } .proof-controls { gap:10px; } }
+@media(prefers-reduced-motion:reduce) { * { scroll-behavior:auto!important; } }
+
+#keten, #grenzen { scroll-margin-top:95px; }
+@media(max-width:700px) { #keten, #grenzen { scroll-margin-top:150px; } .proof-state > div:first-child { grid-column:1 / -1; } }

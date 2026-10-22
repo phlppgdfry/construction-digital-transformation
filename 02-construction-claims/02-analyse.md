@@ -95,3 +95,7 @@ Dit register wordt gegenereerd uit [`data/requirements.json`](../data/requiremen
 | Raming onbekend | 0 mag; beoordelaar vult raming aan, keten wordt herberekend |
 | Goedkeurder afwezig | vervanger uit `hv_goedkeurder`; na 5 dagen terug naar beoordelaar |
 | Werf al afgesloten | melding geweigerd met uitleg; via afdelingsverantwoordelijke |
+
+## Expliciete gap-analyse
+
+De [gap-analysetabel](gap-analyse.md) verbindt de AS-IS met de gewenste uitkomsten, maatregelen, verantwoordelijke rollen en acceptatie. Een gebouwde functie sluit de gap pas na validatie van de werkelijke werkwijze en het resultaat.

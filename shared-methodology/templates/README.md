@@ -11,3 +11,11 @@ Lege sjablonen die in de drie cases ingevuld terugkomen.
 | [KPI-kaart](kpi-kaart.md) | [case 01 measure](../../01-document-intelligence/07-measure-improve.md) |
 | [ADR](adr.md) | [ADR-001](../adr/ADR-001-dataverse.md) |
 | [Change-impact](change-impact.md) | [case 03 implement](../../03-material-requests/06-implement.md) |
+
+## Aanvullende sjablonen
+
+| Sjabloon | Ingevuld voorbeeld |
+|---|---|
+| [Formele use case](use-case.md) | [claims](../../02-construction-claims/use-cases.md) |
+| [Gap-analyse](gap-analyse.md) | [materiaal](../../03-material-requests/gap-analyse.md) |
+| [Backlogitem](backlog-item.md) | [backlog en splitsing](../product-backlog.md), [sprintplan](../sprintplanning.md) |

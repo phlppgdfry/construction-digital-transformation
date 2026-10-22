@@ -178,3 +178,7 @@ Scenario: het dossier wordt heropend en opnieuw afgesloten
 ## Werfapp-schermen (ontwerp)
 
 Eén scherm "Schade melden" met bovenaan de letselvraag, daarna enkel de velden voor de gekozen categorie, foto-knop, en één rode knop "Verzenden" die pas actief wordt als alles klopt. Fouten staan in gewone taal onder het formulier. Bron: [werfapp-schademelding.pa.yaml](artefacts/power-apps/werfapp-schademelding.pa.yaml).
+
+## Formele use cases
+
+De [uitgewerkte use cases](use-cases.md) verbinden de stories tot volledige gebruikersdoelen, inclusief voorwaarden, resultaat, alternatieve stromen en fouten. Ze verwijzen naar dezelfde requirements en het UAT-plan; open productievragen staan expliciet vermeld.

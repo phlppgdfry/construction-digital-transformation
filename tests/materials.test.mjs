@@ -96,3 +96,18 @@ test("AS-IS baseline", () => {
   assert.equal(b.n, 60);
   assert.equal(b.byChannel.telefoon, 32);
 });
+
+test("repeated identical article lines produce separate ERP instructions, not colliding keys", () => {
+  const req = { ...signage, lines: [{ itemNo: 'HK-350', qty: 2 }, { itemNo: 'HK-350', qty: 2 }] };
+  const msgs = erpMessages(evaluate(req, master, NOW), req);
+  assert.equal(msgs.length, 2);
+  assert.equal(new Set(msgs.map(m => m.idempotencyKey)).size, 2);
+  assert.equal(msgs.reduce((sum, m) => sum + m.body.quantity, 0), 4);
+});
+
+test("invalid dates and non-finite quantities are rejected before evaluation", () => {
+  assert.equal(validateRequest({ ...signage, deliverAt: 'invalid' }, master, NOW).ok, false);
+  for (const qty of [Infinity, NaN, -1, 0]) {
+    assert.equal(validateRequest({ ...signage, lines: [{ itemNo: 'HK-350', qty }] }, master, NOW).ok, false);
+  }
+});

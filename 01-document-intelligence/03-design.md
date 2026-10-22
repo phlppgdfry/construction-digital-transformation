@@ -129,3 +129,7 @@ Scenario: dezelfde bon als foto en als pdf
 Twee schermen: **wachtrij** (alleen bonnen met bevindingen, oudste eerst, rood na 4 uur) en **detail** (origineel links, velden rechts, foute velden rood, knoppen "Goedkeuren en boeken" en "Afwijzen"). Bron: [review-app.pa.yaml](artefacts/power-apps/review-app.pa.yaml). De app beslist niets zelf: ze zet een status, en de flow boekt.
 
 **Gebouwd als Power Apps code app** in plaats van canvas-app, omdat ze zo volledig van buiten Studio te bouwen en te testen is: [`power-platform/reviewapp/`](../power-platform/reviewapp/). Nieuw ten opzichte van het ontwerp: correcties worden in de app meteen opnieuw getoetst met dezelfde regelmotor ([`src/review.mjs`](../src/review.mjs)), escalaties zijn alleen voor de milieucoördinator (en die kan enkel weigeren), en flow HV-DI-02 controleert na goedkeuring nog eens op dubbels en geweigerd materiaal. Het canvas-ontwerp hierboven blijft als oefening om in Power Apps Studio na te bouwen.
+
+## Formele use cases
+
+De [uitgewerkte use cases](use-cases.md) verbinden de stories tot volledige gebruikersdoelen, inclusief voorwaarden, resultaat, alternatieve stromen en fouten. Ze verwijzen naar dezelfde requirements en het UAT-plan; open productievragen staan expliciet vermeld.

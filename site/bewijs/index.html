@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Materiaalketen — bewijs en grenzen</title>
+  <meta name="description" content="Van materiaalbehoefte tot ontvangst en boeking: inspecteer de reproduceerbare referentieproef en de grenzen van het Power Platform-bewijs.">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="proof.css">
+</head>
+<body>
+<header class="site-header"><div class="wrap header-inner">
+  <a class="brand" href="../"><img class="brand-mark" src="../assets/mark.svg" alt=""><span>Halverdijk<small>fictieve bouwgroep · portfolio</small></span></a>
+  <nav aria-label="Hoofdnavigatie"><a href="../">Portfolio</a><a href="../demo/?case=materiaal">Probeer de demo</a><a href="#grenzen">Bewijsgrenzen</a><a href="https://github.com/phlppgdfry/construction-digital-transformation">Broncode</a></nav>
+</div></header>
+<main>
+  <section class="hero"><div class="wrap">
+    <span class="eyebrow">Eén proces van vraag tot boeking</span>
+    <h1>Wanneer is materiaal echt bevestigd?</h1>
+    <p class="lede">Een aanvraag is nog geen reservatie. Een levering is nog geen kostenboeking. Volg die verschillen bij een storing, deelontvangst en correctie.</p>
+    <p class="notice">Fictieve gegevens. Het interactieve bewijs hieronder is een lokale referentiesimulatie. De bestaande Power Platform-omgeving is afzonderlijk geverifieerd; de nieuwe deelontvangst- en correctielogica is daar niet gedeployd.</p>
+  </div></section>
+  <section class="section"><div class="wrap">
+    <div class="grid cards-3">
+      <article class="card"><span class="num">1 · PROBLEEM</span><h2>Veel bellen, laat boeken</h2><p>De werfleider kent de voorraad niet zeker. Goedkeuring en planning verlopen via overdrachten; materiaalkosten verschijnen pas later op de werf. De nulmeting is fictief.</p><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/03-material-requests/gap-analyse.md">Bekijk de gap-analyse</a></article>
+      <article class="card"><span class="num">2 · AFWEGING</span><h2>Eerst plannen, dan automatiseren</h2><p>Een vaste weekplanning begint zonder software. Daarna volgen voorraadvoorstellen, een budgetroute en betrouwbare overdracht naar het ERP. Spoed schrapt geen goedkeuring.</p><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/03-material-requests/04-validate-prioritise.md">Opties en businesscase</a></article>
+      <article class="card"><span class="num">3 · ZELF PROBEREN</span><h2>Neem een beslissing</h2><p>Onderzoek kleine aanvragen, budgetoverschrijding en opnieuw verzenden bij storing. Rolkeuzes en ERP zijn gesimuleerd; je plaatst geen echte bestelling.</p><a class="btn small" href="../demo/?case=materiaal">Open de materiaaldemo</a></article>
+    </div>
+  </div></section>
+  <section class="section grey" id="keten"><div class="wrap">
+    <div class="section-title"><h2>4 · Inspecteer de keten</h2><span class="muted">gegenereerde referentieproef</span></div>
+    <p class="measure">Tien werfhekken, met twee goedkeuringsniveaus. Ontvangst, bevestigde boeking en resterende hoeveelheid blijven afzonderlijk zichtbaar. De stappen zijn vooraf berekend door uitvoerbare controles; de knoppen verplaatsen alleen de weergave.</p>
+    <p id="proof-error" role="alert"></p>
+    <div id="proof-view" hidden>
+      <div class="proof-controls"><button class="btn small ghost" id="proof-prev" type="button">Vorige stap</button><b id="proof-counter"></b><button class="btn small" id="proof-next" type="button">Volgende stap</button></div>
+      <article class="card proof-step" aria-live="polite" aria-atomic="true">
+        <h3 id="proof-action"></h3>
+        <dl class="proof-state"><div><dt>Akkoord</dt><dd id="proof-approval"></dd></div><div><dt>Reservatie bevestigd</dt><dd id="proof-reserved"></dd></div><div><dt>Ontvangen</dt><dd id="proof-received"></dd></div><div><dt>Geboekt</dt><dd id="proof-booked"></dd></div><div><dt>Nog te ontvangen</dt><dd id="proof-outstanding"></dd></div><div><dt>Toestand</dt><dd id="proof-state"></dd></div></dl>
+      </article>
+      <details><summary>Alle stappen naast elkaar</summary><div class="proof-table"><table><thead><tr><th>Stap</th><th>Handeling</th><th>Ontvangen</th><th>Geboekt</th><th>Rest</th><th>Toestand</th></tr></thead><tbody id="proof-rows"></tbody></table></div></details>
+      <p class="measure" id="proof-competing"></p>
+    </div>
+    <noscript><p>Lees de volledige <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/evidence/materiaalketen.md">ketentrace zonder JavaScript</a>.</p></noscript>
+    <p class="measure"><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/evidence/materiaalketen.md">Trace en reproduceerinstructie</a> · <a href="../data/material-proof.json">Machineleesbare uitkomst</a> · <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/tests/material-lifecycle.test.mjs">Gerichte regressietests</a></p>
+  </div></section>
+  <section class="section" id="grenzen"><div class="wrap">
+    <div class="section-title"><h2>5 · Wat bewijst dit?</h2></div>
+    <div class="proof-table"><table><thead><tr><th>Onderdeel</th><th>Beschikbaar bewijs</th><th>Wat openblijft</th></tr></thead><tbody>
+      <tr><td>Power Platform</td><td>Eerder uitgevoerde flows in DEV: regels, outbox, unieke boekingen en volledige ontvangst.</td><td>ERP-sandbox slaat boekingen op; geen echte voorraadtransactie. De huidige ontvangstflow boekt de volledige aangevraagde hoeveelheid.</td></tr>
+      <tr><td>Nieuwe referentieproef</td><td>Akkoordvolgorde, voorraadconflict tussen verouderde voorstellen, deelontvangst, storing, herhaling en tegenboeking.</td><td>Eén geserialiseerd proces; vertrouwde testidentiteiten. Geen bewijs van multi-user cloudbeveiliging of distributed transactions.</td></tr>
+      <tr><td>Browserdemo</td><td>Zelf klikken en de budgetroute en retrylog inspecteren.</td><td>Simulatie met rolknoppen; geen echte autorisatie, ERP of opslag na herladen.</td></tr>
+      <tr><td>Gebruikers en kandidaat</td><td>Takenblad, observatieformulier en beheersingsopdrachten zijn beschikbaar.</td><td>Geen echte deelnemer, business-UAT of persoonlijke beheersing afgetekend.</td></tr>
+    </tbody></table></div>
+    <p class="measure">De productievoorwaarden zijn concreet: atomaire voorraadverwerking in het ERP, ontvangen hoeveelheden en correctieboekingen in de cloudflow, serverrollen met echte testaccounts, en acceptatie door key users. Ze blijven open totdat dat afzonderlijk is gebouwd en getoetst.</p>
+    <div class="cta-row"><a class="btn" href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/validation/deelnemer.md">Zelfstandige gebruikstest</a><a class="btn ghost" href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/validation/beheersingsproef.md">Beheersingsproef zonder AI</a><a class="btn ghost" href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/power-platform/VERIFICATION.md">Bestaand cloudbewijs</a></div>
+  </div></section>
+</main>
+<script type="module" src="proof.js"></script>
+</body></html>

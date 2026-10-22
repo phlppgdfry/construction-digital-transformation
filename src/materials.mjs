@@ -30,11 +30,12 @@ export function validateRequest(req, master, now) {
   if (!project) errors.push({ field: "projectNo", msg: "Onbekende werf" });
   else if (!project.active) errors.push({ field: "projectNo", msg: `Werf ${req.projectNo} is afgesloten` });
   if (!req.deliverAt) errors.push({ field: "deliverAt", msg: "Gewenste leverdatum ontbreekt" });
+  else if (!Number.isFinite(hoursBetween(now, req.deliverAt))) errors.push({ field: "deliverAt", msg: "Ongeldige leverdatum" });
   else if (hoursBetween(now, req.deliverAt) < 0) errors.push({ field: "deliverAt", msg: "Leverdatum ligt in het verleden" });
   if (!req.lines?.length) errors.push({ field: "lines", msg: "Minstens één lijn" });
   for (const [i, l] of (req.lines ?? []).entries()) {
     if (!ix.catalog.has(l.itemNo)) errors.push({ field: `lines[${i}].itemNo`, msg: `Artikel ${l.itemNo} niet in catalogus` });
-    if (!(l.qty > 0)) errors.push({ field: `lines[${i}].qty`, msg: "Hoeveelheid moet groter zijn dan 0" });
+    if (!Number.isFinite(l.qty) || !(l.qty > 0)) errors.push({ field: `lines[${i}].qty`, msg: "Hoeveelheid moet groter zijn dan 0" });
   }
   if (isRush(req, now) && !RUSH_REASONS.includes(req.rushReason)) errors.push({ field: "rushReason", msg: "Spoedaanvraag: kies een reden" });
   return { ok: errors.length === 0, errors };
@@ -121,12 +122,12 @@ export function evaluate(req, master, now, stock = stockState(master)) {
 /** ERP messages once the request is approved: one reservation per depot allocation, one purchase requisition per external line. */
 export function erpMessages(evaluation, req) {
   const msgs = [];
-  for (const l of evaluation.lines) {
+  for (const [lineIndex, l] of evaluation.lines.entries()) {
     for (const a of l.allocations) {
-      msgs.push({ type: "reservation", idempotencyKey: stableKey(req.requestNo, l.itemNo, a.depotNo, a.qty), body: { requestNo: req.requestNo, projectNo: req.projectNo, itemNo: l.itemNo, depotNo: a.depotNo, quantity: a.qty, unit: l.unit, requiredDate: req.deliverAt } });
+      msgs.push({ type: "reservation", idempotencyKey: stableKey(req.requestNo, lineIndex, l.itemNo, a.depotNo, a.qty), body: { requestNo: req.requestNo, projectNo: req.projectNo, itemNo: l.itemNo, depotNo: a.depotNo, quantity: a.qty, unit: l.unit, requiredDate: req.deliverAt } });
     }
     const buy = l.purchase + l.shortfall;
-    if (buy > 0) msgs.push({ type: "purchaseRequisition", idempotencyKey: stableKey(req.requestNo, l.itemNo, "PR", buy), body: { requestNo: req.requestNo, projectNo: req.projectNo, itemNo: l.itemNo, quantity: buy, unit: l.unit, requiredDate: req.deliverAt } });
+    if (buy > 0) msgs.push({ type: "purchaseRequisition", idempotencyKey: stableKey(req.requestNo, lineIndex, l.itemNo, "PR", buy), body: { requestNo: req.requestNo, projectNo: req.projectNo, itemNo: l.itemNo, quantity: buy, unit: l.unit, requiredDate: req.deliverAt } });
   }
   return msgs;
 }

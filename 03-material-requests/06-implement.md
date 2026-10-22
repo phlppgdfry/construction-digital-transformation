@@ -67,3 +67,11 @@ Verandermanagement per rol (ADKAR, training, champions, adoptie): [verandermanag
 ## Fallback
 
 ERP-facade langer dan een dag weg: aanvragen en goedkeuringen lopen door; depot werkt met de lijst in de app; boekingen volgen automatisch na herstel. Werfapp weg: telefoon naar het depot zoals vroeger, depot registreert achteraf in de app.
+
+## Aanvullende proef voor de kritieke randgevallen
+
+De [uitvoerbare referentieketen](../evidence/materiaalketen.md) doorloopt akkoord, ERP-uitval, reservatie, deelontvangst, dead-letter, herstel en een compenserende correctie. Twee voorstellen voor dezelfde laatste voorraad worden eveneens getoetst. Dit is lokale, geserialiseerde logica met vertrouwde testidentiteiten; geen bewijs van echte Dataverse-autorisatie of een atomaire ERP-transactie.
+
+**Belangrijke implementatiegrens:** de huidige cloudflow HV-MA-04 boekt de volledige aangevraagde hoeveelheid bij status Ontvangen. UAT-08 (deelontvangst met open rest) is daar nog niet gerealiseerd. Bevestig in die app uitsluitend een werkelijk volledige levering; voor deelontvangsten is een expliciet ontvangen-hoeveelhedenmodel en aangepaste cloudflow nodig. Het nieuwe referentiemodel geeft daarvoor een getoetst ontwerp, geen productieclaim.
+
+De [zelfstandige gebruikstest](../validation/deelnemer.md) is klaar voor een echte deelnemer. Resultaten en formele acceptatie blijven open.

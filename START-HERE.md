@@ -2,6 +2,10 @@
 
 Portfolio van Philippe Godfroy voor de rol Digital Transformation Analyst. Je hebt weinig tijd. Dit zijn de dingen die het meest zeggen.
 
+## Begin met één aantoonbare keten
+
+[Materiaalketen, stap voor stap](https://phlppgdfry.github.io/construction-digital-transformation/bewijs/): probleem → keuze → browserdemo → reproduceerbare proef → grenzen. Bekijk [het tekstbewijs](evidence/materiaalketen.md) en de [validatiestatus](validation/README.md). Daarna kun je verbreden naar de andere cases.
+
 ## 0. Het verhaal in 10 minuten
 
 [Presentatie](https://phlppgdfry.github.io/construction-digital-transformation/deck/): probleem, AS-IS en TO-BE, wat er gebouwd is, het bewijs, de businesscase en wat ik niet weet. Negen slides, af te drukken als PDF.
@@ -10,8 +14,8 @@ Portfolio van Philippe Godfroy voor de rol Digital Transformation Analyst. Je he
 
 [Werfportaal-demo met rondleiding](https://phlppgdfry.github.io/construction-digital-transformation/demo/?tour). Tien stappen langs de drie cases:
 - een zelfverzekerde AI-leesfout die door een rekenregel gevangen wordt, en de ene fout die niemand vangt;
-- een schademelding zonder bereik die toch één keer en volledig aankomt;
-- een ERP-storing van 20 minuten die de werf niet merkt.
+- een gesimuleerde offlinewachtrij met één dossier na herhaald verzenden (geen bewijs van echte foto-opslag op een toestel);
+- een gesimuleerde ERP-storing van 20 minuten met gecontroleerde nieuwe pogingen.
 
 ## 2. Het bewijs: echt gebouwd in Power Platform (1 minuut)
 
@@ -38,3 +42,7 @@ De cases draaien ook in een echte Power Platform-ontwikkelomgeving: <!--n:pp.tab
 **Meer tijd?** [Werkwijze](shared-methodology/README.md) · [BABOK-mapping](shared-methodology/babok-mapping.md) · [Strategie en portfolio](shared-methodology/strategie-en-portfolio.md) · [Privacy en data](shared-methodology/privacy-en-data.md) · [EVIDENCE.md](EVIDENCE.md) · [ADR's](shared-methodology/adr/README.md) · [Woordenlijst](shared-methodology/woordenlijst.md)
 
 **Wat fictief is:** de organisatie, de cijfers, de workshops, de stakeholderhoudingen en de baseline-goedkeuring. Gebouwd met AI als bouw- en schrijfpartner; wat ik verdedig en wat ik niet weet staat op de [site](https://phlppgdfry.github.io/construction-digital-transformation/#mijn-rol).
+
+## Requirements en projectaanpak bekijken
+
+Het [begrippenoverzicht](shared-methodology/requirements-en-specificaties.md) geeft per vaardigheid het bewijs. Lees voor één volledige keten de [gap-analyse claims](02-construction-claims/gap-analyse.md), [formele use cases](02-construction-claims/use-cases.md), [product backlog](shared-methodology/product-backlog.md) en [sprintplanning](shared-methodology/sprintplanning.md).

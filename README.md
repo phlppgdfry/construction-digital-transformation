@@ -13,7 +13,7 @@ Portfolio van **Philippe Godfroy** voor de rol Digital Transformation Analyst.
 | | Case | Businessvraag | Kernresultaat (fictief model) |
 |---|---|---|---|
 | 01 | [**Document intelligence**](01-document-intelligence/README.md) | Hoe stopt de recyclagedivisie met het overtypen van weegbonnen, zonder dat er ooit asbest of een dubbele bon in het ERP belandt? | <!--n:c1.autoPct-->66,7%<!--/n--> automatisch, <!--n:c1.accuracy-->98,8%<!--/n--> veldnauwkeurigheid, <!--n:c1.silent-->1<!--/n--> stille fout eerlijk benoemd |
-| 02 | [**Schadeclaims**](02-construction-claims/README.md) | Hoe gaat schade op de werf van melding tot afgesloten dossier, zonder verloren info of verstreken verzekeringstermijn? | te late aangiftes <!--n:c2.latePct-->54%<!--/n--> → doel <!--n:c2.lateTarget-->5%<!--/n-->; offline melden, DT-02 getest in Power Fx |
+| 02 | [**Schadeclaims**](02-construction-claims/README.md) | Hoe gaat schade op de werf van melding tot afgesloten dossier, zonder verloren info of verstreken verzekeringstermijn? | te late aangiftes <!--n:c2.latePct-->54%<!--/n--> → doel <!--n:c2.lateTarget-->5%<!--/n-->; offline als doelontwerp, DT-02 getest in Power Fx |
 | 03 | [**Materiaalaanvragen**](03-material-requests/README.md) | Hoe krijgt een werfleider zijn materiaal op tijd, met voorraad, budget en transport onder controle? | <!--n:c3.autoPct-->43%<!--/n--> automatisch goedgekeurd (replay), ERP-koppeling die een storing overleeft |
 
 ## Draait ook echt in Microsoft Power Platform
@@ -36,6 +36,10 @@ Plus [**shared-methodology/**](shared-methodology/README.md): werkwijze met [BAB
 ```
 
 Elke case heeft zeven documenten (`01-discover.md` … `07-measure-improve.md`), een [samenvatting van één pagina](02-construction-claims/samenvatting.md), een [traceerbaarheidsmatrix](02-construction-claims/traceerbaarheid.md), een [beslissingslog en RAID-log](02-construction-claims/raid-en-beslissingen.md), AS-IS- en TO-BE-modellen in BPMN 2.0 en een map `artefacts/` met de doelontwerpen: Power Automate-flowdefinities, Power Apps-broncode (`*.pa.yaml`), Dataverse-tabellen, OpenAPI-contracten en Power Fx-beslistabellen.
+
+## Requirements, procesanalyse en iteratief leveren
+
+Het [volledige begrippenoverzicht](shared-methodology/requirements-en-specificaties.md) verbindt requirements gathering, functionele en niet-functionele eisen, stories, use cases, BPMN, gap-analyse, scopebeheer, Agile/Scrum, backlog, stakeholders en UAT met concrete bestanden. Nieuw uitgewerkt: negen formele use cases, gap-tabellen per case en een [lokale backlog](shared-methodology/product-backlog.md) met 24 werkpakketten voor alle 83 bestaande requirements, plus [sprintafspraken](shared-methodology/agile-scrum.md) en [planning](shared-methodology/sprintplanning.md). Het zijn voorstellen en ontwerpen; er worden geen echte teamsprints of gebruikersacceptatie geclaimd.
 
 ## Wat dit laat zien
 
@@ -60,7 +64,7 @@ Volledige mapping: [EVIDENCE.md](EVIDENCE.md).
 1. **Dataverse, niet SharePoint**: offline op de werf, echte relaties, unieke sleutels en audit. De licentiekost staat in elke businesscase ([ADR-001](shared-methodology/adr/ADR-001-dataverse.md)).
 2. **ERP alleen via een eigen API-facade**: één OpenAPI-contract, ERP-onafhankelijk ([ADR-002](shared-methodology/adr/ADR-002-erp-facade.md)).
 3. **AI met menselijke review**: elf regels na extractie, want confidence alleen vangt geen zelfverzekerde leesfouten ([ADR-003](shared-methodology/adr/ADR-003-document-ai.md)).
-4. **Outbox + idempotency-key, voor alle cases**: een ERP-storing blokkeert de werf niet, boekt nooit dubbel, en gedraagt zich overal hetzelfde ([ADR-004](shared-methodology/adr/ADR-004-outbox-idempotency.md)).
+4. **Outbox + idempotency-key, voor alle cases**: opdrachten blijven in de wachtrij; herhaling boekt in de geteste sandboxscenario’s niet dubbel. Voorraad en levering zijn pas bevestigd na verwerking ([ADR-004](shared-methodology/adr/ADR-004-outbox-idempotency.md)).
 5. **Regels als data**: de drempels staan in een tabel die de business leest en wijzigt; de flows en de geteste motor lezen dezelfde waarden ([ADR-006](shared-methodology/adr/ADR-006-beslistabellen.md), [regelcatalogus](shared-methodology/regelcatalogus.md)).
 6. **Eerst het gedrag, dan de app**: in case 03 start een weekplanning zonder software, omdat spoed een planningsprobleem is ([oorzaakanalyse](03-material-requests/01-discover.md#oorzaakanalyse-vijf-keer-waarom)).
 
@@ -111,3 +115,9 @@ tests/                      node:test
 ## Licentie
 
 [MIT](LICENSE) voor code. Documentatie mag hergebruikt worden met bronvermelding.
+
+## Eén keten en de echte bewijsgrenzen
+
+Begin bij de [materiaalketen](https://phlppgdfry.github.io/construction-digital-transformation/bewijs/), of lees de [gegenereerde trace](evidence/materiaalketen.md). Nieuwe referentietests toetsen voorraadconflict, deelontvangst, dubbele verzending, bevoegdheden en correcties. Dat referentiemodel is **niet gedeployd** naar Power Platform. De bestaande cloudflow boekt nog volledige ontvangsten; echte ERP-voorraadtransacties en toegangstests blijven open.
+
+[Zelfstandige gebruikstest](validation/deelnemer.md), [observatieblad](validation/observatie.md) en [beheersingsproef zonder AI](validation/beheersingsproef.md) zijn gereed voor uitvoering, niet ingevuld namens mensen. Alle statussen: [validatie](validation/README.md).

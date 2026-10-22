@@ -80,3 +80,7 @@ Case 03 heeft het grootste risico in gedrag, niet in techniek. De volledige lijs
 | MVP (12 weken) | Release 2 | Later |
 |---|---|---|
 | F-01..F-07: aanvraag, voorraad, toewijzing, spoed, DT-03, outbox naar ERP, ontvangst + verbruik | F-08 alternatieven, F-09 weekplanning | F-10 ritbundeling, F-11 tellen in depot |
+
+## Van releasekeuze naar uitvoering
+
+De [lokale product backlog](../shared-methodology/product-backlog.md) groepeert alle requirements met acceptatie en afhankelijkheden. De [sprintplanning](../shared-methodology/sprintplanning.md) werkt de bestaande MVP-horizon uit als voorstel; het is geen verslag van uitgevoerde sprints of echte gebruikersacceptatie. Wijzigingen volgen de [governance](../shared-methodology/governance.md).

@@ -41,6 +41,12 @@ De stappen zijn een volgorde om niets te vergeten, geen waterval: in een echt pr
 | Traceerbaarheid | [01](../01-document-intelligence/traceerbaarheid.md) | [02](../02-construction-claims/traceerbaarheid.md) | [03](../03-material-requests/traceerbaarheid.md) |
 | Beslissingslog en RAID | [01](../01-document-intelligence/raid-en-beslissingen.md) | [02](../02-construction-claims/raid-en-beslissingen.md) | [03](../03-material-requests/raid-en-beslissingen.md) |
 
+## Volledige requirements- en uitvoeringsroute
+
+[Overzicht van alle begrippen en hun bewijs](requirements-en-specificaties.md) · [Product backlog](product-backlog.md) · [Agile en Scrum](agile-scrum.md) · [Sprintplanning](sprintplanning.md)
+
+Elke case heeft daarnaast een expliciete gap-analyse en drie formele use cases: [documenten](../01-document-intelligence/use-cases.md), [claims](../02-construction-claims/use-cases.md), [materiaal](../03-material-requests/use-cases.md). De case-README’s linken beide analyses. Dit zijn uitgewerkte ontwerpen; echte stakeholdervalidatie en sprints zijn niet uitgevoerd.
+
 ## Gedeelde bouwstenen
 
 | Document | Waarvoor |

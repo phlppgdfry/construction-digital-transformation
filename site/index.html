@@ -35,9 +35,10 @@
       <span class="eyebrow">Business transformation · bouw &amp; infra</span>
       <p class="byline">Portfolio van <strong>Philippe Godfroy</strong> · voor de rol <strong>Digital Transformation Analyst</strong></p>
       <h1>Drie processen. Eén werkwijze.</h1>
-      <p class="lede">Van werfprobleem tot gemeten resultaat: document-AI voor weegbonnen, schadeclaims van werf tot afsluiting, en materiaalaanvragen met voorraadcheck en ERP-koppeling. Elke case volgt dezelfde zeven stappen.</p>
+      <p class="lede">Van werfprobleem tot toetsbare oplossing: document-AI voor weegbonnen, schadeclaims van werf tot afsluiting, en materiaalaanvragen met voorraadcheck en ERP-koppeling. Elke case volgt dezelfde zeven stappen.</p>
       <div class="cta-row">
-        <a class="btn" href="demo/?tour">Rondleiding van 2 minuten</a>
+        <a class="btn" href="bewijs/">Volg één materiaalaanvraag</a>
+        <a class="btn on-dark ghost" href="demo/?tour">Rondleiding van 2 minuten</a>
         <a class="btn on-dark ghost" href="#powerplatform">Echt gebouwd in Power Platform</a>
         <a class="btn on-dark ghost" href="deck/">Presentatie (10 min)</a>
       </div>
@@ -50,8 +51,16 @@
     <div class="stat"><b><!--n:ben.breakEven-->maand 25<!--/n--></b><span>programma terugverdiend (simulatie, <a href="baten/">batenrealisatie</a>)</span></div>
     <div class="stat"><b><!--n:c2.latePct-->54%<!--/n--> → <!--n:c2.lateTarget-->5%<!--/n--></b><span>te late verzekeringsaangiftes, nu → doel</span></div>
     <div class="stat"><b><!--n:pp.flows-->14<!--/n--> flows</b><span>echt gebouwd in Power Platform; <!--n:pp.v.docs-->30/30<!--/n--> weegbonnen identiek aan de geteste regels</span></div>
-    <div class="stat"><b><!--n:req.total-->83<!--/n--></b><span>requirements, elk traceerbaar tot test en KPI (CI-gecontroleerd)</span></div>
+    <div class="stat"><b><!--n:req.total-->83<!--/n--></b><span>requirements; verwijzingen naar stories, flows, tests en KPI’s worden gecontroleerd, waar opgenomen</span></div>
   </div>
+
+  <section class="section grey" id="leesroute">
+    <div class="wrap">
+      <div class="section-title"><h2>Begin met één keten</h2><span class="muted">probleem → afweging → demonstratie → bewijs → grenzen</span></div>
+      <p class="measure">Een werfleider heeft materiaal nodig. Wie beslist, wanneer is de voorraad echt bevestigd en wat gebeurt er bij een deellevering of storing? <a href="bewijs/">Loop de materiaalketen stap voor stap door</a>. De pagina onderscheidt bestaande Power Platform-verificatie, de browserdemo en een nieuwe lokale referentieproef.</p>
+      <p class="measure"><a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/shared-methodology/requirements-en-specificaties.md">Volledige analyse</a> · <a href="https://github.com/phlppgdfry/construction-digital-transformation/blob/main/validation/deelnemer.md">Zelfstandig proberen</a> · <a href="#grenzen">Wat nog niet bewezen is</a></p>
+    </div>
+  </section>
 
   <section class="section" id="cases">
     <div class="wrap">
@@ -74,7 +83,7 @@
         <article class="card" id="case-02">
           <span class="num">CASE 02 · CLAIMS MANAGEMENT</span>
           <h3>Schadeclaims van werf tot afsluiting</h3>
-          <p>Offline melden met foto's en GPS, automatisch dossier en triage, goedkeuring uit één beslistabel, aangifte die niet meer te laat vertrekt.</p>
+          <p>Doel: offline melden met foto’s en GPS, dossier en triage, één goedkeuringsregel en bewaakte aangiftetermijnen. Echte offlinewerking met foto’s moet nog worden gevalideerd.</p>
           <ul class="facts">
             <li><b><!--n:c2.medianRegister-->3 dagen<!--/n--></b>mediaan tot registratie vandaag</li>
             <li><b><!--n:c2.incomplete-->55%<!--/n--></b>van de eerste meldingen onvolledig</li>
@@ -283,10 +292,10 @@
       <div class="section-title"><h2>Lastige vragen</h2><span class="muted">wat een stuurgroep of IT-team terecht vraagt</span></div>
       <div class="qa">
         <details open><summary>Waarom Dataverse in plaats van SharePoint?</summary><p>Omdat offline melden, relaties (claim → foto's → tijdlijn) en unieke sleutels hier niet onderhandelbaar zijn. Prijs: ±<!--n:p.licenseYear-->€12.996<!--/n--> per jaar voor <!--n:p.users-->57<!--/n--> gebruikers (aanname), meegerekend in de businesscases. Bij één klein proces zonder offline zou ik met SharePoint starten.</p></details>
-        <details><summary>Wat gebeurt er als de ERP-API onbereikbaar is?</summary><p>De werf merkt niets. De berichten staan in een outbox, worden opnieuw verstuurd met dezelfde idempotency-key (dus nooit dubbel geboekt) en gaan na de laatste poging naar dead-letter met een ticket voor functioneel beheer.</p></details>
+        <details><summary>Wat gebeurt er als de ERP-API onbereikbaar is?</summary><p>De opdrachten blijven in de outbox en worden opnieuw geprobeerd. Planning moet herkennen dat de ERP-reservatie nog niet bevestigd is. De sandbox bewijst dubbele-boekingcontrole en herstel in de geteste gevallen, geen gegarandeerde voorraad of levering.</p></details>
         <details><summary>Wie mag een claim goedkeuren?</summary><p>Beslistabel DT-02: tot €2.500 de projectleider, tot €15.000 ook de afdeling, daarboven ook de directie. Bij machines beoordeelt de fleetmanager eerst, bij derden en leidingen claims &amp; verzekeringen. In Power Fx getest met de echte engine: 11/11 gevallen identiek.</p></details>
         <details><summary>Welke informatie is verplicht?</summary><p>Alleen wat later niet meer te achterhalen is: werf, tijdstip, locatie, categorie, minstens één foto, een korte omschrijving en een ruwe raming. Per categorie komt er iets bij (KLIP-referentie bij leidingen). Wat het kantoor kan opzoeken, vraagt de app niet.</p></details>
-        <details><summary>Wat als de werfleider geen internet heeft?</summary><p>De app werkt offline-first en synchroniseert later met een client-id. Twee keer verzenden geeft één dossier. Kritieke leidingschade blijft een telefoonplicht, en dat zegt de app ook.</p></details>
+        <details><summary>Wat als de werfleider geen internet heeft?</summary><p>Offline met echte foto’s is doelontwerp. De browserdemo gebruikt een tijdelijke wachtrij in het geheugen; de code app bewaart meldingsvelden maar geen echte foto’s. Een toesteltest is nog nodig. Kritieke leidingschade volgt onmiddellijk de noodprocedure.</p></details>
         <details><summary>Wat als de AI zich vergist?</summary><p>Dan vangt een regel de fout. Een zelfverzekerde leesfout (8 als 3, confidence 0,96) wordt gevonden door netto = bruto − tarra. Op de testset bleef <!--n:c1.silent-->1<!--/n--> stille fout over; die wordt afgedekt met een steekproef van 5%.</p></details>
       </div>
     </div>

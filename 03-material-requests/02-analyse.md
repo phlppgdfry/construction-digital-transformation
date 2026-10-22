@@ -148,3 +148,7 @@ Dit register wordt gegenereerd uit [`data/requirements.json`](../data/requiremen
 | Werf afgesloten | aanvraag geweigerd |
 | Voorraad intussen weg (409 bij reservatie) | aanvraag terug naar planning met melding |
 | Gedeeltelijke levering | ontvangst per lijn bevestigen; rest blijft open |
+
+## Expliciete gap-analyse
+
+De [gap-analysetabel](gap-analyse.md) verbindt de AS-IS met de gewenste uitkomsten, maatregelen, verantwoordelijke rollen en acceptatie. Een gebouwde functie sluit de gap pas na validatie van de werkelijke werkwijze en het resultaat.

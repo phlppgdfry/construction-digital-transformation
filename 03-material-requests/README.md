@@ -42,3 +42,13 @@
 - Toewijzing per depot, DT-03, spoed, alternatieven, idempotente ERP-berichten, retry en dead-letter, replay: [tests/materials.test.mjs](../tests/materials.test.mjs).
 - DT-03 in **Power Fx** met de echte engine: [RESULTS.md](artefacts/power-fx/RESULTS.md).
 - In de demo het ERP uitzetten en zien hoe de outbox wacht, opnieuw probeert en boekt.
+
+## Aanvullende analyse en uitvoering
+
+- [Gap-analyse](gap-analyse.md): AS-IS, gewenste uitkomst, ontbrekende capaciteit, maatregel, eigenaar en bewijs.
+- [Formele use cases](use-cases.md): drie gebruikersdoelen met voorwaarden, hoofdstroom, alternatieven en foutpaden.
+- [Product backlog](../shared-methodology/product-backlog.md), [Agile/Scrum-afspraken](../shared-methodology/agile-scrum.md) en [sprintplanning](../shared-methodology/sprintplanning.md): voorgestelde uitvoering en resterend acceptatiewerk.
+
+## Grenzen van het bewijs
+
+[Validatie-overzicht](../validation/README.md) onderscheidt automatische controles, browserdemo, cloudverificatie en nog uit te voeren tests door mensen. Deelontvangsten en voorraadconflicten zijn aanvullend als lokale referentie uitgewerkt; ze zijn daarmee nog geen gedeployde Power Platform-functionaliteit.

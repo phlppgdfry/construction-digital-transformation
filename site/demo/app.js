@@ -307,6 +307,7 @@ let req = structuredClone(M.SAMPLE_REQUESTS[0]);
 let outbox = [];
 let erpSeen = new Set();
 let approvals = [];
+let materialRevision = "";
 $("#r-project").innerHTML = master.projects.map((p) => `<option value="${p.projectNo}">${p.projectNo} ${esc(p.name)}${p.active ? "" : " (afgesloten)"}</option>`).join("");
 $("#r-reason").innerHTML = `<option value="">— kies —</option>` + M.RUSH_REASONS.map((r) => `<option>${r}</option>`).join("");
 $("#req-presets").innerHTML = M.SAMPLE_REQUESTS.map((r, i) => `<button class="btn small ${i ? "ghost" : ""}" type="button" data-req="${i}">${r.requestNo}</button>`).join("");
@@ -317,6 +318,8 @@ function loadRequest(i) {
   req = structuredClone(M.SAMPLE_REQUESTS[i]);
   for (const b of $$("[data-req]")) b.classList.toggle("ghost", Number(b.dataset.req) !== i);
   outbox = []; erpSeen = new Set(); approvals = [];
+  for (const el of $("#req-form").querySelectorAll("input, select, button")) el.disabled = false;
+  $("#r-booked").hidden = true;
   renderRequestForm();
 }
 function renderRequestForm() {
@@ -334,6 +337,14 @@ $("#r-reason").addEventListener("change", (e) => { req.rushReason = e.target.val
 $("#r-add").addEventListener("click", () => { req.lines.push({ itemNo: "MG-031", qty: 20 }); renderRequestForm(); });
 
 function evaluateNow() {
+  const revision = JSON.stringify(req);
+  if (revision !== materialRevision) {
+    // Any content change invalidates earlier approvals and unsent messages.
+    approvals = [];
+    outbox = [];
+    materialRevision = revision;
+    renderOutbox();
+  }
   const v = M.validateRequest(req, master, NOW_M);
   const rush = M.isRush(req, NOW_M);
   $("#r-rush").classList.toggle("hidden", !rush);
@@ -357,12 +368,12 @@ function evaluateNow() {
   const done = approvals.length >= needed.length;
   const approveBtns = needed.length && !done ? `<button class="btn small" type="button" id="m-approve">Goedkeuren als ${needed[approvals.length]}</button>` : "";
   $("#evaluation").innerHTML = `<div class="route" id="m-route"><b>${needed.length ? needed.join(" → ") : "Automatisch goedgekeurd"}</b><br><span class="small">${esc(e.approval.rule)} · waarde €${nl.int(e.value)}${e.rush ? " · SPOED" : ""}</span></div>
-    <p class="small">Verwittigd: ${e.informs.map((x) => `<span class="chip info">${esc(x)}</span>`).join(" ")}</p>
+    <p class="small">Te verwittigen (simulatie): ${e.informs.map((x) => `<span class="chip info">${esc(x)}</span>`).join(" ")}</p>
     <div id="m-lines">${lines}</div>
     ${budget}
     <div class="actions" style="margin-top:12px">${approveBtns}<button class="btn small dark" type="button" id="m-submit" ${needed.length && !done ? "disabled" : ""}>Naar ERP-outbox</button></div>`;
   if ($("#m-approve")) $("#m-approve").addEventListener("click", () => { approvals.push(needed[approvals.length]); evaluateNow(); });
-  $("#m-submit").addEventListener("click", () => { outbox = M.erpMessages(e, req); erpSeen = new Set(); renderOutbox(); $("#outbox-wrap").scrollIntoView({ behavior: "smooth", block: "start" }); });
+  $("#m-submit").addEventListener("click", () => { outbox = M.erpMessages(e, req); renderOutbox(); $("#outbox-wrap").scrollIntoView({ behavior: "smooth", block: "start" }); });
 }
 function renderOutbox(log = null, res = null) {
   if (!outbox.length) { $("#outbox").innerHTML = `<p class="muted">Leeg. Keur een aanvraag goed en stuur ze naar de outbox.</p>`; return; }
@@ -376,6 +387,10 @@ function sendOutbox() {
   const up = $("#erp-up").checked;
   const restore = Number($("#erp-restore").value);
   const res = M.deliverOutbox(outbox, up ? () => true : (m) => m >= restore, { erpSeen });
+  if (res.delivered.length) {
+    for (const el of $("#req-form").querySelectorAll("input, select, button")) el.disabled = true;
+    $("#r-booked").hidden = false;
+  }
   renderOutbox(res.log, res);
 }
 $("#outbox-send").addEventListener("click", sendOutbox);
@@ -384,7 +399,8 @@ loadRequest(0);
 renderOutbox();
 
 // ================================================================== tour + deep links
-const start = new URLSearchParams(location.search).get("case");
+const requestedCase = new URLSearchParams(location.search).get("case");
+const start = ({ claims: "claims", materials: "materiaal", documents: "documenten" })[requestedCase] ?? requestedCase;
 showTab(["documenten", "claims", "materiaal"].includes(start) ? start : "documenten");
 
 const tour = createTour([
@@ -392,7 +408,7 @@ const tour = createTour([
   { text: "Case 01: dertig weegbonnen worden verwerkt. 20 gaan automatisch naar het ERP, 8 naar nazicht, 1 asbestbon naar de milieucoördinator en 1 dubbele bon wordt tegengehouden.", focus: "#doc-counters", before: () => { showTab("documenten"); runDocs(true); selectDoc("DOC-001"); } },
   { text: "DOC-006: de AI las een 8 als 3, met confidence 0,96. De confidence-drempel ziet dat niet, maar de rekenregel netto = bruto − tarra (R03) vangt het. Zo werkt de mens-bij-twijfel.", focus: "#doc-detail", before: () => { showTab("documenten"); runDocs(true); selectDoc("DOC-006"); } },
   { text: "DOC-025 is de eerlijke uitzondering: een geldige maar verkeerde nummerplaat van dezelfde klant. Geen regel vangt dit. Restrisico, afgedekt met een steekproef van 5%.", focus: "#doc-detail", before: () => { showTab("documenten"); runDocs(true); selectDoc("DOC-025"); } },
-  { text: "Case 02: een werfleider raakt een gasleiding en heeft geen bereik. De app bewaart de melding op het toestel. Twee keer verzenden geeft toch één dossier (client-id).", focus: "#phone", before: () => { showTab("claims"); $("#net").checked = false; $("#preset").value = "0"; fillForm(C.SAMPLE_REPORTS[0]); sendClaim(); sendClaim(); } },
+  { text: "Case 02: een werfleider raakt een gasleiding en heeft geen bereik. Deze browserdemo simuleert de wachtrij in het geheugen; vernieuwen wist die. Twee keer verzenden geeft één dossier (client-id). Echte foto-opslag en offlinegebruik op een toestel zijn nog niet bewezen.", focus: "#phone", before: () => { showTab("claims"); $("#net").checked = false; $("#preset").value = "0"; fillForm(C.SAMPLE_REPORTS[0]); sendClaim(); sendClaim(); } },
   { text: "Verbinding terug: het dossier wordt aangemaakt en meteen getriageerd. Kritiek, beoordeling binnen 2 uur, vijf partijen verwittigd, en de aangiftetermijn bij de verzekeraar loopt al.", focus: "#claim-detail", before: () => { showTab("claims"); $("#net").checked = true; syncNow(); refreshForm(); } },
   { text: "Case 03: 240 ton menggranulaat voor werf W-2604. De regels nemen eerst 160 ton uit het dichtste depot (4 km) en de rest uit de breekwerf (6 km). Geen telefoontje meer naar het depot.", focus: "#m-lines", before: () => { showTab("materiaal"); loadRequest(0); } },
   { text: "Primair porfier boven het werfbudget: beslistabel DT-03 stuurt naar projectleider én afdeling, en de app toont het gerecycleerde alternatief op voorraad met de besparing.", focus: "#m-route", before: () => { showTab("materiaal"); loadRequest(3); } },

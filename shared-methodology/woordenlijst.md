@@ -55,3 +55,22 @@ Bouw, recyclage en IT in gewone taal. Alfabetisch.
 | **UAT** | User Acceptance Test: de gebruikers testen of het doet wat afgesproken is |
 | **Weegbon** | het ticket van de weegbrug met bruto, tarra, netto, klant, nummerplaat en materiaal |
 | **Werfleider / projectleider** | leidt de werf ter plaatse / is verantwoordelijk voor planning, budget en marge van één of meer werven |
+
+## Aanvullende begrippen voor analyse en uitvoering
+
+| Term | Betekenis en toepassing |
+|---|---|
+| Requirements gathering | Wensen, problemen en eisen actief ophalen via gesprekken, observatie, documenten en workshops; daarna laten bevestigen |
+| Functionele requirement | Beschrijft wat de oplossing doet; hier F-ID’s in het register |
+| Niet-functionele requirement | Beschrijft toetsbare kwaliteit of randvoorwaarde; hier NF-ID’s met benodigde meetproeven |
+| User story | Als [rol] wil ik [actie] zodat [waarde], met acceptatiecriteria om het gedrag controleerbaar te maken |
+| Use case | Een volledig gebruikersdoel met actoren, trigger, voorwaarden, hoofdstroom, alternatieven en resultaat; [voorbeeld](../02-construction-claims/use-cases.md) |
+| Gap-analyse | Vergelijking van AS-IS met gewenste uitkomst, inclusief ontbrekende capaciteit, maatregel, eigenaar en bewijs; [voorbeeld](../03-material-requests/gap-analyse.md) |
+| Scope creep | Ongecontroleerde groei zonder expliciet akkoord over impact, tijd of budget; [wijzigingsbeheer](governance.md) |
+| Agile | Iteratief waarde leveren en de aanpak bijstellen op basis van feedback; [toepassing](agile-scrum.md) |
+| Scrum | Een kader voor teamverantwoordelijkheden, sprints, inspectie en bijsturing; hier als [voorgestelde werkwijze](agile-scrum.md) uitgewerkt |
+| Product backlog | Geordende, veranderende werkvoorraad voor het product; [lokale backlog](product-backlog.md) |
+| Sprint backlog | Sprintdoel, geselecteerde items en het uitvoeringsplan van de Developers |
+| Sprintdoel | Eén gezamenlijk resultaat dat richting geeft aan het werk in de sprint |
+| Definition of Done | De afgesproken kwaliteitsgrens voor een bruikbaar increment; geen vervanging van organisatorische go/no-go |
+| Stakeholder management | Betrokkenen herkennen, hun invloed en behoeften begrijpen en beslissingen en verwachtingen blijven afstemmen |

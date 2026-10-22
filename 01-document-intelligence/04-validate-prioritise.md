@@ -59,3 +59,7 @@ De volledige lijst, met eigenaar en wanneer ingrijpen, staat in het [RAID-log](r
 | Reviewers vertrouwen de automatische route niet en kijken alles na | M | H | 4 weken schaduwdraaien met vergelijking; resultaten tonen |
 | Stille fout (geldige maar verkeerde waarde) | L | M | steekproef 5% van automatische boekingen, maandelijkse review |
 | ERP-facade niet klaar | M | M | MVP kan naar een tussentabel boeken; ERP-boeking als tweede stap |
+
+## Van releasekeuze naar uitvoering
+
+De [lokale product backlog](../shared-methodology/product-backlog.md) groepeert alle requirements met acceptatie en afhankelijkheden. De [sprintplanning](../shared-methodology/sprintplanning.md) werkt de bestaande MVP-horizon uit als voorstel; het is geen verslag van uitgevoerde sprints of echte gebruikersacceptatie. Wijzigingen volgen de [governance](../shared-methodology/governance.md).

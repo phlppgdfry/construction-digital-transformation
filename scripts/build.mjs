@@ -15,6 +15,7 @@ import { FLOWS, NOT_BUILT } from "../power-platform/flows/definitions.mjs";
 import { RULEBOOK } from "../src/rules.mjs";
 import { benefitsOverTime } from "../src/benefits.mjs";
 import { nl } from "../src/common.mjs";
+import { materialProof, proofMarkdown } from "./material-proof.mjs";
 import { describeFlow } from "../power-platform/flows/describe.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -74,6 +75,11 @@ const eurSigned = (n) => (n < 0 ? `−${nl.eur(-n)}` : nl.eur(n));
 const round = (_k, v) => (typeof v === "number" && !Number.isInteger(v) ? Math.round(v * 1000) / 1000 : v === Infinity ? null : v);
 write("site/data/benefits.json", JSON.stringify(benefits, round) + "\n");
 write("site/data/model.json", JSON.stringify({ now: NOW, models: modelIndex, case01: { ...model.case01, results: undefined }, case02: model.case02, case03: model.case03, platform: model.platform }, round, 2) + "\n");
+
+// Reproducible reference lifecycle proof; deliberately separate from cloud verification.
+const materialReference = materialProof(master);
+write("site/data/material-proof.json", JSON.stringify(materialReference, null, 2) + "\n");
+write("evidence/materiaalketen.md", proofMarkdown(materialReference));
 
 // 3. engines + data for the browser
 for (const f of readdirSync(join(ROOT, "src"))) copyFileSync(join(ROOT, "src", f), join(ROOT, "site/assets/lib", f));

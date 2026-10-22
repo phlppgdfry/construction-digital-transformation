@@ -128,3 +128,7 @@ Scenario: dubbel bevestigd
 ## Schermen (ontwerp)
 
 Werfapp-tegel "Materiaal": werf kiezen → datum en uur → lijnen toevoegen (zoeken in de catalogus, beschikbaarheid meteen zichtbaar) → samenvatting met waarde en verwachte route → indienen. Bron: [materiaalaanvraag.pa.yaml](artefacts/power-apps/materiaalaanvraag.pa.yaml).
+
+## Formele use cases
+
+De [uitgewerkte use cases](use-cases.md) verbinden de stories tot volledige gebruikersdoelen, inclusief voorwaarden, resultaat, alternatieve stromen en fouten. Ze verwijzen naar dezelfde requirements en het UAT-plan; open productievragen staan expliciet vermeld.

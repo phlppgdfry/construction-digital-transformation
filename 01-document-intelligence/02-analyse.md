@@ -97,3 +97,7 @@ Dit register wordt gegenereerd uit [`data/requirements.json`](../data/requiremen
 | Nieuwe vrachtwagen van bestaande klant | wekelijks | R05 → nazicht, reviewer voegt plaat toe aan stamgegevens |
 | Geblokkeerde klant (krediet) | zelden | R04 → nazicht, facturatie beslist |
 | Overlading | zelden | R11 → nazicht, transportcompliance |
+
+## Expliciete gap-analyse
+
+De [gap-analysetabel](gap-analyse.md) verbindt de AS-IS met de gewenste uitkomsten, maatregelen, verantwoordelijke rollen en acceptatie. Een gebouwde functie sluit de gap pas na validatie van de werkelijke werkwijze en het resultaat.

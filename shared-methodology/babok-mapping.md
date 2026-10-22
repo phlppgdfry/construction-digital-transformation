@@ -43,6 +43,7 @@ BABOK beschrijft 50 technieken. Deze komen echt in de repo voor:
 | Decision Modelling | DT-02, DT-03, regels R01–R11, [regelcatalogus](regelcatalogus.md) |
 | Data Modelling | Dataverse-model, conceptueel datamodel in case 03 |
 | User Stories, Acceptance and Evaluation Criteria | stories met Gherkin-scenario's |
+| Use Cases and Scenarios | [Formele use cases met alternatieve en foutstromen](../02-construction-claims/use-cases.md) |
 | Prioritization (MoSCoW) | register en MVP per case |
 | Business Cases, Financial Analysis | rekenmodel met gevoeligheid en break-even |
 | Risk Analysis and Management | RAID-log |
@@ -50,7 +51,7 @@ BABOK beschrijft 50 technieken. Deze komen echt in de repo voor:
 | Prototyping | papieren prototype, klikbare demo |
 | Metrics and KPIs | KPI-kaarten, meetplan |
 | Non-Functional Requirements Analysis | NF-requirements in het register |
-| Item Tracking | GitHub Project met de MVP-stories |
+| Item Tracking | [Lokale backlog met requirements, afhankelijkheden en resterend bewijs](product-backlog.md); externe GitHub Project-inhoud niet gecontroleerd |
 | Interface Analysis | API-contract (OpenAPI) van de ERP-facade |
 
 ## Wat BABOK zou zeggen dat nog ontbreekt
@@ -60,3 +61,7 @@ Eerlijk, vanuit de standaard bekeken:
 - **Stakeholderattitudes zijn aannames**, niet uit echte gesprekken. Dat kan in een fictieve case niet anders.
 - **Goedkeuring van de baseline** is gesimuleerd: geen handtekening van een echte eigenaar.
 - **Solution evaluation** (KA6) bestaat alleen als plan en simulatie: er is geen echte go-live om te evalueren.
+
+## Expliciete uitwerking van huidige en gewenste toestand
+
+De [gap-analyse documenten](../01-document-intelligence/gap-analyse.md), [claims](../02-construction-claims/gap-analyse.md) en [materiaal](../03-material-requests/gap-analyse.md) verbinden AS-IS en TO-BE met maatregelen en eigenaarschap. De [sprintafspraken](agile-scrum.md) plannen de uitvoering; ze vervangen geen analyse of echte stakeholdervalidatie.

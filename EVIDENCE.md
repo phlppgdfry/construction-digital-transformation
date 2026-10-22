@@ -26,6 +26,17 @@ Elke rij koppelt een vaardigheid van een business transformation analyst aan een
 | **KPI's en opvolging** | [KPI-framework](shared-methodology/kpi-framework.md), KPI-kaarten, leading en lagging indicators, stopcriterium in elke `07-measure-improve.md` | – |
 | **Presenteren** | [presentatie van 10 minuten](https://phlppgdfry.github.io/construction-digital-transformation/deck/), [samenvatting van één pagina per case](02-construction-claims/samenvatting.md) | cijfers uit het model (CI) |
 
+## Aanvullende analyse- en leveringsartefacten
+
+| Vaardigheid | Bewijs | Status |
+|---|---|---|
+| Formele use cases | Drie per case: [documenten](01-document-intelligence/use-cases.md), [claims](02-construction-claims/use-cases.md), [materiaal](03-material-requests/use-cases.md); actoren, voorwaarden, hoofdstroom, fouten, requirements en UAT | Doelontwerp; open acceptatiepunten benoemd |
+| Gap-analyse | [Documenten](01-document-intelligence/gap-analyse.md), [claims](02-construction-claims/gap-analyse.md), [materiaal](03-material-requests/gap-analyse.md); maatregel, eigenaar, acceptatie en restant | Fictieve analyse, geen gemeten productieresultaat |
+| Product backlog | [24 lokale pakketten](shared-methodology/product-backlog.md) met alle 83 requirements, afhankelijkheden en acceptatie | Reviewbaar plan; niet gesynchroniseerd met GitHub Project |
+| Agile / Scrum en scopebeheer | [Rollen, events, kwaliteitsafspraak en wijzigingsvoorbeeld](shared-methodology/agile-scrum.md), [concrete sprintplanning](shared-methodology/sprintplanning.md) | Voorstel; geen uitgevoerd Scrum-team |
+
+Leesroute voor alle begrippen: [requirements en specificaties](shared-methodology/requirements-en-specificaties.md).
+
 ## Oplossing en bouw
 
 | Vaardigheid | Bewijs | Getest of gebouwd |
@@ -39,3 +50,9 @@ Elke rij koppelt een vaardigheid van een business transformation analyst aan een
 | **Foutafhandeling en beheer** | outbox, retry, dead-letter met melding ([ADR-004](shared-methodology/adr/ADR-004-outbox-idempotency.md)); `Probeer`/`Bij_fout` in elke flow; [monitoring](power-platform/flows/README.md#monitoring-wie-ziet-een-mislukte-run-en-hoe-snel) | storingstest en foutscenario in de verificatie |
 | **Offline werken** | [ADR-005](shared-methodology/adr/ADR-005-offline-canvas.md) met de [afwijking in de demo](shared-methodology/adr/ADR-005-offline-canvas.md#afwijking-in-de-demo-omgeving), [`syncQueue()`](src/claims.mjs) | idempotente sync in de tests; niet getest op een toestel zonder bereik |
 | **Documentatie en procedures** | runbooks, [templates](shared-methodology/templates/README.md), [woordenlijst](shared-methodology/woordenlijst.md), [BABOK-mapping](shared-methodology/babok-mapping.md) | linkcheck |
+
+## Bewijs van de materiaalketen en resterende validatie
+
+[Reproduceerbare ketentrace](evidence/materiaalketen.md) · [Technische review](validation/technische-review.md) · [Zelfstandig gebruik](validation/deelnemer.md) · [Eigen beheersingsproef](validation/beheersingsproef.md).
+
+De referentieketen is lokaal getest met fictieve data. Deelontvangsten, tegenboekingen en bescherming tegen verouderde voorraadvoorstellen zijn niet aan de bestaande Power Platform-omgeving toegevoegd. Onafhankelijk gebruik, echte business-UAT en persoonlijke beheersing zijn niet afgetekend.

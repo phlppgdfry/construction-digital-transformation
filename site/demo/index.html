@@ -33,7 +33,7 @@
 </div>
 
 <main class="wrap demo-main">
-  <p class="demo-note">Fictieve gegevens. De regels draaien op dezelfde code als de tests in de repo (<code>src/*.mjs</code>). AI-extractie en ERP worden gesimuleerd.</p>
+  <p class="demo-note">Fictieve gegevens. De regels draaien op dezelfde code als de tests in de repo (<code>src/*.mjs</code>). AI-extractie en ERP worden gesimuleerd. Er is geen aanmelding: rolkeuzes zijn demonstratie, geen toegangsbeveiliging.</p>
 
   <!-- ============================================================ 01 DOCUMENTEN -->
   <section id="p-documenten" role="tabpanel" aria-labelledby="tab-documenten" class="panel">
@@ -66,7 +66,7 @@
     <div class="panel-head">
       <div>
         <h2>Schade melden en afhandelen</h2>
-        <p class="muted">Links de werfapp (ook offline), rechts de backoffice: triage, DT-02-goedkeuringsketen, tijdlijn.</p>
+        <p class="muted">Links een simulatie van melden zonder bereik, rechts de backoffice: triage, DT-02 en tijdlijn. De wachtrij leeft alleen in het geheugen; vernieuwen wist die.</p>
       </div>
       <div class="clock">Demo-klok <b id="clock">ma 12/10 08:00</b> <button class="btn small ghost" id="clock-plus" type="button">+4 uur</button></div>
     </div>
@@ -158,9 +158,11 @@
         <div class="lines" id="r-lines"></div>
         <button type="button" class="btn small dark" id="r-add">+ lijn</button>
         <ul class="errors" id="r-errors"></ul>
+        <p id="r-booked" class="demo-note" hidden>Deze demoaanvraag is al geboekt en daarom vergrendeld. Laad bovenaan een voorbeeld voor een nieuwe simulatie. Herhaald verzenden behoudt de bestaande boekingen.</p>
       </form>
       <div class="evaluation" id="evaluation" aria-live="polite"></div>
     </div>
+    <p class="demo-note">Deze demo eindigt bij de gesimuleerde ERP-opdracht. Voor deelontvangsten, correcties en strijd om de laatste voorraad: <a href="../bewijs/">bekijk de afzonderlijke referentieproef</a>. Opnieuw een voorbeeld laden start een nieuwe simulatie.</p>
     <div class="outbox" id="outbox-wrap">
       <div class="panel-head">
         <div><h3>ERP-outbox</h3><p class="muted small">Berichten wachten hier tot de ERP-facade ze aanvaardt. Retry na 1, 5, 15, 60 en 240 minuten; daarna dead-letter.</p></div>

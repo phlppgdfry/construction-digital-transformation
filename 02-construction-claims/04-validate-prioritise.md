@@ -54,3 +54,7 @@ De volledige lijst, met eigenaar en wanneer ingrijpen, staat in het [RAID-log](r
 | Offline-sync conflicten | M | M | alleen aanmaken offline (geen bewerken); client-id als sleutel |
 | Goedkeurders reageren niet | M | M | Teams-herinnering, vervanger, terug na 5 dagen, escalatie |
 | Verwarring met arbeidsongevallen | L | H | letselvraag eerst, formulier stopt; afgestemd met preventieadviseur |
+
+## Van releasekeuze naar uitvoering
+
+De [lokale product backlog](../shared-methodology/product-backlog.md) groepeert alle requirements met acceptatie en afhankelijkheden. De [sprintplanning](../shared-methodology/sprintplanning.md) werkt de bestaande MVP-horizon uit als voorstel; het is geen verslag van uitgevoerde sprints of echte gebruikersacceptatie. Wijzigingen volgen de [governance](../shared-methodology/governance.md).

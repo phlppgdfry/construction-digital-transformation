@@ -1,0 +1,428 @@
+{
+  "environment": "Lokale referentiesimulatie; geen gedeployde ERP- of Power Platform-keten",
+  "fixtureTime": "2026-10-12T08:00",
+  "steps": [
+    {
+      "action": "Aanvraag: 10 werfhekken; budgetroute vereist beide rollen",
+      "requestNo": "REFERENCE-01",
+      "reserved": false,
+      "approvals": [],
+      "required": [
+        "Projectleider",
+        "Afdelingsverantwoordelijke"
+      ],
+      "received": [
+        0
+      ],
+      "booked": [
+        0
+      ],
+      "outstanding": [
+        10
+      ],
+      "state": "wacht op akkoord/reservatie",
+      "audit": []
+    },
+    {
+      "action": "Reservatie zonder akkoord en verkeerde volgorde geweigerd",
+      "requestNo": "REFERENCE-01",
+      "reserved": false,
+      "approvals": [],
+      "required": [
+        "Projectleider",
+        "Afdelingsverantwoordelijke"
+      ],
+      "received": [
+        0
+      ],
+      "booked": [
+        0
+      ],
+      "outstanding": [
+        10
+      ],
+      "state": "wacht op akkoord/reservatie",
+      "audit": []
+    },
+    {
+      "action": "Beide rollen hebben in volgorde akkoord gegeven",
+      "requestNo": "REFERENCE-01",
+      "reserved": false,
+      "approvals": [
+        "Projectleider",
+        "Afdelingsverantwoordelijke"
+      ],
+      "required": [
+        "Projectleider",
+        "Afdelingsverantwoordelijke"
+      ],
+      "received": [
+        0
+      ],
+      "booked": [
+        0
+      ],
+      "outstanding": [
+        10
+      ],
+      "state": "wacht op akkoord/reservatie",
+      "audit": [
+        {
+          "action": "goedkeuring",
+          "actor": "reference-site-user",
+          "role": "Projectleider"
+        },
+        {
+          "action": "goedkeuring",
+          "actor": "reference-site-user",
+          "role": "Afdelingsverantwoordelijke"
+        }
+      ]
+    },
+    {
+      "action": "ERP uit: nog geen bevestigde reservatie",
+      "requestNo": "REFERENCE-01",
+      "reserved": false,
+      "approvals": [
+        "Projectleider",
+        "Afdelingsverantwoordelijke"
+      ],
+      "required": [
+        "Projectleider",
+        "Afdelingsverantwoordelijke"
+      ],
+      "received": [
+        0
+      ],
+      "booked": [
+        0
+      ],
+      "outstanding": [
+        10
+      ],
+      "state": "wacht op akkoord/reservatie",
+      "audit": [
+        {
+          "action": "goedkeuring",
+          "actor": "reference-site-user",
+          "role": "Projectleider"
+        },
+        {
+          "action": "goedkeuring",
+          "actor": "reference-site-user",
+          "role": "Afdelingsverantwoordelijke"
+        }
+      ]
+    },
+    {
+      "action": "ERP hersteld: reservatie één keer, ook na herhaling",
+      "requestNo": "REFERENCE-01",
+      "reserved": true,
+      "approvals": [
+        "Projectleider",
+        "Afdelingsverantwoordelijke"
+      ],
+      "required": [
+        "Projectleider",
+        "Afdelingsverantwoordelijke"
+      ],
+      "received": [
+        0
+      ],
+      "booked": [
+        0
+      ],
+      "outstanding": [
+        10
+      ],
+      "state": "open ontvangst/boeking",
+      "audit": [
+        {
+          "action": "goedkeuring",
+          "actor": "reference-site-user",
+          "role": "Projectleider"
+        },
+        {
+          "action": "goedkeuring",
+          "actor": "reference-site-user",
+          "role": "Afdelingsverantwoordelijke"
+        }
+      ]
+    },
+    {
+      "action": "Eerste levering: 4 ontvangen en geboekt; 6 open",
+      "requestNo": "REFERENCE-01",
+      "reserved": true,
+      "approvals": [
+        "Projectleider",
+        "Afdelingsverantwoordelijke"
+      ],
+      "required": [
+        "Projectleider",
+        "Afdelingsverantwoordelijke"
+      ],
+      "received": [
+        4
+      ],
+      "booked": [
+        4
+      ],
+      "outstanding": [
+        6
+      ],
+      "state": "open ontvangst/boeking",
+      "audit": [
+        {
+          "action": "goedkeuring",
+          "actor": "reference-site-user",
+          "role": "Projectleider"
+        },
+        {
+          "action": "goedkeuring",
+          "actor": "reference-site-user",
+          "role": "Afdelingsverantwoordelijke"
+        },
+        {
+          "action": "ontvangst",
+          "actor": "reference-site-user",
+          "eventId": "DELIVERY-1",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "action": "Tweede levering fysiek binnen; boeking in dead-letter",
+      "requestNo": "REFERENCE-01",
+      "reserved": true,
+      "approvals": [
+        "Projectleider",
+        "Afdelingsverantwoordelijke"
+      ],
+      "required": [
+        "Projectleider",
+        "Afdelingsverantwoordelijke"
+      ],
+      "received": [
+        10
+      ],
+      "booked": [
+        4
+      ],
+      "outstanding": [
+        0
+      ],
+      "state": "open ontvangst/boeking",
+      "audit": [
+        {
+          "action": "goedkeuring",
+          "actor": "reference-site-user",
+          "role": "Projectleider"
+        },
+        {
+          "action": "goedkeuring",
+          "actor": "reference-site-user",
+          "role": "Afdelingsverantwoordelijke"
+        },
+        {
+          "action": "ontvangst",
+          "actor": "reference-site-user",
+          "eventId": "DELIVERY-1",
+          "reason": null
+        },
+        {
+          "action": "ontvangst",
+          "actor": "reference-site-user",
+          "eventId": "DELIVERY-2",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "action": "Herstel: 10 geboekt, afgesloten; herhalen boekt niet dubbel",
+      "requestNo": "REFERENCE-01",
+      "reserved": true,
+      "approvals": [
+        "Projectleider",
+        "Afdelingsverantwoordelijke"
+      ],
+      "required": [
+        "Projectleider",
+        "Afdelingsverantwoordelijke"
+      ],
+      "received": [
+        10
+      ],
+      "booked": [
+        10
+      ],
+      "outstanding": [
+        0
+      ],
+      "state": "afgesloten",
+      "audit": [
+        {
+          "action": "goedkeuring",
+          "actor": "reference-site-user",
+          "role": "Projectleider"
+        },
+        {
+          "action": "goedkeuring",
+          "actor": "reference-site-user",
+          "role": "Afdelingsverantwoordelijke"
+        },
+        {
+          "action": "ontvangst",
+          "actor": "reference-site-user",
+          "eventId": "DELIVERY-1",
+          "reason": null
+        },
+        {
+          "action": "ontvangst",
+          "actor": "reference-site-user",
+          "eventId": "DELIVERY-2",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "action": "Bevoegde correctie: -2 tegenboeking met reden; 2 opnieuw open",
+      "requestNo": "REFERENCE-01",
+      "reserved": true,
+      "approvals": [
+        "Projectleider",
+        "Afdelingsverantwoordelijke"
+      ],
+      "required": [
+        "Projectleider",
+        "Afdelingsverantwoordelijke"
+      ],
+      "received": [
+        8
+      ],
+      "booked": [
+        8
+      ],
+      "outstanding": [
+        2
+      ],
+      "state": "open ontvangst/boeking",
+      "audit": [
+        {
+          "action": "goedkeuring",
+          "actor": "reference-site-user",
+          "role": "Projectleider"
+        },
+        {
+          "action": "goedkeuring",
+          "actor": "reference-site-user",
+          "role": "Afdelingsverantwoordelijke"
+        },
+        {
+          "action": "ontvangst",
+          "actor": "reference-site-user",
+          "eventId": "DELIVERY-1",
+          "reason": null
+        },
+        {
+          "action": "ontvangst",
+          "actor": "reference-site-user",
+          "eventId": "DELIVERY-2",
+          "reason": null
+        },
+        {
+          "action": "correctie",
+          "actor": "reference-admin",
+          "eventId": "CORRECTION-1",
+          "reason": "Telfout: vier in plaats van zes"
+        }
+      ]
+    }
+  ],
+  "bookings": [
+    [
+      "048ed350",
+      {
+        "requestNo": "REFERENCE-01",
+        "projectNo": "W-2601",
+        "itemNo": "HK-350",
+        "depotNo": "DEP-OOST",
+        "quantity": 10,
+        "unit": "st",
+        "requiredDate": "2026-10-16T06:30"
+      }
+    ],
+    [
+      "receipt:[\"REFERENCE-01\",\"DELIVERY-1\",0]",
+      {
+        "requestNo": "REFERENCE-01",
+        "projectNo": "W-2601",
+        "line": 0,
+        "itemNo": "HK-350",
+        "quantity": 4,
+        "correctionOf": null,
+        "reason": null
+      }
+    ],
+    [
+      "receipt:[\"REFERENCE-01\",\"DELIVERY-2\",0]",
+      {
+        "requestNo": "REFERENCE-01",
+        "projectNo": "W-2601",
+        "line": 0,
+        "itemNo": "HK-350",
+        "quantity": 6,
+        "correctionOf": null,
+        "reason": null
+      }
+    ],
+    [
+      "receipt:[\"REFERENCE-01\",\"CORRECTION-1\",0]",
+      {
+        "requestNo": "REFERENCE-01",
+        "projectNo": "W-2601",
+        "line": 0,
+        "itemNo": "HK-350",
+        "quantity": -2,
+        "correctionOf": "DELIVERY-2",
+        "reason": "Telfout: vier in plaats van zes"
+      }
+    ]
+  ],
+  "competing": {
+    "first": {
+      "requestNo": "COMPETE-A",
+      "reserved": true,
+      "approvals": [],
+      "required": [],
+      "received": [
+        0
+      ],
+      "booked": [
+        0
+      ],
+      "outstanding": [
+        10
+      ],
+      "state": "open ontvangst/boeking",
+      "audit": []
+    },
+    "second": {
+      "requestNo": "COMPETE-B",
+      "reserved": false,
+      "approvals": [],
+      "required": [],
+      "received": [
+        0
+      ],
+      "booked": [
+        0
+      ],
+      "outstanding": [
+        10
+      ],
+      "state": "wacht op akkoord/reservatie",
+      "audit": []
+    },
+    "result": "Tweede reservatie geweigerd; dezelfde laatste voorraad niet dubbel toegezegd"
+  }
+}

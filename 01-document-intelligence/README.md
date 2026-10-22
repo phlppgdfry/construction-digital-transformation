@@ -43,3 +43,13 @@
 - `npm test` draait de regels op <!--n:c1.n-->30<!--/n--> fictieve bonnen en controleert elke uitkomst ([tests/documents.test.mjs](../tests/documents.test.mjs)).
 - De rekencontrole, de confidence-drempel en de overladingscontrole zijn ook in **Power Fx** uitgevoerd met de echte engine: [RESULTS.md](artefacts/power-fx/RESULTS.md).
 - De BPMN-bestanden openen in bpmn.io of Camunda Modeler: [as-is.bpmn](bpmn/as-is.bpmn), [to-be.bpmn](bpmn/to-be.bpmn).
+
+## Aanvullende analyse en uitvoering
+
+- [Gap-analyse](gap-analyse.md): AS-IS, gewenste uitkomst, ontbrekende capaciteit, maatregel, eigenaar en bewijs.
+- [Formele use cases](use-cases.md): drie gebruikersdoelen met voorwaarden, hoofdstroom, alternatieven en foutpaden.
+- [Product backlog](../shared-methodology/product-backlog.md), [Agile/Scrum-afspraken](../shared-methodology/agile-scrum.md) en [sprintplanning](../shared-methodology/sprintplanning.md): voorgestelde uitvoering en resterend acceptatiewerk.
+
+## Grenzen van het bewijs
+
+[Validatie-overzicht](../validation/README.md) onderscheidt automatische controles, browserdemo, cloudverificatie en nog uit te voeren tests door mensen. Deelontvangsten en voorraadconflicten zijn aanvullend als lokale referentie uitgewerkt; ze zijn daarmee nog geen gedeployde Power Platform-functionaliteit.

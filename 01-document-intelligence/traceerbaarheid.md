@@ -38,3 +38,7 @@ Van pijnpunt tot gemeten resultaat: per requirement de pijn die ze oplost, de us
 <!--/trace-->
 
 **Lezen:** een lege kolom is geen fout, maar een vraag. Een stakeholder requirement zonder flow is een behoefte die de oplossing als geheel invult; een transition requirement heeft geen story, wel een eigenaar en een datum. Een solution requirement met status *ontworpen* of *gesimuleerd* zegt in het [register](02-analyse.md#requirements) waarom.
+
+## Aanvullende koppelingen voor analyse en planning
+
+De [use cases](use-cases.md) verwijzen naar requirements, stories en UAT; de [gap-analyse](gap-analyse.md) koppelt huidige problemen aan maatregelen en eigenaren. De [product backlog](../shared-methodology/product-backlog.md) dekt alle requirements van deze case in werkpakketten. Deze documenten worden handmatig bijgehouden; de gegenereerde matrix hierboven blijft de technische traceerbaarheid tot flow, test en KPI.
