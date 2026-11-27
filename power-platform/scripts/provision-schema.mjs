@@ -5,7 +5,7 @@ import { CONFIG, label, get, post, idFrom } from "./dv.mjs";
 
 const model = JSON.parse(readFileSync(new URL("../model.json", import.meta.url)));
 const P = CONFIG.publisher;
-const schemaName = (logical) => logical.replace(/^hv_/, "hv_").replace(/_([a-z])/, (_m, c) => `_${c.toUpperCase()}`);
+const schemaName = (logical) => logical.replace(/_([a-z])/, (_m, c) => `_${c.toUpperCase()}`);
 const log = (...a) => console.log(...a);
 
 async function ensurePublisher() {
